@@ -2618,28 +2618,33 @@ export class PostgresEngine implements BrainEngine {
     // v0.31.8 (D16): two-branch query. Without opts.sourceId, no source filter
     // (preserves pre-v0.31.8 cross-source semantics). With opts.sourceId,
     // scope the from-page lookup. See pglite-engine.ts:getLinks for context.
+    // v0.43.0: only current bi-temporal edges (valid_to IS NULL).
     if (opts?.sourceId) {
       const rows = await sql`
         SELECT f.slug as from_slug, t.slug as to_slug,
                l.link_type, l.context, l.link_source,
-               o.slug as origin_slug, l.origin_field
+               o.slug as origin_slug, l.origin_field,
+               l.valid_from, l.valid_to, l.superseded_by
         FROM links l
         JOIN pages f ON f.id = l.from_page_id
         JOIN pages t ON t.id = l.to_page_id
         LEFT JOIN pages o ON o.id = l.origin_page_id
         WHERE f.slug = ${slug} AND f.source_id = ${opts.sourceId}
+          AND l.valid_to IS NULL
       `;
       return rows as unknown as Link[];
     }
     const rows = await sql`
       SELECT f.slug as from_slug, t.slug as to_slug,
              l.link_type, l.context, l.link_source,
-             o.slug as origin_slug, l.origin_field
+             o.slug as origin_slug, l.origin_field,
+             l.valid_from, l.valid_to, l.superseded_by
       FROM links l
       JOIN pages f ON f.id = l.from_page_id
       JOIN pages t ON t.id = l.to_page_id
       LEFT JOIN pages o ON o.id = l.origin_page_id
       WHERE f.slug = ${slug}
+        AND l.valid_to IS NULL
     `;
     return rows as unknown as Link[];
   }
@@ -2647,28 +2652,105 @@ export class PostgresEngine implements BrainEngine {
   async getBacklinks(slug: string, opts?: { sourceId?: string }): Promise<Link[]> {
     const sql = this.sql;
     // v0.31.8 (D16): two-branch query, mirrors getLinks above.
+    // v0.43.0: only current bi-temporal edges (valid_to IS NULL).
     if (opts?.sourceId) {
       const rows = await sql`
         SELECT f.slug as from_slug, t.slug as to_slug,
                l.link_type, l.context, l.link_source,
-               o.slug as origin_slug, l.origin_field
+               o.slug as origin_slug, l.origin_field,
+               l.valid_from, l.valid_to, l.superseded_by
         FROM links l
         JOIN pages f ON f.id = l.from_page_id
         JOIN pages t ON t.id = l.to_page_id
         LEFT JOIN pages o ON o.id = l.origin_page_id
         WHERE t.slug = ${slug} AND t.source_id = ${opts.sourceId}
+          AND l.valid_to IS NULL
       `;
       return rows as unknown as Link[];
     }
     const rows = await sql`
       SELECT f.slug as from_slug, t.slug as to_slug,
              l.link_type, l.context, l.link_source,
-             o.slug as origin_slug, l.origin_field
+             o.slug as origin_slug, l.origin_field,
+             l.valid_from, l.valid_to, l.superseded_by
       FROM links l
       JOIN pages f ON f.id = l.from_page_id
       JOIN pages t ON t.id = l.to_page_id
       LEFT JOIN pages o ON o.id = l.origin_page_id
       WHERE t.slug = ${slug}
+        AND l.valid_to IS NULL
+    `;
+    return rows as unknown as Link[];
+  }
+
+  async supersedeLink(
+    from: string,
+    to: string,
+    linkType: string,
+    newContext: string,
+    linkSource?: string,
+    opts?: { fromSourceId?: string; toSourceId?: string },
+  ): Promise<{ oldLinkId: number; newLinkId: number } | null> {
+    const sql = this.sql;
+    const fromSrc = opts?.fromSourceId ?? 'default';
+    const toSrc = opts?.toSourceId ?? 'default';
+    const src = linkSource ?? 'manual';
+    return this.transaction(async (tx) => {
+      // 1. Find the current link row.
+      const oldRows = await sql`
+        SELECT l.id FROM links l
+        JOIN pages f ON f.id = l.from_page_id
+        JOIN pages t ON t.id = l.to_page_id
+        WHERE f.slug = ${from} AND f.source_id = ${fromSrc}
+          AND t.slug = ${to} AND t.source_id = ${toSrc}
+          AND l.link_type = ${linkType}
+          AND l.valid_to IS NULL
+        LIMIT 1
+      `;
+      if (oldRows.length === 0) return null;
+      const oldId = oldRows[0].id as number;
+      // 2. Insert the new link version.
+      const newRows = await sql`
+        INSERT INTO links (from_page_id, to_page_id, link_type, context, link_source, valid_from, valid_to)
+        SELECT f.id, t.id, ${linkType}, ${newContext}, ${src}, now(), NULL
+        FROM pages f, pages t
+        WHERE f.slug = ${from} AND f.source_id = ${fromSrc}
+          AND t.slug = ${to} AND t.source_id = ${toSrc}
+        RETURNING id
+      `;
+      const newId = newRows[0].id as number;
+      // 3. Mark the old link as superseded.
+      await sql`
+        UPDATE links
+        SET valid_to = now(), superseded_by = ${newId}
+        WHERE id = ${oldId}
+      `;
+      return { oldLinkId: oldId, newLinkId: newId };
+    });
+  }
+
+  async getLinkHistory(
+    from: string,
+    to: string,
+    linkType: string,
+    opts?: { fromSourceId?: string; toSourceId?: string },
+  ): Promise<Link[]> {
+    const sql = this.sql;
+    const fromSrc = opts?.fromSourceId ?? 'default';
+    const toSrc = opts?.toSourceId ?? 'default';
+    const rows = await sql`
+      SELECT f.slug as from_slug, t.slug as to_slug,
+             l.link_type, l.context, l.link_source,
+             o.slug as origin_slug, l.origin_field,
+             l.valid_from, l.valid_to, l.superseded_by
+      FROM links l
+      JOIN pages f ON f.id = l.from_page_id
+      JOIN pages t ON t.id = l.to_page_id
+      LEFT JOIN pages o ON o.id = l.origin_page_id
+      WHERE f.slug = ${from} AND f.source_id = ${fromSrc}
+        AND t.slug = ${to} AND t.source_id = ${toSrc}
+        AND l.link_type = ${linkType}
+      ORDER BY l.valid_from DESC
     `;
     return rows as unknown as Link[];
   }
@@ -2680,17 +2762,19 @@ export class PostgresEngine implements BrainEngine {
     // v114 (#1941): distinct provenances + counts for `gbrain link-sources`.
     // Scope by the FROM page's source (consistent with getLinks). Federated
     // {sourceIds} takes precedence over scalar {sourceId}; neither = unscoped.
+    // v0.43.0: only current bi-temporal edges.
     const sourceCondition =
       opts?.sourceIds && opts.sourceIds.length > 0
-        ? sql`WHERE f.source_id = ANY(${opts.sourceIds}::text[])`
+        ? sql`AND f.source_id = ANY(${opts.sourceIds}::text[])`
         : opts?.sourceId
-          ? sql`WHERE f.source_id = ${opts.sourceId}`
+          ? sql`AND f.source_id = ${opts.sourceId}`
           : sql``;
     const rows = await sql`
       SELECT l.link_source, COUNT(*)::int AS count
       FROM links l
       JOIN pages f ON f.id = l.from_page_id
-      ${sourceCondition}
+      WHERE l.valid_to IS NULL
+        ${sourceCondition}
       GROUP BY l.link_source
       ORDER BY count DESC, l.link_source ASC NULLS LAST
     `;

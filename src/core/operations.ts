@@ -751,6 +751,20 @@ const put_page: Operation = {
     // FAIL-CLOSED: `viaSubagent=true` enforces the check even if the
     // dispatcher forgot to populate `subagentId`. Agent-originated writes
     // without an owning subagent id are rejected outright.
+    // v0.43.0: duplicate entity prevention (pbrain feature port).
+    // When creating a new page (not updating), check for existing pages
+    // with similar titles and warn the caller.
+    const existingPage = await ctx.engine.getPage(slug, ctx.sourceId ? { sourceId: ctx.sourceId } : undefined);
+    if (!existingPage && !ctx.dryRun) {
+      const parsed = await import('./markdown.ts').then(m => m.parseMarkdown(p.content as string, slug + '.md'));
+      if (parsed.title) {
+        const similar = await ctx.engine.findByTitleFuzzy(parsed.title, undefined, 0.7);
+        if (similar && similar.slug !== slug) {
+          console.warn(`[put_page] Possible duplicate detected: "${parsed.title}" already exists as "${similar.slug}" (similarity: ${similar.similarity.toFixed(2)}). Use that slug or confirm this is intentional.`);
+        }
+      }
+    }
+
     if (ctx.viaSubagent === true) {
       if (typeof ctx.subagentId !== 'number' || Number.isNaN(ctx.subagentId)) {
         throw new OperationError('permission_denied', 'put_page via subagent requires ctx.subagentId');
@@ -1965,6 +1979,61 @@ const remove_link: Operation = {
   cliHints: { name: 'unlink', aliases: ['link-rm'], positional: ['from', 'to'] },
 };
 
+const supersede_link: Operation = {
+  name: 'supersede_link',
+  description: 'v0.43.0: Create a new version of a bi-temporal link, marking the old one as superseded. Preserves link history.',
+  params: {
+    from: { type: 'string', required: true },
+    to: { type: 'string', required: true },
+    link_type: { type: 'string', required: true, description: 'Link type to supersede (e.g. works_at, invested_in)' },
+    context: { type: 'string', required: true, description: 'New context/reason for the updated link' },
+    link_source: { type: 'string', description: "Provenance tag (kebab-case). Defaults to 'manual'." },
+  },
+  mutating: true,
+  scope: 'write',
+  handler: async (ctx, p) => {
+    if (ctx.dryRun) return { dry_run: true, action: 'supersede_link', from: p.from, to: p.to };
+    const linkOpts = ctx.sourceId
+      ? { fromSourceId: ctx.sourceId, toSourceId: ctx.sourceId }
+      : undefined;
+    const result = await ctx.engine.supersedeLink(
+      p.from as string,
+      p.to as string,
+      p.link_type as string,
+      (p.context as string) || '',
+      (p.link_source as string) || 'manual',
+      linkOpts,
+    );
+    return result
+      ? { status: 'ok', old_link_id: result.oldLinkId, new_link_id: result.newLinkId }
+      : { status: 'not_found', detail: 'No current link found to supersede' };
+  },
+  cliHints: { name: 'link-supersede', positional: ['from', 'to'] },
+};
+
+const get_link_history: Operation = {
+  name: 'get_link_history',
+  description: 'v0.43.0: Retrieve the full bi-temporal history of a link between two pages. Returns all versions ordered newest first.',
+  params: {
+    from: { type: 'string', required: true },
+    to: { type: 'string', required: true },
+    link_type: { type: 'string', required: true },
+  },
+  handler: async (ctx, p) => {
+    const linkOpts = ctx.sourceId
+      ? { fromSourceId: ctx.sourceId, toSourceId: ctx.sourceId }
+      : undefined;
+    return ctx.engine.getLinkHistory(
+      p.from as string,
+      p.to as string,
+      p.link_type as string,
+      linkOpts,
+    );
+  },
+  scope: 'read',
+  cliHints: { name: 'link-history', positional: ['from', 'to'] },
+};
+
 const get_links: Operation = {
   name: 'get_links',
   description: 'List outgoing links from a page',
@@ -2571,6 +2640,9 @@ const file_upload: Operation = {
       '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
       '.gif': 'image/gif', '.webp': 'image/webp', '.svg': 'image/svg+xml',
       '.pdf': 'application/pdf', '.mp4': 'video/mp4', '.mp3': 'audio/mpeg',
+      '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      '.eml': 'message/rfc822', '.csv': 'text/csv', '.tsv': 'text/tab-separated-values',
     };
     const mimeType = MIME_TYPES[extname(filePath).toLowerCase()] || null;
 
@@ -4818,7 +4890,7 @@ export const operations: Operation[] = [
   // Tags
   add_tag, remove_tag, get_tags,
   // Links
-  add_link, remove_link, get_links, get_backlinks, list_link_sources, traverse_graph,
+  add_link, remove_link, supersede_link, get_link_history, get_links, get_backlinks, list_link_sources, traverse_graph,
   // Timeline
   add_timeline_entry, get_timeline,
   // Admin

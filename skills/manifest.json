@@ -2,7 +2,7 @@
   "name": "gbrain",
   "version": "0.32.3.0",
   "conformance_version": "1.0.0",
-  "description": "Personal knowledge brain with hybrid RAG search \u2014 GStack mod for agent platforms",
+  "description": "Personal knowledge brain with hybrid RAG search — GStack mod for agent platforms",
   "skills": [
     {
       "name": "ingest",
@@ -72,7 +72,22 @@
     {
       "name": "media-ingest",
       "path": "media-ingest/SKILL.md",
-      "description": "Ingest video, audio, PDF, book, screenshot, and repo content with entity extraction."
+      "description": "Ingest video, audio, book, screenshot, and repo content with entity extraction."
+    },
+    {
+      "name": "document-ingest",
+      "path": "document-ingest/SKILL.md",
+      "description": "Ingest PDF, DOCX, Word, E-Mail, Excel, and CSV documents with OCR, auto-classification, and domain entity extraction."
+    },
+    {
+      "name": "deadline-extract",
+      "path": "deadline-extract/SKILL.md",
+      "description": "Extract dates and deadlines from ingested documents into timeline entries — extraction only, statutory period computation is flagged for human verification"
+    },
+    {
+      "name": "connector-ingest",
+      "path": "connector-ingest/SKILL.md",
+      "description": "Connect external systems (Google Drive, Gmail, Notion, GitHub) and sync content into the brain with delta sync, OAuth2, and rate-limiting."
     },
     {
       "name": "meeting-ingestion",
@@ -258,6 +273,26 @@
       "name": "skill-optimizer",
       "path": "skill-optimizer/SKILL.md",
       "description": "Self-evolving skill optimization via gbrain skillopt — SkillOpt-paper-grounded text-space optimizer with validation gating (median-of-3 + epsilon=0.05), bundled-skill safety, bootstrap review sentinel, per-skill DB lock, and atomic versioned writes."
+    },
+    {
+      "name": "legal-brain",
+      "path": "legal-brain/SKILL.md",
+      "description": "Legal Brain dispatcher: case management, opponent analysis, strategy generation, and precedent search for legal professionals. Anonymizes all PII."
+    },
+    {
+      "name": "pm-status",
+      "path": "pm-status/SKILL.md",
+      "description": "Generate structured status reports for projects, cases, or initiatives. Pulls from brain pages, facts, and timeline."
+    },
+    {
+      "name": "pm-task",
+      "path": "pm-task/SKILL.md",
+      "description": "Task and action-item management for projects, cases, and initiatives. Creates, tracks, and completes tasks with deadlines and dependencies."
+    },
+    {
+      "name": "project-onboard",
+      "path": "project-onboard/SKILL.md",
+      "description": "Onboard a new project into the brain: directory structure, seed pages, initial tasks, and connector wiring."
     }
   ],
   "dependencies": {

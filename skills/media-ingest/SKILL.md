@@ -59,11 +59,17 @@ Every mention of a person or company with a brain page MUST create a back-link.
 | Format | Action |
 |--------|--------|
 | YouTube/video URL | Fetch transcript (Whisper, transcription service, or captions) |
-| Audio file | Transcribe with available STT service |
-| PDF | Extract text (OCR if needed) |
+| Audio file (.mp3/.wav/.m4a/.ogg/.flac) | `gbrain import` handles it natively — transcribed via the configured STT provider, filed as a `transcription` page |
+| PDF | `gbrain import` handles it natively — text layer extracted in-engine; scanned PDFs get a best-effort OCR fallback (needs GraphicsMagick/Ghostscript + vision model), otherwise skipped with a `pdf_text_layer_sparse` warning |
+| DOCX / EML / CSV / XLSX | `gbrain import` handles them natively — extracted to text, frontmatter synthesized (EML: Subject→title, Date→date) |
 | Book PDF | Extract text, identify chapters/sections |
 | Screenshot/image | OCR via vision model, extract text and entities |
 | GitHub repo | Clone, read README + key files, summarize architecture |
+
+Native document ingestion (`src/core/extract-document.ts`) means you do NOT need
+external pre-processors for the formats above: point `gbrain import <dir>` at the
+folder and the engine extracts, chunks and embeds. Background `gbrain sync` only
+picks up document formats when `GBRAIN_INGEST_DOCUMENTS=true`.
 
 ### Phase 2: Upload raw source
 

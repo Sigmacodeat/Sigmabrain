@@ -10,6 +10,12 @@ import { findChunkForOffset } from './chunkers/edge-extractor.ts';
 import { extractCodeRefs, imageOfCandidates } from './link-extraction.ts';
 import { embedBatch, embedMultimodal, currentEmbeddingSignature } from './embedding.ts';
 import { slugifyPath, slugifyCodePath, isCodeFilePath } from './sync.ts';
+import {
+  isDocumentFilePath,
+  extractDocumentText,
+  synthesizeDocumentMarkdown,
+  MAX_DOCUMENT_FILE_SIZE,
+} from './extract-document.ts';
 import type { ChunkInput, PageInput, PageType } from './types.ts';
 import { computeEffectiveDate } from './effective-date.ts';
 import { MARKDOWN_CHUNKER_VERSION } from './chunkers/recursive.ts';
@@ -926,12 +932,46 @@ export async function importFromFile(
     return { slug: relativePath, status: 'skipped', chunks: 0, error: `Skipping symlink: ${filePath}` };
   }
 
+  const isDocument = isDocumentFilePath(relativePath);
   const stat = statSync(filePath);
-  if (stat.size > MAX_FILE_SIZE) {
+  const sizeLimit = isDocument ? MAX_DOCUMENT_FILE_SIZE : MAX_FILE_SIZE;
+  if (stat.size > sizeLimit) {
     return { slug: relativePath, status: 'skipped', chunks: 0, error: `File too large (${stat.size} bytes)` };
   }
 
-  let content = readFileSync(filePath, 'utf-8');
+  let content: string;
+  if (isDocument) {
+    // Binary document formats (.pdf/.docx/.eml/.csv/.tsv/.xlsx): extract
+    // text first, then continue through the normal markdown import path.
+    // The extracted text is still subject to importFromContent's size guard.
+    let extracted;
+    try {
+      extracted = await extractDocumentText(readFileSync(filePath), extname(relativePath).toLowerCase(), {
+        filename: basename(relativePath),
+      });
+    } catch (err) {
+      return {
+        slug: relativePath,
+        status: 'skipped',
+        chunks: 0,
+        error: `Document extraction failed: ${err instanceof Error ? err.message : String(err)}`,
+      };
+    }
+    for (const w of extracted.warnings) {
+      console.warn(`[gbrain] ${relativePath}: ${w}`);
+    }
+    if (!extracted.text.trim()) {
+      return {
+        slug: relativePath,
+        status: 'skipped',
+        chunks: 0,
+        error: extracted.warnings[0] ?? 'Document contained no extractable text',
+      };
+    }
+    content = synthesizeDocumentMarkdown(relativePath, extracted);
+  } else {
+    content = readFileSync(filePath, 'utf-8');
+  }
 
   // Route code files through the code import path
   if (isCodeFilePath(relativePath)) {
@@ -1012,7 +1052,9 @@ export async function importFromFile(
   // v0.29.1: thread the basename (without extension) for filename-date
   // precedence in computeEffectiveDate. e.g. `daily/2024-03-15.md` →
   // filename `2024-03-15`.
-  const fileBasename = basename(relativePath, '.md');
+  const fileBasename = isDocument
+    ? basename(relativePath, extname(relativePath))
+    : basename(relativePath, '.md');
   return importFromContent(engine, resolvedSlug, content, {
     ...opts,
     filename: fileBasename,

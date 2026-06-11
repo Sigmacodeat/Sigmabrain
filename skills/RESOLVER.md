@@ -32,8 +32,11 @@ This is the dispatcher. Skills are the implementation. **Read the skill file bef
 | Trigger | Skill |
 |---------|-------|
 | "capture this", "save this thought", "remember this", "drop this in the inbox", "save to brain" | `skills/capture/SKILL.md` |
+| "connect google drive", "connect gmail", "connect notion", "connect github", "sync google drive", "sync gmail", "sync notion", "sync github", "pull from google drive", "pull from gmail", "pull from notion", "pull from github", "connector status", "list connectors", "add connector", "remove connector" | `skills/connector-ingest/SKILL.md` |
 | User shares a link, article, tweet, or idea | `skills/idea-ingest/SKILL.md` |
-| "watch this video", "process this YouTube link", "ingest this PDF", "save this podcast", "process this book", "summarize this book", "PDF book", "ingest it into my brain", "what's in this screenshot", "check out this repo" | `skills/media-ingest/SKILL.md` |
+| "watch this video", "process this YouTube link", "save this podcast", "process this book", "summarize this book", "PDF book", "what's in this screenshot", "check out this repo" | `skills/media-ingest/SKILL.md` |
+| "ingest this document", "process this PDF", "process this Word document", "ingest this contract", "ingest this invoice", "ingest this email", "scanned PDF", "OCR this document", "upload and process", "document to brain", "bulk ingest documents", "import these files" | `skills/document-ingest/SKILL.md` |
+| "extract deadlines", "find deadlines", "Fristen extrahieren", "deadline audit", "upcoming deadlines", "what deadlines are in this document" | `skills/deadline-extract/SKILL.md` (chains after document-ingest/meeting-ingestion on deadline-bearing content) |
 | Meeting transcript received | `skills/meeting-ingestion/SKILL.md` |
 | Generic "ingest this" (auto-routes to above) | `skills/ingest/SKILL.md` |
 
@@ -69,6 +72,9 @@ This is the dispatcher. Skills are the implementation. **Read the skill file bef
 | Webhook setup, external event processing | `skills/webhook-transforms/SKILL.md` |
 | "Spawn agent", "background task", "parallel tasks", "steer agent", "pause/resume agent", "gbrain jobs submit", "submit a gbrain job", "submit a shell job", "shell job" | `skills/minion-orchestrator/SKILL.md` |
 | "present options", "ask before proceeding", "choice gate", "user decision" | `skills/ask-user/SKILL.md` |
+| "project status", "status update", "where are we on", "what is the status of", "Projektstatus", "Statusbericht", "Fortschritt" | `skills/pm-status/SKILL.md` |
+| "create a project task", "case task", "project task", "project action items", "task dependency", "mark project task done", "tasks for project", "Aufgabe für Projekt", "Fallaufgabe", "Abhängigkeit erstellen" | `skills/pm-task/SKILL.md` |
+| "onboard project", "new project", "set up project", "start project", "Projekt anlegen", "Projekt einrichten", "Neues Projekt", "Projekt initialisieren" | `skills/project-onboard/SKILL.md` |
 
 ## Setup & migration
 
@@ -124,6 +130,7 @@ These apply to ALL brain-writing skills:
 | "personalized version of this book", "mirror this book", "two-column book analysis", "apply this book to my life", "how does this book apply to me" | `skills/book-mirror/SKILL.md` |
 | "enrich this article", "enrich brain pages", "batch enrich", "make brain pages useful" | `skills/article-enrichment/SKILL.md` |
 | "strategic reading", "read this through the lens of", "apply this to my problem", "what can I learn from this about", "extract a playbook from" | `skills/strategic-reading/SKILL.md` |
+| "legal brain", "create a case", "new legal case", "analyze opponent", "assess chances", "legal strategy", "search precedent", "find precedent", "legal precedent", "Rechtsfall", "Gegner analysieren", "Gegneranalyse", "Chancen bewerten", "Chancenbewertung", "Rechtsstrategie", "Präjudizien", "Präzedenzfall" | `skills/legal-brain/SKILL.md` |
 | "concept synthesis", "synthesize my concepts", "find patterns across my notes", "build my intellectual map", "trace idea evolution" | `skills/concept-synthesis/SKILL.md` |
 | "idea lineage", "trace the lineage of this idea", "how my thinking about", "how has my thinking about", "what is my current version of", "show reversals in my thinking about", "where did this idea come from" | `skills/idea-lineage/SKILL.md` |
 | "perplexity research", "what's new about", "current state of", "web research", "what changed about" | `skills/perplexity-research/SKILL.md` |

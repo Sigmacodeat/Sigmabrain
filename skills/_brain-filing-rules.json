@@ -140,6 +140,12 @@
       "directory": "conversations/",
       "examples": ["conversations/chatgpt/{thread-slug}.md", "conversations/claude/{thread-slug}.md"],
       "description": "Imported chat exports (ChatGPT, Claude, etc.) where the conversation itself is the artifact. Cross-link concepts and people from the conversation; the conversation page is the source-of-truth for the dialog. Distinct from voice-notes/ (which holds raw voice capture)."
+    },
+    {
+      "kind": "document",
+      "directory": "documents/",
+      "examples": ["documents/contracts/", "documents/invoices/", "documents/legal/court-filings/", "documents/correspondence/emails/"],
+      "description": "Ingested documents (PDF, DOCX, EML, XLSX, CSV) with extracted text, OCR, and auto-classification. Sub-directories by document type: contracts/, invoices/, legal/, correspondence/, medical/, tax/, reports/, uncategorized/."
     }
   ],
   "sources_dir": {

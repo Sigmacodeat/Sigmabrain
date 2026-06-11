@@ -41,8 +41,10 @@ export interface WriteThroughResult {
    *   - repo_not_found: `sync.repo_path` set but missing / not a directory.
    *   - page_not_found_after_write: the DB row isn't readable back (the caller's
    *     DB write failed or targeted a different source).
+   *   - file_recently_modified: v0.43.0 — on-disk mtime < 60s, skipping to avoid
+   *     clobbering an active editing session.
    */
-  skipped?: 'no_repo_configured' | 'repo_not_found' | 'page_not_found_after_write';
+  skipped?: 'no_repo_configured' | 'repo_not_found' | 'page_not_found_after_write' | 'file_recently_modified';
   /** Set when the render/write/rename itself threw (EACCES, ENOTDIR, disk full). */
   error?: string;
 }
@@ -86,6 +88,18 @@ export async function writePageThrough(
     });
 
     const filePath = resolvePageFilePath(repoPath, slug, sourceId);
+
+    // v0.43.0: 60-second cooldown when the file is being actively edited.
+    // If the on-disk mtime is younger than 60s, skip the write-through so
+    // the user's active editing session is not clobbered by a DB→disk sync.
+    if (existsSync(filePath)) {
+      const mtime = statSync(filePath).mtime;
+      const ageMs = Date.now() - mtime.getTime();
+      if (ageMs < 60_000) {
+        return { written: false, skipped: 'file_recently_modified' };
+      }
+    }
+
     mkdirSync(dirname(filePath), { recursive: true });
 
     // Atomic write: unique temp sibling + rename. Unique name (pid + random)

@@ -2524,16 +2524,19 @@ export class PGLiteEngine implements BrainEngine {
     // and read-side op handlers that haven't threaded sourceId yet). With
     // opts.sourceId, scope to that source — used by reconcileLinks and any
     // ctx.sourceId-aware read op (D20).
+    // v0.43.0: only current bi-temporal edges (valid_to IS NULL).
     if (opts?.sourceId) {
       const { rows } = await this.db.query(
         `SELECT f.slug as from_slug, t.slug as to_slug,
                 l.link_type, l.context, l.link_source,
-                o.slug as origin_slug, l.origin_field
+                o.slug as origin_slug, l.origin_field,
+                l.valid_from, l.valid_to, l.superseded_by
          FROM links l
          JOIN pages f ON f.id = l.from_page_id
          JOIN pages t ON t.id = l.to_page_id
          LEFT JOIN pages o ON o.id = l.origin_page_id
-         WHERE f.slug = $1 AND f.source_id = $2`,
+         WHERE f.slug = $1 AND f.source_id = $2
+           AND l.valid_to IS NULL`,
         [slug, opts.sourceId]
       );
       return rows as unknown as Link[];
@@ -2541,12 +2544,14 @@ export class PGLiteEngine implements BrainEngine {
     const { rows } = await this.db.query(
       `SELECT f.slug as from_slug, t.slug as to_slug,
               l.link_type, l.context, l.link_source,
-              o.slug as origin_slug, l.origin_field
+              o.slug as origin_slug, l.origin_field,
+              l.valid_from, l.valid_to, l.superseded_by
        FROM links l
        JOIN pages f ON f.id = l.from_page_id
        JOIN pages t ON t.id = l.to_page_id
        LEFT JOIN pages o ON o.id = l.origin_page_id
-       WHERE f.slug = $1`,
+       WHERE f.slug = $1
+         AND l.valid_to IS NULL`,
       [slug]
     );
     return rows as unknown as Link[];
@@ -2554,16 +2559,19 @@ export class PGLiteEngine implements BrainEngine {
 
   async getBacklinks(slug: string, opts?: { sourceId?: string }): Promise<Link[]> {
     // v0.31.8 (D16): two-branch query. See getLinks() comment.
+    // v0.43.0: only current bi-temporal edges (valid_to IS NULL).
     if (opts?.sourceId) {
       const { rows } = await this.db.query(
         `SELECT f.slug as from_slug, t.slug as to_slug,
                 l.link_type, l.context, l.link_source,
-                o.slug as origin_slug, l.origin_field
+                o.slug as origin_slug, l.origin_field,
+                l.valid_from, l.valid_to, l.superseded_by
          FROM links l
          JOIN pages f ON f.id = l.from_page_id
          JOIN pages t ON t.id = l.to_page_id
          LEFT JOIN pages o ON o.id = l.origin_page_id
-         WHERE t.slug = $1 AND t.source_id = $2`,
+         WHERE t.slug = $1 AND t.source_id = $2
+           AND l.valid_to IS NULL`,
         [slug, opts.sourceId]
       );
       return rows as unknown as Link[];
@@ -2571,13 +2579,89 @@ export class PGLiteEngine implements BrainEngine {
     const { rows } = await this.db.query(
       `SELECT f.slug as from_slug, t.slug as to_slug,
               l.link_type, l.context, l.link_source,
-              o.slug as origin_slug, l.origin_field
+              o.slug as origin_slug, l.origin_field,
+              l.valid_from, l.valid_to, l.superseded_by
        FROM links l
        JOIN pages f ON f.id = l.from_page_id
        JOIN pages t ON t.id = l.to_page_id
        LEFT JOIN pages o ON o.id = l.origin_page_id
-       WHERE t.slug = $1`,
+       WHERE t.slug = $1
+         AND l.valid_to IS NULL`,
       [slug]
+    );
+    return rows as unknown as Link[];
+  }
+
+  async supersedeLink(
+    from: string,
+    to: string,
+    linkType: string,
+    newContext: string,
+    linkSource?: string,
+    opts?: { fromSourceId?: string; toSourceId?: string },
+  ): Promise<{ oldLinkId: number; newLinkId: number } | null> {
+    const fromSrc = opts?.fromSourceId ?? 'default';
+    const toSrc = opts?.toSourceId ?? 'default';
+    const src = linkSource ?? 'manual';
+    return this.db.transaction(async (tx) => {
+      // 1. Find the current link row.
+      const { rows: oldRows } = await tx.query(
+        `SELECT l.id FROM links l
+         JOIN pages f ON f.id = l.from_page_id
+         JOIN pages t ON t.id = l.to_page_id
+         WHERE f.slug = $1 AND f.source_id = $2
+           AND t.slug = $3 AND t.source_id = $4
+           AND l.link_type = $5
+           AND l.valid_to IS NULL
+         LIMIT 1`,
+        [from, fromSrc, to, toSrc, linkType],
+      );
+      if (oldRows.length === 0) return null;
+      const oldId = (oldRows[0] as { id: number }).id;
+      // 2. Insert the new link version.
+      const { rows: newRows } = await tx.query(
+        `INSERT INTO links (from_page_id, to_page_id, link_type, context, link_source, valid_from, valid_to)
+         SELECT f.id, t.id, $3, $4, $5, now(), NULL
+         FROM pages f, pages t
+         WHERE f.slug = $1 AND f.source_id = $2
+           AND t.slug = $6 AND t.source_id = $7
+         RETURNING id`,
+        [from, fromSrc, linkType, newContext, src, to, toSrc],
+      );
+      const newId = (newRows[0] as { id: number }).id;
+      // 3. Mark the old link as superseded.
+      await tx.query(
+        `UPDATE links
+         SET valid_to = now(), superseded_by = $1
+         WHERE id = $2`,
+        [newId, oldId],
+      );
+      return { oldLinkId: oldId, newLinkId: newId };
+    });
+  }
+
+  async getLinkHistory(
+    from: string,
+    to: string,
+    linkType: string,
+    opts?: { fromSourceId?: string; toSourceId?: string },
+  ): Promise<Link[]> {
+    const fromSrc = opts?.fromSourceId ?? 'default';
+    const toSrc = opts?.toSourceId ?? 'default';
+    const { rows } = await this.db.query(
+      `SELECT f.slug as from_slug, t.slug as to_slug,
+              l.link_type, l.context, l.link_source,
+              o.slug as origin_slug, l.origin_field,
+              l.valid_from, l.valid_to, l.superseded_by
+       FROM links l
+       JOIN pages f ON f.id = l.from_page_id
+       JOIN pages t ON t.id = l.to_page_id
+       LEFT JOIN pages o ON o.id = l.origin_page_id
+       WHERE f.slug = $1 AND f.source_id = $2
+         AND t.slug = $3 AND t.source_id = $4
+         AND l.link_type = $5
+       ORDER BY l.valid_from DESC`,
+      [from, fromSrc, to, toSrc, linkType],
     );
     return rows as unknown as Link[];
   }
@@ -2588,14 +2672,15 @@ export class PGLiteEngine implements BrainEngine {
     // v114 (#1941): distinct provenances + counts for `gbrain link-sources`.
     // Scope by the FROM page's source (consistent with getLinks). Federated
     // {sourceIds} takes precedence over scalar {sourceId}; neither = unscoped.
+    // v0.43.0: only current bi-temporal edges.
     const params: unknown[] = [];
-    let where = '';
+    let where = 'WHERE l.valid_to IS NULL';
     if (opts?.sourceIds && opts.sourceIds.length > 0) {
       params.push(opts.sourceIds);
-      where = `JOIN pages f ON f.id = l.from_page_id WHERE f.source_id = ANY($${params.length}::text[])`;
+      where += ` JOIN pages f ON f.id = l.from_page_id AND f.source_id = ANY($${params.length}::text[])`;
     } else if (opts?.sourceId) {
       params.push(opts.sourceId);
-      where = `JOIN pages f ON f.id = l.from_page_id WHERE f.source_id = $${params.length}`;
+      where += ` JOIN pages f ON f.id = l.from_page_id AND f.source_id = $${params.length}`;
     }
     const { rows } = await this.db.query(
       `SELECT l.link_source, COUNT(*)::int AS count

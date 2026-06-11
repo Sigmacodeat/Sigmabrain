@@ -1,0 +1,42 @@
+"use client";
+
+// Dedicated pricing page — tiers + pricing-specific FAQ.
+
+import { LANDING, PRICING, type Lang } from "@/content/site";
+import {
+  MarketingBackground,
+  MarketingNav,
+  MarketingFooter,
+  SectionHeading,
+  FaqList,
+} from "./chrome";
+import { PricingGrid } from "./pricing-grid";
+
+export default function PricingPage({ lang }: { lang: Lang }) {
+  const pricing = PRICING[lang];
+  // Reuse the landing FAQ — limits/data/open-source questions are pricing questions.
+  const faq = LANDING[lang].faq;
+
+  return (
+    <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+      <MarketingBackground />
+      <MarketingNav lang={lang} />
+
+      <section className="relative z-10 pt-20 pb-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <SectionHeading badge="Pricing" title={pricing.title} sub={pricing.sub} />
+          <PricingGrid lang={lang} />
+        </div>
+      </section>
+
+      <section className="relative z-10 py-24 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <div className="max-w-5xl mx-auto">
+          <SectionHeading title={LANDING[lang].faqTitle} />
+          <FaqList items={faq} />
+        </div>
+      </section>
+
+      <MarketingFooter lang={lang} />
+    </div>
+  );
+}

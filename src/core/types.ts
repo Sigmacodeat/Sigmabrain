@@ -1181,6 +1181,15 @@ export interface Link {
    * 'investors'). Used for debug output and the `unresolved` response list.
    */
   origin_field?: string | null;
+  /**
+   * v0.43.0: bi-temporal edge fields (pbrain v0.3.0 port).
+   * valid_from = when this edge version became active.
+   * valid_to = when this edge version was superseded (NULL = current).
+   * superseded_by = id of the newer link row that replaced this one.
+   */
+  valid_from?: string | null;
+  valid_to?: string | null;
+  superseded_by?: number | null;
 }
 
 export interface GraphNode {

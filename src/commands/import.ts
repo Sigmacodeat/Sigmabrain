@@ -4,6 +4,7 @@ import { join, relative } from 'path';
 import { cpus, totalmem } from 'os';
 import type { BrainEngine } from '../core/engine.ts';
 import { importFile, importImageFile, isImageFilePath } from '../core/import-file.ts';
+import { isDocumentFilePath } from '../core/extract-document.ts';
 import { loadConfig, gbrainPath } from '../core/config.ts';
 import { createProgress } from '../core/progress.ts';
 import { getCliOptions, cliOptsToProgressOptions } from '../core/cli-options.ts';
@@ -504,9 +505,14 @@ function isCollectibleForWalker(
     case 'markdown':
       return isMarkdownFilePath(path) || (multimodalOn && isImageFilePathFromSync(path));
     case 'auto':
+      // Documents (.pdf/.docx/.eml/.csv/.tsv/.xlsx) are admitted
+      // unconditionally here: `gbrain import <dir>` names a directory, so
+      // ingesting its documents is the user's explicit intent. Background
+      // sync stays gated behind GBRAIN_INGEST_DOCUMENTS (sync.ts).
       return (
         isMarkdownFilePath(path) ||
         isCodeFilePath(path) ||
+        isDocumentFilePath(path) ||
         (multimodalOn && isImageFilePathFromSync(path))
       );
   }

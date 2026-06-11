@@ -1,4 +1,4 @@
-const BASE = '';
+const BASE = import.meta.env.VITE_API_BASE || '';
 
 // v0.26.3 trust model (D11 + D12): the admin UI does NOT cache the
 // bootstrap token in browser JS state. On 401, redirect to login —
@@ -52,4 +52,23 @@ export const api = {
     apiFetchText(`/admin/api/calibration/charts/${encodeURIComponent(type)}${holder ? `?holder=${encodeURIComponent(holder)}` : ''}`),
   // v0.41 D2 — live minion-jobs dashboard snapshot.
   jobsWatch: () => apiFetch('/admin/api/jobs/watch'),
+  // v0.43.0: brain status dashboard (PMBrain parity).
+  brainStatus: () => apiFetch('/admin/api/brain-status'),
+  // v0.43.0: natural language console.
+  nlQuery: (query: string) => apiFetch('/admin/api/nl-query', { method: 'POST', body: JSON.stringify({ query }) }),
+  // v0.44.0: Legal Brain endpoints.
+  legalEntities: () => apiFetch('/admin/api/legal/entities'),
+  legalCases: () => apiFetch('/admin/api/legal/cases'),
+  legalStats: () => apiFetch('/admin/api/legal/stats'),
+  createLegalEntity: (body: unknown) => apiFetch('/admin/api/legal/entity', { method: 'POST', body: JSON.stringify(body) }),
+  createLegalCase: (body: unknown) => apiFetch('/admin/api/legal/case', { method: 'POST', body: JSON.stringify(body) }),
+  updateLegalEntity: (slug: string, body: unknown) => apiFetch(`/admin/api/legal/entity/${encodeURIComponent(slug)}`, { method: 'PUT', body: JSON.stringify(body) }),
+  updateLegalCase: (slug: string, body: unknown) => apiFetch(`/admin/api/legal/case/${encodeURIComponent(slug)}`, { method: 'PUT', body: JSON.stringify(body) }),
+  deleteLegalEntity: (slug: string) => apiFetch(`/admin/api/legal/entity/${encodeURIComponent(slug)}`, { method: 'DELETE' }),
+  deleteLegalCase: (slug: string) => apiFetch(`/admin/api/legal/case/${encodeURIComponent(slug)}`, { method: 'DELETE' }),
+  // v0.42: connector ingestion status.
+  connectors: () => apiFetch('/admin/api/connectors'),
+  connectorSync: (service: string) => apiFetch(`/admin/api/connectors/${encodeURIComponent(service)}/sync`, { method: 'POST' }),
+  connectorToggle: (service: string) => apiFetch(`/admin/api/connectors/${encodeURIComponent(service)}/toggle`, { method: 'POST' }),
+  connectorHealth: (service: string) => apiFetch(`/admin/api/connectors/${encodeURIComponent(service)}/health`),
 };

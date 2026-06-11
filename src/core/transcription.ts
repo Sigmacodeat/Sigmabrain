@@ -102,6 +102,62 @@ function getApiKey(provider: string): string | undefined {
 }
 
 // ---------------------------------------------------------------------------
+// Buffer transcription (v0.43.0: for document extraction pipeline)
+// ---------------------------------------------------------------------------
+
+/**
+ * Transcribe audio from an in-memory Buffer instead of a file path.
+ * Used by extract-document.ts for audio file import.
+ */
+export async function transcribeBuffer(
+  buf: Buffer,
+  filename: string,
+  config: TranscriptionConfig = {},
+): Promise<TranscriptionResult> {
+  const provider = config.provider || detectProvider();
+  const apiKey = config.apiKey || getApiKey(provider);
+  if (!apiKey) {
+    const envVar = provider === 'groq' ? 'GROQ_API_KEY' : 'OPENAI_API_KEY';
+    throw new Error(`${provider} API key not set. Set ${envVar} environment variable.`);
+  }
+  const model = config.model || (provider === 'groq' ? 'whisper-large-v3' : 'whisper-1');
+  const baseUrl = provider === 'groq'
+    ? 'https://api.groq.com/openai/v1'
+    : 'https://api.openai.com/v1';
+
+  const formData = new FormData();
+  formData.append('file', new Blob([new Uint8Array(buf)]), basename(filename));
+  formData.append('model', model);
+  formData.append('response_format', 'verbose_json');
+  if (config.language) formData.append('language', config.language);
+
+  const response = await fetch(`${baseUrl}/audio/transcriptions`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}` },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Transcription failed (${provider} ${response.status}): ${errorText}`);
+  }
+
+  const data = await response.json() as any;
+
+  return {
+    text: data.text || '',
+    segments: (data.segments || []).map((s: any) => ({
+      start: s.start || 0,
+      end: s.end || 0,
+      text: s.text || '',
+    })),
+    language: data.language || config.language || 'unknown',
+    duration: data.duration || 0,
+    provider,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Single file transcription
 // ---------------------------------------------------------------------------
 

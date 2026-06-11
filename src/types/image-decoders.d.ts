@@ -32,3 +32,26 @@ declare module '@jsquash/avif/codec/dec/avif_dec.wasm' {
   const path: string;
   export default path;
 }
+
+declare module 'pdf2pic' {
+  interface ConvertOptions {
+    density?: number;
+    format?: 'png' | 'jpg' | 'jpeg';
+    width?: number;
+    height?: number;
+    quality?: number;
+  }
+  interface ConvertResult {
+    buffer?: Buffer;
+    base64?: string;
+    size?: string;
+    path?: string;
+  }
+  interface Converter {
+    (page: number): Promise<ConvertResult>;
+    bulk(page: number): Promise<ConvertResult[]>;
+    setOptions(options: ConvertOptions): void;
+  }
+  export function fromBuffer(buffer: Buffer, options?: ConvertOptions): Converter;
+  export function fromPath(path: string, options?: ConvertOptions): Converter;
+}

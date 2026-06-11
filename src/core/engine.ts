@@ -1198,6 +1198,31 @@ export interface BrainEngine {
     opts?: { depth?: number; linkType?: string; direction?: 'in' | 'out' | 'both'; sourceId?: string; sourceIds?: string[] },
   ): Promise<GraphPath[]>;
   /**
+   * v0.43.0: bi-temporal link supersession (pbrain v0.3.0 port).
+   * Creates a new link version and marks the old one as superseded.
+   * The old link gets valid_to = now() and superseded_by = new_link_id.
+   * Only works on links with valid_to IS NULL (current edges).
+   */
+  supersedeLink(
+    from: string,
+    to: string,
+    linkType: string,
+    newContext: string,
+    linkSource?: string,
+    opts?: { fromSourceId?: string; toSourceId?: string },
+  ): Promise<{ oldLinkId: number; newLinkId: number } | null>;
+  /**
+   * v0.43.0: retrieve the full history of a bi-temporal edge.
+   * Returns all versions of the link between from→to with the given link_type,
+   * ordered by valid_from DESC (newest first).
+   */
+  getLinkHistory(
+    from: string,
+    to: string,
+    linkType: string,
+    opts?: { fromSourceId?: string; toSourceId?: string },
+  ): Promise<Link[]>;
+  /**
    * Typed-edge relational fan-out for the relational recall arm (v0.43).
    *
    * Generalizes traversePaths to a SEED ARRAY and aggregates to ranked NODES

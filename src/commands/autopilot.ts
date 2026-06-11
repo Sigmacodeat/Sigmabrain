@@ -37,6 +37,9 @@ import { logSelfUpgrade } from '../core/audit/self-upgrade-audit.ts';
 import { detectInstallMethod } from './upgrade.ts';
 import { evaluateQuietHours } from '../core/minions/quiet-hours.ts';
 import { inspectLock } from '../core/db-lock.ts';
+import { startConnectorIngestion } from '../core/ingestion/connectors/daemon-integration.ts';
+import type { IngestionDaemon } from '../core/ingestion/daemon.ts';
+import { MinionQueue } from '../core/minions/queue.ts';
 
 /**
  * v0.37.7.0 #1162 — classify autopilot reconnect-loop errors.
@@ -457,10 +460,43 @@ export async function runAutopilot(engine: BrainEngine, args: string[]) {
   //
   // No `process.on('exit')` handler — its callback runs synchronously and
   // cannot await the worker's drain.
+  // v0.42+ Connector ingestion daemon.
+  let connectorDaemon: IngestionDaemon | undefined;
+  try {
+    const dispatch = async (event: import('../core/ingestion/types.ts').IngestionEvent) => {
+      const queue = new MinionQueue(engine);
+      const job = await queue.add(
+        'ingest_capture',
+        { event },
+        { idempotency_key: `ingest:${event.source_kind}:${event.content_hash}`, maxWaiting: 100 },
+      );
+      return { kind: 'queued' as const, jobId: job.id };
+    };
+    const logger = {
+      info: (msg: string) => { if (!jsonMode) console.log(`[connector] ${msg}`); },
+      warn: (msg: string) => console.error(`[connector] WARN: ${msg}`),
+      error: (msg: string) => console.error(`[connector] ERR: ${msg}`),
+    };
+    connectorDaemon = await startConnectorIngestion(engine, logger as any, dispatch);
+  } catch (err) {
+    console.error(`[connector] Daemon startup failed (non-blocking): ${err instanceof Error ? err.message : String(err)}`);
+  }
+
+  // Async shutdown with 35s drain window for the worker child. The worker
+  // has its own SIGTERM handler (minions/worker.ts:79-85) that drains
+  // in-flight jobs for up to 30s before exit. We give it 35s here to
+  // account for signal-delivery latency, then SIGKILL as a last resort.
+  //
+  // No `process.on('exit')` handler — its callback runs synchronously and
+  // cannot await the worker's drain.
   const shutdown = async (sig: string) => {
     if (stopping) return;
     stopping = true;
     console.log(`Autopilot stopping (${sig}).`);
+    if (connectorDaemon) {
+      console.log('[connector] Stopping connector daemon...');
+      try { await connectorDaemon.stop(); } catch { /* non-fatal */ }
+    }
     if (childSupervisor) {
       childSupervisor.killChild('SIGTERM');
       await childSupervisor.awaitChildExit(35_000);

@@ -2,6 +2,7 @@ import matter from 'gray-matter';
 import { safeLoad as yamlSafeLoad } from 'js-yaml';
 import type { Page, PageType } from './types.ts';
 import { slugifyPath } from './sync.ts';
+import { stripCodeBlocks } from './link-extraction.ts';
 
 export type ParseValidationCode =
   | 'MISSING_OPEN'
@@ -136,7 +137,10 @@ export function parseMarkdown(
     opts?.activePack ? inferTypeFromPack(filePath, opts.activePack) : inferType(filePath)
   );
   const title = coerceFrontmatterString(frontmatter.title).trim() || inferTitle(filePath);
-  const tags = extractTags(frontmatter);
+  const frontmatterTags = extractTags(frontmatter);
+  const inlineTags = extractInlineTags(body);
+  // Merge frontmatter tags and inline #tags, deduplicate.
+  const tags = Array.from(new Set([...frontmatterTags, ...inlineTags]));
   const slug = coerceFrontmatterString(frontmatter.slug) || inferSlug(filePath);
 
   const cleanFrontmatter = { ...frontmatter };
@@ -144,6 +148,9 @@ export function parseMarkdown(
   delete cleanFrontmatter.title;
   delete cleanFrontmatter.tags;
   delete cleanFrontmatter.slug;
+  // v0.43.0: keep aliases in frontmatter for Obsidian compatibility
+  // (aliases are stripped from cleanFrontmatter but we want them preserved)
+  // Actually: aliases ARE kept because we only delete type/title/tags/slug.
 
   const result: ParsedMarkdown = {
     frontmatter: cleanFrontmatter,
@@ -618,6 +625,39 @@ function extractTags(frontmatter: Record<string, unknown>): string[] {
   if (!tags) return [];
   if (Array.isArray(tags)) return tags.map(String);
   if (typeof tags === 'string') return tags.split(',').map(t => t.trim()).filter(Boolean);
+  return [];
+}
+
+/**
+ * v0.43.0: Extract inline Obsidian-style #tags from markdown body text.
+ * Matches #tag-name (letters, numbers, hyphens, underscores, slashes for nested tags).
+ * Excludes tags inside code blocks, URLs, and frontmatter.
+ */
+export function extractInlineTags(content: string): string[] {
+  const stripped = stripCodeBlocks(content);
+  // Remove URLs so # inside URLs doesn't match.
+  const noUrls = stripped.replace(/https?:\/\/[^\s)]+/g, ' ');
+  const tagRe = /#([a-zA-Z0-9_\-/]+)/g;
+  const found = new Set<string>();
+  let match: RegExpExecArray | null;
+  while ((match = tagRe.exec(noUrls)) !== null) {
+    const tag = match[1]!.toLowerCase().replace(/\/$/, ''); // trim trailing slash
+    if (tag && !tag.includes('//') && !/^\d+$/.test(tag)) {
+      found.add(tag);
+    }
+  }
+  return Array.from(found);
+}
+
+/**
+ * v0.43.0: Extract Obsidian aliases from frontmatter.
+ * Obsidian supports aliases: ["Name One", "Alt Name"] in YAML frontmatter.
+ */
+export function extractAliases(frontmatter: Record<string, unknown>): string[] {
+  const aliases = frontmatter.aliases;
+  if (!aliases) return [];
+  if (Array.isArray(aliases)) return aliases.map(String).filter(Boolean);
+  if (typeof aliases === 'string') return [aliases];
   return [];
 }
 

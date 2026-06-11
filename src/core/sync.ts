@@ -12,6 +12,7 @@
  */
 
 import { CJK_SLUG_CHARS } from './cjk.ts';
+import { isDocumentFilePath as isDocumentFilePathFromExtractor } from './extract-document.ts';
 // v0.37.7.0 #1169 submodule-detection helpers. Bottom-of-file already
 // aliases existsSync as `_existsSync` for other purposes; the top-of-file
 // import keeps the pruneDir helper's deps near its callsite.
@@ -178,14 +179,27 @@ function isMultimodalEnabled(): boolean {
   return process.env.GBRAIN_EMBEDDING_MULTIMODAL === 'true';
 }
 
+/**
+ * Document formats (.pdf/.docx/.eml/.csv/.tsv/.xlsx) are admitted into sync
+ * only when the operator opts in — mirrors the multimodal image gate so
+ * existing brains keep their current sync surface until the flag flips.
+ * Explicit `gbrain import` admits documents unconditionally (named-directory
+ * intent), see commands/import.ts.
+ */
+export function isDocumentIngestEnabled(): boolean {
+  return process.env.GBRAIN_INGEST_DOCUMENTS === 'true';
+}
+
 function isAllowedByStrategy(path: string, strategy: SyncStrategy): boolean {
   if (strategy === 'markdown') return isMarkdownFilePath(path);
   if (strategy === 'code') return isCodeFilePath(path);
-  // 'auto' / default: markdown + code, plus images when multimodal is on.
+  // 'auto' / default: markdown + code, plus images when multimodal is on,
+  // plus document formats when document ingest is on.
   return (
     isMarkdownFilePath(path) ||
     isCodeFilePath(path) ||
-    (isMultimodalEnabled() && isImageFilePath(path))
+    (isMultimodalEnabled() && isImageFilePath(path)) ||
+    (isDocumentIngestEnabled() && isDocumentFilePathFromExtractor(path))
   );
 }
 

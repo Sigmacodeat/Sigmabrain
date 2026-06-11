@@ -5,13 +5,15 @@ import { AgentsPage } from './pages/Agents';
 import { RequestLogPage } from './pages/RequestLog';
 import { CalibrationPage } from './pages/Calibration';
 import { JobsWatchPage } from './pages/JobsWatch';
+import { LegalPage } from './pages/Legal';
+import { ConnectorsPage } from './pages/Connectors';
 import { api } from './api';
 
-type Page = 'login' | 'dashboard' | 'agents' | 'log' | 'calibration' | 'jobs';
+type Page = 'login' | 'dashboard' | 'agents' | 'log' | 'calibration' | 'jobs' | 'legal' | 'connectors';
 
 function getPage(): Page {
   const hash = window.location.hash.replace('#', '') || 'dashboard';
-  if (['login', 'dashboard', 'agents', 'log', 'calibration', 'jobs'].includes(hash)) return hash as Page;
+  if (['login', 'dashboard', 'agents', 'log', 'calibration', 'jobs', 'legal', 'connectors'].includes(hash)) return hash as Page;
   return 'dashboard';
 }
 
@@ -48,7 +50,7 @@ export function App() {
   return (
     <div className="app">
       <nav className="sidebar">
-        <div className="sidebar-logo">GBrain</div>
+        <div className="sidebar-logo">Sigmabrain</div>
         <div className="sidebar-nav">
           <a className={`nav-item ${page === 'dashboard' ? 'active' : ''}`}
              onClick={() => navigate('dashboard')}>Dashboard</a>
@@ -60,6 +62,10 @@ export function App() {
              onClick={() => navigate('calibration')}>Calibration</a>
           <a className={`nav-item ${page === 'jobs' ? 'active' : ''}`}
              onClick={() => navigate('jobs')}>Jobs Watch</a>
+          <a className={`nav-item ${page === 'connectors' ? 'active' : ''}`}
+             onClick={() => navigate('connectors')}>Connectors</a>
+          <a className={`nav-item ${page === 'legal' ? 'active' : ''}`}
+             onClick={() => navigate('legal')}>Legal Brain</a>
         </div>
         <div style={{ marginTop: 'auto', padding: '16px 12px', borderTop: '1px solid var(--border)' }}>
           <button
@@ -86,6 +92,8 @@ export function App() {
         {page === 'log' && <RequestLogPage />}
         {page === 'calibration' && <CalibrationPage />}
         {page === 'jobs' && <JobsWatchPage />}
+        {page === 'connectors' && <ConnectorsPage />}
+        {page === 'legal' && <LegalPage />}
       </main>
     </div>
   );

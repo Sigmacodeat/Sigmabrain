@@ -43,6 +43,8 @@ import {
   type IngestionContentType,
   type IngestionEvent,
 } from '../core/ingestion/types.ts';
+import { mountWebApi } from './web-api.ts';
+import { startConnectorIngestion } from '../core/ingestion/connectors/daemon-integration.ts';
 
 /**
  * /health endpoint timeout. 3s rather than 5s: Fly.io's default
@@ -537,6 +539,8 @@ export async function runServeHttp(engine: BrainEngine, options: ServeHttpOption
   app.use('/authorize', cors(corsOAuthOptions));
   app.use('/register', cors(corsOAuthOptions));
   app.use('/revoke', cors(corsOAuthOptions));
+  // Sigmabrain dashboard REST API — same CORS allowlist as OAuth when set.
+  app.use('/api', cors({ ...corsOAuthOptions, credentials: true }));
 
   // ---------------------------------------------------------------------------
   // Custom client_credentials handler (before mcpAuthRouter)
@@ -715,6 +719,11 @@ export async function runServeHttp(engine: BrainEngine, options: ServeHttpOption
   });
 
   app.use(authRouter);
+
+  // ---------------------------------------------------------------------------
+  // Sigmabrain Web Dashboard REST API (v0.42+ product layer)
+  // ---------------------------------------------------------------------------
+  mountWebApi(app, engine);
 
   // ---------------------------------------------------------------------------
   // Health check — liveness only. Full engine stats live at
@@ -920,6 +929,221 @@ export async function runServeHttp(engine: BrainEngine, options: ServeHttpOption
     }
   });
 
+  // v0.44.0 — Legal Brain admin API endpoints
+  app.get('/admin/api/legal/entities', requireAdmin, async (_req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      const rows = await sql`
+        SELECT slug, type, title, frontmatter, created_at
+        FROM pages
+        WHERE type = 'legal-entity'
+        ORDER BY created_at DESC
+        LIMIT 100
+      `;
+      const entities = (rows as unknown as Array<{ slug: string; type: string; title: string; frontmatter: Record<string, unknown>; created_at: string }>).map((r) => ({
+        id: r.slug,
+        type: (r.frontmatter.legal_type as string) || 'lawyer',
+        displayName: r.title,
+        legalAreas: (r.frontmatter.legal_areas as string[]) || [],
+        specializations: (r.frontmatter.specializations as string[]) || [],
+        jurisdiction: (r.frontmatter.jurisdiction as string) || '',
+        caseCount: (r.frontmatter.anonymized_case_count as number) || 0,
+        tags: (r.frontmatter.tags as string[]) || [],
+        createdAt: r.created_at,
+      }));
+      res.json({ entities });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
+  app.get('/admin/api/legal/cases', requireAdmin, async (_req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      const rows = await sql`
+        SELECT slug, type, title, frontmatter, compiled_truth, created_at
+        FROM pages
+        WHERE type = 'legal-case'
+        ORDER BY created_at DESC
+        LIMIT 100
+      `;
+      const cases = (rows as unknown as Array<{ slug: string; type: string; title: string; frontmatter: Record<string, unknown>; compiled_truth: string; created_at: string }>).map((r) => ({
+        id: r.slug,
+        caseNumber: (r.frontmatter.case_number as string) || r.slug,
+        displayTitle: r.title,
+        legalArea: (r.frontmatter.legal_area as string) || '',
+        subArea: (r.frontmatter.sub_area as string) || '',
+        status: (r.frontmatter.status as string) || 'open',
+        priority: (r.frontmatter.priority as string) || 'medium',
+        opponentId: (r.frontmatter.opponent_id as string) || '',
+        claims: (r.frontmatter.claims as string[]) || [],
+        facts: r.compiled_truth || '',
+        createdAt: r.created_at,
+      }));
+      res.json({ cases });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
+  app.get('/admin/api/legal/stats', requireAdmin, async (_req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      const [entityCount] = await sql`SELECT count(*)::int as count FROM pages WHERE type = 'legal-entity'`;
+      const [caseCount] = await sql`SELECT count(*)::int as count FROM pages WHERE type = 'legal-case'`;
+      const [openCases] = await sql`SELECT count(*)::int as count FROM pages WHERE type = 'legal-case' AND frontmatter->>'status' = 'open'`;
+      const [wonCases] = await sql`SELECT count(*)::int as count FROM pages WHERE type = 'legal-case' AND frontmatter->>'status' = 'won'`;
+      res.json({
+        entities: (entityCount?.count as number) ?? 0,
+        cases: (caseCount?.count as number) ?? 0,
+        openCases: (openCases?.count as number) ?? 0,
+        wonCases: (wonCases?.count as number) ?? 0,
+      });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
+  // ── Legal Brain CRUD ──────────────────────────────────────────────────
+  app.post('/admin/api/legal/entity', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      const { title, legalType, legalAreas, jurisdiction, specializations, tags, sourceId } = req.body;
+      if (!title || !legalType) {
+        res.status(400).json({ error: 'title and legalType are required' });
+        return;
+      }
+      const slugBase = (title as string).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const slug = `legal-entity-${slugBase}-${Date.now()}`;
+      const frontmatter = {
+        legal_type: legalType,
+        legal_areas: legalAreas || [],
+        jurisdiction: jurisdiction || '',
+        specializations: specializations || [],
+        tags: tags || [],
+      };
+      const source_id = (sourceId as string) || 'default';
+      await sql`
+        INSERT INTO pages (slug, source_id, type, title, frontmatter, compiled_truth, created_at, updated_at)
+        VALUES (${slug}, ${source_id}, ${'legal-entity'}, ${title}, ${JSON.stringify(frontmatter)}::jsonb, '', NOW(), NOW())
+      `;
+      res.status(201).json({ slug, title, type: 'legal-entity' });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
+  app.post('/admin/api/legal/case', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      const { title, caseNumber, legalArea, subArea, status, priority, opponentId, claims, facts, sourceId } = req.body;
+      if (!title || !legalArea) {
+        res.status(400).json({ error: 'title and legalArea are required' });
+        return;
+      }
+      const slugBase = (title as string).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const slug = `legal-case-${slugBase}-${Date.now()}`;
+      const frontmatter = {
+        case_number: caseNumber || slug,
+        legal_area: legalArea,
+        sub_area: subArea || '',
+        status: status || 'open',
+        priority: priority || 'medium',
+        opponent_id: opponentId || '',
+        claims: claims || [],
+      };
+      const source_id = (sourceId as string) || 'default';
+      await sql`
+        INSERT INTO pages (slug, source_id, type, title, frontmatter, compiled_truth, created_at, updated_at)
+        VALUES (${slug}, ${source_id}, ${'legal-case'}, ${title}, ${JSON.stringify(frontmatter)}::jsonb, ${facts || ''}, NOW(), NOW())
+      `;
+      res.status(201).json({ slug, title, type: 'legal-case' });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
+  app.put('/admin/api/legal/entity/:slug', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      const slug = req.params.slug;
+      const { title, legalType, legalAreas, jurisdiction, specializations, tags } = req.body;
+      const [existing] = await sql`SELECT frontmatter FROM pages WHERE slug = ${slug} AND type = 'legal-entity'`;
+      if (!existing) { res.status(404).json({ error: 'Entity not found' }); return; }
+      const fm = (existing.frontmatter as Record<string, unknown>) || {};
+      const newFm = {
+        ...fm,
+        ...(legalType !== undefined ? { legal_type: legalType } : {}),
+        ...(legalAreas !== undefined ? { legal_areas: legalAreas } : {}),
+        ...(jurisdiction !== undefined ? { jurisdiction } : {}),
+        ...(specializations !== undefined ? { specializations } : {}),
+        ...(tags !== undefined ? { tags } : {}),
+      };
+      await sql`
+        UPDATE pages
+        SET title = COALESCE(${title ?? null}, title),
+            frontmatter = ${JSON.stringify(newFm)}::jsonb,
+            updated_at = NOW()
+        WHERE slug = ${slug} AND type = 'legal-entity'
+      `;
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
+  app.put('/admin/api/legal/case/:slug', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      const slug = req.params.slug;
+      const { title, caseNumber, legalArea, subArea, status, priority, opponentId, claims, facts } = req.body;
+      const [existing] = await sql`SELECT frontmatter FROM pages WHERE slug = ${slug} AND type = 'legal-case'`;
+      if (!existing) { res.status(404).json({ error: 'Case not found' }); return; }
+      const fm = (existing.frontmatter as Record<string, unknown>) || {};
+      const newFm = {
+        ...fm,
+        ...(caseNumber !== undefined ? { case_number: caseNumber } : {}),
+        ...(legalArea !== undefined ? { legal_area: legalArea } : {}),
+        ...(subArea !== undefined ? { sub_area: subArea } : {}),
+        ...(status !== undefined ? { status } : {}),
+        ...(priority !== undefined ? { priority } : {}),
+        ...(opponentId !== undefined ? { opponent_id: opponentId } : {}),
+        ...(claims !== undefined ? { claims } : {}),
+      };
+      await sql`
+        UPDATE pages
+        SET title = COALESCE(${title ?? null}, title),
+            frontmatter = ${JSON.stringify(newFm)}::jsonb,
+            compiled_truth = COALESCE(${facts ?? null}, compiled_truth),
+            updated_at = NOW()
+        WHERE slug = ${slug} AND type = 'legal-case'
+      `;
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
+  app.delete('/admin/api/legal/entity/:slug', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      await sql`DELETE FROM pages WHERE slug = ${req.params.slug} AND type = 'legal-entity'`;
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
+  app.delete('/admin/api/legal/case/:slug', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const sql = db.getConnection();
+      await sql`DELETE FROM pages WHERE slug = ${req.params.slug} AND type = 'legal-case'`;
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  });
+
   // v0.38 Slice 4 — per-OAuth-client agent spend viewer. Pre-computes today's
   // spend (committed + pending reservations) per client so the Agents tab
   // can render a "$X / $Y today" cell. Read-side endpoint only — no mutation.
@@ -986,6 +1210,242 @@ export async function runServeHttp(engine: BrainEngine, options: ServeHttpOption
       const { readSnapshot } = await import('./jobs-watch.ts');
       const snap = await readSnapshot(engine);
       res.json(snap);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      res.status(500).json({ error: msg });
+    }
+  });
+
+  // v0.43.0: brain status dashboard endpoint (PMBrain admin parity).
+  // Returns page counts, source breakdown, embedding coverage, and
+  // bi-temporal link metrics for the admin dashboard.
+  app.get('/admin/api/brain-status', requireAdmin, async (_req: Request, res: Response) => {
+    try {
+      const [pages] = await sql`SELECT count(*)::int as count FROM pages WHERE deleted_at IS NULL`;
+      const [sources] = await sql`SELECT count(*)::int as count FROM sources WHERE archived_at IS NULL`;
+      const [chunks] = await sql`SELECT count(*)::int as count FROM content_chunks`;
+      const [embedded] = await sql`SELECT count(*)::int as count FROM content_chunks WHERE embedding IS NOT NULL`;
+      const [links] = await sql`SELECT count(*)::int as count FROM links WHERE valid_to IS NULL`;
+      const [linksHistory] = await sql`SELECT count(*)::int as count FROM links WHERE valid_to IS NOT NULL`;
+      const sourceRows = await sql`
+        SELECT s.source_id, s.local_path, count(p.id)::int as page_count
+        FROM sources s
+        LEFT JOIN pages p ON p.source_id = s.source_id AND p.deleted_at IS NULL
+        WHERE s.archived_at IS NULL
+        GROUP BY s.source_id, s.local_path
+        ORDER BY page_count DESC
+      `;
+      const pageCount = (pages?.count as number) ?? 0;
+      const sourceCount = (sources?.count as number) ?? 0;
+      const chunkCount = (chunks?.count as number) ?? 0;
+      const embeddedCount = (embedded?.count as number) ?? 0;
+      const linkCount = (links?.count as number) ?? 0;
+      const linkHistCount = (linksHistory?.count as number) ?? 0;
+      res.json({
+        pages: pageCount,
+        sources: sourceCount,
+        chunks: chunkCount,
+        embedded: embeddedCount,
+        embedding_coverage_pct: chunkCount ? Math.round((embeddedCount / chunkCount) * 100) : 0,
+        links_current: linkCount,
+        links_historical: linkHistCount,
+        source_breakdown: sourceRows,
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      res.status(500).json({ error: msg });
+    }
+  });
+
+  // v0.42: Connector status endpoint for admin dashboard.
+  // Returns all configured connectors with their enabled/disabled state
+  // and last-known health. Reads from the connector registry on disk.
+  app.get('/admin/api/connectors', requireAdmin, async (_req: Request, res: Response) => {
+    try {
+      const { ConnectorManager } = await import('../core/ingestion/connectors/manager.ts');
+      const mgr = new ConnectorManager();
+      const entries = await mgr.list();
+      const enabled = await mgr.loadEnabled();
+      const enabledIds = new Set(enabled.map((c) => c.id));
+
+      const connectors = await Promise.all(
+        entries.map(async (entry) => ({
+          service: entry.service,
+          enabled: entry.enabled,
+          running: enabledIds.has(entry.service),
+          hasCredentials: entry.hasCredentials,
+          last_sync_at: await mgr.getLastSync(entry.service),
+        }))
+      );
+
+      res.json({ connectors });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      res.status(500).json({ error: msg });
+    }
+  });
+
+  // v0.42: POST /admin/api/connectors/:service/sync — manual sync trigger.
+  app.post('/admin/api/connectors/:service/sync', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const service = String(req.params.service);
+      const { ConnectorManager, SUPPORTED_CONNECTORS, CONNECTOR_REGISTRY } = await import('../core/ingestion/connectors/manager.ts');
+      if (!SUPPORTED_CONNECTORS.includes(service)) {
+        res.status(400).json({ error: 'unsupported_service', message: `Service "${service}" is not supported` });
+        return;
+      }
+      const mgr = new ConnectorManager();
+      const entries = await mgr.list();
+      const entry = entries.find((e) => e.service === service);
+      if (!entry) {
+        res.status(404).json({ error: 'not_found', message: `Connector "${service}" not configured` });
+        return;
+      }
+      if (!entry.enabled) {
+        res.status(409).json({ error: 'disabled', message: `Connector "${service}" is disabled. Enable it first.` });
+        return;
+      }
+      // Load raw registry to get config for instantiation.
+      const rawPath = (mgr as any)._registryPath ? (mgr as any)._registryPath() : '';
+      const { readFileSync, existsSync } = await import('node:fs');
+      let config: Record<string, unknown> = {};
+      if (existsSync(rawPath)) {
+        const raw = JSON.parse(readFileSync(rawPath, 'utf-8')) as Array<{ service: string; config: Record<string, unknown> }>;
+        const found = raw.find((r) => r.service === service);
+        if (found) config = found.config;
+      }
+      const Ctor = CONNECTOR_REGISTRY[service];
+      if (!Ctor) {
+        res.status(500).json({ error: 'internal', message: 'Connector registry inconsistency' });
+        return;
+      }
+      const connector = new Ctor(config);
+      connector.sync().catch((err: unknown) => {
+        console.error(`[admin] Manual sync failed for ${service}:`, err instanceof Error ? err.message : String(err));
+      });
+      res.json({ status: 'sync_triggered', service });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      res.status(500).json({ error: msg });
+    }
+  });
+
+  // v0.42: POST /admin/api/connectors/:service/toggle — enable/disable.
+  app.post('/admin/api/connectors/:service/toggle', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const service = String(req.params.service);
+      const { ConnectorManager, SUPPORTED_CONNECTORS } = await import('../core/ingestion/connectors/manager.ts');
+      if (!SUPPORTED_CONNECTORS.includes(service)) {
+        res.status(400).json({ error: 'unsupported_service', message: `Service "${service}" is not supported` });
+        return;
+      }
+      const mgr = new ConnectorManager();
+      const entries = await mgr.list();
+      const entry = entries.find((e) => e.service === service);
+      if (!entry) {
+        res.status(404).json({ error: 'not_found', message: `Connector "${service}" not configured` });
+        return;
+      }
+      const newState = !entry.enabled;
+      await mgr.setEnabled(service, newState);
+      res.json({ status: 'ok', service, enabled: newState });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      res.status(500).json({ error: msg });
+    }
+  });
+
+  // v0.42: GET /admin/api/connectors/:service/health — detailed health check.
+  app.get('/admin/api/connectors/:service/health', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const service = String(req.params.service);
+      const { ConnectorManager, SUPPORTED_CONNECTORS } = await import('../core/ingestion/connectors/manager.ts');
+      if (!SUPPORTED_CONNECTORS.includes(service)) {
+        res.status(400).json({ error: 'unsupported_service', message: `Service "${service}" is not supported` });
+        return;
+      }
+      const mgr = new ConnectorManager();
+      const entries = await mgr.list();
+      const entry = entries.find((e) => e.service === service);
+      if (!entry) {
+        res.status(404).json({ error: 'not_found', message: `Connector "${service}" not configured` });
+        return;
+      }
+      const running = await mgr.loadEnabled();
+      const isRunning = running.some((c) => c.id === service);
+      res.json({
+        service,
+        enabled: entry.enabled,
+        running: isRunning,
+        hasCredentials: entry.hasCredentials,
+        status: isRunning ? 'ok' : entry.enabled ? 'stopped' : 'disabled',
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      res.status(500).json({ error: msg });
+    }
+  });
+
+  // v0.43.0: Natural Language Console endpoint.
+  // Accepts a text query, parses intent, executes the matching BrainEngine
+  // operation, and returns a natural language response.
+  app.post('/admin/api/nl-query', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { parseNLQuery, formatNLResponse } = await import('../core/nl-console.ts');
+      const text = (req.body as { query?: string }).query ?? '';
+      const nl = parseNLQuery(text);
+
+      let data: unknown;
+      switch (nl.intent) {
+        case 'brain_status': {
+          const [pages] = await sql`SELECT count(*)::int as count FROM pages WHERE deleted_at IS NULL`;
+          const [sources] = await sql`SELECT count(*)::int as count FROM sources WHERE archived_at IS NULL`;
+          const [chunks] = await sql`SELECT count(*)::int as count FROM content_chunks`;
+          const [embedded] = await sql`SELECT count(*)::int as count FROM content_chunks WHERE embedding IS NOT NULL`;
+          const [links] = await sql`SELECT count(*)::int as count FROM links WHERE valid_to IS NULL`;
+          const [linksHistory] = await sql`SELECT count(*)::int as count FROM links WHERE valid_to IS NOT NULL`;
+          data = {
+            pages: (pages?.count as number) ?? 0,
+            sources: (sources?.count as number) ?? 0,
+            chunks: (chunks?.count as number) ?? 0,
+            embedding_coverage_pct: (chunks?.count as number) ? Math.round(((embedded?.count as number) / (chunks?.count as number)) * 100) : 0,
+            links_current: (links?.count as number) ?? 0,
+            links_historical: (linksHistory?.count as number) ?? 0,
+          };
+          break;
+        }
+        case 'health': {
+          const now = Math.floor(Date.now() / 1000);
+          const [expiring] = await sql`SELECT count(*)::int as count FROM oauth_tokens WHERE token_type = 'access' AND expires_at BETWEEN ${now} AND ${now + 86400}`;
+          const [errors] = await sql`SELECT count(*)::int as count FROM mcp_log WHERE status >= 400 AND created_at > now() - interval '24 hours'`;
+          const totalReqs = await sql`SELECT count(*)::int as count FROM mcp_log WHERE created_at > now() - interval '24 hours'`;
+          const errorRate = totalReqs[0]?.count ? `${(((errors?.count as number) / (totalReqs[0].count as number)) * 100).toFixed(1)}%` : '0%';
+          data = { expiring_soon: (expiring?.count as number) ?? 0, error_rate: errorRate };
+          break;
+        }
+        case 'agents': {
+          const oauthClients = await sql`SELECT client_id, client_name FROM oauth_clients`;
+          data = oauthClients;
+          break;
+        }
+        case 'page_links': {
+          data = nl.slug ? await engine.getLinks(nl.slug) : [];
+          break;
+        }
+        case 'page_backlinks': {
+          data = nl.slug ? await engine.getBacklinks(nl.slug) : [];
+          break;
+        }
+        case 'search': {
+          data = nl.query ? await engine.searchKeyword(nl.query, { limit: 5 }) : [];
+          break;
+        }
+        default:
+          data = {};
+      }
+
+      const response = formatNLResponse(nl.intent, data);
+      res.json({ intent: nl.intent, response, data });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       res.status(500).json({ error: msg });
@@ -2089,11 +2549,90 @@ export async function runServeHttp(engine: BrainEngine, options: ServeHttpOption
   );
 
   // ---------------------------------------------------------------------------
+  // POST /webhooks/google-drive — push-triggered sync (v0.42+ connector wave)
+  // ---------------------------------------------------------------------------
+  // Google Drive sends push notifications when files change.
+  // Auth: X-Goog-Channel-ID header must match the registered channel.
+  // The endpoint acks immediately (Google needs < 10s response) and
+  // triggers sync asynchronously.
+  // ---------------------------------------------------------------------------
+  app.post('/webhooks/google-drive', express.raw({ type: '*/*', limit: '64kb' }), async (req: Request, res: Response) => {
+    const channelId = req.header('X-Goog-Channel-ID');
+    const resourceState = req.header('X-Goog-Resource-State') ?? 'change';
+    const resourceId = req.header('X-Goog-Resource-ID');
+
+    if (!channelId) {
+      res.status(400).json({ error: 'missing_channel_id', message: 'X-Goog-Channel-ID header is required' });
+      return;
+    }
+
+    // Always acknowledge quickly. Google Drive expects a 200 within ~10s.
+    res.status(200).json({ status: 'received', channel: channelId, state: resourceState });
+
+    // The initial "sync" notification is just a handshake; no action needed.
+    if (resourceState === 'sync') return;
+
+    // Fire-and-forget sync trigger.
+    (async () => {
+      try {
+        const { ConnectorManager } = await import('../core/ingestion/connectors/manager.ts');
+        const { GoogleDriveConnector } = await import('../core/ingestion/connectors/google-drive.ts');
+        const { readFileSync, existsSync } = await import('node:fs');
+        const { join } = await import('node:path');
+        const { homedir } = await import('node:os');
+
+        // Load connector state directly to verify channel ID match.
+        const statePath = join(homedir(), '.gbrain', 'connectors', 'google-drive.json');
+        if (!existsSync(statePath)) return;
+
+        const state = JSON.parse(readFileSync(statePath, 'utf-8')) as Record<string, unknown>;
+        if (state.webhook_channel_id !== channelId) return;
+
+        // Instantiate connector with persisted config and trigger one-shot sync.
+        const cfg = (state.config ?? {}) as Record<string, unknown>;
+        const connector = new GoogleDriveConnector(cfg);
+        connector['_state'] = state as any;
+        await connector.sync();
+      } catch (err) {
+        console.error(`[webhook] Google Drive sync trigger failed: ${err instanceof Error ? err.message : String(err)}`);
+      }
+    })().catch(() => {});
+  });
+
+  // ---------------------------------------------------------------------------
+  // v0.42+ Connector ingestion daemon — auto-starts enabled connectors
+  // (Google Drive, Gmail, Notion, GitHub, Slack, Calendar) with delta sync.
+  // ---------------------------------------------------------------------------
+  let connectorDaemon: Awaited<ReturnType<typeof startConnectorIngestion>> | undefined;
+  try {
+    const dispatch: import('../core/ingestion/daemon.ts').IngestionDispatcher = async (event) => {
+      const queue = new MinionQueue(engine);
+      const job = await queue.add(
+        'ingest_capture',
+        { event },
+        {
+          idempotency_key: `ingest:${event.source_kind}:${event.content_hash}`,
+          maxWaiting: 100,
+        },
+      );
+      return { kind: 'queued', jobId: job.id };
+    };
+    const logger = {
+      info: (msg: string) => console.error(`[connector] ${msg}`),
+      warn: (msg: string) => console.error(`[connector] WARN: ${msg}`),
+      error: (msg: string) => console.error(`[connector] ERR: ${msg}`),
+    };
+    connectorDaemon = await startConnectorIngestion(engine, logger as any, dispatch);
+  } catch (err) {
+    console.error(`[connector] Daemon startup failed (non-blocking): ${err instanceof Error ? err.message : String(err)}`);
+  }
+
+  // ---------------------------------------------------------------------------
   // Start server
   // ---------------------------------------------------------------------------
   const clientCount = await sql`SELECT count(*)::int as count FROM oauth_clients`;
 
-  app.listen(port, bind, () => {
+  const server = app.listen(port, bind, () => {
     console.error(`
 ╔══════════════════════════════════════════════════════╗
 ║  GBrain MCP Server v${VERSION.padEnd(37)}║
@@ -2104,6 +2643,7 @@ export async function runServeHttp(engine: BrainEngine, options: ServeHttpOption
 ║  Issuer:    ${issuerUrl.origin.padEnd(40)}║
 ║  Clients:   ${String((clientCount[0] as any).count).padEnd(40)}║
 ║  DCR:       ${(enableDcr ? 'enabled' : 'disabled').padEnd(40)}║
+║  Connectors:${String(connectorDaemon ? 'active' : 'none').padEnd(40)}║
 ║  Skills:    ${skillStatus.bannerValue.padEnd(40)}║
 ║  Token TTL: ${(tokenTtl + 's').padEnd(40)}║
 ╠══════════════════════════════════════════════════════╣
@@ -2118,4 +2658,18 @@ ${suppressBootstrapPrint
     : `║  Admin Token (paste into /admin login):              ║\n║  ${bootstrapToken.substring(0, 50)}  ║\n║  ${bootstrapToken.substring(50).padEnd(50)}  ║\n╚══════════════════════════════════════════════════════╝`}
 `);
   });
+
+  // Graceful shutdown: stop connector daemon before closing server.
+  const gracefulShutdown = async () => {
+    console.error('[serve] Shutting down connector daemon...');
+    if (connectorDaemon) {
+      try { await connectorDaemon.stop(); } catch { /* non-fatal */ }
+    }
+    server.close(() => {
+      console.error('[serve] Server closed.');
+      process.exit(0);
+    });
+  };
+  process.on('SIGTERM', gracefulShutdown);
+  process.on('SIGINT', gracefulShutdown);
 }

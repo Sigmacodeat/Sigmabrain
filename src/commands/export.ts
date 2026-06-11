@@ -22,6 +22,7 @@ export async function runExport(engine: BrainEngine, args: string[]) {
   const slugPrefix = slugPrefixIdx !== -1 ? args[slugPrefixIdx + 1] : undefined;
 
   const restoreOnly = args.includes('--restore-only');
+  const obsidianGraph = args.includes('--obsidian-graph');
 
   // Resolution chain (D5): explicit --repo → typed sources.getDefault() →
   // hard-error for restore-only paths (never fall through to cwd).
@@ -95,6 +96,11 @@ export async function runExport(engine: BrainEngine, args: string[]) {
   } else {
     pages = await engine.listPages(filters);
   }
+  // v0.43.0: Obsidian Graph View JSON export.
+  if (obsidianGraph) {
+    return exportObsidianGraph(engine, pages, outDir);
+  }
+
   if (restoreOnly) {
     console.log(`Restoring ${pages.length} db_only pages to ${outDir}/`);
   } else {
@@ -146,4 +152,39 @@ export async function runExport(engine: BrainEngine, args: string[]) {
   } else {
     console.log(`Exported ${exported} pages to ${outDir}/`);
   }
+}
+
+// v0.43.0: Obsidian Graph View JSON export.
+// Generates a nodes+links JSON that Obsidian's graph view can ingest
+// via community plugins (e.g. "Graph Analysis", "Juggl").
+async function exportObsidianGraph(
+  engine: BrainEngine,
+  pages: import('../core/types.ts').Page[],
+  outDir: string,
+) {
+  const nodeSet = new Map<string, { id: string; type: string; title: string }>();
+  const links: { source: string; target: string; link_type: string }[] = [];
+
+  for (const page of pages) {
+    nodeSet.set(page.slug, { id: page.slug, type: page.type, title: page.title });
+    const pageLinks = await engine.getLinks(page.slug);
+    for (const l of pageLinks) {
+      links.push({ source: l.from_slug, target: l.to_slug, link_type: l.link_type });
+      if (!nodeSet.has(l.to_slug)) {
+        nodeSet.set(l.to_slug, { id: l.to_slug, type: 'unknown', title: l.to_slug });
+      }
+    }
+  }
+
+  const graph = {
+    nodes: Array.from(nodeSet.values()),
+    links,
+    generated_at: new Date().toISOString(),
+    source: 'gbrain-obsidian-export',
+  };
+
+  mkdirSync(outDir, { recursive: true });
+  const outPath = join(outDir, 'obsidian-graph.json');
+  writeFileSync(outPath, JSON.stringify(graph, null, 2) + '\n');
+  console.log(`Exported Obsidian graph: ${nodeSet.size} nodes, ${links.length} links → ${outPath}`);
 }

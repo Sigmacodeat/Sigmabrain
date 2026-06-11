@@ -269,6 +269,10 @@ CREATE TABLE IF NOT EXISTS links (
   -- v0.18.0 Step 4: see src/schema.sql.
   resolution_type TEXT   CHECK (resolution_type IS NULL OR resolution_type IN ('qualified', 'unqualified')),
   created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
+  -- v0.43.0: bi-temporal edge support (pbrain v0.3.0 port)
+  valid_from     TIMESTAMPTZ NOT NULL DEFAULT now(),
+  valid_to       TIMESTAMPTZ,
+  superseded_by  INTEGER REFERENCES links(id) ON DELETE SET NULL,
   CONSTRAINT links_from_to_type_source_origin_unique
     UNIQUE NULLS NOT DISTINCT (from_page_id, to_page_id, link_type, link_source, origin_page_id)
 );
@@ -277,6 +281,10 @@ CREATE INDEX IF NOT EXISTS idx_links_from ON links(from_page_id);
 CREATE INDEX IF NOT EXISTS idx_links_to ON links(to_page_id);
 CREATE INDEX IF NOT EXISTS idx_links_source ON links(link_source);
 CREATE INDEX IF NOT EXISTS idx_links_origin ON links(origin_page_id);
+-- v0.43.0: partial index for current bi-temporal edges (valid_to IS NULL)
+CREATE INDEX IF NOT EXISTS idx_links_current ON links(from_page_id, to_page_id, link_type) WHERE valid_to IS NULL;
+-- v0.43.0: index for historical link lookups
+CREATE INDEX IF NOT EXISTS idx_links_history ON links(from_page_id, valid_from, valid_to);
 
 -- v0.38: page_links is the alias the engine queries use (pglite-engine.ts +
 -- postgres-engine.ts both JOIN page_links pl ON pl.to_page_id = p.id). The
