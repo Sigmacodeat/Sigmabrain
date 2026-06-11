@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 // Security headers for every route. HSTS only bites over HTTPS (production);
 // browsers ignore it on plain http://localhost. CSP is intentionally not set
@@ -14,9 +13,6 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: path.resolve(__dirname),
-  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
