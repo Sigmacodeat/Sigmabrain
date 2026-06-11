@@ -1,6 +1,5 @@
 {
-  "rootDirectory": "admin",
   "framework": "vite",
-  "buildCommand": "bun install && bun run build",
-  "outputDirectory": "dist"
+  "buildCommand": "cd admin && bun install && bun run build",
+  "outputDirectory": "admin/dist"
 }
