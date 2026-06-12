@@ -6,7 +6,6 @@ import {
   Key,
   Database,
   Zap,
-  Globe,
   Copy,
   Check,
   Eye,
@@ -65,15 +64,6 @@ function MaskedInput({ value, placeholder }: { value: string; placeholder: strin
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="space-y-4">
-      <h3 className="text-xs text-[#4a4a6a] uppercase tracking-wider font-medium">{title}</h3>
-      {children}
-    </div>
-  );
-}
-
 function Field({ label, desc, children }: { label: string; desc?: string; children: React.ReactNode }) {
   return (
     <div className="grid grid-cols-3 gap-4 items-start py-4 border-b border-[#1e1e3a] last:border-0">
@@ -105,9 +95,9 @@ export default function SettingsPage() {
 
   const [brainUrl, setBrainUrl] = useState("http://localhost:3001");
   const [searchMode, setSearchMode] = useState("balanced");
-  const [openaiKey, setOpenaiKey] = useState("");
-  const [anthropicKey, setAnthropicKey] = useState("");
-  const [zeroEntropyKey, setZeroEntropyKey] = useState("");
+  const [openaiKey] = useState("");
+  const [anthropicKey] = useState("");
+  const [zeroEntropyKey] = useState("");
   const [dreamEnabled, setDreamEnabled] = useState(false);
 
   return (

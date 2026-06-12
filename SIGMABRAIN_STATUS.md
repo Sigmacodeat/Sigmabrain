@@ -411,6 +411,63 @@ Bekannter Hinweis: Next meldet die middleware-Konvention als deprecated
 („proxy" ist der Nachfolger) — Migration ist ein mechanischer Rename, bewusst
 nicht mitten im Launch-Block; notiert für die nächste Wartungsrunde.
 
+## 🆕 Gesetzes-Corpus-Runde DE/AT (12. Juni 2026) — Public-Law-Brain V1 ist real
+
+**`server/scripts/ingest-law-corpus.ts` (neu), live verifiziert: 16/16 Gesetze.**
+
+- **Deutschland (10):** GG, BGB, StGB, ZPO, StPO, HGB, UWG, AO, EStG, UStG —
+  amtliche XML von gesetze-im-internet.de (§ 5 UrhG, gemeinfrei), pro Gesetz
+  eine Markdown-Datei mit ##-Sektion je §, **Versions-Stempel aus dem
+  XML-builddate** (z. B. BGB Stand 2026-06-08, StGB Stand 2026-05-31).
+- **Österreich (6):** ABGB, StGB-AT, AHG, ZPO-AT, UGB, BAO — Gesetzesnummer
+  wird DYNAMISCH über die RIS-OGD-API aufgelöst (Hardcoding erwies sich im
+  Test als falsch!), dann das amtliche Gesamt-PDF („…, Fassung vom
+  DD.MM.YYYY.pdf") gezogen und mit unserem eigenen PDF-Extraktor verarbeitet.
+  **Versions-Stempel = RIS-Fassungsdatum.** OGD-Namensnennung im Frontmatter.
+- **Frontmatter je Gesetz:** type: law, jurisdiction, abbreviation,
+  version_date, retrieved_at, source_url, license → Antworten des Brains
+  zitieren Gesetz + Stand. Import in dedizierte Quellen:
+  `gbrain sources add law-de law-corpus/de && gbrain import law-corpus/de --source-id law-de`
+  (analog law-at). Output gitignored (regenerierbar). Erweiterung = Eintrag
+  in DE_LAWS/AT_LAWS. Aktualisierung = Cron auf das Script (Roadmap).
+
+**Ehrliche Einordnung (deckungsgleich mit /compare):** Das gibt dem Brain
+ZITIERFÄHIGEN GESETZESTEXT mit Versionsstand — es ist KEIN beck-online
+(keine Kommentare, keine Rechtsprechungsketten, keine redaktionelle
+Konsolidierungs-Garantie) und das Brain zieht weiterhin keine
+Rechtsschlüsse: Es zitiert §§, die Bewertung bleibt beim Profi.
+
+## 🆕 Dreierblock-Runde (12. Juni 2026): Produktlinien, Legal-Härtung, Corpus-Ausbau
+
+**(a) Subsumio + Taxumio sind live baubar** — `/subsumio`, `/taxumio` (+ /de/…),
+Modell „powered by Sigmabrain": Produktmarken-Hero (Name + Claim als Gradient),
+darunter der komplette bewährte Vertikal-Funnel (Pains/Demo/Features/FAQ) per
+Wiederverwendung (`VerticalPage` mit neuem optionalen `product`-Prop — kein
+Markup-Duplikat). Kauf-CTA deep-linkt `/signup?industry=legal|tax`, und das
+Signup-Formular **liest den Param und belegt die Branche vor** (validiert gegen
+die Allowlist). Footer-Links (EN+DE), Sitemap, FAQ-JSON-LD. Weitere Produkt-
+linie = ein Eintrag in `src/content/products.ts` + 2 Thin-Routes.
+⚠️ Vor öffentlicher Nutzung: Markenrecherche Subsumio/Taxumio (Nizza 9/42).
+
+**(b) Legal-Brain gehärtet:** Das Parallel-Team hatte bereits 30 Tests
+geliefert (alle grün, inkl. Anonymizer + PGLite-Schema-Kompat) — Gap-Flag
+„keine Tests" damit erledigt. Von mir ergänzt: (1) Terminologie-Korrektur im
+Anonymizer-Header — HMAC = **Pseudonymisierung** (Art. 4 Nr. 5 DSGVO), nicht
+Anonymisierung; öffentliche Doku darf nie „anonymisiert" behaupten; (2)
+verbindlicher **Leitplanken-Block im LEGAL_BRAIN_BLUEPRINT.md**: Gegner-Analyse
+NUR aus öffentlichen Quellen + eigenen Fällen (source_id-gescoped, nie
+Cross-Tenant), keine autoritativen Rechtsschlüsse (Verifikations-Standard),
+Gesetzes-Zitate immer mit Fassungsdatum.
+
+**(c) Corpus auf 21 Gesetze erweitert + Betriebspfad:** Neu DE: FamFG (Stand
+2026-06-11), GmbHG (2024-12-31), InsO (2026-05-06); AT: EO + StPO-AT (Fassung
+2026-06-12). Dabei Resolver verbessert: RIS-Titelsuche rankt verwandte Gesetze
+vor dem Treffer („Einführungsgesetz zur EO" vor „EO") → Pagination bis zum
+exakten Kurztitel. **Aktualisierung:** `cd server && bun run law-corpus`
+(npm-Script neu) — als Cron z. B. wöchentlich:
+`0 6 * * 1 cd <repo>/server && bun run law-corpus && cd .. && gbrain import law-corpus/de --source-id law-de && gbrain import law-corpus/at --source-id law-at`
+(Re-Import ist idempotent: unveränderte Gesetze skippen per content_hash).
+
 ## 📱 Schritt 2: iOS / Android / iPadOS — Roadmap
 
 **Stufe 1 — JETZT FERTIG: PWA.** Installierbar auf allen drei Plattformen ohne App-Store,

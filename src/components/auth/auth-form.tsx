@@ -109,7 +109,12 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [industry, setIndustry] = useState("");
+  // Product-line landing pages (Subsumio/Taxumio) deep-link to
+  // /signup?industry=legal — prefill from the URL when it's a known value.
+  const industryParam = params.get("industry") ?? "";
+  const [industry, setIndustry] = useState(
+    industryParam && industryParam in COPY.en.industries ? industryParam : "",
+  );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 

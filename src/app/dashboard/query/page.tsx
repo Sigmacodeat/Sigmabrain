@@ -16,7 +16,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { useStore } from "@/lib/store";
 
 interface Message {
   id: string;
@@ -101,6 +100,7 @@ function CitationPill({ slug, title }: { slug: string; title: string }) {
   return (
     <a
       href={`/dashboard/brain/${encodeURIComponent(slug)}`}
+      title={title}
       className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-violet-500/20 bg-violet-500/10 text-xs text-violet-400 hover:bg-violet-500/20 hover:border-violet-500/40 transition-all font-mono"
     >
       <FileText size={10} />

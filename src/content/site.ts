@@ -78,7 +78,9 @@ export const FOOTER = {
         links: [
           { label: "VC & Private Equity", href: "/solutions/vc" },
           { label: "Law Firms", href: "/solutions/legal" },
+          { label: "Subsumio · the law firm's brain", href: "/subsumio" },
           { label: "Tax & Accounting Firms", href: "/solutions/tax" },
+          { label: "Taxumio · the tax firm's memory", href: "/taxumio" },
           { label: "Consulting & Agencies", href: "/solutions/consulting" },
           { label: "Executive Search & Recruiting", href: "/solutions/recruiting" },
         ],
@@ -121,7 +123,9 @@ export const FOOTER = {
         links: [
           { label: "VC & Private Equity", href: "/solutions/vc" },
           { label: "Kanzleien", href: "/solutions/legal" },
+          { label: "Subsumio · das Kanzlei-Gehirn", href: "/subsumio" },
           { label: "Steuerberater & WP", href: "/solutions/tax" },
+          { label: "Taxumio · das Kanzleigedächtnis", href: "/taxumio" },
           { label: "Beratung & Agenturen", href: "/solutions/consulting" },
           { label: "Executive Search & Recruiting", href: "/solutions/recruiting" },
         ],

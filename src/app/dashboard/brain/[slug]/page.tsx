@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
   Clock,
-  Hash,
   Tag,
   Edit3,
   Eye,
@@ -17,7 +16,6 @@ import {
   Lightbulb,
   Calendar,
   MapPin,
-  AlertTriangle,
   BookOpen,
   Copy,
   Check,
@@ -25,7 +23,6 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { BrainPage, Entity } from "@/lib/types";
 
@@ -109,7 +106,6 @@ export default function BrainDetailPage() {
   const renderContent = (text: string) => {
     const lines = text.split("\n");
     const elements: React.ReactNode[] = [];
-    let inList = false;
     let listItems: React.ReactNode[] = [];
 
     const flushList = () => {
@@ -120,7 +116,6 @@ export default function BrainDetailPage() {
           </ul>
         );
         listItems = [];
-        inList = false;
       }
     };
 
@@ -140,7 +135,6 @@ export default function BrainDetailPage() {
           </h2>
         );
       } else if (trimmed.startsWith("- ")) {
-        inList = true;
         listItems.push(
           <li key={i} className="text-sm text-[#8888aa] leading-relaxed">
             {trimmed.slice(2)}

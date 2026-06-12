@@ -1,7 +1,32 @@
 # Legal Brain Blueprint — Sigmabrain Erweiterung
 
 ## Ziel
-Ein vollständiges **Legal Brain** Subsystem für Anwälte und Kanzleien. Anonymisiert, datenschutzkonform, mit intelligenter Fallunterstützung.
+Ein vollständiges **Legal Brain** Subsystem für Anwälte und Kanzleien. Pseudonymisiert, datenschutzkonform, mit intelligenter Fallunterstützung.
+
+## ⚖️ LEITPLANKEN (verbindlich — vor jedem Feature-Ausbau lesen)
+
+1. **Pseudonymisierung, nicht Anonymisierung.** Der HMAC-Ansatz (anonymizer.ts)
+   ist DSGVO-rechtlich Pseudonymisierung (Art. 4 Nr. 5) — mit Owner-Key
+   auflösbar, also bleiben die Daten personenbezogen. Öffentliche Doku,
+   Marketing und UI dürfen NIE „anonymisiert" behaupten. Sprachregelung:
+   „pseudonymisiert; Klarnamen nur mit dem Schlüssel des Eigentümers auflösbar".
+2. **Datenquellen der Gegner-Analyse (Flow 2/4) sind hart beschränkt auf:**
+   (a) ÖFFENTLICHE Quellen (RIS, Urteilsdatenbanken, law-de/law-at-Corpus,
+   Recherche-Skills auf öffentliche Inhalte) und (b) EIGENE Fälle der
+   JEWEILIGEN Kanzlei (gleiche source_id). **NIEMALS Cross-Tenant-Daten,
+   auch nicht pseudonymisiert** — § 203 StGB/Verschwiegenheit + unser
+   /security-Versprechen („eure Mandate bleiben eure"). Das Repository ist
+   bereits durchgängig source-gescoped (WHERE source_id = …); jede neue
+   Query MUSS dieses Muster übernehmen (Engine-Invariante sourceScopeOpts).
+3. **Keine autoritativen Rechtsschlüsse.** Chancen-/Strategie-Outputs
+   (Flow 3/4) tragen IMMER den Verifikations-Standard aus deadline-extract:
+   Quellen-Zitate (§§ mit Fassungsdatum aus law-de/law-at, Akten-Fundstellen)
+   plus expliziter Hinweis „fachlich verifizieren — ersetzt keine
+   anwaltliche Prüfung". Fristen werden nie berechnet, nur verbatim erfasst.
+4. **Gesetzes-Zitate nur mit Versionsstand.** Der law-Corpus
+   (server/scripts/ingest-law-corpus.ts) stempelt version_date je Gesetz —
+   Antworten zitieren „§ X AHG, Fassung vom YYYY-MM-DD". Ein Zitat ohne
+   Stand ist ein Bug.
 
 ## Kern-Userflows
 

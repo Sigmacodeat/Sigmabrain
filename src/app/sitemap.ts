@@ -13,6 +13,8 @@ const PAGES = [
   "/partners",
   "/download",
   ...VERTICAL_SLUGS.map((s) => `/solutions/${s}`),
+  "/subsumio",
+  "/taxumio",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

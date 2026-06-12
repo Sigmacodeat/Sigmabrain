@@ -176,7 +176,7 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
                     {"external" in link && link.external ? (
                       <a href={link.href} target="_blank" rel="noreferrer" className="text-xs text-[#4a4a6a] hover:text-[#8888aa]">{link.label}</a>
                     ) : (
-                      <Link href={link.href.startsWith("/dashboard") || link.href.startsWith("/privacy") || link.href.startsWith("/imprint") || link.href.startsWith("/terms") ? link.href : p(lang, link.href)} className="text-xs text-[#4a4a6a] hover:text-[#8888aa]">{link.label}</Link>
+                      <Link href={p(lang, link.href)} className="text-xs text-[#4a4a6a] hover:text-[#8888aa]">{link.label}</Link>
                     )}
                   </li>
                 ))}

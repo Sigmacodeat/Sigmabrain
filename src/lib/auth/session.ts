@@ -61,15 +61,16 @@ export async function signSession(
 
 export async function verifySession(
   token: string | undefined | null,
-  secret: string = getAuthSecret(),
+  secret?: string,
 ): Promise<SessionPayload | null> {
   if (!token) return null;
+  const authSecret = secret ?? getAuthSecret();
   const dot = token.lastIndexOf(".");
   if (dot <= 0) return null;
   const body = token.slice(0, dot);
   const sigPart = token.slice(dot + 1);
   try {
-    const key = await hmacKey(secret);
+    const key = await hmacKey(authSecret);
     const sigBin = b64urlDecode(sigPart);
     const sigBytes = new Uint8Array(sigBin.length);
     for (let i = 0; i < sigBin.length; i++) sigBytes[i] = sigBin.charCodeAt(i);

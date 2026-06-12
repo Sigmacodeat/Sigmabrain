@@ -148,6 +148,23 @@ für Nicht-Techniker, (2) Dev-Tool-Positionierung & -Pricing im falschen Markt,
 | Meme-Risiko "Sigma" | ⚠️ in B2B-Vertikalen vernachlässigbar, bei Gen-Z-Consumer eher Vorteil |
 | Trademark | ⚠️ Nizza-Klasse 9/42 vs. 32 (Getränk) — Recherche beauftragen, Risiko gering |
 
+**Entscheidung Vertikal-Marken „Subsumio" (Legal) / „Taxumio" (Tax) etc.
+(Juni 2026): JA als Produktlinien-Namen, NEIN als eigenständige Marken.**
+Empfohlenes Modell: **„Subsumio — powered by Sigmabrain"** (Branded-House-
+Light). Begründung: (a) Eigenständige Marken × N Branchen = Marketing-Budget,
+SEO-Autorität und Vertrauensaufbau × N — als Einzelkämpfer der sichere Weg,
+überall Mittelmaß zu sein (K3/K10); (b) Produktlinien-Namen auf den
+bestehenden Vertikal-Funnels (+ später eigene Domains subsumio.com →
+sigmabrain.com/solutions/legal als Redirect oder gehostete Skin) fangen die
+branchenspezifische Suche ab, OHNE die Plattform-Marke zu fragmentieren;
+(c) die Architektur trägt es bereits heute: Ein Codebase, Content-getriebene
+Vertikale, Branche-am-Konto (Signup-Select), Schema-Packs je Branche —
+eine eigene Landingpage je Produktlinie ist Content, kein Umbau. Kauf-Flow
+direkt auf der Landingpage = bestehender /signup mit vorbelegter Branche
+(`/signup?industry=legal` — Query-Param-Vorbelegung ist der nächste kleine
+Schritt). WICHTIG vor Nutzung der Namen: Markenrecherche (Nizza 9/42) für
+„Subsumio"/„Taxumio" beauftragen — gleiche Sorgfalt wie beim Hauptnamen (K9).
+
 **Entscheidung „Sigmabrain OS" (Juni 2026): NICHT als Hauptbrand.** Gründe:
 (a) ICP sind Nicht-Techniker — „OS" signalisiert Komplexität/Lock-in, Gegenteil
 des 3-Minuten-Versprechens; (b) /compare verneint bewusst Vollständigkeit

@@ -18,8 +18,26 @@ import {
   ICONS,
 } from "./chrome";
 
-export default function VerticalPage({ lang, slug }: { lang: Lang; slug: VerticalSlug }) {
+/** Product-line branding (Subsumio, Taxumio, …): same funnel body, branded
+ *  hero, and signup deep-links carrying the industry for prefill. */
+export interface ProductBrand {
+  name: string;
+  claim: string;
+  poweredBy: string;
+  industry: string;
+}
+
+export default function VerticalPage({
+  lang,
+  slug,
+  product,
+}: {
+  lang: Lang;
+  slug: VerticalSlug;
+  product?: ProductBrand;
+}) {
   const t = VERTICALS[lang][slug];
+  const signupHref = p(lang, product ? `/signup?industry=${product.industry}` : "/signup");
 
   return (
     <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
@@ -30,15 +48,22 @@ export default function VerticalPage({ lang, slug }: { lang: Lang; slug: Vertica
       <section className="relative z-10 pt-20 pb-24 px-6 max-w-7xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-xs text-violet-400 font-medium mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-          {t.badge}
+          {product ? product.poweredBy : t.badge}
         </div>
-        <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
-          {t.h1a}<br />
-          <span className="gradient-text glow-text">{t.h1b}</span>
-        </h1>
+        {product ? (
+          <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
+            {product.name}<br />
+            <span className="gradient-text glow-text">{product.claim}</span>
+          </h1>
+        ) : (
+          <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
+            {t.h1a}<br />
+            <span className="gradient-text glow-text">{t.h1b}</span>
+          </h1>
+        )}
         <p className="text-lg md:text-xl text-[#8888aa] max-w-2xl mx-auto mb-12 leading-relaxed">{t.sub}</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <Link href={p(lang, "/signup")}>
+          <Link href={signupHref}>
             <Button size="xl" variant="glow" className="min-w-[220px]">
               <SigmaMark size={18} tile={false} /> {t.ctaButton}
             </Button>
@@ -107,7 +132,7 @@ export default function VerticalPage({ lang, slug }: { lang: Lang; slug: Vertica
         <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />
         <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
         <p className="text-lg text-[#8888aa] mb-10">{t.ctaSub}</p>
-        <Link href={p(lang, "/signup")}>
+        <Link href={signupHref}>
           <Button size="xl" variant="glow">
             {t.ctaButton} <ArrowRight size={18} />
           </Button>

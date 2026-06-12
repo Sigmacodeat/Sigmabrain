@@ -1,7 +1,6 @@
-import { NextRequest } from "next/server";
 import { ENGINE_URL, engineHeaders, unauthorized } from "@/lib/engine";
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   const auth = await engineHeaders();
   if (!auth) return unauthorized();
   try {

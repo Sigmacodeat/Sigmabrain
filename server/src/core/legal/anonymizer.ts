@@ -1,11 +1,18 @@
 /**
- * Anonymisierungs-Engine für das Legal Brain
+ * Pseudonymisierungs-Engine für das Legal Brain
  *
- * Alle personenbezogenen Daten werden gehasht (SHA-256) mit einem
- * salts-gestützten HMAC. Der Owner kann mit seinem Source-Key die
- * Daten reversibel machen; für alle anderen sind sie irreversibel.
+ * TERMINOLOGIE (rechtlich relevant, nicht umbenennen ohne DSGVO-Check):
+ * HMAC mit Owner-Key ist PSEUDONYMISIERUNG i. S. v. Art. 4 Nr. 5 DSGVO,
+ * KEINE Anonymisierung (ErwG 26) — der Owner kann die Zuordnung mit seinem
+ * Key wiederherstellen, also bleiben die Daten personenbezogen und alle
+ * DSGVO-Pflichten bestehen. Öffentliche Doku/Marketing darf deshalb nie
+ * "anonymisiert" behaupten; korrekt ist "pseudonymisiert, Klarnamen nur
+ * mit dem Schlüssel des Eigentümers auflösbar".
  *
- * Keine Klarnamen, Adressen oder Mandanten-Daten landen im Brain.
+ * Funktional: personenbezogene Werte werden per HMAC-SHA-256 (Owner-Key)
+ * pseudonymisiert; ohne den Key ist die Zuordnung praktisch nicht
+ * wiederherstellbar. Klarnamen, Adressen und Mandantendaten landen nur
+ * in Platzhalter-Form in Brain-Seiten.
  */
 
 import { createHash, createHmac } from "crypto";
