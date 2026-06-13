@@ -1,22 +1,19 @@
 import type { Metadata } from "next";
-import VerticalPage from "@/components/marketing/vertical";
-import { PRODUCTS } from "@/content/products";
-import { VERTICALS } from "@/content/verticals";
+import TaxumioPage from "@/components/marketing/taxumio-page";
+import { TAXUMIO } from "@/content/taxumio";
 import { JsonLd, faqPageLd } from "@/components/seo/jsonld";
 
-const product = PRODUCTS.en.taxumio;
-
 export const metadata: Metadata = {
-  title: product.metaTitle,
-  description: product.metaDesc,
+  title: TAXUMIO.en.metaTitle,
+  description: TAXUMIO.en.metaDesc,
   alternates: { canonical: "/taxumio", languages: { en: "/taxumio", de: "/de/taxumio" } },
 };
 
 export default function Page() {
   return (
     <>
-      <JsonLd data={faqPageLd(VERTICALS.en[product.vertical].faq)} />
-      <VerticalPage lang="en" slug={product.vertical} product={product} />
+      <JsonLd data={faqPageLd(TAXUMIO.en.faq)} />
+      <TaxumioPage lang="en" />
     </>
   );
 }

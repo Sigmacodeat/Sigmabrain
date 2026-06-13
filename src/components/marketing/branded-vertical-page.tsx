@@ -1,0 +1,292 @@
+"use client";
+
+// Branded vertical page — one agency-grade template, content-driven, reused by
+// every product brand (Taxumio, Compliumio, …). Sells the daily workflow and
+// links to the real dashboard tools. Animated cockpit mockup, day timeline,
+// tool grid, brain demo. Decorative motion respects prefers-reduced-motion.
+//
+// The content shape is BrandedVerticalContent (defined alongside TAXUMIO in
+// content/taxumio.ts and reused by content/compliance.ts).
+
+import Link from "next/link";
+import { motion, MotionConfig } from "framer-motion";
+import { ArrowRight, Check, CalendarClock, FileSignature } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SigmaMark } from "@/components/brand/logo";
+import { p, type Lang } from "@/content/site";
+import type { BrandedVerticalContent } from "@/content/taxumio";
+import {
+  MarketingBackground,
+  MarketingNav,
+  MarketingFooter,
+  SectionHeading,
+  DemoWindow,
+  FaqList,
+  ICONS,
+} from "./chrome";
+
+const viewport = { once: true, margin: "-60px" } as const;
+
+function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+      className="relative mx-auto w-full max-w-[420px]"
+    >
+      <div className="absolute -inset-8 bg-violet-600/15 blur-3xl rounded-full" />
+      <motion.div
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="relative rounded-2xl border border-[#1e1e3a] bg-[#0a0a18] shadow-2xl shadow-black/50 overflow-hidden"
+      >
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1e1e3a]">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+          <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
+          <div className="flex-1 ml-3 text-xs text-[#4a4a6a] font-mono">{c.title}</div>
+        </div>
+
+        <div className="p-4 space-y-3">
+          <motion.div
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
+            className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <CalendarClock size={13} className="text-violet-400" />
+              <span className="text-xs font-semibold text-[#e8e8f0]">{c.digestLabel}</span>
+            </div>
+            <ul className="space-y-1.5">
+              {c.digestItems.map((it, i) => (
+                <motion.li
+                  key={it}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7 + i * 0.15, duration: 0.3 }}
+                  className="flex items-center gap-2 text-[11px] text-[#8888aa]"
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${it.includes("!") || it.includes("today") || it.includes("heute") || it.includes("überfällig") || it.includes("overdue") ? "bg-rose-400" : "bg-amber-400"}`} />
+                  {it}
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.05, duration: 0.4 }}
+            className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] p-3 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-2">
+              <Check size={13} className="text-emerald-400 shrink-0" />
+              <span className="text-[11px] text-[#c8c8d8]">{c.invoiceLabel}</span>
+            </div>
+            <span className="text-xs font-bold text-emerald-300 font-mono">{c.invoiceValue}</span>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.35, duration: 0.4 }}
+            className="flex items-center justify-between gap-2"
+          >
+            <span className="inline-flex items-center gap-1.5 text-[11px] text-[#8888aa]">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-400" /> {c.datevLabel}
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[9px] text-amber-300">
+              <FileSignature size={9} /> {c.aiBadge}
+            </span>
+          </motion.div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export default function BrandedVerticalPage({
+  lang,
+  content: t,
+  signupIndustry,
+}: {
+  lang: Lang;
+  content: BrandedVerticalContent;
+  signupIndustry: string;
+}) {
+  const signupHref = p(lang, `/signup?industry=${signupIndustry}`);
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+        <MarketingBackground />
+        <MarketingNav lang={lang} />
+
+        {/* Hero */}
+        <section className="relative z-10 pt-20 pb-16 px-6 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="text-center lg:text-left"
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-xs text-violet-400 font-medium mb-8">
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+                {t.badge}
+              </div>
+              <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
+                {t.h1a}
+                <br />
+                <span className="gradient-text glow-text">{t.h1b}</span>
+              </h1>
+              <p className="text-lg md:text-xl text-[#8888aa] max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+                {t.sub}
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
+                <Link href={signupHref}>
+                  <Button size="xl" variant="glow">
+                    <SigmaMark size={18} tile={false} /> {t.ctaPrimary}
+                  </Button>
+                </Link>
+                <Link href={p(lang, "/compare")}>
+                  <Button size="xl" variant="secondary">{t.ctaSecondary}</Button>
+                </Link>
+              </div>
+            </motion.div>
+
+            <Cockpit c={t.cockpit} />
+          </div>
+        </section>
+
+        {/* Brain demo */}
+        <section className="relative z-10 px-6 pb-20 max-w-3xl mx-auto">
+          <DemoWindow {...t.demo} />
+        </section>
+
+        {/* A day in the workflow — timeline */}
+        <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+          <div className="max-w-4xl mx-auto">
+            <SectionHeading title={t.dayTitle} sub={t.daySub} />
+            <div className="relative">
+              <div className="absolute left-[19px] md:left-1/2 top-2 bottom-2 w-px bg-[#1e1e3a] md:-translate-x-1/2" />
+              <div className="space-y-6">
+                {t.steps.map((s, i) => {
+                  const Icon = ICONS[s.icon];
+                  const left = i % 2 === 0;
+                  return (
+                    <motion.div
+                      key={s.title}
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={viewport}
+                      transition={{ duration: 0.4, delay: 0.05 }}
+                      className={`relative flex gap-4 md:w-1/2 ${left ? "md:pr-10" : "md:ml-auto md:pl-10 md:flex-row-reverse md:text-right"}`}
+                    >
+                      <div className="relative z-10 shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center">
+                          {Icon && <Icon size={18} className="text-violet-400" />}
+                        </div>
+                      </div>
+                      <div className="flex-1 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 hover:border-violet-500/30 transition-colors">
+                        <span className="text-xs font-mono text-violet-400">{s.time}</span>
+                        <h3 className="text-sm font-semibold text-[#e8e8f0] mt-1 mb-1.5">{s.title}</h3>
+                        <p className="text-sm text-[#8888aa] leading-relaxed">{s.desc}</p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Tools that ship today */}
+        <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
+          <SectionHeading title={t.toolsTitle} sub={t.toolsSub} />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {t.tools.map((tool, i) => {
+              const Icon = ICONS[tool.icon];
+              return (
+                <motion.div
+                  key={tool.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={viewport}
+                  transition={{ duration: 0.35, delay: (i % 3) * 0.07 }}
+                >
+                  <Link
+                    href={tool.href}
+                    className="group block h-full p-6 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-violet-500/40 hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
+                  >
+                    <div className="w-11 h-11 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      {Icon && <Icon size={20} className="text-violet-400" />}
+                    </div>
+                    <h3 className="text-base font-bold text-[#e8e8f0] mb-1.5">{tool.title}</h3>
+                    <p className="text-sm text-[#8888aa] leading-relaxed">{tool.desc}</p>
+                    <span className="inline-flex items-center gap-1 text-xs text-violet-400 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {lang === "en" ? "Open" : "Öffnen"} <ArrowRight size={12} />
+                    </span>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Trust band */}
+        <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+          <div className="max-w-6xl mx-auto">
+            <SectionHeading title={t.trustTitle} />
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {t.trust.map((tr, i) => {
+                const Icon = ICONS[tr.icon];
+                return (
+                  <motion.div
+                    key={tr.title}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={viewport}
+                    transition={{ duration: 0.35, delay: i * 0.06 }}
+                    className="p-5 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-4">
+                      {Icon && <Icon size={18} className="text-violet-400" />}
+                    </div>
+                    <h3 className="text-sm font-semibold text-[#e8e8f0] mb-1.5">{tr.title}</h3>
+                    <p className="text-xs text-[#8888aa] leading-relaxed">{tr.desc}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+            <p className="text-xs text-[#4a4a6a] leading-relaxed max-w-3xl mx-auto text-center mt-8">{t.honesty}</p>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="relative z-10 py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <SectionHeading title={t.faqTitle} />
+            <FaqList items={t.faq} />
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="relative z-10 py-24 px-6 text-center max-w-3xl mx-auto border-t border-[#1e1e3a]">
+          <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />
+          <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
+          <p className="text-lg text-[#8888aa] mb-10">{t.ctaSub}</p>
+          <Link href={signupHref}>
+            <Button size="xl" variant="glow">
+              {t.ctaButton} <ArrowRight size={18} />
+            </Button>
+          </Link>
+        </section>
+
+        <MarketingFooter lang={lang} />
+      </div>
+    </MotionConfig>
+  );
+}
