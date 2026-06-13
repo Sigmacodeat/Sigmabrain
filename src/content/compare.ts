@@ -31,6 +31,7 @@ export interface CompareContent {
   honestyTitle: string;
   honestyText: string;
   legal: CompareTable;
+  gov: CompareTable;
   km: CompareTable;
   whenThem: { title: string; items: string[] };
   whenUs: { title: string; items: string[] };
@@ -69,6 +70,7 @@ export const COMPARE: Record<Lang, CompareContent> = {
         { label: "Typed knowledge graph over your data", cells: ["✓ extracted on every write", "k. A.", "k. A.", "✗", "k. A.", "✗"] },
         { label: "Gap analysis (“what's NOT in the file”)", cells: ["✓ in every answer", "k. A.", "k. A.", "k. A.", "k. A.", "k. A."] },
         { label: "Beyond legal (deals, clients, firm memory)", cells: ["✓ cross-domain by design", "✗ legal-focused", "✗", "✗", "✗", "✗"] },
+        { label: "Compounding firm brain (learns from every matter)", cells: ["✓ your brain knows every case you've run", "k. A.", "k. A.", "k. A.", "k. A.", "k. A."] },
         { label: "Self-hosting on your own hardware", cells: ["✓ full engine, free", "✗ cloud", "✗ cloud", "✗ cloud", "✗ sovereign EU cloud, no self-host", "✓ on-premise offered"] },
         { label: "Open-source, auditable code", cells: ["✓ MIT-licensed engine", "✗", "✗", "✗", "✗", "✗"] },
         { label: "Published entry price", cells: ["€79/user/mo · €0 self-hosted", "individual (reports: ~$1,200/seat/mo, 20+ seats)", "individual", "from ~$639/user/mo incl. Westlaw (public configurator)", "individual (min. 3 licenses)", "individual (reports: $50k+/yr small teams)"] },
@@ -78,6 +80,28 @@ export const COMPARE: Record<Lang, CompareContent> = {
         "“k. A.” = no public information found; we do not guess competitors' gaps.",
         "Harvey/CoCounsel benchmark standing: Vals Legal AI Report (VLAIR). Sigmabrain has not participated in any legal benchmark — our published numbers are retrieval benchmarks (Recall@5, P@5), a different discipline.",
         "Luminance offers on-premise deployment — self-hosting is NOT unique to Sigmabrain. The difference: our engine is open source (auditable) and free to self-host.",
+      ],
+    },
+    gov: {
+      title: "Governance, security & EU compliance",
+      sub: "The questions a DACH/EU firm's IT and data-protection officer ask first — and where Sigmabrain already has a shipped answer.",
+      cols: ["Sigmabrain", "Harvey", "CoCounsel", "Beck-Noxtua", "Glean"],
+      rows: [
+        { label: "EU AI Act Art. 50 — AI output labeled (visible + machine-readable)", cells: ["✓ badge + frontmatter + X-AI-Generated header", "k. A.", "k. A.", "k. A.", "k. A."] },
+        { label: "Four-eyes / human approval gate for agent actions", cells: ["✓ approval queue, documented reason", "k. A.", "k. A.", "k. A.", "k. A."] },
+        { label: "Source-coverage / hallucination-caution badge on answers", cells: ["✓ grounded / partial / unsupported", "k. A.", "k. A.", "k. A.", "k. A."] },
+        { label: "GoBD building blocks (10-yr retention stamp, tamper-evidence, Verfahrensdoku)", cells: ["✓ for tax vertical — building blocks, not a “audit-proof” claim", "✗ not a tax tool", "✗", "✗", "✗"] },
+        { label: "DACH legal interfaces (beA drafts, RVG, conflict check, RIS/openlegaldata)", cells: ["✓ native", "✗", "✗", "~ German law focus", "✗"] },
+        { label: "MFA / 2FA (TOTP) for the dashboard", cells: ["✓ built in", "k. A.", "k. A.", "k. A.", "✓ via SSO/IdP"] },
+        { label: "Team / org model with roles & invites", cells: ["✓ org entity, member/admin/owner", "k. A.", "k. A.", "k. A.", "✓ enterprise admin console"] },
+        { label: "GDPR Art. 20 data export (account + brain, JSON)", cells: ["✓ one click", "k. A.", "k. A.", "k. A.", "k. A."] },
+        { label: "SSO (SAML/OIDC) + SCIM", cells: ["~ on the roadmap (WorkOS path)", "✓", "✓", "k. A.", "✓ category standard"] },
+        { label: "SOC 2 / ISO 27001 certification", cells: ["✗ not yet — self-host compensates", "k. A.", "✓ (Thomson Reuters)", "k. A.", "✓"] },
+      ],
+      footnotes: [
+        "This matrix shows governance building blocks we actively ship. Where a competitor publishes nothing on a row, it reads “k. A.” — we do NOT claim they lack it.",
+        "GoBD and the EU AI Act labeling are honest building blocks, not certifications: full GoBD conformance needs process documentation + an auditor's sign-off, and the AI Act classification is per-feature.",
+        "Two rows we lose on purpose: SSO/SCIM is on our roadmap (the standard WorkOS path), and we are not yet SOC 2 / ISO 27001 certified — self-hosting on your own infrastructure is the interim answer for regulated buyers.",
       ],
     },
     km: {
@@ -164,6 +188,7 @@ export const COMPARE: Record<Lang, CompareContent> = {
         { label: "Typisierter Wissensgraph über eure Daten", cells: ["✓ bei jedem Schreibvorgang extrahiert", "k. A.", "k. A.", "✗", "k. A.", "✗"] },
         { label: "Gap-Analyse („was FEHLT in der Akte“)", cells: ["✓ in jeder Antwort", "k. A.", "k. A.", "k. A.", "k. A.", "k. A."] },
         { label: "Über Legal hinaus (Deals, Mandanten, Firmenwissen)", cells: ["✓ cross-domain gebaut", "✗ legal-fokussiert", "✗", "✗", "✗", "✗"] },
+        { label: "Compounding-Brain (lernt aus jedem Mandat)", cells: ["✓ euer Brain kennt jeden Fall, den ihr je geführt habt", "k. A.", "k. A.", "k. A.", "k. A.", "k. A."] },
         { label: "Self-Hosting auf eigener Hardware", cells: ["✓ volle Engine, kostenlos", "✗ Cloud", "✗ Cloud", "✗ Cloud", "✗ souveräne EU-Cloud, kein Self-Host", "✓ On-Premise verfügbar"] },
         { label: "Open Source / auditierbarer Code", cells: ["✓ MIT-lizenzierte Engine", "✗", "✗", "✗", "✗", "✗"] },
         { label: "Veröffentlichter Einstiegspreis", cells: ["79 €/User/Monat · 0 € self-hosted", "individuell (Berichte: ~1.200 $/Seat/Monat, 20+ Seats)", "individuell", "ab ~639 $/User/Monat inkl. Westlaw (öffentl. Konfigurator)", "individuell (min. 3 Lizenzen)", "individuell (Berichte: 50k $+/Jahr für kleine Teams)"] },
@@ -173,6 +198,28 @@ export const COMPARE: Record<Lang, CompareContent> = {
         "„k. A.“ = keine öffentliche Angabe gefunden; wir raten Lücken der Konkurrenz nicht.",
         "Benchmark-Stand Harvey/CoCounsel: Vals Legal AI Report (VLAIR). Sigmabrain hat an keinem Legal-Benchmark teilgenommen — unsere veröffentlichten Zahlen sind Retrieval-Benchmarks (Recall@5, P@5), eine andere Disziplin.",
         "Luminance bietet On-Premise — Self-Hosting ist NICHT einzigartig bei Sigmabrain. Der Unterschied: unsere Engine ist Open Source (auditierbar) und kostenlos selbst zu hosten.",
+      ],
+    },
+    gov: {
+      title: "Governance, Sicherheit & EU-Compliance",
+      sub: "Die Fragen, die IT und Datenschutzbeauftragte einer DACH/EU-Kanzlei zuerst stellen — und wo Sigmabrain bereits eine ausgelieferte Antwort hat.",
+      cols: ["Sigmabrain", "Harvey", "CoCounsel", "Beck-Noxtua", "Glean"],
+      rows: [
+        { label: "EU AI Act Art. 50 — KI-Output gekennzeichnet (sichtbar + maschinenlesbar)", cells: ["✓ Badge + Frontmatter + X-AI-Generated-Header", "k. A.", "k. A.", "k. A.", "k. A."] },
+        { label: "Vier-Augen-/Freigabe-Gate für Agenten-Aktionen", cells: ["✓ Freigabe-Queue, dokumentierter Grund", "k. A.", "k. A.", "k. A.", "k. A."] },
+        { label: "Quellendeckungs-/Halluzinations-Vorsicht-Badge an Antworten", cells: ["✓ gut gestützt / teilweise / ungestützt", "k. A.", "k. A.", "k. A.", "k. A."] },
+        { label: "GoBD-Bausteine (10-J-Aufbewahrungsstempel, Manipulations-Evidenz, Verfahrensdoku)", cells: ["✓ für Steuer-Vertikale — Bausteine, kein „revisionssicher“-Claim", "✗ kein Steuer-Tool", "✗", "✗", "✗"] },
+        { label: "DACH-Legal-Schnittstellen (beA-Entwürfe, RVG, Kollisionsprüfung, RIS/openlegaldata)", cells: ["✓ nativ", "✗", "✗", "~ deutsches Recht", "✗"] },
+        { label: "MFA / 2FA (TOTP) fürs Dashboard", cells: ["✓ eingebaut", "k. A.", "k. A.", "k. A.", "✓ via SSO/IdP"] },
+        { label: "Team-/Org-Modell mit Rollen & Invites", cells: ["✓ Org-Entity, member/admin/owner", "k. A.", "k. A.", "k. A.", "✓ Enterprise-Admin-Konsole"] },
+        { label: "DSGVO Art. 20 Datenexport (Konto + Brain, JSON)", cells: ["✓ ein Klick", "k. A.", "k. A.", "k. A.", "k. A."] },
+        { label: "SSO (SAML/OIDC) + SCIM", cells: ["~ auf der Roadmap (WorkOS-Weg)", "✓", "✓", "k. A.", "✓ Kategorie-Standard"] },
+        { label: "SOC 2 / ISO 27001 Zertifizierung", cells: ["✗ noch nicht — Self-Host kompensiert", "k. A.", "✓ (Thomson Reuters)", "k. A.", "✓"] },
+      ],
+      footnotes: [
+        "Diese Matrix zeigt Governance-Bausteine, die wir aktiv ausliefern. Wo ein Wettbewerber dazu nichts veröffentlicht, steht „k. A.“ — wir behaupten NICHT, dass er es nicht hat.",
+        "GoBD und die EU-AI-Act-Kennzeichnung sind ehrliche Bausteine, keine Zertifikate: volle GoBD-Konformität braucht Verfahrensdoku + Prüfer-Abnahme, die AI-Act-Einstufung ist je Feature zu bewerten.",
+        "Zwei Zeilen verlieren wir bewusst: SSO/SCIM ist auf unserer Roadmap (Standard-WorkOS-Weg), und wir sind noch nicht SOC-2-/ISO-27001-zertifiziert — Self-Hosting auf eurer eigenen Infrastruktur ist bis dahin die Antwort für regulierte Käufer.",
       ],
     },
     km: {
