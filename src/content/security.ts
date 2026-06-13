@@ -1,0 +1,123 @@
+// /security — trust & data-protection page. EN + DE.
+// HONESTY RULE: only claims the engine/tests actually back. No SOC 2 / ISO
+// claims (we don't hold them — say so and show the roadmap instead).
+
+import type { Lang } from "./site";
+
+export interface SecurityContent {
+  metaTitle: string;
+  metaDesc: string;
+  badge: string;
+  h1a: string;
+  h1b: string;
+  sub: string;
+  pillars: { icon: string; title: string; desc: string }[];
+  hostingTitle: string;
+  hostingSub: string;
+  hostingOptions: { title: string; points: string[] }[];
+  complianceTitle: string;
+  complianceItems: { title: string; desc: string }[];
+  roadmapTitle: string;
+  roadmapText: string;
+  roadmapItems: string[];
+  disclosureTitle: string;
+  disclosureText: string;
+  faq: { q: string; a: string }[];
+  faqTitle: string;
+  ctaTitle: string;
+  ctaSub: string;
+  ctaButton: string;
+}
+
+export const SECURITY: Record<Lang, SecurityContent> = {
+  en: {
+    metaTitle: "Security & data protection — Sigmabrain",
+    metaDesc: "Self-host the full open-source engine or use EU cloud with a DPA. Per-user scoped access fuzz-tested for zero leaks. Honest about what we have — and what's still on the compliance roadmap.",
+    badge: "Security & data protection",
+    h1a: "Your data is the product's value.",
+    h1b: "So it stays under your control.",
+    sub: "Sigmabrain is built for professions where confidentiality is law, not preference: law firms, tax advisors, funds. Here is the architecture — and an honest list of what's still in progress.",
+    pillars: [
+      { icon: "Shield", title: "Self-hosting, fully", desc: "The complete engine runs on your hardware — not a crippled community edition. Client data never reaches a third party at all. MIT-licensed: your IT audits every line that touches your files." },
+      { icon: "Layers", title: "Isolation, fuzz-tested", desc: "Per-user and per-source scoped access is enforced on every read path and fuzz-tested for zero cross-tenant leaks. A user sees their scope — never another's." },
+      { icon: "Lock", title: "No training on your data", desc: "Your content never trains our or anyone else's models. Synthesis calls go to the LLM provider you configure; self-hosted setups choose their own endpoints or gateways." },
+      { icon: "Eye", title: "Auditable by design", desc: "Open-source engine, deterministic citations on every answer, request logging, and a trust boundary that treats every remote caller as untrusted by default." },
+    ],
+    hostingTitle: "Two ways to run it",
+    hostingSub: "Both keep you in control. Pick by your compliance posture.",
+    hostingOptions: [
+      { title: "Self-hosted (free, open source)", points: ["Your hardware, your jurisdiction, your keys", "No third party processes client data — relevant for statutory professional secrecy", "Full engine under MIT license, auditable", "You manage updates and backups"] },
+      { title: "Managed EU cloud (Pro/Team/Enterprise)", points: ["EU hosting with a data processing agreement (DPA, Art. 28 GDPR)", "Contractual confidentiality commitment available for professional-secrecy holders", "Encryption in transit and at rest", "Deletion requests handled in one place"] },
+    ],
+    complianceTitle: "What we have today",
+    complianceItems: [
+      { title: "GDPR-aligned processing", desc: "DPA for hosted plans, EU data location, documented subprocessors, deletion on request. Self-hosted deployments process nothing on our side at all." },
+      { title: "Professional secrecy (e.g. § 203 German Criminal Code)", desc: "Self-hosting means no third party is involved — the cleanest answer to professional-secrecy rules. Hosted plans add a contractual confidentiality commitment on top of the DPA." },
+      { title: "Tested isolation", desc: "Multi-tenant scoping is enforced in the engine and pinned by fuzz tests across every read path — not a dashboard checkbox." },
+    ],
+    roadmapTitle: "What we don't have yet — honestly",
+    roadmapText: "We'd rather tell you here than have you find out in procurement. In progress, in order:",
+    roadmapItems: [
+      "SOC 2 / ISO 27001 certification — not yet held; audit roadmap planned alongside enterprise rollout. Self-hosting sidesteps the question for many buyers.",
+      "SSO/SAML for hosted team plans (self-hosted deployments can front the engine with their own auth today).",
+      "Source-system permission inheritance for connector-synced content in shared brains — until it lands, we document connectors for single-user brains.",
+    ],
+    disclosureTitle: "Responsible disclosure",
+    disclosureText: "Found a vulnerability? Email security@sigmabrain.com. We confirm receipt within 48 hours, keep you updated, and credit researchers who wish to be named. Please don't test against systems holding real customer data — self-host a copy instead; it's free.",
+    faqTitle: "Security questions, answered plainly",
+    faq: [
+      { q: "Where exactly does my data live?", a: "Self-hosted: on your machines, full stop. Hosted: in EU data centers, with the location named in your DPA. Synthesis requests go to the LLM provider configured for your plan — enterprise setups can route through EU endpoints or their own gateway." },
+      { q: "Can Sigmabrain employees read my brain?", a: "Self-hosted: no, structurally — we have no access path. Hosted: access is restricted to break-glass operational procedures, logged, and covered by the DPA and confidentiality commitment. We don't browse customer content, and your content never trains models." },
+      { q: "What happens to my data if I leave?", a: "Export everything at any time (the engine's export is a first-class command, not a support ticket). Hosted data is deleted on contract end per the DPA. Self-hosted: it was never with us." },
+      { q: "Is the open-source version less secure?", a: "It's the same engine. Security-relevant behavior — scoping, trust boundaries, isolation — is identical and test-pinned. The difference is who operates it: you, instead of us." },
+    ],
+    ctaTitle: "Bring your data protection officer.",
+    ctaSub: "We speak their language. Hosted with a DPA, or self-hosted so the question never arises.",
+    ctaButton: "Talk to us",
+  },
+  de: {
+    metaTitle: "Sicherheit & Datenschutz — Sigmabrain",
+    metaDesc: "Volle Open-Source-Engine self-hosted oder EU-Cloud mit AVV. Zugriff pro Nutzer gescoped, fuzz-getestet auf null Leaks. Ehrlich über das, was wir haben — und was noch auf der Compliance-Roadmap steht.",
+    badge: "Sicherheit & Datenschutz",
+    h1a: "Eure Daten sind der Wert des Produkts.",
+    h1b: "Deshalb bleiben sie unter eurer Kontrolle.",
+    sub: "Sigmabrain ist für Berufe gebaut, in denen Verschwiegenheit Gesetz ist, nicht Präferenz: Kanzleien, Steuerberater, Fonds. Hier ist die Architektur — und eine ehrliche Liste dessen, was noch in Arbeit ist.",
+    pillars: [
+      { icon: "Shield", title: "Self-Hosting, vollständig", desc: "Die komplette Engine läuft auf eurer Hardware — keine beschnittene Community-Edition. Mandantendaten erreichen überhaupt keinen Dritten. MIT-lizenziert: Eure IT auditiert jede Zeile, die eure Akten berührt." },
+      { icon: "Layers", title: "Isolation, fuzz-getestet", desc: "Zugriff pro Nutzer und pro Quelle wird auf jedem Lesepfad erzwungen und auf null Cross-Tenant-Leaks fuzz-getestet. Ein Nutzer sieht seinen Scope — nie den eines anderen." },
+      { icon: "Lock", title: "Kein Training mit euren Daten", desc: "Eure Inhalte trainieren weder unsere noch fremde Modelle. Synthese-Calls gehen an den LLM-Provider, den ihr konfiguriert; Self-Hosted-Setups wählen eigene Endpunkte oder Gateways." },
+      { icon: "Eye", title: "Auditierbar per Architektur", desc: "Open-Source-Engine, deterministische Zitate in jeder Antwort, Request-Logging, und eine Trust-Boundary, die jeden Remote-Aufrufer standardmäßig als nicht vertrauenswürdig behandelt." },
+    ],
+    hostingTitle: "Zwei Betriebsarten",
+    hostingSub: "Beide lassen euch die Kontrolle. Wählt nach eurer Compliance-Lage.",
+    hostingOptions: [
+      { title: "Self-hosted (kostenlos, Open Source)", points: ["Eure Hardware, eure Jurisdiktion, eure Keys", "Kein Dritter verarbeitet Mandantendaten — relevant für § 203 StGB: keine mitwirkende Person", "Volle Engine unter MIT-Lizenz, auditierbar", "Updates und Backups verwaltet ihr selbst"] },
+      { title: "Verwaltete EU-Cloud (Pro/Team/Enterprise)", points: ["EU-Hosting mit Auftragsverarbeitungsvertrag (AVV, Art. 28 DSGVO)", "Verschwiegenheitsverpflichtung nach § 203 Abs. 4 StGB für Berufsgeheimnisträger verfügbar", "Verschlüsselung bei Übertragung und Speicherung", "Löschanfragen an einer Stelle erledigt"] },
+    ],
+    complianceTitle: "Was wir heute haben",
+    complianceItems: [
+      { title: "DSGVO-konforme Verarbeitung", desc: "AVV für gehostete Pläne, EU-Datenstandort, dokumentierte Subprozessoren, Löschung auf Anfrage. Self-Hosted-Deployments verarbeiten auf unserer Seite gar nichts." },
+      { title: "Berufsgeheimnisschutz (§ 203 StGB)", desc: "Self-Hosting heißt: kein Dritter ist beteiligt — die sauberste Antwort auf die Verschwiegenheitspflicht, ganz ohne mitwirkende Person. Gehostete Pläne ergänzen die AVV um eine vertragliche Verschwiegenheitsverpflichtung nach § 203 Abs. 4 StGB." },
+      { title: "Getestete Isolation", desc: "Multi-Tenant-Scoping wird in der Engine erzwungen und über jeden Lesepfad mit Fuzz-Tests gepinnt — keine Dashboard-Checkbox." },
+    ],
+    roadmapTitle: "Was wir noch nicht haben — ehrlich",
+    roadmapText: "Wir sagen es lieber hier, als dass ihr es im Einkauf herausfindet. In Arbeit, in dieser Reihenfolge:",
+    roadmapItems: [
+      "SOC 2 / ISO 27001-Zertifizierung — noch nicht vorhanden; Audit-Roadmap parallel zum Enterprise-Rollout geplant. Self-Hosting macht die Frage für viele Käufer gegenstandslos.",
+      "SSO/SAML für gehostete Team-Pläne (Self-Hosted-Deployments können die Engine heute hinter die eigene Auth legen).",
+      "Berechtigungs-Vererbung aus Quellsystemen für Konnektor-Inhalte in geteilten Brains — bis dahin dokumentieren wir Konnektoren für Einzel-Nutzer-Brains.",
+    ],
+    disclosureTitle: "Responsible Disclosure",
+    disclosureText: "Schwachstelle gefunden? E-Mail an security@sigmabrain.com. Wir bestätigen den Eingang innerhalb von 48 Stunden, halten euch auf dem Laufenden und nennen Researcher auf Wunsch namentlich. Bitte nicht gegen Systeme mit echten Kundendaten testen — self-hostet stattdessen eine Kopie; das ist kostenlos.",
+    faqTitle: "Sicherheitsfragen, klar beantwortet",
+    faq: [
+      { q: "Wo genau liegen meine Daten?", a: "Self-hosted: auf euren Maschinen, Punkt. Gehostet: in EU-Rechenzentren, Standort im AVV benannt. Synthese-Anfragen gehen an den für euren Plan konfigurierten LLM-Provider — Enterprise-Setups können über EU-Endpunkte oder ein eigenes Gateway routen." },
+      { q: "Können Sigmabrain-Mitarbeiter mein Brain lesen?", a: "Self-hosted: nein, strukturell — es gibt keinen Zugriffspfad. Gehostet: Zugriff ist auf protokollierte Break-Glass-Betriebsprozeduren beschränkt und durch AVV plus Verschwiegenheitsverpflichtung gedeckt. Wir durchstöbern keine Kundeninhalte, und eure Inhalte trainieren keine Modelle." },
+      { q: "Was passiert mit meinen Daten, wenn ich kündige?", a: "Export jederzeit (der Export der Engine ist ein vollwertiger Befehl, kein Support-Ticket). Gehostete Daten werden zum Vertragsende gemäß AVV gelöscht. Self-hosted: sie waren nie bei uns." },
+      { q: "Ist die Open-Source-Version unsicherer?", a: "Es ist dieselbe Engine. Sicherheitsrelevantes Verhalten — Scoping, Trust-Boundaries, Isolation — ist identisch und test-gepinnt. Der Unterschied ist, wer sie betreibt: ihr statt wir." },
+    ],
+    ctaTitle: "Bringt euren Datenschutzbeauftragten mit.",
+    ctaSub: "Wir sprechen seine Sprache. Gehostet mit AVV — oder self-hosted, sodass sich die Frage gar nicht stellt.",
+    ctaButton: "Sprich mit uns",
+  },
+};

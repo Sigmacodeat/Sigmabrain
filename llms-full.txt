@@ -1312,8 +1312,11 @@ This is the dispatcher. Skills are the implementation. **Read the skill file bef
 | Trigger | Skill |
 |---------|-------|
 | "capture this", "save this thought", "remember this", "drop this in the inbox", "save to brain" | `skills/capture/SKILL.md` |
+| "connect google drive", "connect gmail", "connect notion", "connect github", "sync google drive", "sync gmail", "sync notion", "sync github", "pull from google drive", "pull from gmail", "pull from notion", "pull from github", "connector status", "list connectors", "add connector", "remove connector" | `skills/connector-ingest/SKILL.md` |
 | User shares a link, article, tweet, or idea | `skills/idea-ingest/SKILL.md` |
-| "watch this video", "process this YouTube link", "ingest this PDF", "save this podcast", "process this book", "summarize this book", "PDF book", "ingest it into my brain", "what's in this screenshot", "check out this repo" | `skills/media-ingest/SKILL.md` |
+| "watch this video", "process this YouTube link", "save this podcast", "process this book", "summarize this book", "PDF book", "what's in this screenshot", "check out this repo" | `skills/media-ingest/SKILL.md` |
+| "ingest this document", "process this PDF", "process this Word document", "ingest this contract", "ingest this invoice", "ingest this email", "scanned PDF", "OCR this document", "upload and process", "document to brain", "bulk ingest documents", "import these files" | `skills/document-ingest/SKILL.md` |
+| "extract deadlines", "find deadlines", "Fristen extrahieren", "deadline audit", "upcoming deadlines", "what deadlines are in this document" | `skills/deadline-extract/SKILL.md` (chains after document-ingest/meeting-ingestion on deadline-bearing content) |
 | Meeting transcript received | `skills/meeting-ingestion/SKILL.md` |
 | Generic "ingest this" (auto-routes to above) | `skills/ingest/SKILL.md` |
 

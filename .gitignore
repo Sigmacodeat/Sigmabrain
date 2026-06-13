@@ -1,4 +1,6 @@
 node_modules/
+.next/
+tsconfig.tsbuildinfo
 bin/
 .DS_Store
 *.log
@@ -41,3 +43,5 @@ test/fixtures/pglite-snapshot.version
 
 # Private brain reports — never check these in (per CLAUDE.md privacy rule)
 reports/network-intelligence/
+.vercel
+.env*

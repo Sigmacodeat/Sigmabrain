@@ -1,0 +1,233 @@
+/* Fonts are self-hosted via next/font (layout.tsx) — no runtime requests
+   to Google (GDPR) and no render-blocking @import. The --font-inter,
+   --font-grotesk and --font-jetbrains variables are set on <html>. */
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg-base: #06060f;
+  --color-bg-surface: #0d0d1a;
+  --color-bg-elevated: #12122a;
+  --color-bg-hover: #1a1a35;
+  --color-border: #1e1e3a;
+  --color-border-active: #3a3a6a;
+  --color-text-primary: #e8e8f0;
+  --color-text-secondary: #8888aa;
+  --color-text-muted: #4a4a6a;
+  --color-accent: #7c3aed;
+  --color-accent-light: #a78bfa;
+  --color-accent-glow: rgba(124, 58, 237, 0.15);
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-info: #60a5fa;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), "Fira Code", monospace;
+}
+
+/* Brand typography: Space Grotesk carries every headline — the geometric,
+   slightly technical voice of the Sigma Synapse mark. Body stays Inter. */
+h1, h2, h3, .font-display {
+  font-family: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
+  letter-spacing: -0.025em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #06060f;
+  color: #e8e8f0;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e1e3a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a6a;
+}
+
+/* Selection */
+::selection {
+  background: rgba(124, 58, 237, 0.3);
+  color: #e8e8f0;
+}
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Noise texture overlay */
+.noise::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  z-index: 9999;
+}
+
+/* Grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Glow effects */
+.glow-purple {
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.2), 0 0 80px rgba(124, 58, 237, 0.1);
+}
+
+.glow-text {
+  text-shadow: 0 0 30px rgba(167, 139, 250, 0.5);
+}
+
+/* Glass card */
+.glass {
+  background: rgba(13, 13, 26, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 30, 58, 0.8);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated pulse ring */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.pulse-ring::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 1px solid rgba(124, 58, 237, 0.4);
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Typing cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor::after {
+  content: "|";
+  animation: blink 1s step-end infinite;
+  color: #7c3aed;
+  margin-left: 1px;
+}
+
+/* Code blocks */
+code, pre {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, opacity, transform, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Loading shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(124, 58, 237, 0.08) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Stream animation */
+@keyframes stream-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stream-word {
+  animation: stream-in 0.15s ease-out both;
+}
+
+/* Orb gradient animation */
+@keyframes orb-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 10px) scale(0.95); }
+}
+
+.orb {
+  animation: orb-float 8s ease-in-out infinite;
+  filter: blur(60px);
+}
+
+.orb-slow {
+  animation: orb-float 12s ease-in-out infinite reverse;
+  filter: blur(80px);
+}
+
+/* Accessibility: respect users who prefer reduced motion.
+   Decorative animations stop; content stays fully usable. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .orb,
+  .orb-slow,
+  .pulse-ring::before,
+  .shimmer {
+    animation: none !important;
+  }
+}
