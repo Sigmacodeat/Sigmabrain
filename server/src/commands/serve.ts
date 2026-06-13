@@ -113,6 +113,36 @@ export async function runServe(
     // restart.
     const suppressBootstrapToken = args.includes('--suppress-bootstrap-token');
 
+    // v0.43 — `--with-worker`: start the minion worker IN-PROCESS next to the
+    // HTTP server. For PGLite installs this is the ONLY way to process agent
+    // jobs (single-writer embedded DB — a second `gbrain jobs work` process
+    // would conflict); for small Postgres deployments it saves a process.
+    // Large deployments keep running a dedicated `gbrain jobs work`.
+    const withWorker = args.includes('--with-worker');
+    if (withWorker) {
+      const { MinionWorker } = await import('../core/minions/worker.ts');
+      const { MinionQueue } = await import('../core/minions/queue.ts');
+      const { registerBuiltinHandlers } = await import('./jobs.ts');
+      const queue = new MinionQueue(engine);
+      await queue.ensureSchema();
+      const worker = new MinionWorker(engine, { queue: 'default' });
+      await registerBuiltinHandlers(worker, engine);
+      // Embedded mode: a worker health failure must NOT kill the HTTP server.
+      // Log loudly; the worker stops, the API stays up, operators see it.
+      worker.on('unhealthy', (info) => {
+        console.error(
+          `[serve --with-worker] worker unhealthy (${info.reason ?? 'unknown'}): ` +
+          `${'message' in info ? info.message : ''} — worker stopped, HTTP API unaffected. ` +
+          `Restart the process to resume job processing.`,
+        );
+        worker.stop();
+      });
+      void worker.start().catch((err) => {
+        console.error(`[serve --with-worker] worker crashed: ${err instanceof Error ? err.message : String(err)} — HTTP API unaffected.`);
+      });
+      console.error(`[serve --with-worker] minion worker started in-process (handlers: ${worker.registeredNames.join(', ')})`);
+    }
+
     const { runServeHttp } = await import('./serve-http.ts');
     await runServeHttp(engine, { port, tokenTtl, enableDcr, publicUrl, logFullParams, bind, suppressBootstrapToken });
     return;

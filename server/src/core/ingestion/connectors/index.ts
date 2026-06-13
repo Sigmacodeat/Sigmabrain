@@ -38,5 +38,7 @@ export { CalendarConnector } from './calendar.ts';
 export { DropboxConnector } from './dropbox.ts';
 export { AsanaConnector } from './asana.ts';
 export { JiraConnector } from './jira.ts';
+export { LegalJudgementsConnector } from './legal-judgements.ts';
+export { BeaImportConnector } from './bea-import.ts';
 
 export type { ConnectorState, ConnectorConfig, SyncCursor } from './base.ts';

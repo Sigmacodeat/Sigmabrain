@@ -143,6 +143,47 @@ describe('buildBrainTools', () => {
       ),
     ).rejects.toBeInstanceOf(OperationError);
   });
+
+  // v0.43 multi-tenant: opts.sourceId scopes every tool call's
+  // OperationContext.sourceId. Regression pin for the hardcoded-'default'
+  // bug where a tenant's agent read/wrote the HOST source.
+  test('execute() with sourceId writes into the tenant source, not default', async () => {
+    await engine.executeRaw(
+      `INSERT INTO sources (id, name) VALUES ('brain_t1', 'brain_t1') ON CONFLICT (id) DO NOTHING`,
+    );
+    const tools = buildBrainTools({ subagentId: 7, engine, config, sourceId: 'brain_t1' });
+    const putPage = tools.find(t => t.name === 'brain_put_page');
+    const ctx: ToolCtx = { engine, jobId: 1, remote: true };
+    await putPage!.execute(
+      { slug: 'wiki/agents/7/tenant-note', content: '---\ntitle: Tenant Note\n---\nbody' },
+      ctx,
+    );
+    const rows = await engine.executeRaw<{ source_id: string }>(
+      `SELECT source_id FROM pages WHERE slug = 'wiki/agents/7/tenant-note'`,
+    );
+    expect(rows.length).toBe(1);
+    expect(rows[0]!.source_id).toBe('brain_t1');
+  });
+
+  test('execute() with sourceId cannot read another source\'s pages', async () => {
+    await engine.executeRaw(
+      `INSERT INTO sources (id, name) VALUES ('brain_t1', 'brain_t1') ON CONFLICT (id) DO NOTHING`,
+    );
+    // Page in the host/default source.
+    const hostTools = buildBrainTools({ subagentId: 8, engine, config });
+    const hostPut = hostTools.find(t => t.name === 'brain_put_page');
+    const ctx: ToolCtx = { engine, jobId: 1, remote: true };
+    await hostPut!.execute(
+      { slug: 'wiki/agents/8/host-secret', content: '---\ntitle: Host Secret\n---\nhost-only' },
+      ctx,
+    );
+    // Tenant-scoped get_page must NOT see it.
+    const tenantTools = buildBrainTools({ subagentId: 8, engine, config, sourceId: 'brain_t1' });
+    const tenantGet = tenantTools.find(t => t.name === 'brain_get_page');
+    await expect(
+      tenantGet!.execute({ slug: 'wiki/agents/8/host-secret' }, ctx),
+    ).rejects.toThrow();
+  });
 });
 
 describe('filterAllowedTools', () => {

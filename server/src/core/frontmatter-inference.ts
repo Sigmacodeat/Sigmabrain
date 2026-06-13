@@ -242,6 +242,15 @@ export const DIRECTORY_RULES: DirectoryRule[] = [
 
   // Entity directories — these should already have frontmatter in most cases,
   // but the 55 people pages etc. that don't get handled here.
+  // Legal corpus — statutes and regulations
+  { pathPrefix: 'law-corpus/', type: 'statute', source: 'legal-corpus', tags: ['law', 'statute'], titleStrategy: 'heading' },
+
+  // Legal judgements and court decisions
+  { pathPrefix: 'legal/judgements/', type: 'court_decision', source: 'legal-judgements', tags: ['law', 'court-decision'], titleStrategy: 'heading' },
+  { pathPrefix: 'legal/eu-judgements/', type: 'eu_court_decision', source: 'eur-lex', tags: ['law', 'eu-court-decision'], titleStrategy: 'heading' },
+  { pathPrefix: 'legal/analyses/', type: 'legal_document', source: 'legal-analysis', tags: ['law', 'analysis'], titleStrategy: 'heading' },
+  { pathPrefix: 'legal/cases/', type: 'legal-case', source: 'legal-case', tags: ['law', 'case'], titleStrategy: 'heading' },
+
   { pathPrefix: 'people/', type: 'person', titleStrategy: 'heading' },
   { pathPrefix: 'companies/', type: 'company', titleStrategy: 'heading' },
   { pathPrefix: 'projects/', type: 'project', titleStrategy: 'heading' },

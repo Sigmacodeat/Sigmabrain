@@ -30,6 +30,8 @@ import { CalendarConnector } from './calendar.ts';
 import { DropboxConnector } from './dropbox.ts';
 import { AsanaConnector } from './asana.ts';
 import { JiraConnector } from './jira.ts';
+import { LegalJudgementsConnector } from './legal-judgements.ts';
+import { BeaImportConnector } from './bea-import.ts';
 
 /** Registry entry: one line per active connector. */
 interface ConnectorRegistryEntry {
@@ -49,6 +51,8 @@ export const CONNECTOR_REGISTRY: Record<string, new (cfg: ConnectorConfig) => Ba
   'dropbox': DropboxConnector,
   'asana': AsanaConnector,
   'jira': JiraConnector,
+  'legal-judgements': LegalJudgementsConnector,
+  'bea-import': BeaImportConnector,
 };
 
 export const SUPPORTED_CONNECTORS = Object.keys(CONNECTOR_REGISTRY);

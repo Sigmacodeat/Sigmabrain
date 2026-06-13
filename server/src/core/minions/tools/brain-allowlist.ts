@@ -194,6 +194,13 @@ export interface BuildBrainToolsOpts {
    * SubagentHandlerData.allowed_slug_prefixes via the handler.
    */
   allowedSlugPrefixes?: readonly string[];
+  /**
+   * v0.43 — Tenant source for multi-tenant jobs (web-api `_source_id`
+   * stamp). Every tool-call OperationContext scopes to this source so a
+   * tenant's agent reads/writes ONLY the tenant's brain. Defaults to
+   * 'default' (host source) for local jobs.
+   */
+  sourceId?: string;
 }
 
 interface OpContextDeps {
@@ -204,6 +211,7 @@ interface OpContextDeps {
   signal?: AbortSignal;
   brainId?: string;
   allowedSlugPrefixes?: readonly string[];
+  sourceId?: string;
 }
 
 function buildOpContext(deps: OpContextDeps): OperationContext {
@@ -217,7 +225,10 @@ function buildOpContext(deps: OpContextDeps): OperationContext {
     },
     dryRun: false,
     remote: true,                // match MCP trust boundary for auto-link skip
-    sourceId: 'default',         // v0.34 D4: required; subagent tools default to host source
+    // v0.43 multi-tenant: tenant jobs carry their source; local jobs keep
+    // the host default. NEVER hardcode 'default' here — a tenant agent
+    // reading/writing the host source is a cross-tenant data leak.
+    sourceId: deps.sourceId ?? 'default',
     jobId: deps.jobId,
     subagentId: deps.subagentId,
     viaSubagent: true,           // FAIL-CLOSED: put_page etc. enforce namespace
@@ -270,6 +281,7 @@ export function buildBrainTools(opts: BuildBrainToolsOpts): ToolDef[] {
           signal: ctx.signal,
           brainId: opts.brainId,
           allowedSlugPrefixes: opts.allowedSlugPrefixes,
+          sourceId: opts.sourceId,
         });
         const params = (input && typeof input === 'object') ? input as Record<string, unknown> : {};
         return op.handler(opCtx, params);

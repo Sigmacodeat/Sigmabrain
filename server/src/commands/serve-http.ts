@@ -1818,34 +1818,49 @@ export async function runServeHttp(engine: BrainEngine, options: ServeHttpOption
     // Embedded path. Read assets from the generated manifest. Cache the
     // bytes per asset on first request — these never change for a given
     // binary, so subsequent requests skip the fs read.
-    const { ADMIN_ASSETS, ADMIN_INDEX_HTML } = await import('../admin-embedded.ts');
-    const cache = new Map<string, Buffer>();
-    function loadAsset(asset: { path: string }): Buffer {
-      const hit = cache.get(asset.path);
-      if (hit) return hit;
-      const buf = fs.readFileSync(asset.path);
-      cache.set(asset.path, buf);
-      return buf;
+    // Forks without the legacy admin SPA (admin/ removed, embedded manifest
+    // stale) must NOT crash the whole server — the brain API is the product,
+    // /admin is optional. Degrade to 404 on /admin instead.
+    let adminEmbedded: { ADMIN_ASSETS: any; ADMIN_INDEX_HTML: any } | null = null;
+    try {
+      adminEmbedded = await import('../admin-embedded.ts');
+    } catch (e: any) {
+      console.warn(`[serve-http] admin SPA assets unavailable (${e?.message ?? e}) — /admin disabled, API unaffected`);
     }
-    app.get('/admin/{*path}', (req: Request, res: Response, next: NextFunction) => {
-      if (req.path.startsWith('/admin/api/') || req.path === '/admin/events' || req.path === '/admin/login') {
-        return next();
+    if (adminEmbedded) {
+      const { ADMIN_ASSETS, ADMIN_INDEX_HTML } = adminEmbedded;
+      const cache = new Map<string, Buffer>();
+      function loadAsset(asset: { path: string }): Buffer {
+        const hit = cache.get(asset.path);
+        if (hit) return hit;
+        const buf = fs.readFileSync(asset.path);
+        cache.set(asset.path, buf);
+        return buf;
       }
-      const hit = ADMIN_ASSETS[req.path];
-      if (hit) {
-        res.setHeader('Content-Type', hit.mime);
-        res.send(loadAsset(hit));
-        return;
-      }
-      // SPA fallback — every unmatched /admin/* route resolves to index.html
-      // so client-side routing takes over (login, dashboard, agents, ...).
-      if (ADMIN_INDEX_HTML) {
-        res.setHeader('Content-Type', ADMIN_INDEX_HTML.mime);
-        res.send(loadAsset(ADMIN_INDEX_HTML));
-        return;
-      }
-      res.status(404).send('admin SPA not available');
-    });
+      app.get('/admin/{*path}', (req: Request, res: Response, next: NextFunction) => {
+        if (req.path.startsWith('/admin/api/') || req.path === '/admin/events' || req.path === '/admin/login') {
+          return next();
+        }
+        const hit = ADMIN_ASSETS[req.path];
+        if (hit) {
+          res.setHeader('Content-Type', hit.mime);
+          res.send(loadAsset(hit));
+          return;
+        }
+        // SPA fallback — every unmatched /admin/* route resolves to index.html
+        // so client-side routing takes over (login, dashboard, agents, ...).
+        if (ADMIN_INDEX_HTML) {
+          res.setHeader('Content-Type', ADMIN_INDEX_HTML.mime);
+          res.send(loadAsset(ADMIN_INDEX_HTML));
+          return;
+        }
+        res.status(404).send('admin SPA not available');
+      });
+    } else {
+      app.get('/admin/{*path}', (_req: Request, res: Response) => {
+        res.status(404).send('admin SPA not available in this build');
+      });
+    }
   }
 
   // ---------------------------------------------------------------------------
