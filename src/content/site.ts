@@ -4,6 +4,14 @@
 
 export type Lang = "en" | "de";
 
+// Öffentliche Repo-URL der Open-Source-Engine. EINE Stelle zum Ändern —
+// per NEXT_PUBLIC_ENGINE_REPO_URL überschreibbar. Auf den eigenen
+// öffentlichen Fork setzen, bevor die Marketing-Seite live geht.
+export const ENGINE_REPO_URL =
+  process.env.NEXT_PUBLIC_ENGINE_REPO_URL || "https://github.com/sigmabrain/sigmabrain";
+export const ENGINE_REPO_INSTALL =
+  ENGINE_REPO_URL.replace("https://github.com/", "github:");
+
 /** Build a locale-aware path. p("de", "/pricing") => "/de/pricing"; p("en", "") => "/" */
 export function p(lang: Lang, path: string): string {
   if (lang === "de") return path === "" || path === "/" ? "/de" : `/de${path}`;
@@ -32,9 +40,11 @@ export const NAV = {
     signIn: "Sign in",
     cta: "Start free",
     solutionItems: [
+      { label: "Law Firms — Subsumio", href: "/subsumio", desc: "Matters, deadlines, WhatsApp intake, time, expenses and invoicing" },
+      { label: "Tax & Accounting — Taxumio", href: "/taxumio", desc: "The practice memory next to DATEV" },
+      { label: "Compliance & GRC — Compliumio", href: "/compliance", desc: "GDPR, AML, EU AI Act — obligations, controls and the evidence trail" },
+      { label: "Insurance Brokers — Versumio", href: "/insurance", desc: "Coverage, claims history, renewals — the agency's memory" },
       { label: "VC & Private Equity", href: "/solutions/vc", desc: "Deal memory, founder tracking, meeting prep" },
-      { label: "Law Firms", href: "/solutions/legal", desc: "Case synthesis on your own infrastructure" },
-      { label: "Tax & Accounting Firms", href: "/solutions/tax", desc: "The practice memory next to your practice software" },
       { label: "Consulting & Agencies", href: "/solutions/consulting", desc: "Institutional memory for project teams" },
       { label: "Executive Search & Recruiting", href: "/solutions/recruiting", desc: "Your proprietary talent graph" },
     ],
@@ -49,9 +59,11 @@ export const NAV = {
     signIn: "Anmelden",
     cta: "Kostenlos starten",
     solutionItems: [
+      { label: "Kanzleien — Subsumio", href: "/subsumio", desc: "Akten, Fristen, WhatsApp-Eingang, Zeiten, Auslagen und Rechnungen" },
+      { label: "Steuerberater & WP — Taxumio", href: "/taxumio", desc: "Das Kanzleigedächtnis neben DATEV" },
+      { label: "Compliance & GRC — Compliumio", href: "/compliance", desc: "DSGVO, GwG, EU AI Act — Pflichten, Kontrollen und der Nachweis" },
+      { label: "Versicherungsmakler — Versumio", href: "/insurance", desc: "Deckung, Schadenhistorie, Verlängerungen — das Makler-Gedächtnis" },
       { label: "VC & Private Equity", href: "/solutions/vc", desc: "Deal-Gedächtnis, Founder-Tracking, Meeting-Prep" },
-      { label: "Kanzleien", href: "/solutions/legal", desc: "Akten-Synthese auf eigener Infrastruktur" },
-      { label: "Steuerberater & WP", href: "/solutions/tax", desc: "Das Kanzleigedächtnis neben DATEV" },
       { label: "Beratung & Agenturen", href: "/solutions/consulting", desc: "Institutional Memory für Projektteams" },
       { label: "Executive Search & Recruiting", href: "/solutions/recruiting", desc: "Euer proprietärer Talent-Graph" },
     ],
@@ -70,7 +82,7 @@ export const FOOTER = {
           { label: "Compare us honestly", href: "/compare" },
           { label: "Dashboard", href: "/dashboard", external: false },
           { label: "Download the app", href: "/download" },
-          { label: "Open Source Engine", href: "https://github.com/garrytan/gbrain", external: true },
+          { label: "Open Source Engine", href: ENGINE_REPO_URL, external: true },
         ],
       },
       {
@@ -115,7 +127,7 @@ export const FOOTER = {
           { label: "Ehrlicher Vergleich", href: "/compare" },
           { label: "Dashboard", href: "/dashboard", external: false },
           { label: "App herunterladen", href: "/download" },
-          { label: "Open-Source-Engine", href: "https://github.com/garrytan/gbrain", external: true },
+          { label: "Open-Source-Engine", href: ENGINE_REPO_URL, external: true },
         ],
       },
       {
@@ -175,25 +187,25 @@ export const PRICING: Record<Lang, { title: string; sub: string; tiers: PricingT
       {
         id: "oss", name: "Open Source", price: "$0", period: "forever",
         blurb: "Self-hosted. Full engine, your keys, your hardware.",
-        features: ["Complete engine (MIT)", "Hybrid search + knowledge graph", "AI synthesis with citations", "Unlimited pages — it's your machine", "Community support"],
-        cta: "Deploy yourself", href: "https://github.com/garrytan/gbrain",
+        features: ["Complete engine (MIT)", "Hybrid search + knowledge graph", "AI synthesis with citations", "Unlimited pages and files — it's your machine/storage", "Community support"],
+        cta: "Deploy yourself", href: ENGINE_REPO_URL,
       },
       {
         id: "pro", name: "Pro", price: "€79", period: "/month",
         blurb: "Hosted. For one professional who lives on their knowledge.",
-        features: ["Fully managed — no API keys needed", "25,000 pages", "Fair-use queries with live usage meter", "24/7 Dream Cycle (dedupe, citations, contradictions)", "Email & document import", "Priority email support"],
+        features: ["Fully managed — no API keys needed", "25,000 pages", "50 GB cloud file storage included", "Fair-use queries with live usage meter", "24/7 Dream Cycle (dedupe, citations, contradictions)", "Email, document & WhatsApp media import", "Priority email support"],
         cta: "Start Pro", href: "/signup", highlight: true,
       },
       {
         id: "team", name: "Team", price: "€290", period: "/month",
         blurb: "5 seats included, +€49 per extra seat. One shared brain, scoped access.",
-        features: ["Everything in Pro", "Shared institutional memory", "Per-user scoped access — fuzz-tested, zero leaks", "Admin & usage analytics", "Onboarding session included"],
+        features: ["Everything in Pro", "Shared institutional memory", "250 GB cloud file storage included", "Per-user scoped access — fuzz-tested, zero leaks", "Admin & usage analytics", "Onboarding session included"],
         cta: "Start Team", href: "/signup",
       },
       {
         id: "ent", name: "Enterprise", price: "Custom", period: "from €12k/yr",
         blurb: "Compliance-grade. 25+ seats, your infrastructure or EU cloud.",
-        features: ["EU or on-prem hosting", "DPA, SLA, SSO", "Maximum-recall search mode", "Dedicated support & integration help"],
+        features: ["EU cloud, Vercel Blob/S3 or on-prem storage", "Custom storage volumes and retention policy", "DPA, SLA, SSO", "Maximum-recall search mode", "Dedicated support & integration help"],
         cta: "Talk to us", href: "mailto:hello@sigmabrain.com",
       },
     ],
@@ -206,25 +218,25 @@ export const PRICING: Record<Lang, { title: string; sub: string; tiers: PricingT
       {
         id: "oss", name: "Open Source", price: "0 €", period: "für immer",
         blurb: "Self-hosted. Volle Engine, deine Keys, deine Hardware.",
-        features: ["Komplette Engine (MIT)", "Hybrid-Suche + Wissensgraph", "KI-Synthese mit Zitaten", "Unbegrenzte Seiten — es ist dein Rechner", "Community-Support"],
-        cta: "Selbst deployen", href: "https://github.com/garrytan/gbrain",
+        features: ["Komplette Engine (MIT)", "Hybrid-Suche + Wissensgraph", "KI-Synthese mit Zitaten", "Unbegrenzte Seiten und Dateien — es ist eure Maschine/euer Speicher", "Community-Support"],
+        cta: "Selbst deployen", href: ENGINE_REPO_URL,
       },
       {
         id: "pro", name: "Pro", price: "79 €", period: "/Monat",
         blurb: "Gehostet. Für Professionals, die von ihrem Wissen leben.",
-        features: ["Voll verwaltet — keine API-Keys nötig", "25.000 Seiten", "Fair-Use-Queries mit Live-Verbrauchsanzeige", "24/7 Dream Cycle (Dedupe, Zitate, Widersprüche)", "E-Mail- & Dokumenten-Import", "Priorisierter E-Mail-Support"],
+        features: ["Voll verwaltet — keine API-Keys nötig", "25.000 Seiten", "50 GB Cloud-Dateispeicher inklusive", "Fair-Use-Queries mit Live-Verbrauchsanzeige", "24/7 Dream Cycle (Dedupe, Zitate, Widersprüche)", "E-Mail-, Dokumenten- & WhatsApp-Medien-Import", "Priorisierter E-Mail-Support"],
         cta: "Pro starten", href: "/signup", highlight: true,
       },
       {
         id: "team", name: "Team", price: "290 €", period: "/Monat",
         blurb: "5 Seats inklusive, +49 € je weiterer Seat. Ein gemeinsames Brain, sauber getrennte Zugriffe.",
-        features: ["Alles aus Pro", "Geteiltes Firmen-Gedächtnis", "Zugriff pro Nutzer gescoped — fuzz-getestet, null Leaks", "Admin & Nutzungs-Analytics", "Onboarding-Session inklusive"],
+        features: ["Alles aus Pro", "Geteiltes Firmen-Gedächtnis", "250 GB Cloud-Dateispeicher inklusive", "Zugriff pro Nutzer gescoped — fuzz-getestet, null Leaks", "Admin & Nutzungs-Analytics", "Onboarding-Session inklusive"],
         cta: "Team starten", href: "/signup",
       },
       {
         id: "ent", name: "Enterprise", price: "Individuell", period: "ab 12.000 €/Jahr",
         blurb: "Compliance-tauglich. 25+ Seats, eure Infrastruktur oder EU-Cloud.",
-        features: ["EU- oder On-Prem-Hosting", "AVV, SLA, SSO", "Maximum-Recall-Suchmodus", "Dedizierter Support & Integrationshilfe"],
+        features: ["EU-Cloud, Vercel Blob/S3 oder On-Prem-Speicher", "Individuelle Speichermengen und Aufbewahrung", "AVV, SLA, SSO", "Maximum-Recall-Suchmodus", "Dedizierter Support & Integrationshilfe"],
         cta: "Sprich mit uns", href: "mailto:hello@sigmabrain.com",
       },
     ],
@@ -285,9 +297,9 @@ export const LANDING = {
     verticalsTitle: "Built for teams that run on knowledge",
     verticalsSub: "One brain, tuned for your industry.",
     verticalCards: [
+      { href: "/subsumio", title: "Law Firms — Subsumio", desc: "Case files, deadlines, WhatsApp intake, time, expenses and invoices — answerable from your own brain, self-hosted or EU cloud.", cta: "For law firms" },
+      { href: "/taxumio", title: "Tax & Accounting — Taxumio", desc: "DATEV knows the numbers. The brain knows the why — advisory history, client context, open items, deadlines.", cta: "For tax & accounting" },
       { href: "/solutions/vc", title: "VC & Private Equity", desc: "Who invested in what? What's open with this founder? Walk into every meeting prepared.", cta: "For investors" },
-      { href: "/solutions/legal", title: "Law Firms", desc: "Synthesize case files on infrastructure you control. The privacy-first alternative.", cta: "For law firms" },
-      { href: "/solutions/tax", title: "Tax & Accounting Firms", desc: "Your practice software knows the numbers. The brain knows the why — advisory history, client context, open items.", cta: "For tax & accounting" },
       { href: "/solutions/consulting", title: "Consulting & Agencies", desc: "Pitch history, project learnings, client context — new hires productive in days.", cta: "For consultancies" },
       { href: "/solutions/recruiting", title: "Executive Search & Recruiting", desc: "Who fits the brief, who can intro you — a proprietary talent graph that compounds.", cta: "For search firms" },
     ],
@@ -295,7 +307,7 @@ export const LANDING = {
     scenariosSub: "Illustrative scenarios based on what the engine does in production.",
     scenarios: [
       { role: "An investor", text: "Uploads deal memos and meeting notes, then asks: “What's still open with the founders I met this week?” — one answer, every commitment listed, sources linked." },
-      { role: "A lawyer", text: "Drops 500 pages of case files into a self-hosted brain and asks: “Where do the opposing party's statements contradict each other?” — contradictions surfaced with page citations." },
+      { role: "A lawyer", text: "Sends a voice note and a PDF by WhatsApp with a matter reference, books 20 minutes, then asks: “Where do the opposing party's statements contradict each other?” — the file, time and answer are in one brain." },
       { role: "A consulting team", text: "Indexes five years of decks and project docs. A new hire asks: “Have we solved something like this before?” — and finds the 2023 playbook in seconds." },
     ],
     faqTitle: "Questions, answered",
@@ -358,9 +370,9 @@ export const LANDING = {
     verticalsTitle: "Gebaut für Teams, die von Wissen leben",
     verticalsSub: "Ein Brain, abgestimmt auf deine Branche.",
     verticalCards: [
+      { href: "/subsumio", title: "Kanzleien — Subsumio", desc: "Akten, Fristen, WhatsApp-Eingang, Zeiten, Auslagen und Rechnungen — abfragbar aus eurem eigenen Brain, self-hosted oder EU-Cloud.", cta: "Für Kanzleien" },
+      { href: "/taxumio", title: "Steuerberater & WP — Taxumio", desc: "DATEV kennt die Zahlen. Das Gehirn kennt das Warum — Gestaltungs-Historie, Mandantenkontext, offene Punkte, Fristen.", cta: "Für Steuerkanzleien" },
       { href: "/solutions/vc", title: "VC & Private Equity", desc: "Wer hat in was investiert? Was ist mit diesem Founder offen? In jedes Meeting vorbereitet gehen.", cta: "Für Investoren" },
-      { href: "/solutions/legal", title: "Kanzleien", desc: "Akten synthetisieren auf Infrastruktur, die ihr kontrolliert. Die Privacy-First-Alternative.", cta: "Für Kanzleien" },
-      { href: "/solutions/tax", title: "Steuerberater & WP", desc: "DATEV kennt die Zahlen. Das Brain kennt das Warum — Gestaltungs-Historie, Mandantenkontext, offene Punkte.", cta: "Für Steuerkanzleien" },
       { href: "/solutions/consulting", title: "Beratung & Agenturen", desc: "Pitch-Historie, Projekt-Learnings, Kundenkontext — neue Kollegen in Tagen produktiv.", cta: "Für Beratungen" },
       { href: "/solutions/recruiting", title: "Executive Search & Recruiting", desc: "Wer passt aufs Mandat, wer kann euch vorstellen — ein proprietärer Talent-Graph, der sich verzinst.", cta: "Für Personalberater" },
     ],
@@ -368,7 +380,7 @@ export const LANDING = {
     scenariosSub: "Illustrative Szenarien — basierend auf dem, was die Engine produktiv leistet.",
     scenarios: [
       { role: "Eine Investorin", text: "Lädt Deal-Memos und Meeting-Notizen hoch und fragt: „Was ist mit den Foundern dieser Woche noch offen?“ — eine Antwort, jede Zusage gelistet, Quellen verlinkt." },
-      { role: "Ein Anwalt", text: "Legt 500 Seiten Akten in ein self-hosted Brain und fragt: „Wo widersprechen sich die Aussagen der Gegenseite?“ — Widersprüche mit Seiten-Zitaten." },
+      { role: "Ein Anwalt", text: "Schickt Sprachnotiz und PDF per WhatsApp mit Aktenzeichen, bucht 20 Minuten und fragt: „Wo widersprechen sich die Aussagen der Gegenseite?“ — Datei, Zeit und Antwort liegen in einem Brain." },
       { role: "Ein Beratungsteam", text: "Indiziert fünf Jahre Decks und Projektdokumente. Ein neuer Kollege fragt: „Haben wir so etwas schon mal gelöst?“ — und findet das Playbook von 2023 in Sekunden." },
     ],
     faqTitle: "Fragen, beantwortet",

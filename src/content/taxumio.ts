@@ -56,6 +56,9 @@ export interface TaxumioContent {
   ctaButton: string;
 }
 
+/** Shared shape for every product-brand vertical page (Taxumio, Compliumio, …). */
+export type BrandedVerticalContent = TaxumioContent;
+
 export const TAXUMIO: Record<Lang, TaxumioContent> = {
   en: {
     metaTitle: "Taxumio — the brain for your tax & accounting firm's daily work",
