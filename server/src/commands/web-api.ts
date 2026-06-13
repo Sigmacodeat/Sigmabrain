@@ -20,10 +20,19 @@ import { slugifySegment } from '../core/sync.ts';
 import { loadConfig } from '../core/config.ts';
 import { OperationError } from '../core/operations.ts';
 import type { ThinkResult } from '../core/think/index.ts';
+import { MinionQueue } from '../core/minions/queue.ts';
 
 export interface WebApiOptions {
   /** When set, require matching X-Sigmabrain-Api-Key or Authorization: Bearer header. */
   apiKey?: string;
+  /**
+   * Fail-closed multi-tenant mode (SaaS deployments). When true, every
+   * request MUST carry a valid `x-sigmabrain-source` header naming a
+   * non-default tenant source — requests without one are rejected with 400
+   * instead of silently falling back to the all-seeing 'default' scope.
+   * Enable via GBRAIN_REQUIRE_TENANT=true (or SIGMABRAIN_REQUIRE_TENANT).
+   */
+  requireTenant?: boolean;
 }
 
 interface ParsedMultipart {
@@ -163,6 +172,9 @@ function mapSearchResults(results: Array<Record<string, unknown>>) {
 function mapPage(page: Record<string, unknown>, tags: string[] = []) {
   const body = String(page.compiled_truth ?? page.content ?? '');
   const wordCount = body.split(/\s+/).filter(Boolean).length;
+  const frontmatter = (page.frontmatter && typeof page.frontmatter === 'object')
+    ? page.frontmatter as Record<string, unknown>
+    : {};
   return {
     slug: String(page.slug ?? ''),
     title: String(page.title ?? page.slug ?? ''),
@@ -173,6 +185,7 @@ function mapPage(page: Record<string, unknown>, tags: string[] = []) {
     tags,
     word_count: wordCount,
     type: page.type ? String(page.type) : undefined,
+    frontmatter,
   };
 }
 
@@ -216,31 +229,38 @@ async function invokeOp(
   }
 }
 
-function streamThinkResult(res: Response, result: ThinkResult) {
-  res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-
-  const answer = result.answer || '';
-  const chunkSize = 48;
-  for (let i = 0; i < answer.length; i += chunkSize) {
-    res.write(`data: ${JSON.stringify({ chunk: answer.slice(i, i + chunkSize) })}\n\n`);
-  }
-
-  const citations = (result.citations ?? []).map((c) => ({
+/**
+ * Batch-fetch page titles for a set of citation slugs so citation pills in
+ * the UI show the real page title instead of the slug path.
+ */
+async function enrichCitations(
+  engine: BrainEngine,
+  citations: Array<{ page_slug: string }>,
+  sourceId: string,
+): Promise<Array<{ slug: string; title: string; quote: string; confidence: number }>> {
+  if (citations.length === 0) return [];
+  const slugs = [...new Set(citations.map((c) => c.page_slug))];
+  const rows = await engine.executeRaw<{ slug: string; title: string }>(
+    `SELECT slug, title FROM pages WHERE slug = ANY($1::text[])
+       AND deleted_at IS NULL
+       AND ($2 = 'default' OR source_id = $2)`,
+    [slugs, sourceId],
+  ).catch(() => [] as Array<{ slug: string; title: string }>);
+  const titleMap = new Map(rows.map((r) => [r.slug, r.title]));
+  return citations.map((c) => ({
     slug: c.page_slug,
-    title: c.page_slug,
+    title: titleMap.get(c.page_slug) ?? c.page_slug.split('/').pop() ?? c.page_slug,
     quote: '',
     confidence: 0.85,
   }));
-
-  res.write(`data: ${JSON.stringify({ citations, gaps: result.gaps ?? [] })}\n\n`);
-  res.write('data: [DONE]\n\n');
-  res.end();
 }
 
 export function mountWebApi(app: Application, engine: BrainEngine, options: WebApiOptions = {}) {
-  const guard = requireWebApiKey(options.apiKey ?? process.env.GBRAIN_WEB_API_KEY);
+  const guard = requireWebApiKey(
+    options.apiKey ?? process.env.GBRAIN_WEB_API_KEY ?? process.env.SIGMABRAIN_WEB_API_KEY,
+  );
+  const requireTenant = options.requireTenant
+    ?? (process.env.GBRAIN_REQUIRE_TENANT === 'true' || process.env.SIGMABRAIN_REQUIRE_TENANT === 'true');
   const config = loadConfig() || { engine: 'pglite' as const };
   const ctx = (req: Request) =>
     buildOperationContext(engine, {}, { remote: false, sourceId: requestSourceId(req) });
@@ -258,6 +278,22 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
   }
 
   app.use('/api', guard);
+
+  // Fail-closed tenant gate: in SaaS mode a missing/invalid tenant header
+  // must NEVER silently widen to the all-seeing 'default' scope.
+  if (requireTenant) {
+    app.use('/api', (req: Request, res: Response, next: NextFunction) => {
+      if (requestSourceId(req) === 'default') {
+        res.status(400).json({
+          error: 'tenant_required',
+          message: 'This deployment requires a valid x-sigmabrain-source tenant header.',
+        });
+        return;
+      }
+      next();
+    });
+    console.error('[web-api] fail-closed tenant mode active (GBRAIN_REQUIRE_TENANT)');
+  }
 
   app.get('/api/stats', async (req: Request, res: Response) => {
     try {
@@ -290,12 +326,16 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
         });
         mapped.total_entities = row?.entity_count ?? 0;
       }
-      const [queriesToday] = await engine.executeRaw<{ count: number }>(
-        `SELECT count(*)::int as count FROM mcp_request_log
-         WHERE operation IN ('think', 'web_think', 'search', 'web_search')
-           AND created_at > now() - interval '24 hours'`,
-      ).catch(() => [{ count: 0 }]);
-      mapped.total_queries = queriesToday?.count ?? 0;
+      if (sourceId === 'default') {
+        const [queriesToday] = await engine.executeRaw<{ count: number }>(
+          `SELECT count(*)::int as count FROM mcp_request_log
+           WHERE operation IN ('think', 'web_think', 'search', 'web_search')
+             AND created_at > now() - interval '24 hours'`,
+        ).catch(() => [{ count: 0 }]);
+        mapped.total_queries = queriesToday?.count ?? 0;
+      }
+      // Tenant view keeps total_queries at 0: mcp_request_log has no source
+      // column, and a global count would leak cross-tenant activity volume.
       res.json(mapped);
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'unknown';
@@ -320,22 +360,56 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
   });
 
   app.post('/api/think', express.json({ limit: '1mb' }), async (req: Request, res: Response) => {
-    const query = String(req.body?.query ?? req.body?.question ?? '');
+    const body = req.body as Record<string, unknown>;
+    const query = String(body?.query ?? body?.question ?? '');
     if (!query.trim()) {
       res.status(400).json({ error: 'missing_query' });
       return;
     }
+
+    const rawMode = String(body?.mode ?? 'balanced');
+    const searchMode = (['conservative', 'balanced', 'tokenmax'] as const).includes(
+      rawMode as 'conservative' | 'balanced' | 'tokenmax',
+    )
+      ? (rawMode as 'conservative' | 'balanced' | 'tokenmax')
+      : 'balanced';
+
+    const sourceId = requestSourceId(req);
+
+    // Start SSE immediately so the browser can render the streaming response.
+    // Headers must be set before any async work that could throw — if runThink
+    // throws after headers are sent, we emit an SSE error event instead of
+    // a JSON 500 (which would be silently ignored after headers are flushed).
+    res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
     try {
       const { runThink } = await import('../core/think/index.ts');
+
       const result = await runThink(engine, {
         question: query,
         remote: false,
-        sourceId: requestSourceId(req),
+        sourceId,
+        searchMode,
+        // Real-time token streaming: each text delta fires an SSE chunk event.
+        onStreamChunk: (text) => {
+          res.write(`data: ${JSON.stringify({ chunk: text })}\n\n`);
+        },
       });
-      streamThinkResult(res, result);
+
+      const citations = await enrichCitations(engine, result.citations ?? [], sourceId);
+      res.write(`data: ${JSON.stringify({ citations, gaps: result.gaps ?? [] })}\n\n`);
+      res.write('data: [DONE]\n\n');
+      res.end();
     } catch (e) {
-      if (!res.headersSent) {
-        const msg = e instanceof Error ? e.message : 'unknown';
+      const msg = e instanceof Error ? e.message : 'unknown';
+      if (res.headersSent) {
+        // SSE already open — deliver error as a structured event then close.
+        res.write(`data: ${JSON.stringify({ error: msg })}\n\n`);
+        res.write('data: [DONE]\n\n');
+        res.end();
+      } else {
         res.status(500).json({ error: 'think_failed', message: msg });
       }
     }
@@ -351,9 +425,13 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
         ...(type ? { type } : {}),
         ...(tag ? { tag } : {}),
         sort: 'updated_desc',
+        include_frontmatter: true,
       }, requestSourceId(req));
       const pages = (Array.isArray(raw) ? raw : []).map((p) => {
         const pg = p as Record<string, unknown>;
+        const fm = (pg.frontmatter && typeof pg.frontmatter === 'object')
+          ? pg.frontmatter as Record<string, unknown>
+          : {};
         return {
           slug: String(pg.slug ?? ''),
           title: String(pg.title ?? pg.slug ?? ''),
@@ -361,9 +439,10 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
           created_at: '',
           updated_at: String(pg.updated_at ?? ''),
           source: undefined,
-          tags: [],
+          tags: Array.isArray(fm.tags) ? fm.tags : [],
           word_count: undefined,
           type: pg.type ? String(pg.type) : 'document',
+          frontmatter: fm,
         };
       });
       res.json(pages);
@@ -385,6 +464,140 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
       const msg = e instanceof Error ? e.message : 'unknown';
       const status = msg.includes('not found') || msg.includes('page_not_found') ? 404 : 500;
       res.status(status).json({ error: 'get_page_failed', message: msg });
+    }
+  });
+
+  // DSGVO Art. 20 (Datenübertragbarkeit): vollständiger Export aller Seiten
+  // der Tenant-Source inkl. Volltext + Frontmatter + Tags. Streng auf die
+  // anfragende Source gescopt — auch im lokalen 'default'-Modus.
+  app.get('/api/export', async (req: Request, res: Response) => {
+    try {
+      const sourceId = requestSourceId(req);
+      const rows = await engine.executeRaw<{
+        slug: string;
+        title: string;
+        type: string;
+        frontmatter: Record<string, unknown> | null;
+        compiled_truth: string | null;
+        timeline: string | null;
+        created_at: string;
+        updated_at: string;
+        tags: string[] | null;
+      }>(
+        `SELECT p.slug, p.title, p.type, p.frontmatter, p.compiled_truth, p.timeline,
+                p.created_at::text, p.updated_at::text,
+                (SELECT array_agg(t.tag) FROM tags t WHERE t.page_id = p.id) as tags
+         FROM pages p
+         WHERE p.source_id = $1 AND p.deleted_at IS NULL
+         ORDER BY p.slug
+         LIMIT 10000`,
+        [sourceId],
+      );
+
+      res.json({
+        format: 'sigmabrain-export-v1',
+        exported_at: new Date().toISOString(),
+        source: sourceId,
+        page_count: rows.length,
+        truncated: rows.length === 10000,
+        pages: rows.map((r) => ({
+          slug: r.slug,
+          title: r.title,
+          type: r.type,
+          frontmatter: r.frontmatter ?? {},
+          content: r.compiled_truth ?? '',
+          timeline: r.timeline ?? '',
+          tags: r.tags ?? [],
+          created_at: r.created_at,
+          updated_at: r.updated_at,
+        })),
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'export_failed', message: msg });
+    }
+  });
+
+  app.post('/api/pages', express.json({ limit: '1mb' }), async (req: Request, res: Response) => {
+    try {
+      const body = req.body as Record<string, unknown>;
+      const slug = String(body.slug ?? '');
+      if (!slug) {
+        res.status(400).json({ error: 'missing_slug' });
+        return;
+      }
+      const title = body.title ? String(body.title) : undefined;
+      const type = body.type ? String(body.type) : undefined;
+      const bodyFrontmatter = body.frontmatter && typeof body.frontmatter === 'object'
+        ? body.frontmatter as Record<string, unknown>
+        : {};
+      const merge = body.merge === true;
+      const sourceId = requestSourceId(req);
+      // First write of a fresh tenant: pages.source_id has an FK on
+      // sources(id) — provision the source row or the INSERT fails.
+      await ensureSource(sourceId);
+
+      // merge:true — partial update: load the existing page, overlay the
+      // provided frontmatter keys, and keep the existing body when the
+      // caller didn't send content. Without this, a metadata-only update
+      // would wipe the page body (put_page replaces the whole page).
+      let existingFrontmatter: Record<string, unknown> = {};
+      let existingContent: string | undefined;
+      let existingTitle: string | undefined;
+      let existingType: string | undefined;
+      if (merge) {
+        try {
+          const existingRaw = await invokeOp(engine, 'get_page', { slug }, sourceId);
+          const existing = existingRaw as Record<string, unknown>;
+          if (existing && typeof existing === 'object') {
+            if (existing.frontmatter && typeof existing.frontmatter === 'object') {
+              existingFrontmatter = existing.frontmatter as Record<string, unknown>;
+            }
+            existingContent = String(existing.compiled_truth ?? existing.content ?? '');
+            // type/title are table columns, NOT part of the returned
+            // frontmatter (parseMarkdown strips them). Without re-injecting
+            // them here, every merge update would reset the page type to the
+            // slug-inferred default and the title to the slug — a legal_case
+            // would silently become `concept` on its first time entry.
+            if (typeof existing.title === 'string' && existing.title) existingTitle = existing.title;
+            if (typeof existing.type === 'string' && existing.type) existingType = existing.type;
+          }
+        } catch {
+          // page doesn't exist yet — merge degrades to create
+        }
+      }
+
+      const content = body.content !== undefined && body.content !== null
+        ? String(body.content)
+        : (existingContent ?? '');
+
+      // title/type are first-class page attributes — fold them into the
+      // frontmatter so put_page's inference picks them up. Explicit body
+      // values win over merged-in existing values.
+      const frontmatter: Record<string, unknown> = {
+        ...existingFrontmatter,
+        ...bodyFrontmatter,
+        ...(title ? { title } : existingTitle ? { title: existingTitle } : {}),
+        ...(type ? { type } : existingType ? { type: existingType } : {}),
+      };
+      for (const key of Object.keys(frontmatter)) {
+        if (frontmatter[key] === undefined || frontmatter[key] === null) delete frontmatter[key];
+      }
+
+      let markdown = content;
+      if (Object.keys(frontmatter).length > 0) {
+        // js-yaml handles quoting/escaping (colons, newlines, unicode) so
+        // user-supplied values can't break out of the frontmatter block.
+        const { dump } = await import('js-yaml');
+        const yamlBlock = dump(frontmatter, { lineWidth: -1, noRefs: true }).trimEnd();
+        markdown = `---\n${yamlBlock}\n---\n\n${content}`;
+      }
+
+      const result = await invokeOp(engine, 'put_page', { slug, content: markdown }, sourceId);
+      res.json({ slug, success: true, ...(result && typeof result === 'object' ? result : {}) });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'put_page_failed', message: msg });
     }
   });
 
@@ -527,13 +740,50 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
           }
         }
 
-        const slug = slugFromUpload(source, file.filename, title);
-        const markdown = await buildMarkdownFromUpload(file.filename, file.data, title);
         const opCtx = ctx(req);
         const tenantSource = opCtx.sourceId ?? 'default';
         await ensureSource(tenantSource);
 
+        // Same embedding posture as put_page: skip embedding when no
+        // provider is configured instead of failing the whole upload.
+        const { isAvailable } = await import('../core/ai/gateway.ts');
+        const noEmbed = !isAvailable('embedding');
+
+        // beA-Export (XML): route through the beA parser so the message
+        // becomes a structured bea_message page (sender, recipient, subject,
+        // Aktenzeichen) in the TENANT's source — the directory-watcher
+        // connector is install-global and unusable per tenant in SaaS mode.
+        if (file.filename.toLowerCase().endsWith('.xml')) {
+          try {
+            const { BeaImportConnector } = await import('../core/ingestion/connectors/bea-import.ts');
+            const connector = new BeaImportConnector({});
+            const item = connector.parseBeaXmlContent(file.data.toString('utf8'), file.filename);
+            if (item) {
+              const event = await connector.toIngestionEvent(item);
+              const beaSlug = String((event.metadata as Record<string, unknown> | undefined)?.slug ?? '')
+                || slugFromUpload(source, file.filename, title);
+              await importFromContent(engine, beaSlug, event.content, {
+                noEmbed,
+                sourceId: tenantSource,
+                filename: file.filename,
+                source_kind: 'web_upload',
+                source_uri: `sigmabrain-upload:${beaSlug}`,
+              });
+              const beaPage = await engine.getPage(beaSlug, { sourceId: opCtx.sourceId });
+              res.json({ slug: beaSlug, title: beaPage?.title ?? item.title });
+              return;
+            }
+            // Not a beA export — fall through to generic document import.
+          } catch (err) {
+            console.error(`[web-api] beA XML parse failed, falling back to generic import: ${err instanceof Error ? err.message : String(err)}`);
+          }
+        }
+
+        const slug = slugFromUpload(source, file.filename, title);
+        const markdown = await buildMarkdownFromUpload(file.filename, file.data, title);
+
         await importFromContent(engine, slug, markdown, {
+          noEmbed,
           sourceId: tenantSource,
           filename: file.filename,
           source_kind: 'web_upload',
@@ -559,6 +809,831 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
       }
     },
   );
+
+  // ============================================================
+  // v0.43 — Agent DAG API
+  // ============================================================
+  //
+  // Tenant isolation: minion_jobs has no source_id column, so every job
+  // submitted through this API is stamped with `data._source_id` and every
+  // read/action filters on it. The supervisor handler propagates the stamp
+  // to its children. `default` (local/admin, no tenant header) sees
+  // everything — that matches the trusted-local posture of this module.
+
+  /** SQL fragment + params for tenant scoping on minion_jobs.data. */
+  function agentScopeClause(sourceId: string, paramOffset: number): { clause: string; params: string[] } {
+    if (sourceId === 'default') return { clause: '', params: [] };
+    return { clause: ` AND data->>'_source_id' = $${paramOffset}`, params: [sourceId] };
+  }
+
+  /** Returns true when the job exists AND belongs to the caller's tenant. */
+  async function agentJobInScope(jobId: number, sourceId: string): Promise<boolean> {
+    const scope = agentScopeClause(sourceId, 2);
+    const rows = await engine.executeRaw<{ id: number }>(
+      `SELECT id FROM minion_jobs
+       WHERE id = $1 AND name IN ('subagent', 'subagent_aggregator', 'supervisor')${scope.clause}`,
+      [jobId, ...scope.params],
+    );
+    return rows.length > 0;
+  }
+
+  app.get('/api/agents', async (req: Request, res: Response) => {
+    try {
+      const sourceId = requestSourceId(req);
+      const scope = agentScopeClause(sourceId, 1);
+      const rows = await engine.executeRaw<{
+        id: number;
+        name: string;
+        status: string;
+        queue: string;
+        data: Record<string, unknown> | null;
+        progress: Record<string, unknown> | null;
+        tokens_input: number;
+        tokens_output: number;
+        tokens_cache_read: number;
+        parent_job_id: number | null;
+        created_at: string;
+        started_at: string | null;
+        finished_at: string | null;
+        error_text: string | null;
+      }>(
+        `SELECT id, name, status, queue, data, progress,
+                tokens_input, tokens_output, tokens_cache_read,
+                parent_job_id, created_at::text, started_at::text, finished_at::text, error_text
+         FROM minion_jobs
+         WHERE name IN ('subagent', 'subagent_aggregator', 'supervisor')${scope.clause}
+         ORDER BY created_at DESC
+         LIMIT 200`,
+        scope.params,
+      );
+
+      const jobs = rows.map(row => {
+        const data = (row.data ?? {}) as Record<string, unknown>;
+        return {
+          id: row.id,
+          name: row.name,
+          status: row.status,
+          queue: row.queue,
+          prompt: String(data.prompt ?? ''),
+          subagent_def: data.subagent_def ? String(data.subagent_def) : undefined,
+          supervisor_model: data.supervisor_model ? String(data.supervisor_model) : undefined,
+          model: data.model ? String(data.model) : undefined,
+          progress: row.progress ?? undefined,
+          tokens: {
+            input: row.tokens_input,
+            output: row.tokens_output,
+            cache: row.tokens_cache_read,
+          },
+          parentId: row.parent_job_id ?? undefined,
+          createdAt: row.created_at,
+          startedAt: row.started_at ?? undefined,
+          finishedAt: row.finished_at ?? undefined,
+          error: row.error_text ?? undefined,
+        };
+      });
+
+      res.json({ jobs });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'agents_list_failed', message: msg });
+    }
+  });
+
+  app.get('/api/agents/:id', async (req: Request, res: Response) => {
+    try {
+      const jobId = parseInt(String(req.params.id), 10);
+      if (isNaN(jobId) || jobId <= 0) {
+        res.status(400).json({ error: 'invalid_id' });
+        return;
+      }
+      const sourceId = requestSourceId(req);
+      const scope = agentScopeClause(sourceId, 2);
+
+      const [row] = await engine.executeRaw<{
+        id: number;
+        name: string;
+        status: string;
+        queue: string;
+        data: Record<string, unknown> | null;
+        progress: Record<string, unknown> | null;
+        result: Record<string, unknown> | null;
+        tokens_input: number;
+        tokens_output: number;
+        tokens_cache_read: number;
+        parent_job_id: number | null;
+        created_at: string;
+        started_at: string | null;
+        finished_at: string | null;
+        error_text: string | null;
+        stacktrace: string[];
+      }>(
+        `SELECT id, name, status, queue, data, progress, result,
+                tokens_input, tokens_output, tokens_cache_read,
+                parent_job_id, created_at::text, started_at::text, finished_at::text,
+                error_text, stacktrace
+         FROM minion_jobs
+         WHERE id = $1 AND name IN ('subagent', 'subagent_aggregator', 'supervisor')${scope.clause}`,
+        [jobId, ...scope.params],
+      );
+
+      if (!row) {
+        res.status(404).json({ error: 'not_found' });
+        return;
+      }
+
+      const data = (row.data ?? {}) as Record<string, unknown>;
+      res.json({
+        id: row.id,
+        name: row.name,
+        status: row.status,
+        queue: row.queue,
+        prompt: String(data.prompt ?? ''),
+        subagent_def: data.subagent_def ? String(data.subagent_def) : undefined,
+        supervisor_model: data.supervisor_model ? String(data.supervisor_model) : undefined,
+        model: data.model ? String(data.model) : undefined,
+        progress: row.progress ?? undefined,
+        result: row.result ?? undefined,
+        tokens: {
+          input: row.tokens_input,
+          output: row.tokens_output,
+          cache: row.tokens_cache_read,
+        },
+        parentId: row.parent_job_id ?? undefined,
+        createdAt: row.created_at,
+        startedAt: row.started_at ?? undefined,
+        finishedAt: row.finished_at ?? undefined,
+        error: row.error_text ?? undefined,
+        stacktrace: row.stacktrace,
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'agent_get_failed', message: msg });
+    }
+  });
+
+  app.post('/api/agents/:id/pause', async (req: Request, res: Response) => {
+    try {
+      const jobId = parseInt(String(req.params.id), 10);
+      if (isNaN(jobId) || jobId <= 0) {
+        res.status(400).json({ error: 'invalid_id' });
+        return;
+      }
+      if (!(await agentJobInScope(jobId, requestSourceId(req)))) {
+        res.status(404).json({ error: 'not_found' });
+        return;
+      }
+      const queue = new MinionQueue(engine);
+      const job = await queue.pauseJob(jobId);
+      res.json({ success: true, status: job?.status ?? 'unknown' });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'pause_failed', message: msg });
+    }
+  });
+
+  app.post('/api/agents/:id/resume', async (req: Request, res: Response) => {
+    try {
+      const jobId = parseInt(String(req.params.id), 10);
+      if (isNaN(jobId) || jobId <= 0) {
+        res.status(400).json({ error: 'invalid_id' });
+        return;
+      }
+      if (!(await agentJobInScope(jobId, requestSourceId(req)))) {
+        res.status(404).json({ error: 'not_found' });
+        return;
+      }
+      const queue = new MinionQueue(engine);
+      const job = await queue.resumeJob(jobId);
+      res.json({ success: true, status: job?.status ?? 'unknown' });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'resume_failed', message: msg });
+    }
+  });
+
+  app.post('/api/agents/:id/cancel', async (req: Request, res: Response) => {
+    try {
+      const jobId = parseInt(String(req.params.id), 10);
+      if (isNaN(jobId) || jobId <= 0) {
+        res.status(400).json({ error: 'invalid_id' });
+        return;
+      }
+      if (!(await agentJobInScope(jobId, requestSourceId(req)))) {
+        res.status(404).json({ error: 'not_found' });
+        return;
+      }
+      const queue = new MinionQueue(engine);
+      const job = await queue.cancelJob(jobId);
+      res.json({ success: true, status: job?.status ?? 'unknown' });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'cancel_failed', message: msg });
+    }
+  });
+
+  app.post('/api/agents/:id/replay', async (req: Request, res: Response) => {
+    try {
+      const jobId = parseInt(String(req.params.id), 10);
+      if (isNaN(jobId) || jobId <= 0) {
+        res.status(400).json({ error: 'invalid_id' });
+        return;
+      }
+      if (!(await agentJobInScope(jobId, requestSourceId(req)))) {
+        res.status(404).json({ error: 'not_found' });
+        return;
+      }
+      const queue = new MinionQueue(engine);
+      const job = await queue.replayJob(jobId);
+      res.json({ success: true, newJobId: job?.id ?? null });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'replay_failed', message: msg });
+    }
+  });
+
+  app.post('/api/agents/supervisor', express.json({ limit: '1mb' }), async (req: Request, res: Response) => {
+    try {
+      const body = req.body as Record<string, unknown>;
+      const prompt = String(body.prompt ?? '');
+      if (!prompt.trim()) {
+        res.status(400).json({ error: 'missing_prompt' });
+        return;
+      }
+
+      const queue = new MinionQueue(engine);
+      const sourceId = requestSourceId(req);
+      // Tenant agents write into their source via brain tools — make sure
+      // the source row exists before the first child put_page fires.
+      await ensureSource(sourceId);
+      const data: Record<string, unknown> = { prompt, _source_id: sourceId };
+      if (body.supervisor_model) data.supervisor_model = String(body.supervisor_model);
+      if (body.skip_critic) data.skip_critic = true;
+      if (Array.isArray(body.force_specialists)) data.force_specialists = body.force_specialists;
+
+      const job = await queue.add('supervisor', data, {
+        max_stalled: 3,
+      }, { allowProtectedSubmit: true });
+
+      res.json({ success: true, jobId: job.id });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'supervisor_submit_failed', message: msg });
+    }
+  });
+
+  // ============================================================
+  // v0.43 — Agent Inbox API (bidirectional user ↔ agent messaging)
+  // ============================================================
+
+  /** GET /api/agents/:id/inbox — list all messages for a job.
+   *  User-facing: does NOT mark messages as read (that is the worker's
+   *  readInbox() fence). Ordered newest-last so the client appends. */
+  app.get('/api/agents/:id/inbox', async (req: Request, res: Response) => {
+    try {
+      const jobId = parseInt(String(req.params.id), 10);
+      if (isNaN(jobId) || jobId <= 0) {
+        res.status(400).json({ error: 'invalid_id' });
+        return;
+      }
+      const sourceId = requestSourceId(req);
+      if (!await agentJobInScope(jobId, sourceId)) {
+        res.status(404).json({ error: 'not_found' });
+        return;
+      }
+
+      const rows = await engine.executeRaw<{
+        id: number; job_id: number; sender: string;
+        payload: unknown; sent_at: string; read_at: string | null;
+      }>(
+        `SELECT id, job_id, sender, payload, sent_at::text, read_at::text
+         FROM minion_inbox
+         WHERE job_id = $1
+         ORDER BY sent_at ASC`,
+        [jobId],
+      );
+
+      res.json({
+        messages: rows.map((r) => ({
+          id: r.id,
+          job_id: r.job_id,
+          sender: r.sender,
+          payload: r.payload,
+          sent_at: r.sent_at,
+          read_at: r.read_at,
+        })),
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'inbox_list_failed', message: msg });
+    }
+  });
+
+  /** POST /api/agents/:id/inbox — send a message to a running job.
+   *  The worker reads it via readInbox() on its next iteration. */
+  app.post('/api/agents/:id/inbox', express.json({ limit: '64kb' }), async (req: Request, res: Response) => {
+    try {
+      const jobId = parseInt(String(req.params.id), 10);
+      if (isNaN(jobId) || jobId <= 0) {
+        res.status(400).json({ error: 'invalid_id' });
+        return;
+      }
+      const sourceId = requestSourceId(req);
+      if (!await agentJobInScope(jobId, sourceId)) {
+        res.status(404).json({ error: 'not_found' });
+        return;
+      }
+
+      const body = req.body as Record<string, unknown>;
+      const payload = body.payload ?? body.message ?? body.text;
+      if (payload == null) {
+        res.status(400).json({ error: 'missing_payload' });
+        return;
+      }
+
+      const queue = new MinionQueue(engine);
+      const msg = await queue.sendMessage(jobId, payload, 'user');
+      if (!msg) {
+        res.status(409).json({ error: 'job_not_messageable', message: 'Job does not exist or is in a terminal state.' });
+        return;
+      }
+
+      res.json({
+        success: true,
+        message: {
+          id: msg.id,
+          job_id: msg.job_id,
+          sender: msg.sender,
+          payload: msg.payload,
+          sent_at: msg.sent_at instanceof Date ? msg.sent_at.toISOString() : msg.sent_at,
+        },
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'inbox_send_failed', message: msg });
+    }
+  });
+
+  // ============================================================
+  // v0.43 — Legal endpoints (Kollisionsprüfung, Judgements-Sync)
+  // ============================================================
+
+  // Anonymisierung (§ 203 StGB / § 43e BRAO): entfernt identifizierende Daten
+  // aus einem Text, bevor er geteilt oder an ein Cloud-LLM gegeben wird.
+  // Regex-Schicht läuft offline; Namens-Schicht nur, wenn ein Chat-Provider
+  // konfiguriert ist (sonst regex-only, ehrlich im Flag llm_used gemeldet).
+  app.post('/api/legal/anonymize', express.json({ limit: '1mb' }), async (req: Request, res: Response) => {
+    try {
+      const body = req.body as Record<string, unknown>;
+      const text = String(body.text ?? '');
+      if (!text.trim()) {
+        res.status(400).json({ error: 'missing_text' });
+        return;
+      }
+      const types = Array.isArray(body.types) ? (body.types as string[]) : undefined;
+
+      const { anonymizeText } = await import('../core/anonymize.ts');
+      const { isAvailable, chat } = await import('../core/ai/gateway.ts');
+
+      // LLM-Namensdetektor nur, wenn ein Chat-Provider verfügbar ist.
+      const detectNames = isAvailable('chat')
+        ? async (input: string) => {
+            const result = await chat({
+              system:
+                'Du extrahierst aus deutschem Rechtstext NUR Eigennamen von natürlichen Personen und ' +
+                'Unternehmen/Organisationen. Antworte ausschließlich als JSON-Array von Objekten ' +
+                '{"text": "<exakter Name im Text>", "type": "person"|"organization"}. Keine Gattungsbegriffe ' +
+                '(Kläger, Gericht, Mandant), keine Behörden-Gattungen. Wenn keine Namen: [].',
+              messages: [{ role: 'user', content: input.slice(0, 12000) }],
+              maxTokens: 1500,
+            });
+            try {
+              const m = result.text.match(/\[[\s\S]*\]/);
+              const parsed = m ? JSON.parse(m[0]) : [];
+              return (Array.isArray(parsed) ? parsed : [])
+                .filter((e) => e && typeof e.text === 'string' && (e.type === 'person' || e.type === 'organization'))
+                .map((e) => ({ text: String(e.text), type: e.type as 'person' | 'organization' }));
+            } catch {
+              return [];
+            }
+          }
+        : undefined;
+
+      const result = await anonymizeText(text, {
+        types: types as never,
+        detectNames,
+      });
+
+      res.json({
+        anonymized: result.text,
+        replacements: result.replacements,
+        stats: result.stats,
+        llm_used: result.llmUsed,
+        count: result.replacements.length,
+        disclaimer:
+          'Automatische Anonymisierung ist ein Hilfsmittel und kann Treffer übersehen. Vor Weitergabe ' +
+          'an Dritte oder Cloud-Dienste manuell prüfen (§ 203 StGB).',
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'anonymize_failed', message: msg });
+    }
+  });
+
+  // Tabular Review (Legora-Style): Zeilen = Dokumente, Spalten = Fragen, jede
+  // Zelle mit Quellbezug. Effizient: EINE LLM-Anfrage pro Dokument beantwortet
+  // alle Fragen gemeinsam (N statt N×M Calls). Streng source-gescoped.
+  app.post('/api/legal/tabular-review', express.json({ limit: '256kb' }), async (req: Request, res: Response) => {
+    try {
+      const body = req.body as Record<string, unknown>;
+      const questions = (Array.isArray(body.questions) ? body.questions : [])
+        .map((q) => String(q).trim())
+        .filter(Boolean)
+        .slice(0, 8); // Spalten-Cap
+      if (questions.length === 0) {
+        res.status(400).json({ error: 'missing_questions' });
+        return;
+      }
+      const sourceId = requestSourceId(req);
+      const explicitSlugs = Array.isArray(body.slugs) ? body.slugs.map((s) => String(s)) : null;
+      const type = body.type ? String(body.type) : undefined;
+      const limit = Math.min(Number(body.limit) || 25, 50); // Zeilen-Cap
+
+      const { isAvailable, chat } = await import('../core/ai/gateway.ts');
+      if (!isAvailable('chat')) {
+        res.status(503).json({
+          error: 'llm_unavailable',
+          message: 'Tabular Review benötigt einen konfigurierten Chat-Provider (z. B. ANTHROPIC_API_KEY).',
+        });
+        return;
+      }
+
+      // 1. Dokumente auflösen.
+      let docs: Array<{ slug: string; title: string }> = [];
+      if (explicitSlugs && explicitSlugs.length > 0) {
+        docs = explicitSlugs.slice(0, limit).map((s) => ({ slug: s, title: s }));
+      } else {
+        const raw = await invokeOp(engine, 'list_pages', {
+          limit,
+          ...(type ? { type } : {}),
+          sort: 'updated_desc',
+        }, sourceId);
+        docs = (Array.isArray(raw) ? raw : []).map((p) => {
+          const pg = p as Record<string, unknown>;
+          return { slug: String(pg.slug ?? ''), title: String(pg.title ?? pg.slug ?? '') };
+        }).filter((d) => d.slug);
+      }
+      const truncated = docs.length >= limit;
+
+      // 2. Pro Dokument eine LLM-Anfrage über alle Fragen.
+      const numbered = questions.map((q, i) => `${i + 1}. ${q}`).join('\n');
+      const runOne = async (doc: { slug: string; title: string }) => {
+        try {
+          const pageRaw = await invokeOp(engine, 'get_page', { slug: doc.slug }, sourceId);
+          const page = pageRaw as Record<string, unknown>;
+          const title = String(page.title ?? doc.title);
+          const content = String(page.compiled_truth ?? page.content ?? '').slice(0, 16000);
+          if (!content.trim()) {
+            return { slug: doc.slug, title, cells: questions.map(() => ({ answer: '—', citations: [] })) };
+          }
+          const result = await chat({
+            system:
+              'Du beantwortest Fragen ausschließlich auf Basis des bereitgestellten Dokuments. ' +
+              'Antworte knapp und faktisch. Wenn das Dokument eine Frage nicht beantwortet, schreibe genau "nicht im Dokument". ' +
+              'Antworte als JSON-Array von Strings, je ein Eintrag pro Frage in Reihenfolge.',
+            messages: [{ role: 'user', content: `DOKUMENT "${title}":\n\n${content}\n\nFRAGEN:\n${numbered}` }],
+            maxTokens: 1200,
+          });
+          let answers: string[] = [];
+          try {
+            const m = result.text.match(/\[[\s\S]*\]/);
+            const parsed = m ? JSON.parse(m[0]) : [];
+            answers = Array.isArray(parsed) ? parsed.map((a) => String(a)) : [];
+          } catch { /* fällt unten auf '—' */ }
+          const cells = questions.map((_, i) => {
+            const answer = answers[i] ?? '—';
+            const grounded = answer && answer !== '—' && !/^nicht im dokument$/i.test(answer);
+            return { answer, citations: grounded ? [{ slug: doc.slug, title }] : [] };
+          });
+          return { slug: doc.slug, title, cells };
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : 'unknown';
+          return { slug: doc.slug, title: doc.title, cells: questions.map(() => ({ answer: `Fehler: ${msg}`, citations: [] })) };
+        }
+      };
+
+      // Concurrency-Limit 4, damit Rate-Limits/Pools nicht überlaufen.
+      const rows: Array<{ slug: string; title: string; cells: { answer: string; citations: { slug: string; title: string }[] }[] }> = [];
+      const queue = [...docs];
+      const workers = Array.from({ length: Math.min(4, queue.length) }, async () => {
+        for (;;) {
+          const doc = queue.shift();
+          if (!doc) break;
+          rows.push(await runOne(doc));
+        }
+      });
+      await Promise.all(workers);
+      // Reihenfolge wie die Eingangsliste (Worker laufen out-of-order).
+      const order = new Map(docs.map((d, i) => [d.slug, i]));
+      rows.sort((a, b) => (order.get(a.slug) ?? 0) - (order.get(b.slug) ?? 0));
+
+      res.json({ questions, rows, document_count: rows.length, truncated });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'tabular_review_failed', message: msg });
+    }
+  });
+
+  // Kollisionsprüfung (§ 43a BRAO): scans EVERY legal_case page of the
+  // tenant server-side — no client-side 200-row cap, no frontmatter
+  // round-trip. Matching is case-insensitive substring (catches "Müller
+  // GmbH" vs "Müller GmbH & Co. KG"); exact matches are flagged separately.
+  app.post('/api/legal/conflict-check', express.json({ limit: '64kb' }), async (req: Request, res: Response) => {
+    try {
+      const name = String((req.body as Record<string, unknown>).name ?? '').trim();
+      if (!name) {
+        res.status(400).json({ error: 'missing_name' });
+        return;
+      }
+      const sourceId = requestSourceId(req);
+      const sourceClause = sourceId === 'default' ? '' : `AND source_id = $2`;
+      const params: string[] = sourceId === 'default' ? [`%${name}%`] : [`%${name}%`, sourceId];
+
+      const rows = await engine.executeRaw<{
+        slug: string;
+        title: string;
+        client_name: string | null;
+        opponent_name: string | null;
+        status: string | null;
+      }>(
+        `SELECT slug, title,
+                frontmatter->>'client_name' as client_name,
+                frontmatter->>'opponent_name' as opponent_name,
+                frontmatter->>'status' as status
+         FROM pages
+         WHERE type = 'legal_case' AND deleted_at IS NULL ${sourceClause}
+           AND (frontmatter->>'client_name' ILIKE $1 OR frontmatter->>'opponent_name' ILIKE $1)
+         ORDER BY updated_at DESC`,
+        params,
+      );
+
+      const lowerName = name.toLowerCase();
+      const matches = rows.map((r) => {
+        const clientMatch = (r.client_name ?? '').toLowerCase().includes(lowerName);
+        const role: 'client' | 'opponent' = clientMatch ? 'client' : 'opponent';
+        const matchedName = clientMatch ? (r.client_name ?? '') : (r.opponent_name ?? '');
+        return {
+          slug: r.slug,
+          title: r.title,
+          role,
+          status: r.status ?? 'open',
+          matched_name: matchedName,
+          exact: matchedName.toLowerCase() === lowerName,
+        };
+      });
+
+      const asClient = matches.filter((m) => m.role === 'client');
+      const asOpponent = matches.filter((m) => m.role === 'opponent');
+
+      let severity: 'critical' | 'low' | 'none';
+      let explanation: string;
+      if (asClient.length > 0 && asOpponent.length > 0) {
+        severity = 'critical';
+        explanation = `"${name}" erscheint sowohl als Mandant als auch als Gegner in verschiedenen Akten. Direkter Interessenkonflikt gemäß § 43a Abs. 4 BRAO — anwaltlich prüfen.`;
+      } else if (asClient.length > 1 || asOpponent.length > 1) {
+        severity = 'low';
+        explanation = asClient.length > 1
+          ? `"${name}" ist Mandant in ${asClient.length} Akten. Kein direkter Konflikt, aber auf gegensätzliche Interessen prüfen.`
+          : `"${name}" ist Gegner in ${asOpponent.length} Akten. Kein direkter Konflikt, aber Wissensnutzung zwischen den Akten beachten.`;
+      } else if (matches.length === 1) {
+        severity = 'none';
+        explanation = `"${name}" ist in einer Akte bekannt (${matches[0]!.role === 'client' ? 'Mandant' : 'Gegner'}). Kein Konflikt erkennbar.`;
+      } else {
+        severity = 'none';
+        explanation = `"${name}" ist in keiner Akte bekannt. Kein Konflikt im Brain erkennbar.`;
+      }
+
+      res.json({
+        name,
+        severity,
+        explanation,
+        matches,
+        checked_cases: rows.length,
+        disclaimer: 'Diese Prüfung ersetzt nicht die anwaltliche Pflicht zur Kollisionsprüfung nach § 43a BRAO.',
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'conflict_check_failed', message: msg });
+    }
+  });
+
+  // Rechtsprechungs-Sync: runs the legal-judgements connector inline and
+  // writes the results into the caller's source. The cursor is persisted
+  // per source so repeated syncs are deltas, not full re-imports.
+  app.post('/api/legal/judgements-sync', express.json({ limit: '64kb' }), async (req: Request, res: Response) => {
+    try {
+      const body = req.body as Record<string, unknown>;
+      const jurisdiction = ['at', 'de', 'all'].includes(String(body.jurisdiction))
+        ? String(body.jurisdiction)
+        : 'all';
+      const query = body.query ? String(body.query) : '';
+      const sourceId = requestSourceId(req);
+      await ensureSource(sourceId);
+
+      const { LegalJudgementsConnector } = await import('../core/ingestion/connectors/legal-judgements.ts');
+      const connector = new LegalJudgementsConnector({
+        filters: {
+          jurisdiction,
+          query,
+          // HTTP path stays responsive: cap the per-case full-text fetches.
+          max_detail_fetches: '10',
+        },
+      });
+
+      const cursorKey = `legal_judgements.cursor.${sourceId}.${jurisdiction}`;
+      const cursor = await engine.getConfig(cursorKey) ?? undefined;
+      const { items, nextCursor } = await connector.fetchDelta(cursor);
+
+      let imported = 0;
+      const errors: string[] = [];
+      for (const item of items) {
+        try {
+          const event = await connector.toIngestionEvent(item);
+          const slug = String((event.metadata as Record<string, unknown> | undefined)?.slug ?? '');
+          if (!slug) continue;
+          await invokeOp(engine, 'put_page', { slug, content: event.content }, sourceId);
+          imported++;
+        } catch (e) {
+          errors.push(e instanceof Error ? e.message : 'unknown');
+        }
+      }
+
+      if (nextCursor) await engine.setConfig(cursorKey, nextCursor);
+
+      res.json({
+        success: true,
+        jurisdiction,
+        fetched: items.length,
+        imported,
+        ...(errors.length > 0 ? { errors: errors.slice(0, 5) } : {}),
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'judgements_sync_failed', message: msg });
+    }
+  });
+
+  // ============================================================
+  // v0.43 — Connector API for the dashboard
+  // ============================================================
+  //
+  // The admin server already exposes connector controls. The Vercel-hosted
+  // dashboard talks to this web API instead, so expose a source-scoped,
+  // non-secret status view plus safe lifecycle triggers here as well.
+
+  app.get('/api/connectors', async (_req: Request, res: Response) => {
+    try {
+      const { ConnectorManager, SUPPORTED_CONNECTORS } = await import('../core/ingestion/connectors/manager.ts');
+      const mgr = new ConnectorManager();
+      const configured = await mgr.list();
+      const enabled = await mgr.loadEnabled();
+      const runningIds = new Set(enabled.map((c) => c.id));
+      const configuredByService = new Map(configured.map((c) => [c.service, c]));
+
+      const connectors = await Promise.all(SUPPORTED_CONNECTORS.map(async (service) => {
+        const entry = configuredByService.get(service);
+        return {
+          service,
+          configured: Boolean(entry),
+          enabled: entry?.enabled ?? false,
+          connected: entry ? runningIds.has(service) : false,
+          hasCredentials: entry?.hasCredentials ?? false,
+          last_sync_at: entry ? await mgr.getLastSync(service) : null,
+        };
+      }));
+
+      res.json({ connectors });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'connectors_list_failed', message: msg });
+    }
+  });
+
+  // ── Legal Case Scanner (Nacht-Agent-Cron) ─────────────────────
+  app.post('/api/legal/case-scanner', express.json({ limit: '64kb' }), async (req: Request, res: Response) => {
+    try {
+      const body = req.body as Record<string, unknown>;
+      const lookAhead = typeof body.look_ahead_days === 'number' ? body.look_ahead_days : 7;
+      const evidenceThreshold = typeof body.evidence_threshold === 'number' ? body.evidence_threshold : 1;
+      const maxCases = typeof body.max_cases === 'number' ? body.max_cases : 50;
+
+      const queue = new MinionQueue(engine);
+      const sourceId = requestSourceId(req);
+
+      const job = await queue.add(
+        'legal-case-scanner',
+        {
+          look_ahead_days: lookAhead,
+          evidence_threshold: evidenceThreshold,
+          max_cases: maxCases,
+          ...(sourceId ? { _source_id: sourceId } : {}),
+        } as Record<string, unknown>,
+        { timeout_ms: 300_000, max_attempts: 1 },
+      );
+
+      res.json({
+        success: true,
+        job_id: job.id,
+        status: 'queued',
+        look_ahead_days: lookAhead,
+        evidence_threshold: evidenceThreshold,
+        max_cases: maxCases,
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'case_scanner_failed', message: msg });
+    }
+  });
+
+  // Connector lifecycle is INSTALL-GLOBAL (writes land in the host source,
+  // config lives in the host DB). In fail-closed tenant mode these actions
+  // are host-operator-only — a tenant-scoped caller gets a clear 403 instead
+  // of silently mutating shared state.
+  const rejectConnectorActionsInTenantMode = (req: Request, res: Response): boolean => {
+    if (!requireTenant) return false;
+    res.status(403).json({
+      error: 'host_admin_only',
+      message: 'Connector-Verwaltung ist installationsweit und in Multi-Tenant-Deployments dem Host-Betreiber (CLI/Admin-Server) vorbehalten.',
+    });
+    return true;
+  };
+
+  app.post('/api/connectors/:service/sync', async (req: Request, res: Response) => {
+    if (rejectConnectorActionsInTenantMode(req, res)) return;
+    try {
+      const service = String(req.params.service);
+      const { ConnectorManager, SUPPORTED_CONNECTORS, CONNECTOR_REGISTRY } = await import('../core/ingestion/connectors/manager.ts');
+      if (!SUPPORTED_CONNECTORS.includes(service)) {
+        res.status(400).json({ error: 'unsupported_service', message: `Service "${service}" is not supported` });
+        return;
+      }
+
+      const mgr = new ConnectorManager();
+      const entries = await mgr.list();
+      const entry = entries.find((e) => e.service === service);
+      if (!entry) {
+        res.status(404).json({ error: 'not_configured', message: `Connector "${service}" is not configured` });
+        return;
+      }
+      if (!entry.enabled) {
+        res.status(409).json({ error: 'disabled', message: `Connector "${service}" is disabled` });
+        return;
+      }
+
+      const config = await mgr.getConfig(service) ?? {};
+      const Ctor = CONNECTOR_REGISTRY[service];
+      if (!Ctor) {
+        res.status(500).json({ error: 'internal', message: 'Connector registry inconsistency' });
+        return;
+      }
+
+      const connector = new Ctor(config);
+      void connector.sync().catch((err: unknown) => {
+        console.error(`[web-api] Manual connector sync failed for ${service}: ${err instanceof Error ? err.message : String(err)}`);
+      });
+
+      res.json({ success: true, status: 'sync_triggered', service });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'connector_sync_failed', message: msg });
+    }
+  });
+
+  app.post('/api/connectors/:service/toggle', async (req: Request, res: Response) => {
+    if (rejectConnectorActionsInTenantMode(req, res)) return;
+    try {
+      const service = String(req.params.service);
+      const { ConnectorManager, SUPPORTED_CONNECTORS } = await import('../core/ingestion/connectors/manager.ts');
+      if (!SUPPORTED_CONNECTORS.includes(service)) {
+        res.status(400).json({ error: 'unsupported_service', message: `Service "${service}" is not supported` });
+        return;
+      }
+
+      const mgr = new ConnectorManager();
+      const entries = await mgr.list();
+      const entry = entries.find((e) => e.service === service);
+      if (!entry) {
+        res.status(404).json({ error: 'not_configured', message: `Connector "${service}" is not configured` });
+        return;
+      }
+
+      const nextEnabled = !entry.enabled;
+      await mgr.setEnabled(service, nextEnabled);
+      res.json({ success: true, service, enabled: nextEnabled });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(500).json({ error: 'connector_toggle_failed', message: msg });
+    }
+  });
 
   console.error(`[web-api] Sigmabrain dashboard REST API mounted at /api/* (engine: ${config.engine})`);
 }

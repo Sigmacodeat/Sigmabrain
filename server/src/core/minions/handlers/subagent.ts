@@ -53,6 +53,7 @@ import { toolLoop as gatewayToolLoop } from '../../ai/gateway.ts';
 import type { ChatToolDef, ChatMessage, ChatBlock, ChatResult, ToolHandler } from '../../ai/gateway.ts';
 import { classifyCapabilities } from '../../ai/capabilities.ts';
 import { randomUUIDv7 } from 'bun';
+import { resolveSpecialist } from '../specialist-defs.ts';
 
 // ── Defaults ────────────────────────────────────────────────
 
@@ -178,6 +179,28 @@ export function makeSubagentHandler(deps: SubagentDeps) {
       throw new Error('subagent job data.prompt is required (string)');
     }
 
+    // v0.43 — Specialist subagent definition resolution.
+    // If data.subagent_def is set, load the embedded (or plugin) definition
+    // and overlay system prompt, allowed_tools, max_turns, and model.
+    if (data.subagent_def) {
+      const def = resolveSpecialist(data.subagent_def);
+      if (def) {
+        data.system = def.systemPrompt;
+        if (def.allowedTools && def.allowedTools.length > 0) {
+          data.allowed_tools = def.allowedTools;
+        }
+        if (def.maxTurns != null) {
+          data.max_turns = def.maxTurns;
+        }
+        if (def.model) {
+          data.model = def.model;
+        }
+      }
+      // Silently ignore unknown definitions so the handler falls back to
+      // the generic subagent behavior — this avoids breaking replay of old
+      // jobs if a definition is later renamed.
+    }
+
     // v0.38 (S1.5 + S1.7) — capability-based gate replaces the v0.31.12
     // Anthropic-only check. The handler now routes between two paths:
     //   1. Gateway path (gateway.toolLoop, provider-agnostic) — opt in via
@@ -246,6 +269,9 @@ export function makeSubagentHandler(deps: SubagentDeps) {
       config,
       brainId: data.brain_id,
       allowedSlugPrefixes: data.allowed_slug_prefixes,
+      // v0.43 multi-tenant: tenant jobs (web-api stamp, supervisor-propagated)
+      // scope every brain tool to the tenant's source.
+      sourceId: typeof data._source_id === 'string' && data._source_id ? data._source_id : undefined,
     });
     const toolDefs = data.allowed_tools && data.allowed_tools.length > 0
       ? filterAllowedTools(registry, data.allowed_tools)
@@ -419,6 +445,44 @@ export function makeSubagentHandler(deps: SubagentDeps) {
       }
     }
 
+    // ── User-inbox drain helper ───────────────────────────
+    // Check the job's inbox for user-sent steering messages and inject
+    // them as Anthropic user-messages into the conversation. Persist so
+    // replay is consistent. Called before each LLM turn.
+    async function drainUserInbox(): Promise<number> {
+      const messages = await ctx.readInbox();
+      let added = 0;
+      for (const m of messages) {
+        if (m.sender !== 'user') continue;
+        const text = typeof m.payload === 'string' ? m.payload : JSON.stringify(m.payload);
+        const userBlock: Anthropic.TextBlock = { type: 'text', text };
+        anthroMessages.push({ role: 'user', content: [userBlock] });
+        await persistMessage(engine, ctx.id, {
+          message_idx: nextMessageIdx++,
+          role: 'user',
+          content_blocks: [userBlock as unknown as ContentBlock],
+          tokens_in: null,
+          tokens_out: null,
+          tokens_cache_read: null,
+          tokens_cache_create: null,
+          model: null,
+        });
+        added++;
+        // Log for audit trail.
+        logSubagentHeartbeat({
+          job_id: ctx.id,
+          event: 'user_inbox_message_consumed',
+          message_id: m.id,
+          sender: m.sender,
+        });
+      }
+      return added;
+    }
+
+    // Drain once before the first turn (messages that arrived while the
+    // job was waiting to be claimed or paused/resumed).
+    await drainUserInbox();
+
     // ── Main loop ───────────────────────────────────────────
     let stopReason: SubagentStopReason = 'error';
     let finalText = '';
@@ -432,6 +496,10 @@ export function makeSubagentHandler(deps: SubagentDeps) {
         stopReason = 'error';
         throw new Error('subagent aborted before turn');
       }
+
+      // Check inbox again at the start of every turn — user may have
+      // sent steering messages while we were executing tools.
+      await drainUserInbox();
 
       // 1. Acquire rate lease for the outbound call.
       //

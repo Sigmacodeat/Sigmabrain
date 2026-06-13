@@ -65,7 +65,14 @@ USAGE
 
 SUBMITTING
   gbrain agent run <prompt>
-    --subagent-def <name>        Named plugin subagent (from GBRAIN_PLUGIN_PATH)
+    --subagent-def <name>        Specialist role (embedded or plugin):
+                                 legal-researcher, legal-analyst, legal-strategist,
+                                 legal-drafter, legal-critic, legal-deadline-extractor
+    --supervisor                 Auto-decompose task into specialist pipeline
+    --force-specialists <csv>    With --supervisor: skip auto-plan, use these roles
+    --skip-critic                With --supervisor: skip the review phase
+    --llm-synthesis              With --supervisor: synthesize results via LLM
+                                 instead of markdown concatenation
     --model <id>                 Anthropic model id (defaults to sonnet)
     --max-turns <n>              Max assistant turns (default 20)
     --tools a,b,c                Subset of registered tool names (comma list)
@@ -98,6 +105,10 @@ interface RunFlags {
   tools?: string[];
   timeoutMs?: number;
   fanoutManifest?: string;
+  supervisor: boolean;
+  skipCritic: boolean;
+  llmSynthesis: boolean;
+  forceSpecialists?: string[];
   follow: boolean;
   detach: boolean;
 }
@@ -106,6 +117,9 @@ function parseRunFlags(args: string[]): { flags: RunFlags; rest: string[] } {
   const flags: RunFlags = {
     follow: process.stdout.isTTY === true,
     detach: false,
+    supervisor: false,
+    skipCritic: false,
+    llmSynthesis: false,
   };
   let i = 0;
   while (i < args.length) {
@@ -119,6 +133,10 @@ function parseRunFlags(args: string[]): { flags: RunFlags; rest: string[] } {
       case '--tools':        flags.tools = (args[++i] ?? '').split(',').map(s => s.trim()).filter(Boolean); i++; break;
       case '--timeout-ms':   flags.timeoutMs = parseInt(args[++i] ?? '', 10); i++; break;
       case '--fanout-manifest': flags.fanoutManifest = args[++i]; i++; break;
+      case '--supervisor':   flags.supervisor = true; i++; break;
+      case '--skip-critic':  flags.skipCritic = true; i++; break;
+      case '--llm-synthesis': flags.llmSynthesis = true; i++; break;
+      case '--force-specialists': flags.forceSpecialists = (args[++i] ?? '').split(',').map(s => s.trim()).filter(Boolean); i++; break;
       case '--follow':       flags.follow = true; i++; break;
       case '--no-follow':    flags.follow = false; i++; break;
       case '--detach':       flags.detach = true; flags.follow = false; i++; break;
@@ -149,6 +167,34 @@ export async function runAgentRun(engine: BrainEngine, args: string[]): Promise<
     process.exit(2);
   }
 
+  // ── Supervisor path ─────────────────────────────────────
+  if (flags.supervisor) {
+    const data: Record<string, unknown> = { prompt };
+    if (flags.model) data.supervisor_model = flags.model;
+    if (flags.skipCritic) data.skip_critic = true;
+    if (flags.llmSynthesis) data.aggregate_with_llm = true;
+    if (flags.forceSpecialists && flags.forceSpecialists.length > 0) {
+      data.force_specialists = flags.forceSpecialists;
+    }
+
+    const submitOpts: Partial<MinionJobInput> = { max_stalled: 3 };
+    if (flags.timeoutMs) submitOpts.timeout_ms = flags.timeoutMs;
+
+    const job = await queue.add('supervisor', data, submitOpts, {
+      allowProtectedSubmit: true,
+    });
+
+    process.stderr.write(`submitted: job ${job.id} (supervisor)\n`);
+
+    if (flags.detach || !flags.follow) {
+      process.stdout.write(String(job.id) + '\n');
+      return;
+    }
+    await followJob(engine, queue, job.id, flags.timeoutMs);
+    return;
+  }
+
+  // ── Standard subagent path ────────────────────────────────
   const data: SubagentHandlerData = { prompt };
   if (flags.subagentDef) data.subagent_def = flags.subagentDef;
   if (flags.model) data.model = flags.model;

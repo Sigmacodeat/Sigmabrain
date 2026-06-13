@@ -20,6 +20,9 @@ export const PROTECTED_JOB_NAMES: ReadonlySet<string> = new Set([
   // trusted local `submit_job` (ctx.remote=false) can insert these rows.
   'subagent',
   'subagent_aggregator',
+  // v0.43 — supervisor: calls Anthropic API (decomposition) AND submits
+  // protected subagent children. Same trust posture as subagent.
+  'supervisor',
   // v0.36+ brain-health-100 wave (D11 from outside-voice review):
   // synthesize, patterns, consolidate are cycle phases that internally
   // submit `subagent` children with allowProtectedSubmit=true. Treating

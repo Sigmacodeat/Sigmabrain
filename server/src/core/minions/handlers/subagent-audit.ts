@@ -37,8 +37,8 @@ export interface SubagentHeartbeatEvent {
   ts: string;
   type: 'heartbeat';
   job_id: number;
-  event: 'llm_call_started' | 'llm_call_completed' | 'tool_called' | 'tool_result' | 'tool_failed';
-  turn_idx: number;
+  event: 'llm_call_started' | 'llm_call_completed' | 'tool_called' | 'tool_result' | 'tool_failed' | 'user_inbox_message_consumed';
+  turn_idx?: number;
   /** Tool name for tool_* events. Never the input — that may contain secrets. */
   tool_name?: string;
   /** ms elapsed for *_completed / tool_result / tool_failed. */
@@ -47,6 +47,10 @@ export interface SubagentHeartbeatEvent {
   tokens?: { in?: number; out?: number; cache_read?: number; cache_create?: number };
   /** Short error text for tool_failed. First 200 chars. */
   error?: string;
+  /** Inbox message id for user_inbox_message_consumed events. */
+  message_id?: number;
+  /** Sender for user_inbox_message_consumed events. */
+  sender?: string;
 }
 
 export type SubagentAuditEvent = SubagentSubmissionEvent | SubagentHeartbeatEvent;

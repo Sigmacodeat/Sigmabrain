@@ -450,6 +450,15 @@ export interface SubagentHandlerData {
    */
   allowed_slug_prefixes?: string[];
   /**
+   * v0.43 — Tenant stamp (multi-tenant web-api). Set by web-api job
+   * submission (and propagated supervisor → children). When present, every
+   * brain-tool call from this subagent scopes its OperationContext.sourceId
+   * to this source: reads can't see other tenants' pages and writes land in
+   * the tenant's source instead of the host default. Absent = local/host
+   * job, legacy 'default' behavior.
+   */
+  _source_id?: string;
+  /**
    * v0.41 Approach C: opt out of the auto-generated tool-usage preamble
    * that `buildSystemPrompt()` splices into `system`. Default behavior
    * (omitted or false) prepends a deterministic preamble listing each

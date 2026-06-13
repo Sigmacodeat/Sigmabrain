@@ -751,20 +751,6 @@ const put_page: Operation = {
     // FAIL-CLOSED: `viaSubagent=true` enforces the check even if the
     // dispatcher forgot to populate `subagentId`. Agent-originated writes
     // without an owning subagent id are rejected outright.
-    // v0.43.0: duplicate entity prevention (pbrain feature port).
-    // When creating a new page (not updating), check for existing pages
-    // with similar titles and warn the caller.
-    const existingPage = await ctx.engine.getPage(slug, ctx.sourceId ? { sourceId: ctx.sourceId } : undefined);
-    if (!existingPage && !ctx.dryRun) {
-      const parsed = await import('./markdown.ts').then(m => m.parseMarkdown(p.content as string, slug + '.md'));
-      if (parsed.title) {
-        const similar = await ctx.engine.findByTitleFuzzy(parsed.title, undefined, 0.7);
-        if (similar && similar.slug !== slug) {
-          console.warn(`[put_page] Possible duplicate detected: "${parsed.title}" already exists as "${similar.slug}" (similarity: ${similar.similarity.toFixed(2)}). Use that slug or confirm this is intentional.`);
-        }
-      }
-    }
-
     if (ctx.viaSubagent === true) {
       if (typeof ctx.subagentId !== 'number' || Number.isNaN(ctx.subagentId)) {
         throw new OperationError('permission_denied', 'put_page via subagent requires ctx.subagentId');
@@ -790,6 +776,22 @@ const put_page: Operation = {
     }
 
     if (ctx.dryRun) return { dry_run: true, action: 'put_page', slug: p.slug };
+
+    // v0.43.0: duplicate entity prevention (pbrain feature port). When
+    // creating a new page (not updating), check for existing pages with
+    // similar titles and warn the caller. Runs AFTER the namespace/allow-list
+    // gate — a rejected caller must not trigger engine reads.
+    const existingPage = await ctx.engine.getPage(slug, ctx.sourceId ? { sourceId: ctx.sourceId } : undefined);
+    if (!existingPage) {
+      const parsed = await import('./markdown.ts').then(m => m.parseMarkdown(p.content as string, slug + '.md'));
+      if (parsed.title) {
+        const similar = await ctx.engine.findByTitleFuzzy(parsed.title, undefined, 0.7);
+        if (similar && similar.slug !== slug) {
+          console.warn(`[put_page] Possible duplicate detected: "${parsed.title}" already exists as "${similar.slug}" (similarity: ${similar.similarity.toFixed(2)}). Use that slug or confirm this is intentional.`);
+        }
+      }
+    }
+
     // Skip embedding when the AI gateway has no embedding provider configured.
     // Checks all auth env vars for the resolved provider, not just OPENAI_API_KEY,
     // so Gemini / Ollama / Voyage brains don't silently drop embeddings (Codex C2).
@@ -1335,6 +1337,7 @@ const list_pages: Operation = {
       description: 'Sort order. Default updated_desc (matches pre-v0.29). Options: updated_desc, updated_asc, created_desc, slug.',
     },
     include_deleted: { type: 'boolean', description: 'v0.26.5: include soft-deleted pages (default: false). Used by restore workflows and operator diagnostics.' },
+    include_frontmatter: { type: 'boolean', description: 'v0.43: include each page\'s frontmatter object in the result (default: false). Lets list views render frontmatter fields (case metadata, deadlines) without N follow-up get_page calls.' },
   },
   handler: async (ctx, p) => {
     // Whitelist the sort enum at the handler before passing to the engine.
@@ -1359,12 +1362,14 @@ const list_pages: Operation = {
       sort,
       ...scope,
     });
+    const includeFrontmatter = (p.include_frontmatter as boolean) === true;
     return pages.map(pg => ({
       slug: pg.slug,
       type: pg.type,
       title: pg.title,
       updated_at: pg.updated_at,
       ...(pg.deleted_at ? { deleted_at: pg.deleted_at } : {}),
+      ...(includeFrontmatter ? { frontmatter: pg.frontmatter ?? {} } : {}),
     }));
   },
   scope: 'read',

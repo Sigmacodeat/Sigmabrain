@@ -7,7 +7,7 @@ import type { BrainEngine } from '../core/engine.ts';
 import { MinionQueue } from '../core/minions/queue.ts';
 import { MinionWorker } from '../core/minions/worker.ts';
 import { WORKER_EXIT_RSS_WATCHDOG } from '../core/minions/worker-exit-codes.ts';
-import type { MinionJob, MinionJobStatus } from '../core/minions/types.ts';
+import type { MinionJob, MinionJobStatus, MinionJobContext } from '../core/minions/types.ts';
 import { loadConfig, isThinClient } from '../core/config.ts';
 import { callRemoteTool, unpackToolResult } from '../core/mcp-client.ts';
 import { parseNiceValue, applyNiceness, getEffectiveNiceness, formatNice } from '../core/minions/niceness.ts';
@@ -1525,6 +1525,13 @@ export async function registerBuiltinHandlers(
     return { imported: true };
   });
 
+  worker.register('legal-case-scanner', async (job) => {
+    const { legalCaseScannerHandler } = await import(
+      '../core/minions/handlers/legal-case-scanner.ts'
+    );
+    return legalCaseScannerHandler(job as MinionJobContext, engine);
+  });
+
   worker.register('extract', async (job) => {
     const { runExtractCore } = await import('./extract.ts');
     const mode = (typeof job.data.mode === 'string' && ['links', 'timeline', 'all'].includes(job.data.mode))
@@ -1683,9 +1690,11 @@ export async function registerBuiltinHandlers(
   // cost-ceremony env flag needed.
   const { makeSubagentHandler } = await import('../core/minions/handlers/subagent.ts');
   const { subagentAggregatorHandler } = await import('../core/minions/handlers/subagent-aggregator.ts');
+  const { makeSupervisorHandler } = await import('../core/minions/handlers/supervisor.ts');
   worker.register('subagent', makeSubagentHandler({ engine }));
   worker.register('subagent_aggregator', subagentAggregatorHandler);
-  process.stderr.write('[minion worker] subagent handlers enabled\n');
+  worker.register('supervisor', makeSupervisorHandler({ engine }));
+  process.stderr.write('[minion worker] subagent + supervisor handlers enabled\n');
 
   // ============================================================
   // v0.38 ingestion substrate — ingest_capture handler. Receives

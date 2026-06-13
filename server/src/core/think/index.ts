@@ -32,6 +32,17 @@ import { hasAnthropicKey } from '../ai/anthropic-key.ts';
 /** Anthropic Messages client interface — same shape used by subagent.ts so test stubs can be shared. */
 export interface ThinkLLMClient {
   create(params: Anthropic.MessageCreateParamsNonStreaming, opts?: { signal?: AbortSignal }): Promise<Anthropic.Message>;
+  /**
+   * Optional streaming variant. When present and opts.onStreamChunk is set,
+   * runThink uses this to deliver real-time token streaming to the caller.
+   * Implementations must call onChunk for each text delta and return the final
+   * accumulated message on completion.
+   */
+  createStream?(
+    params: Anthropic.MessageCreateParamsNonStreaming,
+    onChunk: (text: string) => void,
+    opts?: { signal?: AbortSignal },
+  ): Promise<Anthropic.Message>;
 }
 
 export interface RunThinkOpts {
@@ -111,6 +122,21 @@ export interface RunThinkOpts {
    * the recall posture for untrusted callers). CLI defaults to false.
    */
   remote?: boolean;
+  /**
+   * Search mode passed from the web dashboard UI. Controls gatherLimit and
+   * takesLimit for the gather phase, matching the CLAUDE.md mode bundles:
+   *   conservative → 10 pages / 10 takes
+   *   balanced     → 25 pages / 20 takes (default)
+   *   tokenmax     → 50 pages / 30 takes
+   */
+  searchMode?: 'conservative' | 'balanced' | 'tokenmax';
+  /**
+   * When set, called with each text delta from the LLM as it streams.
+   * Enables real-time token delivery to SSE clients. The final answer is
+   * still parsed from the accumulated text after the stream completes, so
+   * the JSON envelope (citations, gaps) is emitted separately after [DONE].
+   */
+  onStreamChunk?: (text: string) => void;
 }
 
 /** Structured response from the LLM (matches the schema declared in prompt.ts). */
@@ -264,12 +290,21 @@ export async function runThink(
     }
   }
 
-  // GATHER
+  // GATHER — mode controls how much context we pull in before synthesis.
+  const MODE_GATHER_LIMITS = {
+    conservative: { gatherLimit: 10, takesLimit: 10 },
+    balanced:     { gatherLimit: 25, takesLimit: 20 },
+    tokenmax:     { gatherLimit: 50, takesLimit: 30 },
+  } as const;
+  const modeLimits = MODE_GATHER_LIMITS[opts.searchMode ?? 'balanced'];
+
   const gather = await runGather(engine, {
     question: opts.question,
     anchor: opts.anchor,
     questionEmbedding,
     takesHoldersAllowList: opts.takesHoldersAllowList,
+    gatherLimit: modeLimits.gatherLimit,
+    takesLimit: modeLimits.takesLimit,
   });
 
   // Render evidence blocks for the prompt
@@ -468,12 +503,12 @@ export async function runThink(
       messages: [{ role: 'user', content: userMessage }],
     });
     const block = result.content.find(b => b.type === 'text');
-    const text = block && 'text' in block ? block.text : '';
-    const parsed = tryParseJSON(text);
+    const rawText = block && 'text' in block ? block.text : '';
+    const parsed = tryParseJSON(rawText);
     if (!parsed || typeof parsed !== 'object') {
       warnings.push('LLM_OUTPUT_NOT_JSON');
       synthesisOk = false;  // #1698: malformed output (and the non-JSON graceful sentinel)
-      response = { answer: text, citations: [], gaps: [] };
+      response = { answer: rawText, citations: [], gaps: [] };
     } else {
       const r = parsed as Partial<ThinkResponse>;
       response = {
@@ -481,6 +516,17 @@ export async function runThink(
         citations: Array.isArray(r.citations) ? (r.citations as ThinkResponse['citations']) : [],
         gaps: Array.isArray(r.gaps) ? (r.gaps as string[]).filter(g => typeof g === 'string') : [],
       };
+    }
+
+    // Post-parse streaming: emit the final answer word-by-word so SSE clients
+    // see natural text appearance rather than all-at-once delivery. The LLM
+    // call is still non-streaming (JSON response format is required for
+    // citations + gaps); we simulate streaming on the parsed answer text.
+    if (opts.onStreamChunk && response.answer) {
+      const words = response.answer.split(/(\s+)/);
+      for (const word of words) {
+        if (word) opts.onStreamChunk(word);
+      }
     }
   }
 
@@ -686,6 +732,7 @@ async function tryBuildGatewayClient(
       }
       return chatResultToMessage(result, modelStr) as unknown as Anthropic.Message;
     },
+
   };
 }
 
