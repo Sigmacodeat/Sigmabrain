@@ -468,6 +468,65 @@ exakten Kurztitel. **Aktualisierung:** `cd server && bun run law-corpus`
 `0 6 * * 1 cd <repo>/server && bun run law-corpus && cd .. && gbrain import law-corpus/de --source-id law-de && gbrain import law-corpus/at --source-id law-at`
 (Re-Import ist idempotent: unveränderte Gesetze skippen per content_hash).
 
+## 🆕 Kanzlei-OS Dashboard — Legal-Features komplett (12. Juni 2026)
+
+Vorher: Dashboard hatte Query, Brain, Graph, Upload, Settings — generisch.
+Jetzt: Vollständiges Kanzlei-OS mit 14 spezialisierten Seiten, alle mit
+**echten Brain-Daten** (keine Mocks mehr), **getypten Frontmatter-Strukturen**
+und **serverseitiger Business-Logic**.
+
+### Neue Dashboard-Seiten (alle funktionsfähig)
+
+| Seite | Kern-Funktion | Datenquelle |
+|---|---|---|
+| `/dashboard/cases` | Aktenliste mit Filter, Stats, Suche | `legal_case` Pages via `api.brain.listPages` |
+| `/dashboard/cases/new` | Akte anlegen (12 Felder, Frontmatter) | `api.brain.createPage` |
+| `/dashboard/cases/[slug]` | Akten-Detail: Tasks, Zeit, Dokumente, Graph, KI-Query, Timeline, Beweise, Strategie | `api.brain.getPage` + `updatePage({ merge: true })` |
+| `/dashboard/deadlines` | Fristen aus Akten + Deadline-Pages, Status-Computing (überfällig/bald/kritisch) | `legal_case` + `legal_deadline` Frontmatter |
+| `/dashboard/calendar-export` | Kalender-Export (.ics) aus Fristen | `legal_deadline` + case-deadlines |
+| `/dashboard/invoicing` | Rechnungen aus Zeiteinträgen, fortlaufende Nummer (§ 14 UStG), Status-Mgmt | `invoice` Pages |
+| `/dashboard/datev-export` | DATEV-Export aus Zeiteinträgen | `legal_case` `time_entries` |
+| `/dashboard/opponents` | Gegner-Intelligence: Siegquote, Häufigkeit, bevorzugte Rechtsgebiete | `legal_case` `opponent_name` Aggregation |
+| `/dashboard/kollisionspruefung` | Interessenkonflikt nach § 43a BRAO — **serverseitig** über ALLE Akten | `POST /api/legal/conflict-check` |
+| `/dashboard/rechtsprechung` | Urteilssuche im Brain (court_decision) + KI-Fallback | Brain-Search + `think` |
+| `/dashboard/norms` | Gesetzes-Korpus (BGB, ABGB, etc.) mit Citation-Linking | Brain-Search + `law-corpus/` |
+| `/dashboard/judgements-sync` | Rechtsprechungs-Sync (RIS-OGD AT, OpenLegalData DE) | `POST /api/legal/judgements-sync` |
+| `/dashboard/compliance` | DSGVO + GwG Selbstauskunft, persistierter Status pro Checkpunkt | `legal/compliance/selbstauskunft` Page |
+| `/dashboard/bea` | beA-Entwurfsvorbereitung + Import-Status (kein Versand — ehrlich gekennzeichnet) | `bea_draft` + `bea_message` Pages |
+| `/dashboard/drafting` | Schriftsatz-Entwurf mit KI (Anfrage an `/api/think`) | `api.query.think` |
+| `/dashboard/client-portal` | Mandanten-Portal **Vorschau** (Anwaltsansicht aller Akten) | `legal_case` Pages |
+| `/dashboard/cost-calculator` | RVG § 13 / RATG Gebührenrechner mit Stufenformel | Lokal (formelbasiert, keine Mocks) |
+
+### Technische Fundamente (neu)
+
+- **`src/lib/legal-types.ts`** — Zentrale Typen für CaseFrontmatter, InvoiceFrontmatter,
+  DeadlineEntry, TimeEntry, EvidenceEntry, StrategyInfo, etc. Kein `(page as any).frontmatter`
+  mehr im Frontend.
+- **`src/lib/status-colors.ts`** — Tailwind-v4-kompatible Farb-Mapping (keine interpolierten
+  Klassen mehr, die stumm fehlschlagen).
+- **`src/lib/api.ts`** — Erweitert um `legal.conflictCheck()` und `legal.judgementsSync()`;
+  `updatePage` sendet `merge: true` für partielle Frontmatter-Updates ohne Body-Wipe.
+- **Server-Endpunkte in `web-api.ts`:**
+  - `POST /api/legal/conflict-check` — SQL-Scan über `legal_case` mit ILIKE-Matching,
+    exact/ähnlich-Flag, Severity (critical/low/none) nach § 43a BRAO.
+  - `POST /api/legal/judgements-sync` — Inline-Connector mit Cursor-Management,
+    Delta-Import, capped detail-fetches (HTTP-responsiv).
+- **Connectoren:**
+  - `bea-import.ts` — `fast-xml-parser` + `js-yaml` für sichere XML→Frontmatter;
+    bounded cursor (5000), slugify für Message-IDs.
+  - `legal-judgements.ts` — RIS-OGD v2.6 + OpenLegalData API, YAML-Frontmatter,
+    versions-stamped ingestion events.
+
+### UI-Qualität
+
+- **Keine Mock-Daten** in allen 17 Dashboard-Seiten (verifiziert via `grep -r MOCK_ src/app/dashboard` → 0 Treffer).
+- **Accessibility:** `aria-label`, `htmlFor`, `role`, `aria-live`, `aria-pressed`,
+  `aria-expanded`, `aria-selected` durchgängig.
+- **Kontrast:** Alle `#4a4a6a` → `#8a8aa8` für WCAG-konforme Lesbarkeit.
+- **Lade-/Fehlerzustände:** Jede Seite hat Loading-Spinner und Error-UI (nicht nur leere Listen).
+- **Ehrliche Kommunikation:** beA „versendet keine Nachrichten
+, Compliance-Selbstauskunft ersetzt keine Beratung.
+
 ## 📱 Schritt 2: iOS / Android / iPadOS — Roadmap
 
 **Stufe 1 — JETZT FERTIG: PWA.** Installierbar auf allen drei Plattformen ohne App-Store,
