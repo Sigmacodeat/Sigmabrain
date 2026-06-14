@@ -97,6 +97,20 @@ const INDUSTRY_QUERIES: Record<string, string[]> = {
     "Was wurde im letzten Teammeeting entschieden?",
     "Welche offenen Punkte gibt es mit dem Labor?",
   ],
+  compliance: [
+    "Welche unserer KI-Systeme fallen unter den EU AI Act — und was fehlt bis 02.08.2026?",
+    "Welche regulatorischen Fristen stehen diese Woche an?",
+    "Welche Kontrollen decken die DSGVO-Dokumentationspflichten ab?",
+    "Was haben wir beim letzten AML-Screening von Geschäftspartner X festgestellt?",
+    "Welche Kontrollen sind als unwirksam oder nur teilweise wirksam markiert?",
+  ],
+  realestate: [
+    "Welche Mietverträge laufen in den nächsten 90 Tagen aus oder haben Break-Optionen?",
+    "Was steht im Mietvertrag von Einheit X — Laufzeit, Staffel, offene Punkte?",
+    "Wie ist der Vermietungsstand und WALT im Objekt Y?",
+    "Welche Zusagen haben wir Mieter Z gemacht, die nicht im Vertrag stehen?",
+    "Was fehlt für die Ankaufsprüfung des Objekts an der Hauptstraße?",
+  ],
 };
 
 const MODE_LABELS = {
@@ -263,6 +277,16 @@ export default function QueryPage() {
     }, 0);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    // Deep-link prefill: vertical workspace pages link here with ?q=<prompt>.
+    // window.location avoids a useSearchParams Suspense boundary.
+    try {
+      const q = new URLSearchParams(window.location.search).get("q");
+      if (q) setInput(q);
+    } catch { /* noop */ }
+  }, []);
+
   const [queryMode, setQueryMode] = useState<"conservative" | "balanced" | "tokenmax">("balanced");
   const [showModeMenu, setShowModeMenu] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
