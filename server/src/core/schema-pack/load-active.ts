@@ -131,6 +131,12 @@ function defaultPackLocator(name: string): string | null {
     // lease, tenant, transaction types, location/lease link verbs, and
     // lease-renewal/deal calibration.
     'gbrain-realestate',
+    // v0.42+ vertical pack: consulting / agency domain (project, client,
+    // proposal, deliverable, learning) — institutional memory.
+    'gbrain-consulting',
+    // v0.42+ vertical pack: executive search / recruiting domain (candidate,
+    // role, client, placement, search) — the proprietary talent graph.
+    'gbrain-recruiting',
   ];
   if (BUNDLED.includes(name)) {
     // Resolve bundled YAML relative to this source file. Works in both
