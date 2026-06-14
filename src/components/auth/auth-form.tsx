@@ -107,7 +107,13 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
   const m = t[mode];
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next") || "/dashboard";
+  // Pricing-tier CTAs deep-link with ?plan=pro|team → after signup, land on
+  // billing with auto-checkout for that plan. Explicit ?next= wins.
+  const planParam = params.get("plan");
+  const planNext = planParam === "pro" || planParam === "team"
+    ? `/dashboard/billing?checkout=${planParam}`
+    : null;
+  const next = params.get("next") || planNext || "/dashboard";
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
