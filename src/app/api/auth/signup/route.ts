@@ -5,6 +5,7 @@ import { signSession, SESSION_COOKIE, SESSION_TTL_SECONDS, REF_COOKIE } from "@/
 import { hit, clientIp } from "@/lib/auth/rate-limit";
 import { signActionToken, bindFragment, VERIFY_TOKEN_TTL_SECONDS } from "@/lib/auth/tokens";
 import { sendMail, siteUrl } from "@/lib/mail";
+import { isValidIndustry } from "@/lib/industry-pack";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -52,10 +53,11 @@ export async function POST(req: NextRequest) {
     if (referrer && referrer.email !== email) referredBy = refCode; // no self-referrals
   }
 
-  // Industry powers dashboard personalization (vertical example prompts);
-  // optional, allowlisted, silently dropped when unknown.
-  const INDUSTRIES = new Set(["legal", "tax", "vc", "consulting", "recruiting", "insurance", "medical", "other"]);
-  const industry = body.industry && INDUSTRIES.has(body.industry) ? body.industry : null;
+  // Industry powers dashboard personalization AND the schema pack the tenant's
+  // brain gets provisioned with (packForIndustry → gbrain-<vertical>). Allowlist
+  // is the single source in lib/industry-pack (covers all 8 branded verticals);
+  // optional, silently dropped when unknown.
+  const industry = isValidIndustry(body.industry) ? (body.industry as string) : null;
 
   const passwordHash = await hashPassword(password);
   const user = await store.create(
