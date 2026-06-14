@@ -91,3 +91,14 @@ tags: [task, <project-slug>]
 - After legal case creation → create initial task list for case phases
 - After status report → create tasks for identified next steps
 - Before daily briefing → pull open tasks as briefing input
+
+## Anti-Patterns
+
+- ❌ Creating duplicate tasks instead of updating the existing one.
+- ❌ Marking a task done without recording the outcome.
+- ❌ Losing the link between a task and its parent project/brain page.
+
+## Output Format
+
+Per task: title · status · owner · due date · linked project — and the brain
+page slug it was written to.

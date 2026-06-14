@@ -346,3 +346,8 @@ This skill guarantees:
 - Content-type aware routing to appropriate processor
 - Raw source preservation via metadata
 - Health checks surface in `gbrain doctor`
+
+## Output Format
+
+Per sync run: connector · items fetched / imported / skipped · cursor advanced ·
+errors (with retry status) — progress on stderr, a clean summary at the end.

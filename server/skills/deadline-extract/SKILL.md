@@ -95,3 +95,14 @@ This skill guarantees:
   timeline as if they were deadlines — classify first.
 - Duplicating timeline entries on re-runs — always read the existing
   timeline before appending.
+
+## Anti-Patterns
+
+- ❌ Emitting a deadline as authoritative — every extracted date is "verify with the responsible professional".
+- ❌ Guessing a trigger date not present in the source document.
+- ❌ Skipping the weekend/holiday roll-forward.
+
+## Output Format
+
+Per extracted deadline: type · trigger event + date · computed due date · source
+document/passage · a human-verification flag.

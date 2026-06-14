@@ -142,6 +142,36 @@
       "description": "Imported chat exports (ChatGPT, Claude, etc.) where the conversation itself is the artifact. Cross-link concepts and people from the conversation; the conversation page is the source-of-truth for the dialog. Distinct from voice-notes/ (which holds raw voice capture)."
     },
     {
+      "kind": "statute",
+      "directory": "law-corpus/",
+      "examples": ["law-corpus/de/bgb.md", "law-corpus/at/abgb.md", "law-corpus/ch/or.md"],
+      "description": "Statutory law texts (BGB, ABGB, OR, StGB, etc.) from DACH+EU jurisdictions. Ingested as Markdown with frontmatter type: statute. Primary source for legal-subsumption and norm-classification skills."
+    },
+    {
+      "kind": "court_decision",
+      "directory": "legal/judgements/",
+      "examples": ["legal/judgements/2023-ogh-1ob123.md", "legal/judgements/2024-bgh-xiz345.md"],
+      "description": "Court decisions from RIS-OGD (AT), openlegaldata (DE), and other national databases. Frontmatter includes court, date, ecli, case_number, legal_area. Filed by date-court-id slug."
+    },
+    {
+      "kind": "eu_court_decision",
+      "directory": "legal/eu-judgements/",
+      "examples": ["legal/eu-judgements/2023-eugh-c-123.md", "legal/eu-judgements/2024-eug-t-456.md"],
+      "description": "EU Court of Justice and General Court decisions from EUR-Lex/Curia. Frontmatter includes court, date, ecli, case_number, procedure_type, parties."
+    },
+    {
+      "kind": "legal_document",
+      "directory": "legal/analyses/",
+      "examples": ["legal/analyses/subsumption-haftung-2024-06.md", "legal/analyses/strategie-musterfall-2024.md"],
+      "description": "AI-generated legal analyses, subsumptions, strategy memos, and case assessments. Requires attorney-review flag in frontmatter."
+    },
+    {
+      "kind": "legal-case",
+      "directory": "legal/cases/",
+      "examples": ["legal/cases/kanzlei-2024-001.md"],
+      "description": "Law firm case files with anonymized facts, claims, defenses, evidence, strategy, and outcome. Cross-linked to legal-entity pages for opponent, court, client."
+    },
+    {
       "kind": "document",
       "directory": "documents/",
       "examples": ["documents/contracts/", "documents/invoices/", "documents/legal/court-filings/", "documents/correspondence/emails/"],

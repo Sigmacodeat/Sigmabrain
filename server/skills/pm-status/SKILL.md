@@ -81,3 +81,9 @@ explicitly asked to save the report.
 - After status, if blockers exist → `skills/pm-task/SKILL.md` to create tracking tasks
 - If risks are high → `skills/ask-user/SKILL.md` to confirm escalation path
 - If data is missing → `skills/data-research/SKILL.md` to fill gaps
+
+## Anti-Patterns
+
+- ❌ Reporting status without citing the underlying task/brain pages.
+- ❌ Presenting a stale snapshot as current — state the as-of date.
+- ❌ Hiding blocked/overdue items behind an aggregate "green".

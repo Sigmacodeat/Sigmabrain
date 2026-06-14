@@ -64,3 +64,20 @@ The Legal Brain is a complete case-management and strategic-analysis subsystem f
 - After `case create`, chain into `case strategy` if the user asks for next steps
 - After `opponent`, chain into `case assess` if a case ID is known
 - Precedent search chains naturally with perplexity-research for live case law
+
+## Contract
+
+1. Every answer routes through the matter's own source + public-law corpus only — no cross-tenant reads.
+2. Each claim cites its brain source; gaps are stated explicitly.
+3. Output is decision support for the responsible professional, never autonomous legal advice.
+
+## Anti-Patterns
+
+- ❌ Reading or blending another tenant's matter data (source isolation is absolute).
+- ❌ Presenting synthesized analysis as binding legal advice.
+- ❌ Answering a relational/opponent question from anything but public sources + the firm's own matters.
+
+## Output Format
+
+A synthesized answer with per-claim citations and an explicit gap list, scoped to the
+firm's own source — marked AI-assisted, professional review required.
