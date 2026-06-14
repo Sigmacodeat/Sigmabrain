@@ -51,3 +51,7 @@ reports/network-intelligence/
 tmp-legal-repo/
 bulk-import-cursor.json
 *.bak
+
+# keep env templates tracked
+!.env.example
+!**/.env.example
