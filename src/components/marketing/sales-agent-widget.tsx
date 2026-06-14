@@ -33,6 +33,13 @@ interface AgentResponse {
     compareHref: string;
   };
   chips: string[];
+  capture?: {
+    eligible: boolean;
+    saved: boolean;
+    leadId: string | null;
+    summary: string;
+    message: string;
+  };
 }
 
 const ROUTE_INDUSTRY: Record<string, string> = {
@@ -54,6 +61,7 @@ const intro = {
     placeholder: "Ask about pricing, security, product fit…",
     open: "Ask Sigmabrain",
     privacy: "No confidential client data here",
+    consent: "Send this conversation to the Sigmabrain team",
     score: "Lead fit",
     fields: "Qualification",
     empty: "Start with one of these:",
@@ -66,6 +74,7 @@ const intro = {
     placeholder: "Frag zu Preisen, Sicherheit, Produkt-Fit…",
     open: "Sigmabrain fragen",
     privacy: "Keine vertraulichen Mandantendaten hier",
+    consent: "Diesen Verlauf ans Sigmabrain-Team übergeben",
     score: "Lead-Fit",
     fields: "Qualifikation",
     empty: "Starte hiermit:",
@@ -98,6 +107,7 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState<Partial<Record<FieldKey, string>>>(routeIndustry ? { industry: routeIndustry } : {});
+  const [consent, setConsent] = useState(false);
   const [industry, setIndustry] = useState<string | null>(routeIndustry);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: "assistant", content: routeProfile ? `${t.starter}\n\n${routeProfile.brand}: ${routeProfile.signature.title[lang]}` : t.starter },
@@ -118,7 +128,7 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
       const res = await fetch("/api/marketing-agent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lang, path: pathname, industry, fields, messages: nextMessages }),
+        body: JSON.stringify({ lang, path: pathname, industry, fields, messages: nextMessages, consent }),
       });
       if (res.status === 429) {
         const limited = lang === "de" ? "Kurz zu viele Anfragen. Versuch es gleich nochmal." : "Too many requests for a moment. Try again shortly.";
@@ -206,6 +216,21 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
                 </div>
               )}
 
+              {agent?.capture && (
+                <div className={`rounded-xl border p-3 ${
+                  agent.capture.saved
+                    ? "border-emerald-500/25 bg-emerald-500/10"
+                    : "border-[#1e1e3a] bg-[#0d0d1a]"
+                }`}>
+                  <p className={agent.capture.saved ? "text-xs text-emerald-300" : "text-xs text-[#8888aa]"}>
+                    {agent.capture.message}
+                  </p>
+                  {agent.capture.saved && agent.capture.leadId && (
+                    <p className="mt-1 text-[10px] font-mono text-emerald-400/70">lead/{agent.capture.leadId.slice(0, 8)}</p>
+                  )}
+                </div>
+              )}
+
               {formatFields(fields, lang).length > 0 && (
                 <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3">
                   <p className="text-[11px] uppercase tracking-wider text-[#666684] mb-2">{t.fields}</p>
@@ -256,6 +281,15 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
                   {loading ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
                 </button>
               </div>
+              <label className="mt-2 flex items-start gap-2 text-[11px] text-[#777795] cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-0.5 accent-[var(--brand-primary)]"
+                />
+                <span>{t.consent}</span>
+              </label>
               <p className="mt-2 flex items-center gap-1.5 text-[11px] text-[#666684]">
                 <LockKeyhole size={11} /> {t.privacy}
               </p>

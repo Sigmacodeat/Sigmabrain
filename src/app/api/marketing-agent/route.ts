@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { hit, clientIp } from "@/lib/auth/rate-limit";
 import { profileForIndustry } from "@/lib/industry-pack";
 import { PRICING, type Lang } from "@/content/site";
+import { createMarketingLead, summarizeLead } from "@/lib/marketing/leads";
 
 type FieldKey = "industry" | "teamSize" | "useCase" | "hosting" | "timeline" | "email";
 
@@ -16,6 +17,7 @@ interface AdvisorContext {
   industry?: string | null;
   fields?: Partial<Record<FieldKey, string>>;
   messages?: AdvisorMessage[];
+  consent?: boolean;
 }
 
 const INDUSTRY_WORDS: Record<string, string[]> = {
@@ -41,7 +43,7 @@ const ROUTE_INDUSTRY: Record<string, string> = {
   "/recruiting": "recruiting",
 };
 
-const EMAIL_RE = /[^\s@]+@[^\s@]+\.[^\s@]+/;
+const EMAIL_RE = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i;
 
 function langOf(input: AdvisorContext): Lang {
   return input.lang === "de" ? "de" : "en";
@@ -213,6 +215,36 @@ export async function POST(req: NextRequest) {
     : "Please don’t enter confidential client or patient data in this public chat.";
 
   const reply = [intro, recommendation, question ? question : (lang === "de" ? "Du kannst mit dieser Konfiguration starten oder Enterprise direkt anschreiben." : "You can start with this setup or talk to Enterprise directly."), privacy].join("\n\n");
+  const transcript = [...(body.messages ?? []), { role: "assistant" as const, content: reply }].slice(-12);
+  const summary = summarizeLead({
+    email: fields.email ?? "",
+    lang,
+    path: body.path ?? "/",
+    industry,
+    product: profile?.brand ?? "Sigmabrain",
+    plan: planLabel,
+    leadScore,
+    fields: Object.fromEntries(Object.entries(fields).filter((entry): entry is [string, string] => Boolean(entry[1]))),
+    transcript,
+  });
+
+  let savedLead: { id: string; notified: { email: boolean; slack: boolean } } | null = null;
+  if (body.consent === true && fields.email) {
+    const lead = await createMarketingLead({
+      email: fields.email,
+      lang,
+      path: body.path ?? "/",
+      industry,
+      product: profile?.brand ?? "Sigmabrain",
+      plan: planLabel,
+      leadScore,
+      fields: Object.fromEntries(Object.entries(fields).filter((entry): entry is [string, string] => Boolean(entry[1]))),
+      transcript,
+      summary,
+      consent: true,
+    });
+    savedLead = { id: lead.id, notified: lead.notified };
+  }
 
   return NextResponse.json({
     reply,
@@ -228,5 +260,16 @@ export async function POST(req: NextRequest) {
       compareHref: localizedPath(lang, "/compare"),
     },
     chips: chipsFor(lang, fields, industry),
+    capture: {
+      eligible: Boolean(fields.email),
+      saved: Boolean(savedLead),
+      leadId: savedLead?.id ?? null,
+      summary,
+      message: savedLead
+        ? (lang === "de" ? "Gespeichert. Wir melden uns mit Kontext." : "Saved. We’ll follow up with context.")
+        : fields.email
+          ? (lang === "de" ? "E-Mail erkannt. Mit Zustimmung kann ich diesen Verlauf ans Team geben." : "Email detected. With consent, I can pass this conversation to the team.")
+          : (lang === "de" ? "Wenn du möchtest, gib eine E-Mail an und aktiviere die Übergabe." : "If you want follow-up, share an email and enable handoff."),
+    },
   });
 }
