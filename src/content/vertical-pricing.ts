@@ -6,7 +6,8 @@
 // pricing section, and launch products (Subsumio) get bespoke tiers.
 
 import type { Lang, PricingTier } from "./site";
-import { ENGINE_REPO_URL } from "./site";
+import { ENGINE_REPO_URL, PRICING } from "./site";
+import { profileForIndustry } from "@/lib/industry-pack";
 
 export interface VerticalPricing {
   title: string;
@@ -85,5 +86,22 @@ export const VERTICAL_PRICING: Record<Lang, Partial<Record<string, VerticalPrici
 
 export function pricingForIndustry(lang: Lang, industry: string | null | undefined): VerticalPricing | null {
   if (!industry) return null;
-  return VERTICAL_PRICING[lang][industry] ?? null;
+  const bespoke = VERTICAL_PRICING[lang][industry];
+  if (bespoke) return bespoke;
+
+  const profile = profileForIndustry(industry);
+  if (!profile) return null;
+  const label = profile.label[lang].toLowerCase();
+  return {
+    title: lang === "en" ? `Pricing for ${profile.brand}` : `Preise für ${profile.brand}`,
+    sub: lang === "en"
+      ? `Sigmabrain tuned for ${label}: same platform, industry-specific onboarding, prompts and schema pack.`
+      : `Sigmabrain für ${label}: gleiche Plattform, branchenspezifisches Onboarding, Prompts und Schema-Pack.`,
+    tiers: PRICING[lang].tiers.map((tier) => ({
+      ...tier,
+      cta: tier.href === "/signup"
+        ? (lang === "en" ? `Start ${profile.brand}` : `${profile.brand} starten`)
+        : tier.cta,
+    })),
+  };
 }

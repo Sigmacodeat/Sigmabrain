@@ -15,6 +15,27 @@ export interface DashboardVertical {
 }
 
 export const DASHBOARD_VERTICALS: Record<string, DashboardVertical> = {
+  tax: {
+    slug: "tax",
+    brand: "Taxumio",
+    title: "Steuerkanzlei-Arbeitsplatz",
+    intro: "Das Mandanten-Gedächtnis: Beratungshistorie, Fristen, Bescheide, DATEV-Kontext — frag das Brain oder öffne ein Tool.",
+    prompts: [
+      "Welche offenen Punkte gibt es vor dem Jahresgespräch mit Mandant X?",
+      "Warum haben wir die Holding-Struktur von Mandant Y so aufgesetzt?",
+      "Welche Bescheide oder Fristen sind diese Woche kritisch?",
+      "Welche Mandanten betrifft die E-Rechnungs-Pflicht — und was haben wir kommuniziert?",
+    ],
+    tools: [
+      { label: "Brain fragen", href: "/dashboard/query", desc: "Mandantenkontext, Bescheide, Notizen — mit Quellen" },
+      { label: "DATEV-Export", href: "/dashboard/datev-export", desc: "Übergaben und strukturierte Exporte" },
+      { label: "Fristen", href: "/dashboard/deadlines", desc: "Bescheide, Einsprüche, Abgaben" },
+      { label: "Kontakte", href: "/dashboard/contacts", desc: "Mandanten, Ansprechpartner, Beziehungen" },
+      { label: "Dokumenten-Vault", href: "/dashboard/vault", desc: "Bescheide, Verträge, Korrespondenz" },
+      { label: "Verfahrensdoku", href: "/dashboard/verfahrensdoku", desc: "GoBD-Dokumentation aus Stammdaten" },
+    ],
+    skills: ["tax-context", "deadline-review", "advisory-history"],
+  },
   insurance: {
     slug: "insurance",
     brand: "Versumio",
@@ -119,5 +140,26 @@ export const DASHBOARD_VERTICALS: Record<string, DashboardVertical> = {
       { label: "Kandidaten-Vault", href: "/dashboard/vault", desc: "Profile, Referenzen, Such-Akten" },
     ],
     skills: ["candidate-match", "pipeline-review", "candidate-dossier"],
+  },
+  medical: {
+    slug: "medical",
+    brand: "Medumio",
+    title: "Medizinischer Arbeitsplatz",
+    intro: "Das vertrauliche Praxis-Gedächtnis: Befunde, Wiedervorlagen, Behandlungskontext und Dokumente — frag das Brain oder öffne ein Tool.",
+    prompts: [
+      "Welche Wiedervorlagen sind diese Woche fällig?",
+      "Was steht in den letzten Notizen zu diesem Behandlungsfall?",
+      "Welche Besonderheiten sind bei Patient X dokumentiert?",
+      "Welche offenen Punkte gibt es mit dem Labor oder Facharzt?",
+    ],
+    tools: [
+      { label: "Brain fragen", href: "/dashboard/query", desc: "Befunde, Notizen, Wiedervorlagen — mit Quellen" },
+      { label: "Dokumenten-Vault", href: "/dashboard/vault", desc: "Befunde, Briefe, Einwilligungen" },
+      { label: "Fristen", href: "/dashboard/deadlines", desc: "Wiedervorlagen und Rückfragen" },
+      { label: "Kontakte", href: "/dashboard/contacts", desc: "Patienten, Praxen, Labore" },
+      { label: "Graph", href: "/dashboard/graph", desc: "Fall → Dokument → Behandlung → Kontakt" },
+      { label: "Anonymisierung", href: "/dashboard/anonymize", desc: "Datenschutzbewusste Weitergabe" },
+    ],
+    skills: ["clinical-context", "follow-up-review", "record-summary"],
   },
 };

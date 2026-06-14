@@ -10,10 +10,31 @@
 
 import Link from "next/link";
 import { motion, MotionConfig } from "framer-motion";
-import { ArrowRight, Check, CalendarClock, FileSignature } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CalendarClock,
+  FileSignature,
+  Scale,
+  Calculator,
+  FileSpreadsheet,
+  Shield,
+  ShieldCheck,
+  Building2,
+  Briefcase,
+  Layers,
+  Users,
+  Network,
+  Landmark,
+  FileText,
+  Brain,
+  type LucideIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SigmaMark } from "@/components/brand/logo";
 import { p, type Lang } from "@/content/site";
+import { profileForIndustry } from "@/lib/industry-pack";
+import { styleForIndustry } from "@/lib/industry-theme";
 import type { BrandedVerticalContent } from "@/content/taxumio";
 import {
   MarketingBackground,
@@ -25,8 +46,95 @@ import {
 } from "./chrome";
 import LiveDemo from "./live-demo";
 import BranchPricing from "./branch-pricing";
+import ProductWorkflowShowcase from "./product-workflow-showcase";
 
 const viewport = { once: true, margin: "-60px" } as const;
+
+const SIGNATURE_ICONS: Record<string, LucideIcon> = {
+  Brain,
+  Briefcase,
+  Building2,
+  Calculator,
+  CalendarClock,
+  Check,
+  FileSpreadsheet,
+  FileText,
+  Landmark,
+  Layers,
+  Network,
+  Scale,
+  Shield,
+  ShieldCheck,
+  ShieldAlert: ICONS.ShieldAlert,
+  Users,
+};
+
+function SignatureBand({
+  industry,
+  lang,
+}: {
+  industry: string;
+  lang: Lang;
+}) {
+  const profile = profileForIndustry(industry);
+  if (!profile) return null;
+
+  const iconMap: Record<string, string[]> = {
+    legal: ["Scale", "CalendarClock", "FileText"],
+    tax: ["Calculator", "FileSpreadsheet", "Shield"],
+    compliance: ["ShieldAlert", "FileText", "Check"],
+    insurance: ["ShieldCheck", "CalendarClock", "Users"],
+    realestate: ["Building2", "FileText", "CalendarClock"],
+    vc: ["Landmark", "Network", "FileText"],
+    consulting: ["Briefcase", "Layers", "Users"],
+    recruiting: ["Users", "Network", "FileText"],
+    medical: ["Shield", "FileText", "CalendarClock"],
+  };
+  const icons = iconMap[industry] ?? ["Brain", "Network", "FileText"];
+
+  return (
+    <section className="relative z-10 px-6 pb-20 max-w-6xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={viewport}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+        className="relative overflow-hidden rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]"
+      >
+        <div className="absolute inset-0 opacity-35" aria-hidden>
+          <div className="absolute inset-y-0 left-0 w-1/2 brand-glow-bg blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--brand-primary)_16%,transparent)_0_1px,transparent_1px_28px)]" />
+        </div>
+        <div className="relative grid lg:grid-cols-[1.15fr_1fr] gap-6 p-6 md:p-8 items-center">
+          <div>
+            <p className="text-xs font-mono uppercase tracking-wider brand-text mb-3">
+              {profile.brand} signature
+            </p>
+            <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] mb-3">
+              {profile.signature.title[lang]}
+            </h2>
+            <p className="text-sm md:text-base text-[#a8a8be] leading-relaxed max-w-2xl">
+              {profile.signature.proof[lang]}
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-3 lg:grid-cols-1 gap-3">
+            {profile.signature.items.map((item, i) => {
+              const Icon = SIGNATURE_ICONS[icons[i]];
+              return (
+                <div key={item.en} className="flex items-center gap-3 rounded-xl border border-[#1e1e3a] bg-[#06060f]/55 p-3">
+                  <div className="w-9 h-9 rounded-lg brand-soft border brand-border flex items-center justify-center shrink-0">
+                    {Icon && <Icon size={16} className="brand-text" />}
+                  </div>
+                  <span className="text-sm font-semibold text-[#e8e8f0]">{item[lang]}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
 
 function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
   return (
@@ -36,7 +144,7 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
       transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
       className="relative mx-auto w-full max-w-[420px]"
     >
-      <div className="absolute -inset-8 bg-violet-600/15 blur-3xl rounded-full" />
+      <div className="absolute -inset-8 brand-glow-bg blur-3xl rounded-full" />
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -57,7 +165,7 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
             className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3"
           >
             <div className="flex items-center gap-2 mb-2">
-              <CalendarClock size={13} className="text-violet-400" />
+              <CalendarClock size={13} className="brand-text" />
               <span className="text-xs font-semibold text-[#e8e8f0]">{c.digestLabel}</span>
             </div>
             <ul className="space-y-1.5">
@@ -96,7 +204,7 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
             className="flex items-center justify-between gap-2"
           >
             <span className="inline-flex items-center gap-1.5 text-[11px] text-[#8888aa]">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-400" /> {c.datevLabel}
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)]" /> {c.datevLabel}
             </span>
             <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[9px] text-amber-300">
               <FileSignature size={9} /> {c.aiBadge}
@@ -121,7 +229,7 @@ export default function BrandedVerticalPage({
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+      <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang} style={styleForIndustry(signupIndustry)}>
         <MarketingBackground />
         <MarketingNav lang={lang} />
 
@@ -134,8 +242,8 @@ export default function BrandedVerticalPage({
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="text-center lg:text-left"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-xs text-violet-400 font-medium mb-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border brand-border brand-soft text-xs brand-text font-medium mb-8">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-pulse" />
                 {t.badge}
               </div>
               <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
@@ -162,6 +270,10 @@ export default function BrandedVerticalPage({
           </div>
         </section>
 
+        <SignatureBand industry={signupIndustry} lang={lang} />
+
+        <ProductWorkflowShowcase lang={lang} industry={signupIndustry} />
+
         {/* Brain demo */}
         <section className="relative z-10 px-6 pb-20 max-w-3xl mx-auto">
           <LiveDemo lang={lang} {...t.demo} />
@@ -187,12 +299,12 @@ export default function BrandedVerticalPage({
                       className={`relative flex gap-4 md:w-1/2 ${left ? "md:pr-10" : "md:ml-auto md:pl-10 md:flex-row-reverse md:text-right"}`}
                     >
                       <div className="relative z-10 shrink-0">
-                        <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center">
-                          {Icon && <Icon size={18} className="text-violet-400" />}
+                        <div className="w-10 h-10 rounded-xl brand-soft border brand-border flex items-center justify-center">
+                          {Icon && <Icon size={18} className="brand-text" />}
                         </div>
                       </div>
-                      <div className="flex-1 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 hover:border-violet-500/30 transition-colors">
-                        <span className="text-xs font-mono text-violet-400">{s.time}</span>
+                      <div className="flex-1 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 hover:brand-border transition-colors">
+                        <span className="text-xs font-mono brand-text">{s.time}</span>
                         <h3 className="text-sm font-semibold text-[#e8e8f0] mt-1 mb-1.5">{s.title}</h3>
                         <p className="text-sm text-[#8888aa] leading-relaxed">{s.desc}</p>
                       </div>
@@ -220,14 +332,14 @@ export default function BrandedVerticalPage({
                 >
                   <Link
                     href={tool.href}
-                    className="group block h-full p-6 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-violet-500/40 hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
+                    className="group block h-full p-6 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:brand-border-strong hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
                   >
-                    <div className="w-11 h-11 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      {Icon && <Icon size={20} className="text-violet-400" />}
+                    <div className="w-11 h-11 rounded-xl brand-soft border brand-border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      {Icon && <Icon size={20} className="brand-text" />}
                     </div>
                     <h3 className="text-base font-bold text-[#e8e8f0] mb-1.5">{tool.title}</h3>
                     <p className="text-sm text-[#8888aa] leading-relaxed">{tool.desc}</p>
-                    <span className="inline-flex items-center gap-1 text-xs text-violet-400 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="inline-flex items-center gap-1 text-xs brand-text mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
                       {lang === "en" ? "Open" : "Öffnen"} <ArrowRight size={12} />
                     </span>
                   </Link>
@@ -253,8 +365,8 @@ export default function BrandedVerticalPage({
                     transition={{ duration: 0.35, delay: i * 0.06 }}
                     className="p-5 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-4">
-                      {Icon && <Icon size={18} className="text-violet-400" />}
+                    <div className="w-10 h-10 rounded-lg brand-soft border brand-border flex items-center justify-center mb-4">
+                      {Icon && <Icon size={18} className="brand-text" />}
                     </div>
                     <h3 className="text-sm font-semibold text-[#e8e8f0] mb-1.5">{tr.title}</h3>
                     <p className="text-xs text-[#8888aa] leading-relaxed">{tr.desc}</p>

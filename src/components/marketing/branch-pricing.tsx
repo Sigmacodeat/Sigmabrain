@@ -35,7 +35,7 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
   return (
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-12">
-        <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-violet-500/15 text-violet-400 border border-violet-500/20 mb-4">
+        <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium brand-soft brand-text border brand-border mb-4">
           Pricing
         </span>
         <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{title}</h2>
@@ -55,11 +55,11 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
             <div
               key={tier.id}
               className={`relative flex flex-col p-6 rounded-2xl border ${
-                tier.highlight ? "border-violet-500/40 bg-violet-500/[0.04]" : "border-[#1e1e3a] bg-[#0d0d1a]"
+                tier.highlight ? "brand-border-strong brand-soft" : "border-[#1e1e3a] bg-[#0d0d1a]"
               }`}
             >
               {tier.highlight && (
-                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-[10px] font-semibold">
+                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full brand-bg text-white text-[10px] font-semibold">
                   {lang === "en" ? "Most popular" : "Beliebt"}
                 </span>
               )}
@@ -72,7 +72,7 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
               <ul className="space-y-2 my-5 flex-1">
                 {tier.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-xs text-[#a8a8be] leading-relaxed">
-                    <Check size={13} className="text-violet-400 shrink-0 mt-0.5" /> {f}
+                    <Check size={13} className="brand-text shrink-0 mt-0.5" /> {f}
                   </li>
                 ))}
               </ul>
@@ -88,7 +88,7 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
 
       <p className="text-center text-xs text-[#4a4a6a] mt-6">
         {PRICING[lang].footnote}{" "}
-        <Link href={p(lang, "/pricing")} className="text-violet-400 hover:underline">
+        <Link href={p(lang, "/pricing")} className="brand-text hover:underline">
           {lang === "en" ? "Full pricing & FAQ" : "Alle Preise & FAQ"}
         </Link>
       </p>

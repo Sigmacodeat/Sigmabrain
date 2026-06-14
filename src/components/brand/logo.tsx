@@ -71,8 +71,9 @@ export function SigmaMark({
     >
       <defs>
         <linearGradient id="sb-tile" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#8b5cf6" />
-          <stop offset="100%" stopColor="#6d28d9" />
+          <stop offset="0%" stopColor="var(--brand-secondary, #20d3c2)" />
+          <stop offset="52%" stopColor="var(--brand-primary, #2f6bff)" />
+          <stop offset="100%" stopColor="var(--brand-tertiary, #8b5cf6)" />
         </linearGradient>
       </defs>
       <rect x="0" y="0" width="100" height="100" rx="24" fill="url(#sb-tile)" />
@@ -95,7 +96,7 @@ export function SigmaLogo({
     <span className="inline-flex items-center gap-2.5">
       <SigmaMark size={size} />
       <span className={`font-display ${wordmarkClassName}`}>
-        Sigma<span className="text-violet-400">brain</span>
+        Sigma<span className="text-[var(--brand-secondary)]">brain</span>
       </span>
     </span>
   );

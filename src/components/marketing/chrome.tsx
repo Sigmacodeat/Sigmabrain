@@ -38,6 +38,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SigmaLogo, SigmaMark } from "@/components/brand/logo";
 import { NAV, FOOTER, p, altPath, ENGINE_REPO_URL, type Lang } from "@/content/site";
+import SalesAgentWidget from "./sales-agent-widget";
 
 // Content files store icon names as strings; resolve them here.
 export const ICONS: Record<string, LucideIcon> = {
@@ -68,10 +69,10 @@ export function MarketingBackground() {
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
       <motion.div style={{ y: yViolet }} className="absolute top-[-20%] left-[-10%] will-change-transform">
-        <div className="orb w-[600px] h-[600px] rounded-full bg-violet-700/20" />
+        <div className="orb w-[600px] h-[600px] rounded-full brand-glow-bg" />
       </motion.div>
       <motion.div style={{ y: yBlue }} className="absolute bottom-[-20%] right-[-10%] will-change-transform">
-        <div className="orb-slow w-[500px] h-[500px] rounded-full bg-blue-700/15" />
+        <div className="orb-slow w-[500px] h-[500px] rounded-full brand-secondary-soft" />
       </motion.div>
       <motion.div style={{ y: yGrid }} className="grid-bg absolute inset-0 opacity-40 will-change-transform" />
     </div>
@@ -86,6 +87,7 @@ export function MarketingNav({ lang }: { lang: Lang }) {
   const other: Lang = lang === "en" ? "de" : "en";
 
   return (
+    <>
     <nav className="relative z-50 max-w-7xl mx-auto px-6 py-4">
       <div className="flex items-center justify-between">
         <Link href={p(lang, "")} aria-label="Sigmabrain home">
@@ -120,7 +122,7 @@ export function MarketingNav({ lang }: { lang: Lang }) {
                       className="block px-3 py-2.5 rounded-lg hover:bg-[#1a1a35] group"
                       onClick={() => setSolutionsOpen(false)}
                     >
-                      <p className="text-sm font-medium text-[#e8e8f0] group-hover:text-violet-300">{item.label}</p>
+                    <p className="text-sm font-medium text-[#e8e8f0] group-hover:brand-text">{item.label}</p>
                       <p className="text-xs text-[#8888aa] mt-0.5">{item.desc}</p>
                     </Link>
                   ))}
@@ -173,6 +175,8 @@ export function MarketingNav({ lang }: { lang: Lang }) {
         </div>
       )}
     </nav>
+    <SalesAgentWidget lang={lang} />
+    </>
   );
 }
 
@@ -212,7 +216,7 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
           <p className="text-xs text-[#4a4a6a]">© 2026 Sigmabrain</p>
           <p className="text-xs text-[#4a4a6a]">
             {lang === "en" ? "Powered by the open-source " : "Angetrieben von der Open-Source-"}
-            <a href={ENGINE_REPO_URL} target="_blank" rel="noreferrer" className="text-violet-400 hover:underline">Sigmabrain Engine</a>
+            <a href={ENGINE_REPO_URL} target="_blank" rel="noreferrer" className="brand-text hover:underline">Sigmabrain Engine</a>
             {lang === "en" ? " (MIT)" : " (MIT)"}
           </p>
         </div>
@@ -227,7 +231,7 @@ export function SectionHeading({ badge, title, sub }: { badge?: string; title: s
   return (
     <div className="text-center mb-14">
       {badge && (
-        <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-violet-500/15 text-violet-400 border border-violet-500/20 mb-4">
+        <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium brand-soft brand-text border brand-border mb-4">
           {badge}
         </span>
       )}

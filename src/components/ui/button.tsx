@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-violet-600 text-white hover:bg-violet-500 shadow-lg shadow-violet-900/30",
+          "brand-bg text-white shadow-lg shadow-[var(--brand-glow)]",
         secondary:
           "bg-transparent border border-[#1e1e3a] text-[#8888aa] hover:border-[#3a3a6a] hover:text-[#e8e8f0] hover:bg-[#12122a]",
         ghost:
@@ -20,9 +20,9 @@ const buttonVariants = cva(
         success:
           "bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-900/30",
         glow:
-          "bg-violet-600 text-white hover:bg-violet-500 shadow-lg shadow-violet-900/40 ring-1 ring-violet-500/30",
+          "brand-bg text-white shadow-lg shadow-[var(--brand-glow)] ring-1 ring-[color-mix(in_srgb,var(--brand-primary)_45%,transparent)]",
         outline:
-          "border border-violet-500/30 text-violet-400 hover:bg-violet-500/10 hover:border-violet-500/50",
+          "border brand-border brand-text hover:brand-border-strong hover:brand-soft",
       },
       size: {
         sm: "text-xs px-3 py-1.5",
