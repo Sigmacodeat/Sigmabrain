@@ -46,6 +46,7 @@ import {
 } from "./chrome";
 import LiveDemo from "./live-demo";
 import BranchPricing from "./branch-pricing";
+import IndustryHeroMotif from "./industry-hero-motif";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 
 const viewport = { once: true, margin: "-60px" } as const;
@@ -235,7 +236,8 @@ export default function BrandedVerticalPage({
 
         {/* Hero */}
         <section className="relative z-10 pt-20 pb-16 px-6 max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <IndustryHeroMotif industry={signupIndustry} className="absolute inset-0 z-0 opacity-[0.16] hidden md:block" />
+          <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}

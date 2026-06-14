@@ -21,6 +21,7 @@ import {
 } from "./chrome";
 import LiveDemo from "./live-demo";
 import BranchPricing from "./branch-pricing";
+import IndustryHeroMotif from "./industry-hero-motif";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 
 /** Product-line branding (Subsumio, Taxumio, …): same funnel body, branded
@@ -83,6 +84,8 @@ export default function VerticalPage({
 
       {/* Hero */}
       <section className="relative z-10 pt-20 pb-24 px-6 max-w-7xl mx-auto text-center">
+        <IndustryHeroMotif industry={industry} className="absolute inset-0 z-0 opacity-[0.16] hidden md:block" />
+        <div className="relative z-10">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border brand-border brand-soft text-xs brand-text font-medium mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-pulse" />
           {product ? product.poweredBy : t.badge}
@@ -108,6 +111,7 @@ export default function VerticalPage({
         </div>
         <div className="max-w-3xl mx-auto">
           <LiveDemo lang={lang} {...t.demo} />
+        </div>
         </div>
       </section>
 
