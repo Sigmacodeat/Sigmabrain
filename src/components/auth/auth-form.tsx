@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { SigmaLogo } from "@/components/brand/logo";
 import { MarketingBackground } from "@/components/marketing/chrome";
 import { p, type Lang } from "@/content/site";
+import { INDUSTRY_PROFILES, isValidIndustry } from "@/lib/industry-pack";
+import { styleForIndustry } from "@/lib/industry-theme";
 
 const COPY = {
   en: {
@@ -35,17 +37,8 @@ const COPY = {
     name: "Name",
     industry: "Your industry (optional)",
     industryHint: "Tunes your dashboard — example questions, getting-started guides.",
-    industries: {
-      "": "Please choose…",
-      legal: "Law firm / legal team",
-      tax: "Tax & accounting",
-      vc: "VC / Private Equity",
-      consulting: "Consulting / agency",
-      recruiting: "Executive search / recruiting",
-      insurance: "Insurance",
-      medical: "Medical practice",
-      other: "Other",
-    } as Record<string, string>,
+    industryPlaceholder: "Please choose…",
+    otherIndustry: "Other",
     errors: {
       invalid_credentials: "Email or password is incorrect.",
       email_taken: "An account with this email already exists.",
@@ -78,17 +71,8 @@ const COPY = {
     name: "Name",
     industry: "Deine Branche (optional)",
     industryHint: "Stimmt dein Dashboard ab — Beispiel-Fragen, Einstiegs-Guides.",
-    industries: {
-      "": "Bitte wählen…",
-      legal: "Kanzlei / Rechtsabteilung",
-      tax: "Steuerberatung & WP",
-      vc: "VC / Private Equity",
-      consulting: "Beratung / Agentur",
-      recruiting: "Executive Search / Recruiting",
-      insurance: "Versicherung",
-      medical: "Arztpraxis",
-      other: "Andere",
-    } as Record<string, string>,
+    industryPlaceholder: "Bitte wählen…",
+    otherIndustry: "Andere",
     errors: {
       invalid_credentials: "E-Mail oder Passwort ist falsch.",
       email_taken: "Ein Konto mit dieser E-Mail existiert bereits.",
@@ -121,9 +105,7 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
   // Product-line landing pages (Subsumio/Taxumio) deep-link to
   // /signup?industry=legal — prefill from the URL when it's a known value.
   const industryParam = params.get("industry") ?? "";
-  const [industry, setIndustry] = useState(
-    industryParam && industryParam in COPY.en.industries ? industryParam : "",
-  );
+  const [industry, setIndustry] = useState(isValidIndustry(industryParam) ? industryParam : "");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [ssoLoading, setSsoLoading] = useState(false);
@@ -183,7 +165,7 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
   }
 
   return (
-    <div className="min-h-screen bg-[#06060f] flex items-center justify-center px-6 py-12" lang={lang}>
+    <div className="min-h-screen bg-[#06060f] flex items-center justify-center px-6 py-12" lang={lang} style={styleForIndustry(industry)}>
       <MarketingBackground />
       <div className="relative z-10 w-full max-w-md">
         <Link href={p(lang, "")} className="flex justify-center mb-8" aria-label="Sigmabrain home">
@@ -221,7 +203,7 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-violet-500/60"
+                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-[var(--brand-primary)]"
                 />
               </div>
             </label>
@@ -236,7 +218,7 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
                   minLength={8}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-violet-500/60"
+                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-[var(--brand-primary)]"
                 />
               </div>
               {mode === "signup" && <span className="text-xs text-[#4a4a6a] mt-1 block">{t.passwordHint}</span>}
@@ -253,11 +235,13 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
                 <select
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2.5 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/60"
+                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2.5 text-sm text-[#e8e8f0] focus:outline-none focus:border-[var(--brand-primary)]"
                 >
-                  {Object.entries(t.industries).map(([value, label]) => (
-                    <option key={value} value={value}>{label}</option>
+                  <option value="">{t.industryPlaceholder}</option>
+                  {Object.values(INDUSTRY_PROFILES).map((profile) => (
+                    <option key={profile.key} value={profile.key}>{profile.label[lang]}</option>
                   ))}
+                  <option value="other">{t.otherIndustry}</option>
                 </select>
                 <span className="text-xs text-[#4a4a6a] mt-1 block">{t.industryHint}</span>
               </label>

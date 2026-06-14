@@ -13,6 +13,8 @@ import { SigmaMark } from "@/components/brand/logo";
 import { LANDING, PRICING, p, type Lang } from "@/content/site";
 import { PricingGrid } from "./pricing-grid";
 import LiveDemo from "./live-demo";
+import ProductWorkflowShowcase from "./product-workflow-showcase";
+import SuperbrainAdvantage from "./superbrain-advantage";
 import {
   MarketingBackground,
   MarketingNav,
@@ -103,6 +105,10 @@ export default function LandingPage({ lang }: { lang: Lang }) {
             <p className="text-center text-xs text-[#4a4a6a]">{t.statsNote}</p>
           </div>
         </motion.section>
+
+        <SuperbrainAdvantage lang={lang} />
+
+        <ProductWorkflowShowcase lang={lang} />
 
         {/* Features */}
         <section id="features" className="relative z-10 py-24 px-6 max-w-7xl mx-auto">

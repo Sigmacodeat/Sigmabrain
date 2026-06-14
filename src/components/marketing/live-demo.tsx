@@ -103,10 +103,10 @@ export default function LiveDemo({
       {/* editable question */}
       <div className="px-5 pt-5">
         <div className="flex items-start gap-3">
-          <div className="w-7 h-7 rounded-full bg-violet-600/30 border border-violet-500/30 flex items-center justify-center shrink-0 mt-0.5">
-            <span className="text-[10px] text-violet-400 font-semibold">{you}</span>
+          <div className="w-7 h-7 rounded-full brand-soft border brand-border flex items-center justify-center shrink-0 mt-0.5">
+            <span className="text-[10px] brand-text font-semibold">{you}</span>
           </div>
-          <div className="flex-1 flex items-end gap-2 rounded-xl border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 focus-within:border-violet-500/40 transition-colors">
+          <div className="flex-1 flex items-end gap-2 rounded-xl border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 focus-within:brand-border-strong transition-colors">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -119,7 +119,7 @@ export default function LiveDemo({
               onClick={ask}
               disabled={loading || !input.trim()}
               aria-label={t.ask}
-              className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white text-xs font-medium px-3 py-1.5 transition-colors"
+              className="shrink-0 inline-flex items-center gap-1.5 rounded-lg brand-bg disabled:opacity-40 text-white text-xs font-medium px-3 py-1.5 transition-colors"
             >
               {loading ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />} {t.ask}
             </button>
@@ -134,12 +134,12 @@ export default function LiveDemo({
           <div className="flex-1 min-w-0">
             {live ? (
               <div>
-                <p className="text-xs text-violet-300 mb-2 flex items-center gap-1.5"><Sparkles size={12} /> {t.liveLabel}</p>
+                <p className="text-xs brand-text mb-2 flex items-center gap-1.5"><Sparkles size={12} /> {t.liveLabel}</p>
                 <ul className="space-y-2">
                   {live.map((r, i) => (
                     <li key={(r.slug ?? "") + i} className="text-sm text-[#8888aa] leading-relaxed">
                       <span className="text-[#c8c8d8]">{r.snippet || r.chunk_text || r.text || r.evidence || r.title}</span>
-                      {r.slug && <span className="ml-2 text-xs font-mono text-violet-400 bg-violet-500/10 px-1.5 py-0.5 rounded">{r.slug}</span>}
+                      {r.slug && <span className="ml-2 text-xs font-mono brand-text brand-soft px-1.5 py-0.5 rounded">{r.slug}</span>}
                     </li>
                   ))}
                 </ul>
@@ -161,7 +161,7 @@ export default function LiveDemo({
           <>
             <span className="text-xs text-[#4a4a6a]">{sourcesLabel}</span>
             {sources.map((slug) => (
-              <span key={slug} className="text-xs font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded">{slug}</span>
+              <span key={slug} className="text-xs font-mono brand-text brand-soft px-2 py-0.5 rounded">{slug}</span>
             ))}
           </>
         ) : (

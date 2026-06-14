@@ -59,6 +59,8 @@ import { useBrainSelector } from "@/lib/use-brain-selector";
 import { SigmaMark } from "@/components/brand/logo";
 import { useNetworkStatus } from "@/lib/use-offline-sync";
 import { ensureRealtime } from "@/lib/realtime";
+import { profileForIndustry } from "@/lib/industry-pack";
+import { styleForIndustry } from "@/lib/industry-theme";
 
 // Gruppierte Navigation: jede Sektion mit Überschrift. Alles erreichbar,
 // aber nach Arbeitsbereich sortiert statt 27 flacher Einträge.
@@ -131,10 +133,12 @@ const NAV_SECTIONS: { title: string; items: { href: string; icon: typeof LayoutD
     title: "Branchen-Workspace",
     items: [
       { href: "/dashboard/insurance", icon: ShieldCheck, label: "Versicherung" },
+      { href: "/dashboard/tax", icon: FileSpreadsheet, label: "Steuerberatung" },
       { href: "/dashboard/realestate", icon: Building2, label: "Immobilien" },
       { href: "/dashboard/vc", icon: Landmark, label: "VC / Fonds" },
       { href: "/dashboard/consulting", icon: Briefcase, label: "Beratung" },
       { href: "/dashboard/recruiting", icon: Users, label: "Recruiting" },
+      { href: "/dashboard/medical", icon: Shield, label: "Medizin" },
     ],
   },
 ];
@@ -180,6 +184,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const { pages, entities, dreamCycle } = useBrainStatus();
   const [searchQuery, setSearchQuery] = useState("");
+  const [industry, setIndustry] = useState<string | null>(null);
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState<Array<{ id: string; title: string; message: string; type: "deadline" | "dream" | "system"; read: boolean }>>([]);
 
@@ -224,6 +229,30 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return () => clearInterval(id);
   }, []);
 
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => setIndustry(data?.user?.industry ?? null))
+      .catch(() => setIndustry(null));
+  }, []);
+
+  const industryProfile = profileForIndustry(industry);
+  const personalizedSections = industryProfile?.dashboardHref && industryProfile.dashboardHref !== "/dashboard"
+    ? [
+        {
+          title: "Dein Workspace",
+          items: [
+            {
+              href: industryProfile.dashboardHref,
+              icon: Sparkles,
+              label: industryProfile.brand,
+            },
+          ],
+        },
+        ...NAV_SECTIONS,
+      ]
+    : NAV_SECTIONS;
+
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/login");
@@ -251,7 +280,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           const b = brains.find((brain) => brain.slug === e.target.value);
           if (b) selectBrain(b);
         }}
-        className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-2 py-1 text-xs text-[#8888aa] focus:outline-none focus:border-violet-500/50"
+        className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-2 py-1 text-xs text-[#8888aa] focus:outline-none focus:border-[var(--brand-primary)]"
         title="Aktiven Brain wechseln"
       >
         {brains.map((b) => (
@@ -271,7 +300,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <button
             onClick={() => void syncPending()}
             disabled={syncing}
-            className="text-xs text-violet-400 hover:text-violet-300 disabled:opacity-50 transition-all"
+            className="text-xs brand-text disabled:opacity-50 transition-all"
           >
             {syncing ? "Sync…" : "Jetzt syncen"}
           </button>
@@ -281,7 +310,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex h-screen bg-[#06060f] overflow-hidden">
+    <div className="flex h-screen bg-[#06060f] overflow-hidden" style={styleForIndustry(industry)} data-industry={industry ?? "core"}>
       {/* Mobile overlay backdrop */}
       {mobileOpen && (
         <div
@@ -313,11 +342,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </button>
           <SigmaMark size={28} className="shrink-0" />
           <span className="font-display text-sm font-bold text-[#e8e8f0] tracking-tight md:hidden">
-            Sigma<span className="text-violet-400">brain</span>
+            Sigma<span className="brand-text">brain</span>
           </span>
           {!collapsed && (
             <span className="hidden md:inline font-display text-sm font-bold text-[#e8e8f0] tracking-tight">
-              Sigma<span className="text-violet-400">brain</span>
+              Sigma<span className="brand-text">brain</span>
             </span>
           )}
         </div>
@@ -341,7 +370,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Nav — gruppiert nach Arbeitsbereich */}
         <nav className="flex-1 px-2 py-3 overflow-y-auto">
-          {NAV_SECTIONS.map((section) => (
+          {personalizedSections.map((section) => (
             <div key={section.title} className="mb-3">
               {!collapsed && (
                 <div className="px-3 mb-1">
@@ -360,7 +389,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150",
                         collapsed && "justify-center px-0",
                         active
-                          ? "bg-violet-600/15 text-violet-400 border border-violet-500/20"
+                          ? "brand-soft brand-text border brand-border"
                           : "text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#12122a]"
                       )}
                       title={collapsed ? item.label : undefined}
@@ -407,8 +436,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150",
                   collapsed && "justify-center px-0",
-                  active
-                    ? "bg-violet-600/15 text-violet-400 border border-violet-500/20"
+                active
+                    ? "brand-soft brand-text border brand-border"
                     : "text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#12122a]"
                 )}
                 title={collapsed ? item.label : undefined}
@@ -456,7 +485,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   }
                 }}
                 placeholder="Brain durchsuchen…"
-                className="w-full bg-[#0d0d1a] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50 transition-colors"
+                className="w-full bg-[#0d0d1a] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-[var(--brand-primary)] transition-colors"
               />
             </div>
           </div>
@@ -468,7 +497,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               >
                 <Bell size={15} />
                 {notifications.filter((n) => !n.read).length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-violet-500" />
+                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)]" />
                 )}
               </button>
               {notifOpen && (
@@ -481,7 +510,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <p className="text-xs text-[#8888aa] py-2">Keine neuen Benachrichtigungen.</p>
                   ) : (
                     notifications.map((n) => (
-                      <div key={n.id} className={`rounded-lg border p-2.5 ${n.type === "deadline" ? "border-amber-500/20 bg-amber-500/5" : n.type === "dream" ? "border-violet-500/20 bg-violet-500/5" : "border-[#1e1e3a] bg-[#0a0a18]"}`}>
+                      <div key={n.id} className={`rounded-lg border p-2.5 ${n.type === "deadline" ? "border-amber-500/20 bg-amber-500/5" : n.type === "dream" ? "brand-border brand-soft" : "border-[#1e1e3a] bg-[#0a0a18]"}`}>
                         <div className="text-xs font-medium text-[#e8e8f0]">{n.title}</div>
                         <div className="text-[11px] text-[#8888aa]">{n.message}</div>
                       </div>
@@ -492,8 +521,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
             <BrainSelector />
             <NetworkStatusBadge />
-            <div className="w-8 h-8 rounded-lg bg-violet-600/20 border border-violet-500/20 flex items-center justify-center">
-              <User size={14} className="text-violet-400" />
+            <div className="w-8 h-8 rounded-lg brand-soft border brand-border flex items-center justify-center">
+              <User size={14} className="brand-text" />
             </div>
             <button
               onClick={logout}

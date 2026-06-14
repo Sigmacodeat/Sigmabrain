@@ -3,11 +3,13 @@
 // Vertical funnel page template — one component, three industries, two languages.
 
 import Link from "next/link";
-import { ArrowRight, AlertCircle } from "lucide-react";
+import { ArrowRight, AlertCircle, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SigmaMark } from "@/components/brand/logo";
 import { p, type Lang } from "@/content/site";
 import { VERTICALS, type VerticalSlug } from "@/content/verticals";
+import { profileForIndustry } from "@/lib/industry-pack";
+import { styleForIndustry } from "@/lib/industry-theme";
 import {
   MarketingBackground,
   MarketingNav,
@@ -18,6 +20,7 @@ import {
 } from "./chrome";
 import LiveDemo from "./live-demo";
 import BranchPricing from "./branch-pricing";
+import ProductWorkflowShowcase from "./product-workflow-showcase";
 
 /** Product-line branding (Subsumio, Taxumio, …): same funnel body, branded
  *  hero, and signup deep-links carrying the industry for prefill. */
@@ -26,6 +29,37 @@ export interface ProductBrand {
   claim: string;
   poweredBy: string;
   industry: string;
+}
+
+function SignatureBand({ industry, lang }: { industry: string; lang: Lang }) {
+  const profile = profileForIndustry(industry);
+  if (!profile) return null;
+
+  const signature = profile.signature;
+  const locale = lang === "de" ? "de" : "en";
+
+  return (
+    <section className="relative z-10 px-6 pb-20">
+      <div className="max-w-5xl mx-auto relative overflow-hidden rounded-2xl border brand-border bg-[#0b0b18]/90 p-6 md:p-8">
+        <div className="absolute inset-y-0 left-0 w-1/2 brand-glow-bg blur-3xl" />
+        <div className="relative grid gap-6 md:grid-cols-[1.1fr_1fr] md:items-center">
+          <div>
+            <p className="text-xs font-mono uppercase tracking-wider brand-text mb-3">{profile.brand} signature</p>
+            <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] leading-tight">{signature.title[locale]}</h2>
+            <p className="mt-4 text-sm md:text-base text-[#aaaac4] leading-relaxed">{signature.proof[locale]}</p>
+          </div>
+          <div className="grid gap-3">
+            {signature.items.map((item) => (
+              <div key={item[locale]} className="flex items-center gap-3 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] px-4 py-3">
+                <CheckCircle size={17} className="brand-text shrink-0" />
+                <span className="text-sm font-medium text-[#e8e8f0]">{item[locale]}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default function VerticalPage({
@@ -38,17 +72,18 @@ export default function VerticalPage({
   product?: ProductBrand;
 }) {
   const t = VERTICALS[lang][slug];
+  const industry = product?.industry ?? slug;
   const signupHref = p(lang, product ? `/signup?industry=${product.industry}` : "/signup");
 
   return (
-    <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+    <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang} style={styleForIndustry(industry)}>
       <MarketingBackground />
       <MarketingNav lang={lang} />
 
       {/* Hero */}
       <section className="relative z-10 pt-20 pb-24 px-6 max-w-7xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-xs text-violet-400 font-medium mb-8">
-          <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border brand-border brand-soft text-xs brand-text font-medium mb-8">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-pulse" />
           {product ? product.poweredBy : t.badge}
         </div>
         {product ? (
@@ -75,6 +110,10 @@ export default function VerticalPage({
         </div>
       </section>
 
+      <SignatureBand industry={industry} lang={lang} />
+
+      <ProductWorkflowShowcase lang={lang} industry={industry} />
+
       {/* Pains */}
       <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
         <div className="max-w-5xl mx-auto">
@@ -99,8 +138,8 @@ export default function VerticalPage({
             const Icon = ICONS[f.icon];
             return (
               <div key={f.title} className="p-7 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-[#3a3a6a] transition-colors flex gap-5">
-                <div className="w-10 h-10 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
-                  {Icon && <Icon size={18} className="text-violet-400" />}
+                <div className="w-10 h-10 rounded-lg brand-soft border brand-border flex items-center justify-center shrink-0">
+                  {Icon && <Icon size={18} className="brand-text" />}
                 </div>
                 <div>
                   <h3 className="text-base font-semibold text-[#e8e8f0] mb-2">{f.title}</h3>
