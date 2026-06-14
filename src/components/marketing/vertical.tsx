@@ -13,10 +13,10 @@ import {
   MarketingNav,
   MarketingFooter,
   SectionHeading,
-  DemoWindow,
   FaqList,
   ICONS,
 } from "./chrome";
+import LiveDemo from "./live-demo";
 
 /** Product-line branding (Subsumio, Taxumio, …): same funnel body, branded
  *  hero, and signup deep-links carrying the industry for prefill. */
@@ -70,7 +70,7 @@ export default function VerticalPage({
           </Link>
         </div>
         <div className="max-w-3xl mx-auto">
-          <DemoWindow {...t.demo} />
+          <LiveDemo lang={lang} {...t.demo} />
         </div>
       </section>
 
