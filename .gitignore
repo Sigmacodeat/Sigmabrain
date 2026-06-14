@@ -36,6 +36,7 @@ export/
 # writes .context/test-failures.log + .context/test-summary.txt +
 # .context/test-shards/. Workspace-local by design — never committed.
 .context/
+.data/
 
 # Tier 3 PGLite snapshot fixture (built on demand by build:pglite-snapshot)
 test/fixtures/pglite-snapshot.tar
@@ -45,3 +46,8 @@ test/fixtures/pglite-snapshot.version
 reports/network-intelligence/
 .vercel
 .env*
+
+# transient artifacts (not source)
+tmp-legal-repo/
+bulk-import-cursor.json
+*.bak

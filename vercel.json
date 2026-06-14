@@ -1,6 +1,11 @@
 {
   "version": 2,
   "framework": "nextjs",
+  "crons": [
+    { "path": "/api/cron/deadlines", "schedule": "0 6 * * *" },
+    { "path": "/api/cron/case-law", "schedule": "30 6 * * *" },
+    { "path": "/api/cron/case-scanner", "schedule": "0 2 * * *" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
