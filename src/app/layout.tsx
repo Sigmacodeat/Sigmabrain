@@ -70,7 +70,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`h-full ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} style={{ colorScheme: "dark" }}>
-      <body className="min-h-full bg-[#06060f] text-[#e8e8f0] antialiased">
+      <body className="min-h-full bg-[#06060f] text-[#e8e8f0] antialiased noise">
         {children}
         <RefConsentBanner />
         <ServiceWorkerRegister />
