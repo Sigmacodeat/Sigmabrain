@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import {
   Upload,
@@ -12,6 +12,7 @@ import {
   CloudUpload,
   Info,
   Archive,
+  FolderOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -63,7 +64,16 @@ export default function UploadPage() {
   // nicht jeder Upload ist ein Buchungsbeleg.
   const [gobdReceipt, setGobdReceipt] = useState(false);
 
-  const onDrop = useCallback((accepted: File[]) => {
+  // File System Access API (Chromium) — feature-detected client-side so we can
+  // show an IDE-style "ganzen Ordner einlesen"-Button only where it actually works.
+  const [folderApi, setFolderApi] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  useEffect(() => {
+    setFolderApi(typeof window !== "undefined" && "showDirectoryPicker" in window);
+  }, []);
+
+  const addFiles = useCallback((accepted: File[]) => {
+    if (accepted.length === 0) return;
     if (!isOnline()) {
       const offlineFiles: UploadFile[] = accepted.map((f) => ({
         id: crypto.randomUUID(),
@@ -85,10 +95,49 @@ export default function UploadPage() {
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
+    onDrop: addFiles,
     accept: ACCEPTED_TYPES,
     maxSize: 50 * 1024 * 1024,
   });
+
+  // Walk a chosen local folder (recursively, like an IDE "open folder") and pull
+  // every supported file into the same upload queue. No server round-trip until
+  // the user clicks "Upload" — the files stay client-side until then.
+  const ACCEPT_RE = /\.(md|txt|pdf|json)$/i;
+  const MAX_BYTES = 50 * 1024 * 1024;
+  const pickFolder = useCallback(async () => {
+    interface FsHandle {
+      kind: "file" | "directory";
+      getFile?: () => Promise<File>;
+      values?: () => AsyncIterable<FsHandle>;
+    }
+    const picker = (window as unknown as {
+      showDirectoryPicker?: () => Promise<FsHandle>;
+    }).showDirectoryPicker;
+    if (!picker) return;
+    try {
+      setScanning(true);
+      const dir = await picker();
+      const out: File[] = [];
+      const walk = async (handle: FsHandle, depth: number) => {
+        if (depth > 5 || !handle.values) return;
+        for await (const entry of handle.values()) {
+          if (entry.kind === "file" && entry.getFile) {
+            const f = await entry.getFile();
+            if (ACCEPT_RE.test(f.name) && f.size <= MAX_BYTES) out.push(f);
+          } else if (entry.kind === "directory") {
+            await walk(entry, depth + 1);
+          }
+        }
+      };
+      await walk(dir, 0);
+      addFiles(out);
+    } catch {
+      // user dismissed the picker, or the browser blocked it — no-op
+    } finally {
+      setScanning(false);
+    }
+  }, [addFiles]);
 
   const removeFile = (id: string) => {
     setFiles((prev) => prev.filter((f) => f.id !== id));
@@ -272,6 +321,25 @@ export default function UploadPage() {
           </div>
         </div>
       </div>
+
+      {/* IDE-style folder import (Chromium only) */}
+      {folderApi && (
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 -mt-1">
+          <Button
+            variant="secondary"
+            onClick={pickFolder}
+            disabled={scanning || !isOnline()}
+            className="gap-2"
+          >
+            <FolderOpen size={15} />
+            {scanning ? "Ordner wird gelesen…" : "Ganzen Ordner einlesen"}
+          </Button>
+          <p className="text-xs text-[#8a8aa8]">
+            Wählt einen lokalen Ordner wie eine IDE und liest alle unterstützten Dateien
+            (auch in Unterordnern) ins Brain ein — nichts wird hochgeladen, bis du auf „Upload“ klickst.
+          </p>
+        </div>
+      )}
 
       {/* Info box */}
       <div className="flex items-start gap-3 p-4 rounded-xl border border-blue-500/20 bg-blue-500/5">

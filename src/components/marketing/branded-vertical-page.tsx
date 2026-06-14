@@ -48,6 +48,7 @@ import LiveDemo from "./live-demo";
 import BranchPricing from "./branch-pricing";
 import IndustryHeroMotif from "./industry-hero-motif";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
+import DashboardReel from "./dashboard-reel";
 
 const viewport = { once: true, margin: "-60px" } as const;
 
@@ -275,6 +276,17 @@ export default function BrandedVerticalPage({
         <SignatureBand industry={signupIndustry} lang={lang} />
 
         <ProductWorkflowShowcase lang={lang} industry={signupIndustry} />
+
+        {/* Product reel — Sigmabrain in action for this vertical */}
+        <section className="relative z-10 py-20 px-6 max-w-5xl mx-auto">
+          <SectionHeading
+            title={lang === "de" ? "Sigmabrain in Aktion" : "Sigmabrain in action"}
+            sub={lang === "de"
+              ? "Datei anhängen, fragen, belegte Antwort erhalten — mit Fundstellen aus deinem eigenen Wissen."
+              : "Attach a file, ask, get a cited answer — backed by your own knowledge."}
+          />
+          <DashboardReel lang={lang} industry={signupIndustry} className="mt-8" />
+        </section>
 
         {/* Brain demo */}
         <section className="relative z-10 px-6 pb-20 max-w-3xl mx-auto">

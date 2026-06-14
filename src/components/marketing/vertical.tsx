@@ -23,6 +23,7 @@ import LiveDemo from "./live-demo";
 import BranchPricing from "./branch-pricing";
 import IndustryHeroMotif from "./industry-hero-motif";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
+import DashboardReel from "./dashboard-reel";
 
 /** Product-line branding (Subsumio, Taxumio, …): same funnel body, branded
  *  hero, and signup deep-links carrying the industry for prefill. */
@@ -118,6 +119,17 @@ export default function VerticalPage({
       <SignatureBand industry={industry} lang={lang} />
 
       <ProductWorkflowShowcase lang={lang} industry={industry} />
+
+      {/* Product reel — Sigmabrain in action for this vertical */}
+      <section className="relative z-10 py-20 px-6 max-w-5xl mx-auto">
+        <SectionHeading title={lang === "de" ? "Sigmabrain in Aktion" : "Sigmabrain in action"} />
+        <p className="text-center text-[#8888aa] -mt-4 mb-8 max-w-2xl mx-auto">
+          {lang === "de"
+            ? "Datei anhängen, fragen, belegte Antwort erhalten — mit Fundstellen aus deinem eigenen Wissen."
+            : "Attach a file, ask, get a cited answer — backed by your own knowledge."}
+        </p>
+        <DashboardReel lang={lang} industry={industry} />
+      </section>
 
       {/* Pains */}
       <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
