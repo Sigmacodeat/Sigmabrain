@@ -4,6 +4,7 @@
 // Footer, and small shared primitives used across all marketing pages.
 
 import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -55,11 +56,24 @@ export const COLOR_MAP: Record<string, string> = {
 };
 
 export function MarketingBackground() {
+  // Scroll-parallax depth: orbs and grid drift at different rates as the page
+  // scrolls. The CSS orb-float animation still runs on the inner element, so
+  // parallax (outer) + float (inner) compose. Reduced-motion → no drift.
+  const reduce = useReducedMotion();
+  const { scrollY } = useScroll();
+  const span = reduce ? 0 : 1;
+  const yViolet = useTransform(scrollY, [0, 1600], [0, 240 * span]);
+  const yBlue = useTransform(scrollY, [0, 1600], [0, -190 * span]);
+  const yGrid = useTransform(scrollY, [0, 1600], [0, 110 * span]);
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
-      <div className="orb absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-violet-700/20" />
-      <div className="orb-slow absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-blue-700/15" />
-      <div className="grid-bg absolute inset-0 opacity-40" />
+      <motion.div style={{ y: yViolet }} className="absolute top-[-20%] left-[-10%] will-change-transform">
+        <div className="orb w-[600px] h-[600px] rounded-full bg-violet-700/20" />
+      </motion.div>
+      <motion.div style={{ y: yBlue }} className="absolute bottom-[-20%] right-[-10%] will-change-transform">
+        <div className="orb-slow w-[500px] h-[500px] rounded-full bg-blue-700/15" />
+      </motion.div>
+      <motion.div style={{ y: yGrid }} className="grid-bg absolute inset-0 opacity-40 will-change-transform" />
     </div>
   );
 }

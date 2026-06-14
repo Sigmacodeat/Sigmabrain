@@ -20,6 +20,19 @@ interface DemoResult {
   evidence?: string;
 }
 
+function renderStrongText(text: string) {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-semibold text-[#d8d8e6]">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return part;
+  });
+}
+
 export default function LiveDemo({
   lang,
   windowTitle,
@@ -132,7 +145,9 @@ export default function LiveDemo({
                 </ul>
               </div>
             ) : (
-              <div className="text-sm text-[#8888aa] leading-relaxed whitespace-pre-line">{a}</div>
+              <div className="text-sm text-[#8888aa] leading-relaxed whitespace-pre-line">
+                {renderStrongText(a)}
+              </div>
             )}
           </div>
         </div>
