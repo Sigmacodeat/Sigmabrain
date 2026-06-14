@@ -293,6 +293,91 @@
       "name": "project-onboard",
       "path": "project-onboard/SKILL.md",
       "description": "Onboard a new project into the brain: directory structure, seed pages, initial tasks, and connector wiring."
+    },
+    {
+      "name": "legal-subsumption",
+      "path": "legal-subsumption/SKILL.md",
+      "description": "Legal subsumption: maps a fact pattern to applicable norms (Tatbestand -> Rechtsfolge) in Gutachtenstil for DE/AT/CH law. Cites paragraphs and case law; flags all output as attorney-review-required."
+    },
+    {
+      "name": "contract-analysis",
+      "path": "contract-analysis/SKILL.md",
+      "description": "Contract risk analysis: clause-by-clause risk matrix, red flags, missing standard clauses, AGB and DSGVO checks. Outputs overall risk rating with concrete amendment proposals."
+    },
+    {
+      "name": "precedent-finder",
+      "path": "precedent-finder/SKILL.md",
+      "description": "Finds controlling precedents (BGH, OGH, BFH, EuGH) from the brain corpus by legal issue or paragraph. Ranks binding over persuasive authority with Leitsatz and Az."
+    },
+    {
+      "name": "aml-screener",
+      "path": "aml-screener/SKILL.md",
+      "description": "AML/KYC compliance screening against brain-indexed sanction lists, PEP categories, and risk criteria per GwG/FM-GwG/AMLD6. Outputs risk rating and required CDD/EDD steps with audit trail."
+    },
+    {
+      "name": "brief-generator",
+      "path": "brief-generator/SKILL.md",
+      "description": "Generates German court brief drafts (Klageschrift, Klageerwiderung, Berufung, einstweilige Verfuegung) from case brain context in ZPO format. Drafts only - attorney review required."
+    },
+    {
+      "name": "tax-ruling-lookup",
+      "path": "tax-ruling-lookup/SKILL.md",
+      "description": "Analyzes tax notices (Bescheide) using the indexed tax corpus, computes Einspruch deadlines per AO, rates appeal prospects, and drafts Einspruchsschreiben."
+    },
+    {
+      "name": "steuer-subsumption",
+      "path": "steuer-subsumption/SKILL.md",
+      "description": "Tax subsumption (Tatbestand → Steuerfolge) over EStG/KStG/UStG/GewStG/AO (DE) and EStG/UStG/BAO (AT). Gutachtenstil with cited §§ and BFH/BFG case law; advisor-review-required."
+    },
+    {
+      "name": "steuer-gestaltung",
+      "path": "steuer-gestaltung/SKILL.md",
+      "description": "Comparative tax-structuring options (Rechtsformwahl, Holding/§8b, Thesaurierung §34a, Umwandlung) with burden estimates and a § 42 AO substance-risk note. Advisory tool for tax professionals."
+    },
+    {
+      "name": "umsatzsteuer-check",
+      "path": "umsatzsteuer-check/SKILL.md",
+      "description": "VAT/USt compliance check: place of supply (§3a), Reverse-Charge (§13b), intra-Community supply (§6a), input VAT (§15), invoice fields (§14/14a) and e-invoicing mandate. Checklist + gap report."
+    },
+    {
+      "name": "cost-calculator",
+      "path": "cost-calculator/SKILL.md",
+      "description": "Calculates legal fee estimates per German RVG and Austrian RATG from the dispute value (Streitwert): court fees, attorney fees, settlement fees. Orientation only — never a binding fee calculation."
+    },
+    {
+      "name": "datev-export",
+      "path": "datev-export/SKILL.md",
+      "description": "Exports time entries and billing data in DATEV-compatible CSV/ASCII (Unternehmen Online, Rechnungswesen, Kanzlei-Rechnung). Supports USt-IdNr, Kostenstellen, mandate-based grouping."
+    },
+    {
+      "name": "deadline-templates",
+      "path": "deadline-templates/SKILL.md",
+      "description": "Computes statutory deadlines from templates across 7 jurisdictions (DE/AT/CH/EU/US/UK) with 27+ deadline types, holiday exclusion and weekend push-forward. Every result is flagged for human verification."
+    },
+    {
+      "name": "dsgvo-compliance",
+      "path": "dsgvo-compliance/SKILL.md",
+      "description": "Checks data processing activities for GDPR/DSGVO compliance: legal bases, data subject rights, documentation duties, breach notification. Produces a compliance checklist and gap report (DE/AT/EU)."
+    },
+    {
+      "name": "kollisionspruefung",
+      "path": "kollisionspruefung/SKILL.md",
+      "description": "Conflict-of-interest check per § 43a BRAO: scans brain cases for entities appearing as both client and opposing party. Reports severity and recommended action — never replaces the attorney's own duty to check."
+    },
+    {
+      "name": "legal-beweislage",
+      "path": "legal-beweislage/SKILL.md",
+      "description": "Analyzes the evidence situation of a case: strengths/weaknesses, gaps, admissibility, gathering recommendations. Produces a weighted evidence-board summary with source verification."
+    },
+    {
+      "name": "legal-normen",
+      "path": "legal-normen/SKILL.md",
+      "description": "Finds and interprets legal norms (statutes, regulations) for a legal question, cross-referenced with case law. Supports DE, AT, CH, EU."
+    },
+    {
+      "name": "legal-strategie",
+      "path": "legal-strategie/SKILL.md",
+      "description": "Generates litigation strategy recommendations from the case's facts, claims, defenses, evidence, and opponent profile: procedural tactics, risk assessment, next steps. Tool for the attorney, not authoritative advice."
     }
   ],
   "dependencies": {

@@ -79,3 +79,14 @@ projects/
 - After onboard → `skills/pm-status/SKILL.md` for first status report
 - After onboard → `skills/pm-task/SKILL.md` to refine initial tasks
 - If legal case → `skills/legal-brain/SKILL.md` to create case + link to project
+
+## Anti-Patterns
+
+- ❌ Onboarding a project without recording its scope, owner and key sources.
+- ❌ Overwriting an existing project page instead of updating it.
+- ❌ Skipping the initial source/connector wiring the project needs.
+
+## Output Format
+
+A project page: name · scope · owner · linked sources/connectors · initial task
+list — with the brain slug it was written to.
