@@ -13,6 +13,7 @@ import { SigmaMark } from "@/components/brand/logo";
 import { LANDING, PRICING, p, type Lang } from "@/content/site";
 import { PricingGrid } from "./pricing-grid";
 import LiveDemo from "./live-demo";
+import NeuralHero from "./neural-hero";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 import SuperbrainAdvantage from "./superbrain-advantage";
 import {
@@ -46,7 +47,14 @@ export default function LandingPage({ lang }: { lang: Lang }) {
 
         {/* Hero */}
         <section className="relative z-10 pt-20 pb-28 px-6 max-w-7xl mx-auto text-center">
+          {/* Signature neural-graph backdrop */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden>
+            <NeuralHero className="absolute inset-0 w-full h-full opacity-70" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#06060f]/10 via-transparent to-[#06060f]" />
+          </div>
+
           <motion.div
+            className="relative z-10"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: "easeOut" }}
@@ -76,7 +84,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
 
           <motion.div
             id="demo"
-            className="max-w-3xl mx-auto"
+            className="relative z-10 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 24, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
