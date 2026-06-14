@@ -14,6 +14,7 @@ import { LANDING, PRICING, p, type Lang } from "@/content/site";
 import { PricingGrid } from "./pricing-grid";
 import LiveDemo from "./live-demo";
 import NeuralHero from "./neural-hero";
+import DashboardReel from "./dashboard-reel";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 import SuperbrainAdvantage from "./superbrain-advantage";
 import {
@@ -117,6 +118,22 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         <SuperbrainAdvantage lang={lang} />
 
         <ProductWorkflowShowcase lang={lang} />
+
+        {/* Dashboard in action */}
+        <section className="relative z-10 py-24 px-6 max-w-5xl mx-auto">
+          <motion.div {...reveal}>
+            <SectionHeading
+              badge={lang === "de" ? "In Aktion" : "In action"}
+              title={lang === "de" ? "Datei anhängen. Fragen. Zitierte Antwort." : "Attach a file. Ask. Cited answer."}
+              sub={lang === "de"
+                ? "Dateien per Upload, Google Drive oder Anwaltssoftware ins Brain — dann im Chat fragen, mit seitengenauen Quellen."
+                : "Bring files in via upload, Google Drive or your practice software — then ask in chat, with page-level sources."}
+            />
+          </motion.div>
+          <motion.div {...reveal}>
+            <DashboardReel lang={lang} />
+          </motion.div>
+        </section>
 
         {/* Features */}
         <section id="features" className="relative z-10 py-24 px-6 max-w-7xl mx-auto">
