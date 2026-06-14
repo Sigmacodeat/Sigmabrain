@@ -127,6 +127,16 @@ const NAV_SECTIONS: { title: string; items: { href: string; icon: typeof LayoutD
       { href: "/dashboard/data-export", icon: Archive, label: "Datenexport" },
     ],
   },
+  {
+    title: "Branchen-Workspace",
+    items: [
+      { href: "/dashboard/insurance", icon: ShieldCheck, label: "Versicherung" },
+      { href: "/dashboard/realestate", icon: Building2, label: "Immobilien" },
+      { href: "/dashboard/vc", icon: Landmark, label: "VC / Fonds" },
+      { href: "/dashboard/consulting", icon: Briefcase, label: "Beratung" },
+      { href: "/dashboard/recruiting", icon: Users, label: "Recruiting" },
+    ],
+  },
 ];
 
 const BOTTOM_ITEMS = [
