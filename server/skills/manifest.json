@@ -365,6 +365,21 @@
       "description": "Assesses a GRC control's design + operating effectiveness against the obligation it covers (GDPR/AML/AI-Act/ISO), rates it with the evidence basis and lists remediation. The demonstrable-effectiveness record."
     },
     {
+      "name": "lease-review",
+      "path": "lease-review/SKILL.md",
+      "description": "Reviews a lease/tenancy: term, rent + escalation (Staffel/Index), deposit, break/renewal options, notice periods and repair obligations extracted with clause locations; risks flagged from the landlord/tenant position. Advisory."
+    },
+    {
+      "name": "rent-roll-analysis",
+      "path": "rent-roll-analysis/SKILL.md",
+      "description": "Portfolio/rent-roll analysis from the leases in the brain: occupancy/vacancy, rent totals, WALT, lease-expiry timeline, arrears and tenant-concentration risk. Estimates to verify against the system of record."
+    },
+    {
+      "name": "property-due-diligence",
+      "path": "property-due-diligence/SKILL.md",
+      "description": "Property purchase/sale due diligence: document checklist (Grundbuch, leases, encumbrances, permits, valuations), red flags cited to source, deal deadlines (exclusivity/LOI/closing). Deal-team support, not legal/tax advice."
+    },
+    {
       "name": "cost-calculator",
       "path": "cost-calculator/SKILL.md",
       "description": "Calculates legal fee estimates per German RVG and Austrian RATG from the dispute value (Streitwert): court fees, attorney fees, settlement fees. Orientation only — never a binding fee calculation."
