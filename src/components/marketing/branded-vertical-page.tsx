@@ -20,10 +20,10 @@ import {
   MarketingNav,
   MarketingFooter,
   SectionHeading,
-  DemoWindow,
   FaqList,
   ICONS,
 } from "./chrome";
+import LiveDemo from "./live-demo";
 
 const viewport = { once: true, margin: "-60px" } as const;
 
@@ -163,7 +163,7 @@ export default function BrandedVerticalPage({
 
         {/* Brain demo */}
         <section className="relative z-10 px-6 pb-20 max-w-3xl mx-auto">
-          <DemoWindow {...t.demo} />
+          <LiveDemo lang={lang} {...t.demo} />
         </section>
 
         {/* A day in the workflow — timeline */}

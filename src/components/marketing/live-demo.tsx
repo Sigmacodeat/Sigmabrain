@@ -1,0 +1,158 @@
+"use client";
+
+// Interactive "try the brain" widget for the marketing branch pages. Terminal
+// styling matches DemoWindow. Visitors can edit the question and ask a public,
+// rate-limited, read-only demo brain (/api/demo). Until the engine is deployed
+// /api/demo returns { configured:false } and the widget shows the page's
+// scripted answer — so the section is always useful, never broken.
+
+import { useState } from "react";
+import { Send, Loader2, Sparkles } from "lucide-react";
+import { SigmaMark } from "@/components/brand/logo";
+import type { Lang } from "@/content/site";
+
+interface DemoResult {
+  slug?: string;
+  title?: string;
+  snippet?: string;
+  chunk_text?: string;
+  text?: string;
+  evidence?: string;
+}
+
+export default function LiveDemo({
+  lang,
+  windowTitle,
+  you,
+  q,
+  a,
+  sourcesLabel,
+  sources,
+}: {
+  lang: Lang;
+  windowTitle: string;
+  you: string;
+  q: string;
+  a: string;
+  sourcesLabel: string;
+  sources: readonly string[];
+}) {
+  const [input, setInput] = useState(q);
+  const [loading, setLoading] = useState(false);
+  const [live, setLive] = useState<DemoResult[] | null>(null);
+  const [note, setNote] = useState<string | null>(null);
+
+  const t = {
+    ask: lang === "en" ? "Ask" : "Fragen",
+    placeholder: lang === "en" ? "Ask the demo brain…" : "Frag das Demo-Brain…",
+    scripted: lang === "en" ? "Example answer · live brain after deploy" : "Beispiel-Antwort · Live-Brain nach Deploy",
+    liveLabel: lang === "en" ? "Live from the demo brain:" : "Live aus dem Demo-Brain:",
+    none: lang === "en" ? "No demo matches — here's the example answer." : "Keine Demo-Treffer — hier die Beispiel-Antwort.",
+    rate: lang === "en" ? "Demo limit reached — try again later." : "Demo-Limit erreicht — später erneut.",
+  };
+
+  async function ask() {
+    const query = input.trim();
+    if (!query || loading) return;
+    setLoading(true);
+    setLive(null);
+    setNote(null);
+    try {
+      const res = await fetch(`/api/demo?q=${encodeURIComponent(query)}`);
+      if (res.status === 429) {
+        setNote(t.rate);
+        return;
+      }
+      const data = await res.json();
+      if (data?.configured && Array.isArray(data.results) && data.results.length > 0) {
+        setLive(data.results as DemoResult[]);
+      } else {
+        // engine not deployed yet, or no matches → scripted fallback
+        setNote(data?.configured ? t.none : t.scripted);
+      }
+    } catch {
+      setNote(t.scripted);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] shadow-2xl shadow-black/50 overflow-hidden text-left">
+      {/* window bar */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1e1e3a] bg-[#0a0a18]">
+        <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+        <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
+        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
+        <div className="flex-1 ml-4 text-xs text-[#4a4a6a] font-mono">{windowTitle}</div>
+      </div>
+
+      {/* editable question */}
+      <div className="px-5 pt-5">
+        <div className="flex items-start gap-3">
+          <div className="w-7 h-7 rounded-full bg-violet-600/30 border border-violet-500/30 flex items-center justify-center shrink-0 mt-0.5">
+            <span className="text-[10px] text-violet-400 font-semibold">{you}</span>
+          </div>
+          <div className="flex-1 flex items-end gap-2 rounded-xl border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 focus-within:border-violet-500/40 transition-colors">
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(); } }}
+              rows={2}
+              placeholder={t.placeholder}
+              className="flex-1 bg-transparent text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] resize-none focus:outline-none leading-relaxed"
+            />
+            <button
+              onClick={ask}
+              disabled={loading || !input.trim()}
+              aria-label={t.ask}
+              className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white text-xs font-medium px-3 py-1.5 transition-colors"
+            >
+              {loading ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />} {t.ask}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* answer */}
+      <div className="px-5 pb-4 pt-4">
+        <div className="flex items-start gap-3">
+          <SigmaMark size={28} className="shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            {live ? (
+              <div>
+                <p className="text-xs text-violet-300 mb-2 flex items-center gap-1.5"><Sparkles size={12} /> {t.liveLabel}</p>
+                <ul className="space-y-2">
+                  {live.map((r, i) => (
+                    <li key={(r.slug ?? "") + i} className="text-sm text-[#8888aa] leading-relaxed">
+                      <span className="text-[#c8c8d8]">{r.snippet || r.chunk_text || r.text || r.evidence || r.title}</span>
+                      {r.slug && <span className="ml-2 text-xs font-mono text-violet-400 bg-violet-500/10 px-1.5 py-0.5 rounded">{r.slug}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <div className="text-sm text-[#8888aa] leading-relaxed whitespace-pre-line">{a}</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* sources / note */}
+      <div className="px-5 py-3 border-t border-[#1e1e3a] bg-[#0a0a18] flex items-center gap-2 flex-wrap min-h-[40px]">
+        {note ? (
+          <span className="text-xs text-amber-400/80">{note}</span>
+        ) : !live ? (
+          <>
+            <span className="text-xs text-[#4a4a6a]">{sourcesLabel}</span>
+            {sources.map((slug) => (
+              <span key={slug} className="text-xs font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded">{slug}</span>
+            ))}
+          </>
+        ) : (
+          <span className="text-xs text-[#4a4a6a]">{lang === "en" ? "Read-only demo brain · your data stays yours" : "Read-only Demo-Brain · deine Daten bleiben deine"}</span>
+        )}
+      </div>
+    </div>
+  );
+}
