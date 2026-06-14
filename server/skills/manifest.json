@@ -380,6 +380,51 @@
       "description": "Property purchase/sale due diligence: document checklist (Grundbuch, leases, encumbrances, permits, valuations), red flags cited to source, deal deadlines (exclusivity/LOI/closing). Deal-team support, not legal/tax advice."
     },
     {
+      "name": "deal-memo",
+      "path": "deal-memo/SKILL.md",
+      "description": "Drafts an investment/deal memo from the brain's context (founder calls, deck, diligence) — structured, cited, with risks and open-question gaps. Decision support for the investment team, not advice."
+    },
+    {
+      "name": "founder-tracker",
+      "path": "founder-tracker/SKILL.md",
+      "description": "Founder/portfolio meeting prep: last contact, open commitments (both sides), what changed, suggested questions and a gap list — synthesized from calls/emails/notes with sources."
+    },
+    {
+      "name": "portfolio-review",
+      "path": "portfolio-review/SKILL.md",
+      "description": "Portfolio-wide review: each company's latest status, attention flags (runway, stale update, risk), follow-on/reserve signals. Advisory; figures as-reported by companies."
+    },
+    {
+      "name": "proposal-finder",
+      "path": "proposal-finder/SKILL.md",
+      "description": "Answers 'have we done this before?' — ranked past projects/proposals/reusable assets for a new opportunity, with learnings, sources and confidentiality/gap flags. Reuse support."
+    },
+    {
+      "name": "project-retro",
+      "path": "project-retro/SKILL.md",
+      "description": "Captures a project's institutional memory: what worked/didn't, reusable assets (with location), key learnings (sourced), filed as a learning page. Team validates."
+    },
+    {
+      "name": "engagement-scoping",
+      "path": "engagement-scoping/SKILL.md",
+      "description": "Drafts an engagement scope/approach grounded in cited prior similar projects: objectives, workstreams, timeline, team, assumptions, risks. Draft, not a binding SOW."
+    },
+    {
+      "name": "candidate-match",
+      "path": "candidate-match/SKILL.md",
+      "description": "Ranks candidates to an open role from the talent graph by explicit fit, with rationale, warm-intro paths and conflict/off-limits flags. Shortlist support; the consultant decides."
+    },
+    {
+      "name": "pipeline-review",
+      "path": "pipeline-review/SKILL.md",
+      "description": "Reviews the recruiting pipeline: each search's stage, stalled candidates, next actions and time-to-fill signals; flags searches at risk. Advisory; verify against the ATS."
+    },
+    {
+      "name": "candidate-dossier",
+      "path": "candidate-dossier/SKILL.md",
+      "description": "Builds a candidate profile from the firm's interactions (history, strengths, motivations, comp, references) with sources; flags consent/off-limits. Validate before external submission."
+    },
+    {
       "name": "cost-calculator",
       "path": "cost-calculator/SKILL.md",
       "description": "Calculates legal fee estimates per German RVG and Austrian RATG from the dispute value (Streitwert): court fees, attorney fees, settlement fees. Orientation only — never a binding fee calculation."
