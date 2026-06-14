@@ -89,29 +89,6 @@ export default function PartnersPage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      {/* Two-level structure */}
-      <section className="relative z-10 py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <SectionHeading title={t.structureTitle} sub={t.structureSub} />
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            {t.structureLevels.map((lvl) => (
-              <div key={lvl.level} className="p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]">
-                <p className="text-xs font-mono text-[#4a4a6a] mb-2">{lvl.level}</p>
-                <p className="text-lg font-bold text-violet-300 mb-3">{lvl.rate}</p>
-                <p className="text-sm text-[#8888aa] leading-relaxed">{lvl.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="p-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] mb-6">
-            <p className="text-sm text-[#a8a8be] leading-relaxed">{t.structureNote}</p>
-          </div>
-          <div className="p-6 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04]">
-            <h3 className="text-sm font-bold text-amber-300 mb-2">{t.territoryTitle}</h3>
-            <p className="text-sm text-[#a8a8be] leading-relaxed">{t.territoryText}</p>
-          </div>
-        </div>
-      </section>
-
       {/* Earnings illustration */}
       <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
         <div className="max-w-3xl mx-auto text-center">

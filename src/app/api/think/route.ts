@@ -1,10 +1,12 @@
 import { NextRequest } from "next/server";
-import { ENGINE_URL, engineContext, unauthorized } from "@/lib/engine";
+import { ENGINE_URL, engineConfigurationResponse, engineContext, unauthorized } from "@/lib/engine";
 import { recordQuery } from "@/lib/usage";
 
 export async function POST(req: NextRequest) {
   const ctx = await engineContext();
   if (!ctx) return unauthorized();
+  const configError = engineConfigurationResponse();
+  if (configError) return configError;
   const body = await req.json();
   void recordQuery(ctx.brainId);
 
@@ -28,9 +30,12 @@ export async function POST(req: NextRequest) {
         "Content-Type": upstream.headers.get("Content-Type") || "text/event-stream",
         "Cache-Control": "no-cache",
         "X-Accel-Buffering": "no",
+        // EU AI Act Art. 50: machine-readable marker that this content is AI-generated.
+        "X-AI-Generated": "true",
       },
     });
-  } catch {
+  } catch (err) {
+    console.error("[think] engine unreachable:", err instanceof Error ? err.message : String(err));
     return new Response(
       JSON.stringify({ error: "Sigmabrain Engine nicht erreichbar. Starte: gbrain serve" }),
       { status: 503, headers: { "Content-Type": "application/json" } }

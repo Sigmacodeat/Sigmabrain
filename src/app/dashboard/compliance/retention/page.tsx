@@ -1,0 +1,150 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { CalendarClock, AlertTriangle, Trash2, CheckCircle2, Shield } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { api } from "@/lib/api";
+import type { BrainPage } from "@/lib/types";
+
+interface RetentionCase {
+  slug: string;
+  title: string;
+  caseNumber: string;
+  status: string;
+  closedAt?: string;
+  yearsSinceClosure: number;
+  action: "keep" | "review" | "delete";
+}
+
+// DSGVO + BRAO: Handakten 6 Jahre nach Abschluss (§ 147 AO, § 50 BRAO)
+// Persönliche Daten: Löschung nach Zweckwegfall (Art. 5 DSGVO)
+// Empfohlene Fristen: 6 Jahre (steuerrechtlich) / 10 Jahre (BRAO) / 3 Jahre (DSGVO nach Zweckwegfall)
+const RETENTION_YEARS = 6;
+
+export default function RetentionPage() {
+  const [cases, setCases] = useState<RetentionCase[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const pages = await api.brain.listPages({ type: "legal_case", limit: 500 });
+        const now = new Date();
+        const mapped: RetentionCase[] = pages.map((p) => {
+          const fm = p.frontmatter as Record<string, unknown>;
+          const closedAt = fm.closed_at ? String(fm.closed_at) : undefined;
+          const years = closedAt ? (now.getTime() - new Date(closedAt).getTime()) / (1000 * 60 * 60 * 24 * 365) : 0;
+          let action: RetentionCase["action"] = "keep";
+          if (years >= RETENTION_YEARS + 4) action = "delete"; // > 10 Jahre
+          else if (years >= RETENTION_YEARS) action = "review"; // 6-10 Jahre
+          return {
+            slug: p.slug,
+            title: p.title,
+            caseNumber: String(fm.case_number ?? p.slug),
+            status: String(fm.status ?? "open"),
+            closedAt,
+            yearsSinceClosure: Math.round(years * 10) / 10,
+            action,
+          };
+        });
+        setCases(mapped.sort((a, b) => b.yearsSinceClosure - a.yearsSinceClosure));
+      } catch (e) {
+        setLoadError(e instanceof Error ? e.message : "Akten konnten nicht geladen werden.");
+      }
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  const toReview = cases.filter((c) => c.action === "review");
+  const toDelete = cases.filter((c) => c.action === "delete");
+
+  return (
+    <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-amber-600/15 border border-amber-500/20 flex items-center justify-center">
+          <CalendarClock size={20} className="text-amber-400" />
+        </div>
+        <div>
+          <h1 className="text-xl font-bold text-[#e8e8f0]">Löschfristen</h1>
+          <p className="text-sm text-[#8888aa]">DSGVO + BRAO — Aufbewahrungsfristen prüfen</p>
+        </div>
+      </div>
+
+      {/* Summary */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-center">
+          <div className="text-xl font-bold text-emerald-400">{cases.filter((c) => c.action === "keep").length}</div>
+          <div className="text-xs text-[#8888aa]">Aktiv / Frist nicht erreicht</div>
+        </div>
+        <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-center">
+          <div className="text-xl font-bold text-amber-400">{toReview.length}</div>
+          <div className="text-xs text-[#8888aa]">Zur Prüfung (≥{RETENTION_YEARS} J.)</div>
+        </div>
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-center">
+          <div className="text-xl font-bold text-red-400">{toDelete.length}</div>
+          <div className="text-xs text-[#8888aa]">Löschfällig (≥{RETENTION_YEARS + 4} J.)</div>
+        </div>
+      </div>
+
+      {loadError && (
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+          {loadError}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="text-center py-20 text-[#8888aa]">Lade Akten…</div>
+      ) : (
+        <div className="space-y-2">
+          {cases.map((c) => (
+            <div
+              key={c.slug}
+              className={`flex items-center gap-4 px-4 py-3 rounded-xl border ${
+                c.action === "delete" ? "border-red-500/20 bg-red-500/5" :
+                c.action === "review" ? "border-amber-500/20 bg-amber-500/5" :
+                "border-[#1e1e3a] bg-[#0a0a18]"
+              }`}
+            >
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0">
+                {c.action === "delete" ? <Trash2 size={18} className="text-red-400" /> :
+                 c.action === "review" ? <AlertTriangle size={18} className="text-amber-400" /> :
+                 <CheckCircle2 size={18} className="text-emerald-400" />}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-[#e8e8f0]">{c.caseNumber}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-[#1e1e3a] bg-[#12122a] text-[#8a8aa8]">{c.status}</span>
+                </div>
+                <div className="text-xs text-[#8888aa]">
+                  {c.title} · {c.yearsSinceClosure} Jahre seit Abschluss
+                </div>
+              </div>
+              {c.action !== "keep" && (
+                <span className={`text-xs font-medium ${c.action === "delete" ? "text-red-400" : "text-amber-400"}`}>
+                  {c.action === "delete" ? "Löschfällig" : "Prüfung empfohlen"}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
+        <div className="flex items-start gap-3">
+          <Shield size={16} className="text-amber-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="text-xs text-[#8888aa]">
+              <strong className="text-[#e8e8f0]">Hinweis:</strong> Die angezeigten Fristen dienen als Orientierung.
+              Die tatsächliche Aufbewahrungsfrist hängt von der Rechtsmaterie ab:
+              Handakten (§ 147 AO): 6 Jahre, Kanzleiakten (§ 50 BRAO): 10 Jahre.
+              Persönliche Daten müssen nach Zweckwegfall gelöscht werden (Art. 5 DSGVO).
+              Vor Löschung stets eine Datenträgerkopie anfertigen.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

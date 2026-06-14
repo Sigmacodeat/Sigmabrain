@@ -1,11 +1,16 @@
 import type {
+  AnonymizeResponse,
   BrainPage,
   BrainStats,
+  ConflictCheckResponse,
+  ConnectorStatus,
   GraphLink,
   GraphNode,
+  JudgementsSyncResponse,
   QueryResponse,
   RecentQuery,
   SearchResult,
+  TabularReviewResponse,
 } from "./types";
 
 // Browser: same-origin Next.js proxy (/api/*). Server: direct engine URL.
@@ -50,12 +55,32 @@ export const api = {
       return request(`/api/pages/${path}`);
     },
 
-    listPages(options?: { limit?: number; offset?: number; source?: string }): Promise<BrainPage[]> {
+    listPages(options?: { limit?: number; offset?: number; source?: string; type?: string; tag?: string }): Promise<BrainPage[]> {
       const params = new URLSearchParams();
       if (options?.limit) params.set("limit", String(options.limit));
       if (options?.offset) params.set("offset", String(options.offset));
       if (options?.source) params.set("source", options.source);
+      if (options?.type) params.set("type", options.type);
+      if (options?.tag) params.set("tag", options.tag);
       return request(`/api/pages?${params.toString()}`);
+    },
+
+    createPage(page: { slug: string; title: string; content?: string; type?: string; frontmatter?: Record<string, unknown> }): Promise<{ slug: string }> {
+      return request("/api/pages", { method: "POST", body: JSON.stringify(page) });
+    },
+
+    /**
+     * Partial update: the server merges the given frontmatter keys into the
+     * existing page and keeps the body when `content` is omitted. Without
+     * merge semantics a metadata-only update would wipe the page body.
+     */
+    updatePage(page: { slug: string; title?: string; content?: string; type?: string; frontmatter?: Record<string, unknown> }): Promise<{ slug: string; success: boolean }> {
+      return request("/api/pages", { method: "POST", body: JSON.stringify({ ...page, merge: true }) });
+    },
+
+    deletePage(slug: string): Promise<{ success: boolean }> {
+      const path = slug.split("/").map(encodeURIComponent).join("/");
+      return request(`/api/pages/${path}`, { method: "DELETE" });
     },
 
     graph(): Promise<{ nodes: GraphNode[]; links: GraphLink[] }> {
@@ -68,6 +93,11 @@ export const api = {
   },
 
   query: {
+    /**
+     * /api/think always answers as an SSE stream (`data: {chunk}` events,
+     * then one `{citations, gaps}` event, then `[DONE]`). The response is
+     * assembled from the stream — calling res.json() on an SSE body throws.
+     */
     async think(
       query: string,
       mode: "conservative" | "balanced" | "tokenmax" = "balanced",
@@ -79,35 +109,95 @@ export const api = {
         body: JSON.stringify({ query, mode }),
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-      if (onChunk && res.body) {
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = "";
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-
-          const lines = buffer.split("\n");
-          buffer = lines.pop() || "";
-
-          for (const line of lines) {
-            if (line.startsWith("data: ")) {
-              const data = line.slice(6);
-              if (data === "[DONE]") continue;
-              try {
-                const parsed = JSON.parse(data);
-                if (parsed.chunk) onChunk(parsed.chunk);
-              } catch {}
-            }
-          }
-        }
+      if (!res.ok) {
+        const error = await res.text().catch(() => "");
+        throw new Error(error || `HTTP ${res.status}`);
       }
 
-      return res.json() as Promise<QueryResponse>;
+      const contentType = res.headers.get("Content-Type") || "";
+      if (!contentType.includes("text/event-stream")) {
+        return res.json() as Promise<QueryResponse>;
+      }
+
+      const result: QueryResponse = { answer: "", citations: [], gaps: [], mode };
+      if (!res.body) return result;
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      const handleEvent = (data: string) => {
+        if (data === "[DONE]") return;
+        try {
+          const parsed = JSON.parse(data);
+          if (typeof parsed.chunk === "string") {
+            result.answer += parsed.chunk;
+            onChunk?.(parsed.chunk);
+          }
+          if (Array.isArray(parsed.citations)) result.citations = parsed.citations;
+          if (Array.isArray(parsed.gaps)) result.gaps = parsed.gaps;
+        } catch {}
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        for (const line of lines) {
+          if (line.startsWith("data: ")) handleEvent(line.slice(6));
+        }
+      }
+      if (buffer.startsWith("data: ")) handleEvent(buffer.slice(6));
+
+      return result;
+    },
+  },
+
+  legal: {
+    conflictCheck(name: string): Promise<ConflictCheckResponse> {
+      return request("/api/legal/conflict-check", {
+        method: "POST",
+        body: JSON.stringify({ name }),
+      });
+    },
+
+    judgementsSync(options?: { jurisdiction?: "at" | "de" | "all"; query?: string }): Promise<JudgementsSyncResponse> {
+      return request("/api/legal/judgements-sync", {
+        method: "POST",
+        body: JSON.stringify(options ?? {}),
+      });
+    },
+
+    anonymize(text: string, types?: string[]): Promise<AnonymizeResponse> {
+      return request("/api/legal/anonymize", {
+        method: "POST",
+        body: JSON.stringify({ text, ...(types ? { types } : {}) }),
+      });
+    },
+
+    /** Tabellarische Massenprüfung: jede Frage gegen jedes Dokument, zitiert. */
+    tabularReview(input: { type?: string; slugs?: string[]; questions: string[]; limit?: number }): Promise<TabularReviewResponse> {
+      return request("/api/legal/tabular-review", {
+        method: "POST",
+        body: JSON.stringify(input),
+      });
+    },
+  },
+
+  connectors: {
+    list(): Promise<{ connectors: ConnectorStatus[] }> {
+      return request("/api/connectors");
+    },
+
+    sync(service: string): Promise<{ success: boolean; status: string; service: string; message?: string }> {
+      return request(`/api/connectors/${encodeURIComponent(service)}/sync`, { method: "POST" });
+    },
+
+    toggle(service: string): Promise<{ success: boolean; service: string; enabled: boolean; message?: string }> {
+      return request(`/api/connectors/${encodeURIComponent(service)}/toggle`, { method: "POST" });
     },
   },
 
@@ -135,9 +225,13 @@ export const api = {
 
         xhr.onload = () => {
           if (xhr.status >= 200 && xhr.status < 300) {
-            resolve(JSON.parse(xhr.responseText));
+            try {
+              resolve(JSON.parse(xhr.responseText));
+            } catch {
+              reject(new Error("Invalid JSON response from server"));
+            }
           } else {
-            reject(new Error(xhr.statusText));
+            reject(new Error(xhr.statusText || `HTTP ${xhr.status}`));
           }
         };
 
@@ -148,4 +242,4 @@ export const api = {
   },
 };
 
-export type { QueryResponse, BrainStats, SearchResult, BrainPage, GraphNode, GraphLink };
+export type { QueryResponse, BrainStats, SearchResult, BrainPage, GraphNode, GraphLink, ConnectorStatus };

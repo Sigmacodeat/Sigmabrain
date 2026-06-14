@@ -11,11 +11,14 @@ import {
   X,
   CloudUpload,
   Info,
+  Archive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
+import { isOnline } from "@/lib/offline-store";
+import { sha256HexBytes, gobdFrontmatter } from "@/lib/gobd";
 
 interface UploadFile {
   id: string;
@@ -24,6 +27,7 @@ interface UploadFile {
   progress: number;
   error?: string;
   slug?: string;
+  gobdStamped?: boolean;
 }
 
 const ACCEPTED_TYPES = {
@@ -41,7 +45,7 @@ function FileIcon({ name }: { name: string }) {
     pdf: "text-red-400",
     json: "text-amber-400",
   };
-  return <File size={20} className={colors[ext || ""] || "text-[#4a4a6a]"} />;
+  return <File size={20} className={colors[ext || ""] || "text-[#8a8aa8]"} />;
 }
 
 function formatBytes(bytes: number) {
@@ -54,8 +58,23 @@ export default function UploadPage() {
   const [files, setFiles] = useState<UploadFile[]>([]);
   const [source, setSource] = useState("wiki");
   const [tags, setTags] = useState("");
+  // GoBD-Baustein: steuerlich relevante Belege beim Ingest mit Aufbewahrungs-
+  // frist + Inhalts-Hash stempeln (§ 147 AO / § 146 Abs. 4 AO). Bewusst opt-in:
+  // nicht jeder Upload ist ein Buchungsbeleg.
+  const [gobdReceipt, setGobdReceipt] = useState(false);
 
   const onDrop = useCallback((accepted: File[]) => {
+    if (!isOnline()) {
+      const offlineFiles: UploadFile[] = accepted.map((f) => ({
+        id: crypto.randomUUID(),
+        file: f,
+        status: "error" as const,
+        progress: 0,
+        error: "Offline — Datei-Upload erfordert Internetverbindung. Datei wurde nicht gespeichert.",
+      }));
+      setFiles((prev) => [...prev, ...offlineFiles]);
+      return;
+    }
     const newFiles: UploadFile[] = accepted.map((f) => ({
       id: crypto.randomUUID(),
       file: f,
@@ -100,10 +119,31 @@ export default function UploadPage() {
             );
           }
         );
+
+        // GoBD-Stempel: Hash über die hochgeladenen Datei-Bytes + 10-Jahre-
+        // Aufbewahrungsfrist ins Frontmatter mergen. Eine spätere Verifikation
+        // (Originaldatei erneut hashen) deckt jede Byte-Änderung auf.
+        let gobdStamped = false;
+        if (gobdReceipt && result.slug) {
+          try {
+            const bytes = await uploadFile.file.arrayBuffer();
+            const hash = await sha256HexBytes(bytes);
+            await api.brain.updatePage({
+              slug: result.slug,
+              frontmatter: { belegart: "steuerbeleg", ...gobdFrontmatter(hash) },
+            });
+            gobdStamped = true;
+          } catch (stampErr) {
+            // Upload ist erfolgt; nur der Stempel fehlt — sichtbar machen, nicht
+            // den ganzen Upload als Fehler werten.
+            console.error("[upload] GoBD-Stempel fehlgeschlagen:", stampErr instanceof Error ? stampErr.message : String(stampErr));
+          }
+        }
+
         setFiles((prev) =>
           prev.map((f) =>
             f.id === uploadFile.id
-              ? { ...f, status: "done", progress: 100, slug: result.slug }
+              ? { ...f, status: "done", progress: 100, slug: result.slug, gobdStamped }
               : f
           )
         );
@@ -136,7 +176,7 @@ export default function UploadPage() {
       {/* Options */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-[#4a4a6a] uppercase tracking-wider font-medium mb-2">
+          <label className="block text-xs text-[#8a8aa8] uppercase tracking-wider font-medium mb-2">
             Brain Source
           </label>
           <select
@@ -153,7 +193,7 @@ export default function UploadPage() {
           </select>
         </div>
         <div>
-          <label className="block text-xs text-[#4a4a6a] uppercase tracking-wider font-medium mb-2">
+          <label className="block text-xs text-[#8a8aa8] uppercase tracking-wider font-medium mb-2">
             Tags (kommasepariert)
           </label>
           <input
@@ -161,10 +201,41 @@ export default function UploadPage() {
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             placeholder="z.B. fintech, q2-2026, alice"
-            className="w-full bg-[#0d0d1a] border border-[#1e1e3a] rounded-lg px-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-violet-500/50 transition-colors"
+            className="w-full bg-[#0d0d1a] border border-[#1e1e3a] rounded-lg px-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50 transition-colors"
           />
         </div>
       </div>
+
+      {/* GoBD-Belegstempel (opt-in) */}
+      <label className="flex items-start gap-3 p-4 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] cursor-pointer hover:border-[#3a3a6a] transition-colors">
+        <input
+          type="checkbox"
+          checked={gobdReceipt}
+          onChange={(e) => setGobdReceipt(e.target.checked)}
+          className="mt-0.5 accent-violet-600"
+        />
+        <span className="flex items-start gap-2.5 text-sm">
+          <Archive size={15} className="text-violet-400 shrink-0 mt-0.5" />
+          <span className="text-[#8888aa] leading-relaxed">
+            <strong className="text-[#e8e8f0]">Steuerlich relevanter Beleg (GoBD-Bausteine)</strong> — Rechnungen,
+            Kontoauszüge, Quittungen. Beim Hochladen werden eine 10-Jahre-Aufbewahrungsfrist
+            (§ 147 AO) und ein Inhalts-Hash zur Manipulations-Evidenz (§ 146 Abs. 4 AO) ins
+            Frontmatter geschrieben. Spätere Verifikation deckt Änderungen auf.
+            <span className="block text-[11px] text-[#8a8aa8] mt-1">
+              Technischer Baustein — volle GoBD-Konformität verlangt zusätzlich Verfahrensdokumentation
+              und Prüfer-Abnahme.
+            </span>
+          </span>
+        </span>
+      </label>
+
+      {/* Offline warning */}
+      {!isOnline() && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-400 text-sm">
+          <CloudUpload size={16} />
+          <span>Offline-Modus aktiv — Datei-Upload erfordert Internetverbindung.</span>
+        </div>
+      )}
 
       {/* Dropzone */}
       <div
@@ -173,7 +244,8 @@ export default function UploadPage() {
           "relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-200",
           isDragActive
             ? "border-violet-500 bg-violet-500/10"
-            : "border-[#1e1e3a] hover:border-[#3a3a6a] hover:bg-[#0d0d1a]"
+            : "border-[#1e1e3a] hover:border-[#3a3a6a] hover:bg-[#0d0d1a]",
+          !isOnline() && "opacity-50 cursor-not-allowed"
         )}
       >
         <input {...getInputProps()} />
@@ -182,13 +254,13 @@ export default function UploadPage() {
             "w-16 h-16 rounded-2xl flex items-center justify-center transition-all",
             isDragActive ? "bg-violet-500/20" : "bg-[#1e1e3a]"
           )}>
-            <CloudUpload size={28} className={isDragActive ? "text-violet-400" : "text-[#4a4a6a]"} />
+            <CloudUpload size={28} className={isDragActive ? "text-violet-400" : "text-[#8a8aa8]"} />
           </div>
           <div>
             <p className="text-base font-semibold text-[#e8e8f0] mb-1">
               {isDragActive ? "Loslassen zum Hochladen" : "Dateien hierher ziehen"}
             </p>
-            <p className="text-sm text-[#4a4a6a]">
+            <p className="text-sm text-[#8a8aa8]">
               oder <span className="text-violet-400 hover:underline">Dateien auswählen</span>
             </p>
           </div>
@@ -196,7 +268,7 @@ export default function UploadPage() {
             {[".md", ".txt", ".pdf", ".json"].map((ext) => (
               <Badge key={ext} variant="default" className="font-mono text-xs">{ext}</Badge>
             ))}
-            <span className="text-xs text-[#4a4a6a]">· max 50 MB</span>
+            <span className="text-xs text-[#8a8aa8]">· max 50 MB</span>
           </div>
         </div>
       </div>
@@ -244,7 +316,7 @@ export default function UploadPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-sm font-medium text-[#e8e8f0] truncate">{f.file.name}</span>
-                    <span className="text-xs text-[#4a4a6a] shrink-0">{formatBytes(f.file.size)}</span>
+                    <span className="text-xs text-[#8a8aa8] shrink-0">{formatBytes(f.file.size)}</span>
                   </div>
                   {f.status === "uploading" && (
                     <div className="h-1 bg-[#1e1e3a] rounded-full overflow-hidden">
@@ -255,18 +327,25 @@ export default function UploadPage() {
                     </div>
                   )}
                   {f.status === "done" && f.slug && (
-                    <span className="text-xs font-mono text-emerald-400">→ {f.slug}</span>
+                    <span className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-mono text-emerald-400">→ {f.slug}</span>
+                      {f.gobdStamped && (
+                        <Badge variant="default" className="text-[10px] bg-violet-500/10 text-violet-400 border border-violet-500/20 gap-1">
+                          <Archive size={10} /> GoBD gestempelt
+                        </Badge>
+                      )}
+                    </span>
                   )}
                   {f.status === "error" && (
                     <span className="text-xs text-red-400">{f.error}</span>
                   )}
                   {f.status === "pending" && (
-                    <span className="text-xs text-[#4a4a6a]">Bereit zum Hochladen</span>
+                    <span className="text-xs text-[#8a8aa8]">Bereit zum Hochladen</span>
                   )}
                 </div>
                 <div className="shrink-0">
                   {f.status === "pending" && (
-                    <button onClick={() => removeFile(f.id)} className="text-[#4a4a6a] hover:text-red-400 transition-colors">
+                    <button onClick={() => removeFile(f.id)} className="text-[#8a8aa8] hover:text-red-400 transition-colors">
                       <X size={14} />
                     </button>
                   )}

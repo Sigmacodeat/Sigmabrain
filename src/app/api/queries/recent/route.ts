@@ -1,9 +1,11 @@
 import { NextRequest } from "next/server";
-import { ENGINE_URL, engineHeaders, unauthorized } from "@/lib/engine";
+import { ENGINE_URL, engineConfigurationResponse, engineHeaders, unauthorized } from "@/lib/engine";
 
 export async function GET(req: NextRequest) {
   const auth = await engineHeaders();
   if (!auth) return unauthorized();
+  const configError = engineConfigurationResponse();
+  if (configError) return configError;
   const { searchParams } = new URL(req.url);
   const limit = searchParams.get("limit") || "10";
 

@@ -1,0 +1,210 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { MessageSquare, CheckCircle2, XCircle, Loader2, ShieldCheck, Clock, AlertTriangle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { api } from "@/lib/api";
+import type { BrainPage } from "@/lib/types";
+
+interface WhatsAppStatus {
+  configured: boolean;
+  verifyToken: boolean;
+  appSecret: boolean;
+  accessToken: boolean;
+  phoneNumberId: boolean;
+  mediaStorageProvider: string;
+  mediaStorageDir: string;
+  mediaMaxBytes: number;
+  blobConfigured: boolean;
+  allowedSenders: Array<{ brainId: string; userId?: string; name?: string; role?: string; phoneLast4: string }>;
+  webhookUrl: string;
+}
+
+function front(page: BrainPage): Record<string, unknown> {
+  return page.frontmatter ?? {};
+}
+
+function text(value: unknown): string {
+  return typeof value === "string" ? value : "";
+}
+
+export default function WhatsAppDashboardPage() {
+  const [status, setStatus] = useState<WhatsAppStatus | null>(null);
+  const [actions, setActions] = useState<BrainPage[]>([]);
+  const [inbox, setInbox] = useState<BrainPage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [statusRes, actionPages, inboxPages] = await Promise.all([
+          fetch("/api/whatsapp/status").then((r) => r.json()),
+          api.brain.listPages({ type: "chat_action", limit: 100 }).catch(() => []),
+          api.brain.listPages({ type: "chat_inbox", limit: 100 }).catch(() => []),
+        ]);
+        if (cancelled) return;
+        setStatus(statusRes as WhatsAppStatus);
+        setActions(actionPages);
+        setInbox(inboxPages);
+      } catch (err) {
+        if (!cancelled) setError(err instanceof Error ? err.message : "WhatsApp-Status konnte nicht geladen werden.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const counts = useMemo(() => {
+    return actions.reduce((acc, page) => {
+      const status = text(front(page).status) || "unknown";
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+  }, [actions]);
+
+  return (
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
+          <MessageSquare size={20} className="text-emerald-400" />
+        </div>
+        <div>
+          <h1 className="text-xl font-bold text-[#e8e8f0]">WhatsApp Copilot</h1>
+          <p className="text-sm text-[#8888aa]">Interner Kanzlei-Assistent für Superbrain-Erfassung und Abfragen</p>
+        </div>
+      </div>
+
+      {error && (
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{error}</div>
+      )}
+
+      {loading ? (
+        <div className="flex items-center justify-center py-20 text-[#8888aa]">
+          <Loader2 size={20} className="animate-spin mr-2" /> Lade WhatsApp Copilot…
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <Metric label="Konfiguration" value={status?.configured ? "bereit" : "offen"} ok={Boolean(status?.configured)} />
+            <Metric label="Pending Actions" value={String(counts.pending_confirmation || 0)} warn={(counts.pending_confirmation || 0) > 0} />
+            <Metric label="Ausgeführt" value={String(counts.executed || 0)} ok />
+            <Metric label="Inbox" value={String(inbox.length)} />
+          </div>
+
+          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-5 space-y-4">
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={16} className="text-emerald-400" />
+              <h2 className="text-sm font-semibold text-[#e8e8f0]">Setup</h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
+              <SetupFlag label="Verify Token" ok={Boolean(status?.verifyToken)} />
+              <SetupFlag label="App Secret" ok={Boolean(status?.appSecret)} />
+              <SetupFlag label="Access Token" ok={Boolean(status?.accessToken)} />
+              <SetupFlag label="Phone ID" ok={Boolean(status?.phoneNumberId)} />
+              <SetupFlag label="Allowlist" ok={(status?.allowedSenders.length || 0) > 0} />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+              <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
+                <span className="text-[#8a8aa8]">Storage Provider</span>
+                <div className="text-[#e8e8f0] mt-1">{status?.mediaStorageProvider || "local"}</div>
+              </div>
+              <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
+                <span className="text-[#8a8aa8]">Media Storage</span>
+                <div className="text-[#e8e8f0] font-mono break-all mt-1">
+                  {status?.mediaStorageProvider === "vercel-blob" ? (status.blobConfigured ? "Vercel Blob" : "Blob Token fehlt") : (status?.mediaStorageDir || ".data/whatsapp-media")}
+                </div>
+              </div>
+              <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
+                <span className="text-[#8a8aa8]">Media Limit</span>
+                <div className="text-[#e8e8f0] mt-1">{Math.round((status?.mediaMaxBytes || 0) / 1024 / 1024)} MB pro Datei</div>
+              </div>
+            </div>
+            <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 text-xs text-[#8888aa] font-mono break-all">
+              {status?.webhookUrl || "/api/whatsapp/webhook"}
+            </div>
+            {status?.allowedSenders?.length ? (
+              <div className="space-y-2">
+                {status.allowedSenders.map((sender, idx) => (
+                  <div key={`${sender.brainId}-${idx}`} className="flex items-center justify-between rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 text-xs">
+                    <span className="text-[#e8e8f0]">{sender.name || "Erlaubter Sender"} · ****{sender.phoneLast4}</span>
+                    <span className="text-[#8a8aa8]">{sender.brainId}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-amber-400">Keine erlaubten WhatsApp-Sender konfiguriert.</p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <LogPanel title="Chat Actions" pages={actions} />
+            <LogPanel title="Inbox" pages={inbox} />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function Metric({ label, value, ok, warn }: { label: string; value: string; ok?: boolean; warn?: boolean }) {
+  const color = ok ? "text-emerald-400" : warn ? "text-amber-400" : "text-[#e8e8f0]";
+  return (
+    <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
+      <div className={`text-lg font-bold ${color}`}>{value}</div>
+      <div className="text-xs text-[#8a8aa8]">{label}</div>
+    </div>
+  );
+}
+
+function SetupFlag({ label, ok }: { label: string; ok: boolean }) {
+  return (
+    <div className="flex items-center gap-2 rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
+      {ok ? <CheckCircle2 size={12} className="text-emerald-400" /> : <XCircle size={12} className="text-red-400" />}
+      <span className="text-[#8888aa]">{label}</span>
+    </div>
+  );
+}
+
+function LogPanel({ title, pages }: { title: string; pages: BrainPage[] }) {
+  const sorted = [...pages].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 20);
+  return (
+    <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-5 space-y-3">
+      <h2 className="text-sm font-semibold text-[#e8e8f0]">{title}</h2>
+      {sorted.length === 0 ? (
+        <p className="text-sm text-[#8888aa] py-6">Noch keine Einträge.</p>
+      ) : (
+        <div className="space-y-2">
+          {sorted.map((page) => {
+            const fm = front(page);
+            const status = text(fm.status) || text(fm.intent) || "received";
+            return (
+              <div key={page.slug} className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-xs font-medium text-[#e8e8f0] truncate">{page.title}</div>
+                  <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">
+                    {status}
+                  </Badge>
+                </div>
+                <div className="text-[11px] text-[#8a8aa8] flex items-center gap-1">
+                  <Clock size={10} /> {new Date(page.created_at).toLocaleString("de-DE")}
+                  {text(fm.intent) && <span> · {text(fm.intent)}</span>}
+                </div>
+                {text(fm.error) && (
+                  <div className="text-[11px] text-red-300 flex items-center gap-1">
+                    <AlertTriangle size={10} /> {text(fm.error)}
+                  </div>
+                )}
+                {page.content && <p className="text-xs text-[#8888aa] line-clamp-2">{page.content}</p>}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

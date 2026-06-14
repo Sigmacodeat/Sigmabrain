@@ -9,8 +9,20 @@ import { cookies } from "next/headers";
 import { verifySession, SESSION_COOKIE } from "@/lib/auth/session";
 import { getStore, getOrgStore, type Plan, type User } from "@/lib/auth/store";
 
-export const ENGINE_URL =
-  process.env.SIGMABRAIN_API_URL || process.env.GBRAIN_API_URL || "http://localhost:3001";
+const CONFIGURED_ENGINE_URL = process.env.SIGMABRAIN_API_URL || process.env.GBRAIN_API_URL;
+
+export const ENGINE_URL = CONFIGURED_ENGINE_URL || "http://localhost:3001";
+
+export function engineConfigurationResponse(): Response | null {
+  if (process.env.NODE_ENV !== "production" || CONFIGURED_ENGINE_URL) return null;
+  return Response.json(
+    {
+      error: "engine_not_configured",
+      message: "Set SIGMABRAIN_API_URL or GBRAIN_API_URL in the production environment.",
+    },
+    { status: 503 },
+  );
+}
 
 export interface EngineContext {
   headers: Record<string, string>;
@@ -63,4 +75,16 @@ export async function engineHeaders(): Promise<Record<string, string> | null> {
 
 export function unauthorized(): Response {
   return Response.json({ error: "unauthorized" }, { status: 401 });
+}
+
+/**
+ * Engine headers for a KNOWN brainId — for trusted server-side jobs (cron,
+ * webhooks) that act on behalf of a tenant without a browser session.
+ * Never expose to request-derived input: the caller must own the brainId.
+ */
+export function engineHeadersForBrain(brainId: string): Record<string, string> {
+  const headers: Record<string, string> = { "x-sigmabrain-source": brainId };
+  const apiKey = process.env.SIGMABRAIN_WEB_API_KEY || process.env.GBRAIN_WEB_API_KEY;
+  if (apiKey) headers["x-sigmabrain-api-key"] = apiKey;
+  return headers;
 }

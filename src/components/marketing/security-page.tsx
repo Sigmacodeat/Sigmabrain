@@ -93,6 +93,25 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
+      {/* EU AI Act */}
+      <section className="relative z-10 py-12 px-6">
+        <div className="max-w-4xl mx-auto p-7 rounded-2xl border border-violet-500/20 bg-violet-500/[0.04]">
+          <h2 className="text-lg font-bold text-violet-300 mb-2">{t.aiActTitle}</h2>
+          <p className="text-sm text-[#a8a8be] leading-relaxed mb-4">{t.aiActText}</p>
+          <div className="space-y-4">
+            {t.aiActItems.map((item) => (
+              <div key={item.title} className="flex gap-2.5">
+                <Check size={14} className="text-violet-400 shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-sm font-bold text-[#e8e8f0] mb-1">{item.title}</h3>
+                  <p className="text-sm text-[#a8a8be] leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Honest roadmap */}
       <section className="relative z-10 py-12 px-6">
         <div className="max-w-4xl mx-auto p-7 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04]">

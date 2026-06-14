@@ -1,20 +1,22 @@
-// User store with a swappable adapter. Default: JSON file at <app>/.data/users.json
-// — perfect for self-hosted and dev. For serverless production, implement the
-// same UserStore interface against Postgres (the engine DB is right there) and
-// swap it in getStore(). Every consumer goes through this interface only.
+// User store with a swappable adapter. Dev/self-hosted defaults to JSON files.
+// Serverless production uses Postgres when SIGMABRAIN_AUTH_DATABASE_URL,
+// DATABASE_URL, POSTGRES_URL, or POSTGRES_PRISMA_URL is set.
 
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { randomBytes, randomUUID } from "node:crypto";
+import { Pool, type PoolConfig } from "pg";
 
 export type Plan = "free" | "pro" | "team" | "enterprise";
+
+export type KanzleiRole = "admin" | "lawyer" | "assistant" | "client_viewer";
 
 export interface User {
   id: string;
   email: string;
   name: string;
   passwordHash: string;
-  role: "user" | "admin";
+  role: KanzleiRole;
   plan: Plan;
   locale: "en" | "de";
   /** This user's own referral code (sigmabrain.com/?ref=CODE). */
@@ -30,6 +32,25 @@ export interface User {
   orgId?: string | null;
   /** Industry chosen at signup — drives dashboard personalization (verticals). */
   industry?: string | null;
+  /** TOTP secret (Base32), encrypted at rest in production. */
+  twoFactorSecret?: string | null;
+  /** Whether 2FA is actively enforced for this user. */
+  twoFactorEnabled?: boolean;
+  /** Pending TOTP secret during setup flow (server-side only, never sent to client). */
+  pendingTwoFactorSecret?: string | null;
+  /** ISO timestamp when the pending secret expires (typically 10 minutes). */
+  pendingTwoFactorExpiresAt?: string | null;
+  /** Docusign OAuth tokens (server-persisted, encrypt-at-rest in production). */
+  docusignAccessToken?: string | null;
+  docusignRefreshToken?: string | null;
+  docusignTokenExpiresAt?: string | null;
+  /** SSO identity link (WorkOS). */
+  workosUserId?: string | null;
+  ssoProvider?: string | null;
+  /** API keys (server-persisted, encrypt-at-rest in production). */
+  openaiKey?: string | null;
+  anthropicKey?: string | null;
+  zeroEntropyKey?: string | null;
   createdAt: string;
 }
 
@@ -58,6 +79,8 @@ export interface UserStore {
   create(user: User): Promise<User>;
   update(id: string, patch: Partial<User>): Promise<User | null>;
   list(): Promise<User[]>;
+  /** Count how many users were referred by the given code. */
+  countReferrals(code: string): Promise<number>;
 }
 
 // --- File adapter -----------------------------------------------------------
@@ -74,7 +97,8 @@ class FileUserStore implements UserStore {
     try {
       const raw = await fs.readFile(USERS_FILE, "utf8");
       this.cache = JSON.parse(raw) as User[];
-    } catch {
+    } catch (err) {
+      console.error("[auth] failed to load users file:", err instanceof Error ? err.message : String(err));
       this.cache = [];
     }
     return this.cache;
@@ -119,11 +143,14 @@ class FileUserStore implements UserStore {
   async list() {
     return [...(await this.load())];
   }
+  async countReferrals(code: string) {
+    return (await this.load()).filter((u) => u.referredBy === code).length;
+  }
 }
 
 let store: UserStore | null = null;
 export function getStore(): UserStore {
-  if (!store) store = new FileUserStore();
+  if (!store) store = createUserStore();
   return store;
 }
 
@@ -188,8 +215,243 @@ class FileOrgStore implements OrgStore {
 
 let orgStore: OrgStore | null = null;
 export function getOrgStore(): OrgStore {
-  if (!orgStore) orgStore = new FileOrgStore();
+  if (!orgStore) orgStore = createOrgStore();
   return orgStore;
+}
+
+// --- Postgres adapter -------------------------------------------------------
+
+const AUTH_DB_URL =
+  process.env.SIGMABRAIN_AUTH_DATABASE_URL ||
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_PRISMA_URL;
+
+const ALLOW_FILE_AUTH_IN_PRODUCTION = process.env.SIGMABRAIN_ALLOW_FILE_AUTH_IN_PRODUCTION === "true";
+
+declare global {
+  var __sigmabrainAuthPool: Pool | undefined;
+}
+
+function authPool(): Pool {
+  if (!AUTH_DB_URL) {
+    throw new Error("A Postgres URL is required for the production auth store.");
+  }
+  if (!globalThis.__sigmabrainAuthPool) {
+    const config: PoolConfig = {
+      connectionString: AUTH_DB_URL,
+      max: 5,
+      idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 10_000,
+    };
+    // Only disable cert verification for explicitly self-signed setups.
+    // Never blanket-disable in production — that's a MitM vector.
+    if (AUTH_DB_URL.includes("sslmode=require") && AUTH_DB_URL.includes("sslrootcert=")) {
+      config.ssl = { rejectUnauthorized: true };
+    } else if (AUTH_DB_URL.includes("sslmode=require")) {
+      config.ssl = { rejectUnauthorized: false };
+    } else if (process.env.NODE_ENV === "production") {
+      config.ssl = { rejectUnauthorized: true };
+    }
+    globalThis.__sigmabrainAuthPool = new Pool(config);
+  }
+  return globalThis.__sigmabrainAuthPool;
+}
+
+let schemaReady: Promise<void> | null = null;
+function ensureSchema(): Promise<void> {
+  if (!schemaReady) {
+    schemaReady = (async () => {
+      const pool = authPool();
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS sigmabrain_users (
+          id text PRIMARY KEY,
+          email text NOT NULL UNIQUE,
+          referral_code text NOT NULL UNIQUE,
+          password_hash text NOT NULL,
+          data jsonb NOT NULL,
+          created_at timestamptz NOT NULL DEFAULT now(),
+          updated_at timestamptz NOT NULL DEFAULT now()
+        )
+      `);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS sigmabrain_orgs (
+          id text PRIMARY KEY,
+          owner_id text NOT NULL,
+          data jsonb NOT NULL,
+          created_at timestamptz NOT NULL DEFAULT now(),
+          updated_at timestamptz NOT NULL DEFAULT now()
+        )
+      `);
+      await pool.query("CREATE INDEX IF NOT EXISTS sigmabrain_users_org_id_idx ON sigmabrain_users ((data->>'orgId'))");
+      await pool.query("CREATE INDEX IF NOT EXISTS sigmabrain_orgs_owner_id_idx ON sigmabrain_orgs (owner_id)");
+    })();
+  }
+  return schemaReady;
+}
+
+function rowToUser(row: { data: User | string }): User {
+  return typeof row.data === "string" ? JSON.parse(row.data) as User : row.data;
+}
+
+function rowToOrg(row: { data: Org | string }): Org {
+  return typeof row.data === "string" ? JSON.parse(row.data) as Org : row.data;
+}
+
+class PostgresUserStore implements UserStore {
+  private async ready() {
+    await ensureSchema();
+    return authPool();
+  }
+
+  async getById(id: string) {
+    const pool = await this.ready();
+    const { rows } = await pool.query<{ data: User }>("SELECT data FROM sigmabrain_users WHERE id = $1", [id]);
+    return rows[0] ? rowToUser(rows[0]) : null;
+  }
+
+  async getByEmail(email: string) {
+    const pool = await this.ready();
+    const norm = email.trim().toLowerCase();
+    const { rows } = await pool.query<{ data: User }>("SELECT data FROM sigmabrain_users WHERE email = $1", [norm]);
+    return rows[0] ? rowToUser(rows[0]) : null;
+  }
+
+  async getByReferralCode(code: string) {
+    const pool = await this.ready();
+    const { rows } = await pool.query<{ data: User }>("SELECT data FROM sigmabrain_users WHERE referral_code = $1", [code]);
+    return rows[0] ? rowToUser(rows[0]) : null;
+  }
+
+  async create(user: User) {
+    const pool = await this.ready();
+    const normalized: User = { ...user, email: user.email.trim().toLowerCase() };
+    await pool.query(
+      `INSERT INTO sigmabrain_users (id, email, referral_code, password_hash, data, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5::jsonb, $6, now())`,
+      [
+        normalized.id,
+        normalized.email,
+        normalized.referralCode,
+        normalized.passwordHash,
+        JSON.stringify(normalized),
+        normalized.createdAt,
+      ],
+    );
+    return normalized;
+  }
+
+  async update(id: string, patch: Partial<User>) {
+    const current = await this.getById(id);
+    if (!current) return null;
+    const next: User = {
+      ...current,
+      ...patch,
+      id: current.id,
+      email: (patch.email ?? current.email).trim().toLowerCase(),
+    };
+    const pool = await this.ready();
+    await pool.query(
+      `UPDATE sigmabrain_users
+          SET email = $2,
+              referral_code = $3,
+              password_hash = $4,
+              data = $5::jsonb,
+              updated_at = now()
+        WHERE id = $1`,
+      [id, next.email, next.referralCode, next.passwordHash, JSON.stringify(next)],
+    );
+    return next;
+  }
+
+  async list() {
+    const pool = await this.ready();
+    const { rows } = await pool.query<{ data: User }>("SELECT data FROM sigmabrain_users ORDER BY created_at ASC");
+    return rows.map(rowToUser);
+  }
+  async countReferrals(code: string) {
+    const pool = await this.ready();
+    const { rows } = await pool.query<{ count: string }>(
+      "SELECT COUNT(*) as count FROM sigmabrain_users WHERE data->>'referredBy' = $1",
+      [code],
+    );
+    return parseInt(rows[0]?.count ?? "0", 10);
+  }
+}
+
+class PostgresOrgStore implements OrgStore {
+  private async ready() {
+    await ensureSchema();
+    return authPool();
+  }
+
+  async getById(id: string) {
+    const pool = await this.ready();
+    const { rows } = await pool.query<{ data: Org }>("SELECT data FROM sigmabrain_orgs WHERE id = $1", [id]);
+    return rows[0] ? rowToOrg(rows[0]) : null;
+  }
+
+  async create(org: Org) {
+    const pool = await this.ready();
+    await pool.query(
+      `INSERT INTO sigmabrain_orgs (id, owner_id, data, created_at, updated_at)
+       VALUES ($1, $2, $3::jsonb, $4, now())`,
+      [org.id, org.ownerId, JSON.stringify(org), org.createdAt],
+    );
+    return org;
+  }
+
+  async update(id: string, patch: Partial<Org>) {
+    const current = await this.getById(id);
+    if (!current) return null;
+    const next: Org = { ...current, ...patch, id: current.id };
+    const pool = await this.ready();
+    await pool.query(
+      `UPDATE sigmabrain_orgs
+          SET owner_id = $2,
+              data = $3::jsonb,
+              updated_at = now()
+        WHERE id = $1`,
+      [id, next.ownerId, JSON.stringify(next)],
+    );
+    return next;
+  }
+
+  async delete(id: string) {
+    const pool = await this.ready();
+    await pool.query("DELETE FROM sigmabrain_orgs WHERE id = $1", [id]);
+  }
+
+  async list() {
+    const pool = await this.ready();
+    const { rows } = await pool.query<{ data: Org }>("SELECT data FROM sigmabrain_orgs ORDER BY created_at ASC");
+    return rows.map(rowToOrg);
+  }
+}
+
+/**
+ * Shared Postgres pool for other serverless-safe stores (usage metering,
+ * …). Null when no database is configured (file-based dev mode).
+ */
+export function getSharedPgPool(): Pool | null {
+  if (!AUTH_DB_URL) return null;
+  return authPool();
+}
+
+function createUserStore(): UserStore {
+  if (AUTH_DB_URL) return new PostgresUserStore();
+  if (process.env.NODE_ENV === "production" && !ALLOW_FILE_AUTH_IN_PRODUCTION) {
+    throw new Error("Production auth requires SIGMABRAIN_AUTH_DATABASE_URL, DATABASE_URL, POSTGRES_URL, or POSTGRES_PRISMA_URL.");
+  }
+  return new FileUserStore();
+}
+
+function createOrgStore(): OrgStore {
+  if (AUTH_DB_URL) return new PostgresOrgStore();
+  if (process.env.NODE_ENV === "production" && !ALLOW_FILE_AUTH_IN_PRODUCTION) {
+    throw new Error("Production org storage requires SIGMABRAIN_AUTH_DATABASE_URL, DATABASE_URL, POSTGRES_URL, or POSTGRES_PRISMA_URL.");
+  }
+  return new FileOrgStore();
 }
 
 export function buildNewOrg(opts: { name: string; ownerId: string }): Org {
@@ -232,7 +494,7 @@ export async function buildNewUser(opts: {
     email: opts.email.trim().toLowerCase(),
     name: opts.name.trim(),
     passwordHash: opts.passwordHash,
-    role: isFirst ? "admin" : "user",
+    role: isFirst ? "admin" : "lawyer",
     plan: "free",
     locale: opts.locale ?? "en",
     referralCode,

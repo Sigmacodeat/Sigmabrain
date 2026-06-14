@@ -7,7 +7,7 @@ import { hit, clientIp } from "@/lib/auth/rate-limit";
 export async function POST(req: NextRequest) {
   // Brute-force protection: per-IP and (below, post-parse) per-email windows.
   const ip = clientIp(req.headers);
-  const ipLimit = hit(`login:ip:${ip}`, 20, 60_000);
+  const ipLimit = await hit(`login:ip:${ip}`, 20, 60_000);
   if (!ipLimit.ok) {
     return NextResponse.json(
       { error: "rate_limited" },
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   const email = (body.email ?? "").trim().toLowerCase();
   const password = body.password ?? "";
 
-  const emailLimit = hit(`login:email:${email}`, 5, 15 * 60_000);
+  const emailLimit = await hit(`login:email:${email}`, 5, 15 * 60_000);
   if (!emailLimit.ok) {
     return NextResponse.json(
       { error: "rate_limited" },
@@ -36,7 +36,19 @@ export async function POST(req: NextRequest) {
   const user = await getStore().getByEmail(email);
 
   // Same error for unknown email and wrong password — no account enumeration.
-  if (!user || !(await verifyPassword(password, user.passwordHash))) {
+  if (!user) {
+    return NextResponse.json({ error: "invalid_credentials" }, { status: 401 });
+  }
+
+  // SSO users have no local password — redirect them to SSO login
+  if (!user.passwordHash) {
+    return NextResponse.json(
+      { error: "sso_required", provider: user.ssoProvider ?? "sso" },
+      { status: 401 },
+    );
+  }
+
+  if (!(await verifyPassword(password, user.passwordHash))) {
     return NextResponse.json({ error: "invalid_credentials" }, { status: 401 });
   }
 

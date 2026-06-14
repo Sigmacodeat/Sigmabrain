@@ -1,10 +1,12 @@
 import { NextRequest } from "next/server";
-import { ENGINE_URL, engineContext, unauthorized } from "@/lib/engine";
+import { ENGINE_URL, engineConfigurationResponse, engineContext, unauthorized } from "@/lib/engine";
 import { recordQuery } from "@/lib/usage";
 
 export async function GET(req: NextRequest) {
   const ctx = await engineContext();
   if (!ctx) return unauthorized();
+  const configError = engineConfigurationResponse();
+  if (configError) return configError;
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
   const limit = searchParams.get("limit") || "10";
@@ -18,7 +20,8 @@ export async function GET(req: NextRequest) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     return Response.json(data);
-  } catch {
-    return Response.json([], { status: 200 });
+  } catch (err) {
+    console.error("[search] engine search failed:", err instanceof Error ? err.message : String(err));
+    return Response.json({ error: "engine_unreachable" }, { status: 503 });
   }
 }

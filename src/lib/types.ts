@@ -9,6 +9,8 @@ export interface BrainPage {
   entities?: Entity[];
   backlinks?: string[];
   word_count?: number;
+  type?: string;
+  frontmatter?: Record<string, unknown>;
 }
 
 export interface Entity {
@@ -98,6 +100,74 @@ export interface RecentQuery {
   answer_preview: string;
   citations_count: number;
   created_at: string;
+}
+
+export interface ConflictMatch {
+  slug: string;
+  title: string;
+  role: "client" | "opponent";
+  status: string;
+  matched_name: string;
+  exact: boolean;
+}
+
+export interface ConflictCheckResponse {
+  name: string;
+  severity: "critical" | "low" | "none";
+  explanation: string;
+  matches: ConflictMatch[];
+  checked_cases: number;
+  disclaimer: string;
+}
+
+export interface JudgementsSyncResponse {
+  success: boolean;
+  jurisdiction: string;
+  fetched: number;
+  imported: number;
+  errors?: string[];
+}
+
+export interface ConnectorStatus {
+  service: string;
+  configured: boolean;
+  enabled: boolean;
+  connected: boolean;
+  hasCredentials: boolean;
+  last_sync_at: number | null;
+}
+
+export interface AnonReplacement {
+  type: string;
+  original: string;
+  placeholder: string;
+}
+
+export interface AnonymizeResponse {
+  anonymized: string;
+  replacements: AnonReplacement[];
+  stats: Record<string, number>;
+  llm_used: boolean;
+  count: number;
+  disclaimer: string;
+}
+
+export interface TabularCell {
+  answer: string;
+  citations: { slug: string; title: string }[];
+}
+
+export interface TabularRow {
+  slug: string;
+  title: string;
+  cells: TabularCell[];
+}
+
+export interface TabularReviewResponse {
+  questions: string[];
+  rows: TabularRow[];
+  document_count: number;
+  truncated: boolean;
 }
 
 export interface PricingTier {

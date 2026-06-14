@@ -1,8 +1,10 @@
-import { ENGINE_URL, engineHeaders, unauthorized } from "@/lib/engine";
+import { ENGINE_URL, engineConfigurationResponse, engineHeaders, unauthorized } from "@/lib/engine";
 
 export async function GET() {
   const auth = await engineHeaders();
   if (!auth) return unauthorized();
+  const configError = engineConfigurationResponse();
+  if (configError) return configError;
   try {
     const res = await fetch(`${ENGINE_URL}/api/stats`, { headers: auth });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);

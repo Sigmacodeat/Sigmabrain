@@ -5,7 +5,7 @@ import { verifyActionToken, bindFragment } from "@/lib/auth/tokens";
 import { hit, clientIp } from "@/lib/auth/rate-limit";
 
 export async function POST(req: NextRequest) {
-  const ipLimit = hit(`reset:ip:${clientIp(req.headers)}`, 10, 15 * 60_000);
+  const ipLimit = await hit(`reset:ip:${clientIp(req.headers)}`, 10, 15 * 60_000);
   if (!ipLimit.ok) {
     return NextResponse.json(
       { error: "rate_limited" },

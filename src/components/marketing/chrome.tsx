@@ -23,16 +23,26 @@ import {
   Megaphone,
   Gift,
   Handshake,
+  CalendarClock,
+  Mail,
+  ShieldAlert,
+  Calculator,
+  Landmark,
+  FileText,
+  FolderOpen,
+  MessageSquare,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SigmaLogo, SigmaMark } from "@/components/brand/logo";
-import { NAV, FOOTER, p, altPath, type Lang } from "@/content/site";
+import { NAV, FOOTER, p, altPath, ENGINE_REPO_URL, type Lang } from "@/content/site";
 
 // Content files store icon names as strings; resolve them here.
 export const ICONS: Record<string, LucideIcon> = {
   Brain, Database, GitBranch, Search, Zap, Shield, Layers, Network,
   Megaphone, Gift, Handshake,
+  CalendarClock, Mail, ShieldAlert, Calculator, Landmark, FileText, FolderOpen, MessageSquare, Users,
 };
 
 export const COLOR_MAP: Record<string, string> = {
@@ -106,8 +116,7 @@ export function MarketingNav({ lang }: { lang: Lang }) {
           </div>
           <Link href={p(lang, "/pricing")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.pricing}</Link>
           <Link href={p(lang, "/compare")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.compare}</Link>
-          <Link href={p(lang, "/partners")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.partners}</Link>
-          <a href="https://github.com/garrytan/gbrain" target="_blank" rel="noreferrer" className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.docs}</a>
+          <a href={ENGINE_REPO_URL} target="_blank" rel="noreferrer" className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.docs}</a>
         </div>
 
         <div className="flex items-center gap-3">
@@ -144,7 +153,6 @@ export function MarketingNav({ lang }: { lang: Lang }) {
           ))}
           <Link href={p(lang, "/pricing")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.pricing}</Link>
           <Link href={p(lang, "/compare")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.compare}</Link>
-          <Link href={p(lang, "/partners")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.partners}</Link>
           <Link href={altPath(lang, pathname)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>
             <Globe size={13} /> {lang === "en" ? "Deutsch" : "English"}
           </Link>
@@ -176,7 +184,9 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
                     {"external" in link && link.external ? (
                       <a href={link.href} target="_blank" rel="noreferrer" className="text-xs text-[#4a4a6a] hover:text-[#8888aa]">{link.label}</a>
                     ) : (
-                      <Link href={p(lang, link.href)} className="text-xs text-[#4a4a6a] hover:text-[#8888aa]">{link.label}</Link>
+                      // App-Routen (/dashboard…) sind nicht lokalisiert —
+                      // niemals den Sprachpräfix anhängen (/de/dashboard = 404).
+                      <Link href={link.href.startsWith("/dashboard") ? link.href : p(lang, link.href)} className="text-xs text-[#4a4a6a] hover:text-[#8888aa]">{link.label}</Link>
                     )}
                   </li>
                 ))}
@@ -188,7 +198,7 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
           <p className="text-xs text-[#4a4a6a]">© 2026 Sigmabrain</p>
           <p className="text-xs text-[#4a4a6a]">
             {lang === "en" ? "Powered by the open-source " : "Angetrieben von der Open-Source-"}
-            <a href="https://github.com/garrytan/gbrain" target="_blank" rel="noreferrer" className="text-violet-400 hover:underline">Sigmabrain Engine</a>
+            <a href={ENGINE_REPO_URL} target="_blank" rel="noreferrer" className="text-violet-400 hover:underline">Sigmabrain Engine</a>
             {lang === "en" ? " (MIT)" : " (MIT)"}
           </p>
         </div>

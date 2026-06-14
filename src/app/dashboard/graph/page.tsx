@@ -186,14 +186,14 @@ export default function GraphPage() {
       <div className="flex-1 relative bg-[#06060f]">
         {loading ? (
           <div className="flex flex-col items-center justify-center h-full">
-            <Loader2 size={32} className="animate-spin text-[#4a4a6a] mb-3" />
-            <p className="text-sm text-[#4a4a6a]">Graph wird geladen…</p>
+            <Loader2 size={32} className="animate-spin text-[#8a8aa8] mb-3" />
+            <p className="text-sm text-[#8a8aa8]">Graph wird geladen…</p>
           </div>
         ) : isEmpty ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <Network size={40} className="text-[#1e1e3a] mb-4" />
             <h3 className="text-lg font-semibold text-[#e8e8f0] mb-2">Graph ist leer</h3>
-            <p className="text-sm text-[#4a4a6a] mb-2">Lade Dokumente hoch um den Wissensgraph zu befüllen</p>
+            <p className="text-sm text-[#8a8aa8] mb-2">Lade Dokumente hoch um den Wissensgraph zu befüllen</p>
             {error && <p className="text-xs text-red-400">{error}</p>}
           </div>
         ) : (
@@ -212,7 +212,7 @@ export default function GraphPage() {
                 >
                   <ZoomIn size={14} />
                 </button>
-                <span className="text-xs text-[#4a4a6a] px-2 font-mono">{Math.round(zoom * 100)}%</span>
+                <span className="text-xs text-[#8a8aa8] px-2 font-mono">{Math.round(zoom * 100)}%</span>
                 <button
                   onClick={() => setZoom((z) => Math.max(z - 0.2, 0.3))}
                   className="p-2 rounded text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#1e1e3a] transition-all"
@@ -235,7 +235,7 @@ export default function GraphPage() {
             </div>
 
             <div className="absolute bottom-4 left-4 bg-[#0d0d1a]/90 backdrop-blur border border-[#1e1e3a] rounded-xl p-4">
-              <p className="text-xs text-[#4a4a6a] uppercase tracking-wider font-medium mb-3">Legende</p>
+              <p className="text-xs text-[#8a8aa8] uppercase tracking-wider font-medium mb-3">Legende</p>
               <div className="space-y-2">
                 {Object.entries(NODE_COLORS).slice(0, 4).map(([type, color]) => (
                   <div key={type} className="flex items-center gap-2">
@@ -247,10 +247,10 @@ export default function GraphPage() {
             </div>
 
             <div className="absolute top-4 right-4 bg-[#0d0d1a]/90 backdrop-blur border border-[#1e1e3a] rounded-xl p-4 text-right">
-              <div className="text-xs text-[#4a4a6a] mb-2">Graph</div>
+              <div className="text-xs text-[#8a8aa8] mb-2">Graph</div>
               <div className="space-y-1">
-                <div className="text-sm font-mono text-[#e8e8f0]">{nodes.length} <span className="text-[#4a4a6a]">Knoten</span></div>
-                <div className="text-sm font-mono text-[#e8e8f0]">{links.length} <span className="text-[#4a4a6a]">Kanten</span></div>
+                <div className="text-sm font-mono text-[#e8e8f0]">{nodes.length} <span className="text-[#8a8aa8]">Knoten</span></div>
+                <div className="text-sm font-mono text-[#e8e8f0]">{links.length} <span className="text-[#8a8aa8]">Kanten</span></div>
               </div>
             </div>
           </>
@@ -276,16 +276,16 @@ export default function GraphPage() {
 
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-[#4a4a6a] uppercase tracking-wider mb-2">Slug</p>
+              <p className="text-xs text-[#8a8aa8] uppercase tracking-wider mb-2">Slug</p>
               <p className="text-sm font-mono text-violet-400 bg-violet-500/10 px-3 py-2 rounded-lg">{selected.id}</p>
             </div>
             <div>
-              <p className="text-xs text-[#4a4a6a] uppercase tracking-wider mb-2">Verbindungen</p>
+              <p className="text-xs text-[#8a8aa8] uppercase tracking-wider mb-2">Verbindungen</p>
               <p className="text-2xl font-bold text-[#e8e8f0] font-mono">{selected.connections}</p>
             </div>
 
             <div>
-              <p className="text-xs text-[#4a4a6a] uppercase tracking-wider mb-2">Kanten</p>
+              <p className="text-xs text-[#8a8aa8] uppercase tracking-wider mb-2">Kanten</p>
               {links.filter((l) => {
                 const src = typeof l.source === "string" ? l.source : l.source.id;
                 const tgt = typeof l.target === "string" ? l.target : l.target.id;
