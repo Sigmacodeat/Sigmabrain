@@ -3,7 +3,7 @@
 // Billing & plan management. Talks to /api/auth/me and /api/billing/checkout.
 // Shows an honest "not configured" state until Stripe env vars are set.
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { CreditCard, Check, ArrowRight, AlertTriangle, Sparkles, Gift, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -117,6 +117,7 @@ function BillingInner() {
   const [me, setMe] = useState<Me | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const autoTriggered = useRef(false);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -124,6 +125,17 @@ function BillingInner() {
       .then(setMe)
       .catch(() => setMe({ user: null }));
   }, []);
+
+  // Auto-start checkout when arriving from a pricing-tier CTA
+  // (/dashboard/billing?checkout=pro|team), once the session is loaded.
+  useEffect(() => {
+    if (!me?.user || autoTriggered.current) return;
+    const checkout = params.get("checkout");
+    if ((checkout === "pro" || checkout === "team") && me.user.plan !== checkout) {
+      autoTriggered.current = true;
+      void upgrade(checkout);
+    }
+  }, [me, params]);
 
   async function upgrade(plan: string) {
     setBusy(plan);

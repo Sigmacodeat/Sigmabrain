@@ -17,9 +17,20 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
   const sub = vp?.sub ?? PRICING[lang].sub;
   const tiers = vp?.tiers ?? PRICING[lang].tiers;
 
-  // signup hrefs carry the industry so provisioning configures the right pack.
-  const withIndustry = (href: string) =>
-    href === "/signup" ? `/signup?industry=${industry}` : href;
+  // Map a tier to its billable plan so the signup CTA can carry it; after
+  // signup the user lands on billing with auto-checkout for that plan.
+  const PLAN_BY_TIER: Record<string, "pro" | "team"> = {
+    pro: "pro", solo: "pro", einzelanwalt: "pro",
+    team: "team", kanzlei: "team",
+  };
+  // signup hrefs carry the industry (provisioning pack) + plan (checkout intent).
+  const hrefFor = (tier: { id: string; href: string }) => {
+    if (tier.href !== "/signup") return tier.href;
+    const plan = PLAN_BY_TIER[tier.id];
+    return plan
+      ? `/signup?industry=${industry}&plan=${plan}`
+      : `/signup?industry=${industry}`;
+  };
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -33,7 +44,7 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
         {tiers.map((tier) => {
-          const href = withIndustry(tier.href);
+          const href = hrefFor(tier);
           const isExternal = href.startsWith("http") || href.startsWith("mailto");
           const btn = (
             <Button variant={tier.highlight ? "glow" : "secondary"} size="md" className="w-full">
