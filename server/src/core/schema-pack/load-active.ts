@@ -124,6 +124,9 @@ function defaultPackLocator(name: string): string | null {
     // v0.42+ vertical pack: compliance / GRC domain with controls, policies,
     // regulatory obligations (GDPR/AML/EU-AI-Act/ISO), and effectiveness calibration.
     'gbrain-compliance',
+    // v0.42+ vertical pack: insurance broker/agency domain with policy, claim,
+    // coverage, risk types, coverage link verbs, and claim/renewal calibration.
+    'gbrain-insurance',
   ];
   if (BUNDLED.includes(name)) {
     // Resolve bundled YAML relative to this source file. Works in both

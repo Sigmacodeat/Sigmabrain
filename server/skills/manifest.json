@@ -340,6 +340,31 @@
       "description": "VAT/USt compliance check: place of supply (§3a), Reverse-Charge (§13b), intra-Community supply (§6a), input VAT (§15), invoice fields (§14/14a) and e-invoicing mandate. Checklist + gap report."
     },
     {
+      "name": "policy-review",
+      "path": "policy-review/SKILL.md",
+      "description": "Broker-side insurance policy review: coverage scope, limits/sub-limits, deductibles and exclusions extracted with clause locations, risks flagged against the client situation. Not a binding coverage confirmation."
+    },
+    {
+      "name": "claims-assist",
+      "path": "claims-assist/SKILL.md",
+      "description": "Broker-side claim support: checks the loss against the policy (sub-limits/deductible), surfaces the notification window, lists required documentation and drafts the carrier notification. The insurer adjudicates."
+    },
+    {
+      "name": "coverage-gap-finder",
+      "path": "coverage-gap-finder/SKILL.md",
+      "description": "Finds coverage gaps / under-insurance across a client's book given a change (move, new assets, headcount), comparing active policies to the risk situation. Duty-of-care + cross-sell signal; advisory."
+    },
+    {
+      "name": "eu-ai-act-inventory",
+      "path": "eu-ai-act-inventory/SKILL.md",
+      "description": "Maintains the EU AI Act inventory: classifies each AI system (prohibited / high-risk Annex III / limited Art.50 / minimal), lists obligations and flags missing evidence before 02.08.2026. Classification needs sign-off."
+    },
+    {
+      "name": "control-effectiveness",
+      "path": "control-effectiveness/SKILL.md",
+      "description": "Assesses a GRC control's design + operating effectiveness against the obligation it covers (GDPR/AML/AI-Act/ISO), rates it with the evidence basis and lists remediation. The demonstrable-effectiveness record."
+    },
+    {
       "name": "cost-calculator",
       "path": "cost-calculator/SKILL.md",
       "description": "Calculates legal fee estimates per German RVG and Austrian RATG from the dispute value (Streitwert): court fees, attorney fees, settlement fees. Orientation only — never a binding fee calculation."
