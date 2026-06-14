@@ -24,6 +24,7 @@ import {
   ICONS,
 } from "./chrome";
 import LiveDemo from "./live-demo";
+import BranchPricing from "./branch-pricing";
 
 const viewport = { once: true, margin: "-60px" } as const;
 
@@ -263,6 +264,11 @@ export default function BrandedVerticalPage({
             </div>
             <p className="text-xs text-[#4a4a6a] leading-relaxed max-w-3xl mx-auto text-center mt-8">{t.honesty}</p>
           </div>
+        </section>
+
+        {/* Pricing — this branch's own tiers (or global fallback) */}
+        <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+          <BranchPricing lang={lang} industry={signupIndustry} />
         </section>
 
         {/* FAQ */}

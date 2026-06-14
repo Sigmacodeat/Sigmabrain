@@ -17,6 +17,7 @@ import {
   ICONS,
 } from "./chrome";
 import LiveDemo from "./live-demo";
+import BranchPricing from "./branch-pricing";
 
 /** Product-line branding (Subsumio, Taxumio, …): same funnel body, branded
  *  hero, and signup deep-links carrying the industry for prefill. */
@@ -117,6 +118,11 @@ export default function VerticalPage({
           <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] mb-5">{t.proofTitle}</h2>
           <p className="text-base text-[#8888aa] leading-relaxed">{t.proof}</p>
         </div>
+      </section>
+
+      {/* Pricing — this branch's own tiers (or global fallback) */}
+      <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <BranchPricing lang={lang} industry={product?.industry ?? slug} />
       </section>
 
       {/* FAQ */}
