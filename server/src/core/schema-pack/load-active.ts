@@ -127,6 +127,10 @@ function defaultPackLocator(name: string): string | null {
     // v0.42+ vertical pack: insurance broker/agency domain with policy, claim,
     // coverage, risk types, coverage link verbs, and claim/renewal calibration.
     'gbrain-insurance',
+    // v0.42+ vertical pack: real estate / property domain with property, unit,
+    // lease, tenant, transaction types, location/lease link verbs, and
+    // lease-renewal/deal calibration.
+    'gbrain-realestate',
   ];
   if (BUNDLED.includes(name)) {
     // Resolve bundled YAML relative to this source file. Works in both
