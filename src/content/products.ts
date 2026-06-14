@@ -30,7 +30,7 @@ export const PRODUCTS: Record<Lang, Record<ProductSlug, ProductContent>> = {
       claim: "The law firm's brain.",
       poweredBy: "Subsumio — powered by Sigmabrain",
       metaTitle: "Subsumio — the law firm's brain, powered by Sigmabrain",
-      metaDesc: "Case files answerable in plain language: contradictions, deadlines, page-level citations — self-hosted or EU cloud. Subsumio is Sigmabrain tuned for law firms.",
+      metaDesc: "Case files, deadlines, time, expenses, invoices and WhatsApp intake answerable in plain language — self-hosted, offline-capable or EU cloud. Subsumio is Sigmabrain tuned for law firms.",
     },
     taxumio: {
       slug: "taxumio",
@@ -52,7 +52,7 @@ export const PRODUCTS: Record<Lang, Record<ProductSlug, ProductContent>> = {
       claim: "Das Kanzlei-Gehirn.",
       poweredBy: "Subsumio — powered by Sigmabrain",
       metaTitle: "Subsumio — das Kanzlei-Gehirn, powered by Sigmabrain",
-      metaDesc: "Akten in normaler Sprache abfragbar: Widersprüche, Fristen, seitengenaue Zitate — self-hosted oder EU-Cloud. Subsumio ist Sigmabrain, abgestimmt auf Kanzleien.",
+      metaDesc: "Akten, Fristen, Zeiten, Auslagen, Rechnungen und WhatsApp-Eingang in normaler Sprache abfragbar — self-hosted, offlinefähig oder EU-Cloud. Subsumio ist Sigmabrain für Kanzleien.",
     },
     taxumio: {
       slug: "taxumio",

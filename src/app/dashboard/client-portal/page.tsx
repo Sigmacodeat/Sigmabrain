@@ -1,0 +1,228 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import {
+  User,
+  Eye,
+  FileText,
+  CalendarClock,
+  MessageSquare,
+  AlertTriangle,
+  CheckCircle2,
+  Loader2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { api } from "@/lib/api";
+import { caseFrontmatter, type DeadlineEntry } from "@/lib/legal-types";
+
+interface ClientCase {
+  slug: string;
+  id: string;
+  title: string;
+  status: string;
+  lastUpdate: string;
+  nextStep: string;
+  documents: number;
+  messages: number;
+}
+
+export default function ClientPortalPage() {
+  // Vorschau-Modus: Diese Seite zeigt dem ANWALT, wie das Mandanten-Portal
+  // aussehen wird. Ein echtes Mandanten-Portal braucht eine eigene,
+  // pro Mandant authentifizierte Deployment-Oberfläche (Phase 5) —
+  // ein clientseitiger PIN wäre Scheinsicherheit und wurde entfernt.
+  const [previewing, setPreviewing] = useState(false);
+  const [cases, setCases] = useState<ClientCase[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  async function loadCases() {
+    setLoading(true);
+    try {
+      const pages = await api.brain.listPages({ type: "legal_case", limit: 50 });
+      const loaded: ClientCase[] = pages.filter((p) => caseFrontmatter(p).portal_enabled === true).map((p) => {
+        const fm = caseFrontmatter(p);
+        const docs = fm.documents ?? [];
+        const deadlines: DeadlineEntry[] = fm.deadlines?.length
+          ? fm.deadlines
+          : (fm.timeline_events ?? fm.timeline ?? []).map((entry) => ({
+              title: entry.title,
+              date: entry.date,
+              status: entry.status,
+              type: entry.type,
+            }));
+        const nextDl = deadlines
+          .filter((d) => new Date(d.due_date || d.date || 0) >= new Date())
+          .sort((a, b) => new Date(a.due_date || a.date || 0).getTime() - new Date(b.due_date || b.date || 0).getTime())[0];
+
+        return {
+          slug: p.slug,
+          id: fm.case_number || p.slug,
+          title: p.title || "Unbenannte Akte",
+          status: fm.status || "open",
+          lastUpdate: p.updated_at || p.created_at,
+          nextStep: nextDl
+            ? `${nextDl.title ?? "Frist"} bis ${new Date(nextDl.due_date || nextDl.date || Date.now()).toLocaleDateString("de-DE")}`
+            : "Keine anstehenden Fristen",
+          documents: Array.isArray(docs) ? docs.length : 0,
+          messages: 0,
+        };
+      });
+      setCases(loaded);
+    } catch (e) {
+      setLoadError(e instanceof Error ? e.message : "Akten konnten nicht geladen werden.");
+      setCases([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function startPreview() {
+    setPreviewing(true);
+    loadCases();
+  }
+
+  if (!previewing) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-full max-w-md space-y-6">
+          <div className="text-center space-y-2">
+            <div className="w-16 h-16 rounded-2xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center mx-auto" aria-hidden="true">
+              <Eye size={28} className="text-violet-400" />
+            </div>
+            <h1 className="text-xl font-bold text-[#e8e8f0]">Mandanten-Portal — Vorschau</h1>
+            <p className="text-sm text-[#8888aa]">
+              So sehen Ihre Mandanten künftig den Stand ihrer Akte.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4" role="note">
+            <div className="flex items-start gap-2">
+              <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />
+              <p className="text-xs text-amber-400 leading-relaxed">
+                Dies ist eine <strong>Vorschau für die Kanzlei</strong> — sie zeigt alle Akten
+                der explizit freigegebenen Akten. Das echte Mandanten-Portal mit eigenem Login pro Mandant und
+                Akten-Filterung ist ein separates Deployment und noch nicht Teil dieses Dashboards.
+              </p>
+            </div>
+          </div>
+
+          <Button
+            variant="primary"
+            className="w-full bg-violet-600 hover:bg-violet-500 text-white"
+            onClick={startPreview}
+          >
+            <Eye size={16} className="mr-2" aria-hidden="true" />
+            Vorschau öffnen (Anwaltsansicht)
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 max-w-3xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
+            <User size={20} className="text-emerald-400" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-[#e8e8f0]">Meine Akten</h1>
+            <p className="text-sm text-[#8888aa]">Übersicht über alle laufenden Mandate</p>
+          </div>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setPreviewing(false)}
+          className="text-[#8a8aa8] hover:text-[#8888aa]"
+        >
+          Vorschau beenden
+        </Button>
+      </div>
+
+      {loadError && (
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+          {loadError}
+        </div>
+      )}
+
+      {/* Cases */}
+      {loading ? (
+        <div className="text-center py-20 text-[#8888aa]">
+          <Loader2 size={24} className="mx-auto animate-spin mb-3" />
+          Akten werden geladen…
+        </div>
+      ) : cases.length === 0 ? (
+        <div className="text-center py-20 space-y-4">
+          <FileText size={48} className="mx-auto text-[#1e1e3a]" />
+          <p className="text-[#8888aa]">Keine Akten gefunden.</p>
+          <p className="text-[#8a8aa8] text-sm">Akten erscheinen hier, sobald sie in der Akte für die Portal-Vorschau freigegeben sind.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {cases.map((c) => (
+            <div
+              key={c.id}
+              className="rounded-xl border border-[#1e1e3a] bg-[#0a0a18] p-4 space-y-3"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-sm font-semibold text-[#e8e8f0]">{c.title}</h2>
+                  <p className="text-xs text-[#8a8aa8] font-mono">{c.id}</p>
+                </div>
+                <Badge variant="default" className={`text-[10px] ${
+                  c.status === "closed" ? "bg-gray-500/10 border-gray-500/20 text-gray-400" :
+                  c.status === "won" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
+                  "bg-blue-500/10 border-blue-500/20 text-blue-400"
+                }`}>
+                  {c.status === "closed" ? "Geschlossen" : c.status === "won" ? "Gewonnen" : "Offen"}
+                </Badge>
+              </div>
+
+              <div className="flex items-center gap-4 text-xs text-[#8a8aa8]">
+                <span className="flex items-center gap-1"><FileText size={10} />{c.documents} Dokumente</span>
+                <span className="flex items-center gap-1"><CalendarClock size={10} />{new Date(c.lastUpdate).toLocaleDateString("de-DE")}</span>
+              </div>
+
+              <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-3">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={14} className="text-amber-400 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs text-amber-400 font-medium">Nächster Schritt</p>
+                    <p className="text-xs text-[#8888aa]">{c.nextStep}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <Link href={`/dashboard/cases/${encodeURIComponent(c.slug)}`} className="flex-1">
+                  <Button
+                    variant="secondary"
+                    className="w-full bg-[#12122a] border border-[#1e1e3a] text-[#e8e8f0] hover:bg-[#1a1a3a] text-xs"
+                  >
+                    <FileText size={12} className="mr-1.5" />
+                    Dokumente
+                  </Button>
+                </Link>
+                <Button
+                  variant="secondary"
+                  disabled
+                  title="Nachrichten sind erst im echten Mandantenportal verfügbar."
+                  className="flex-1 bg-[#12122a] border border-[#1e1e3a] text-[#8a8aa8] text-xs disabled:opacity-60"
+                >
+                  <MessageSquare size={12} className="mr-1.5" />
+                  Nachricht
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

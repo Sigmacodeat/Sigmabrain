@@ -17,6 +17,9 @@ export interface SecurityContent {
   hostingOptions: { title: string; points: string[] }[];
   complianceTitle: string;
   complianceItems: { title: string; desc: string }[];
+  aiActTitle: string;
+  aiActText: string;
+  aiActItems: { title: string; desc: string }[];
   roadmapTitle: string;
   roadmapText: string;
   roadmapItems: string[];
@@ -52,8 +55,16 @@ export const SECURITY: Record<Lang, SecurityContent> = {
     complianceTitle: "What we have today",
     complianceItems: [
       { title: "GDPR-aligned processing", desc: "DPA for hosted plans, EU data location, documented subprocessors, deletion on request. Self-hosted deployments process nothing on our side at all." },
-      { title: "Professional secrecy (e.g. § 203 German Criminal Code)", desc: "Self-hosting means no third party is involved — the cleanest answer to professional-secrecy rules. Hosted plans add a contractual confidentiality commitment on top of the DPA." },
+      { title: "Professional secrecy (§ 203 StGB, § 43e BRAO)", desc: "Self-hosting means no third party is involved — the cleanest answer to professional-secrecy rules for lawyers and tax advisors. Hosted plans add a contractual confidentiality commitment on top of the DPA, covering involved parties under § 43e BRAO / § 203 (4) StGB." },
+      { title: "Built-in anonymization before the cloud", desc: "A one-click tool redacts client names, IBANs, case numbers and contact data from any text before it is shared or sent to a cloud LLM — with a re-identification map only the authorized holder keeps. Pattern-based offline; name detection adds an optional LLM layer." },
       { title: "Tested isolation", desc: "Multi-tenant scoping is enforced in the engine and pinned by fuzz tests across every read path — not a dashboard checkbox." },
+    ],
+    aiActTitle: "EU AI Act — where we stand",
+    aiActText: "The AI Act's transparency duties (Art. 50) and most high-risk obligations apply from 2 August 2026. Our honest position before that date:",
+    aiActItems: [
+      { title: "AI output is labelled (Art. 50)", desc: "Every AI-generated draft and answer is marked as AI-generated — visibly in the app and as a machine-readable marker on the API response and on saved documents. A human signs off; the machine never poses as the author." },
+      { title: "Human oversight, always", desc: "Sigmabrain drafts and suggests; it never files, books, or sends on its own. A qualified professional reviews and approves every output — the human-in-the-loop the Act requires for high-risk use." },
+      { title: "Risk classification, documented", desc: "We assess each feature against Annex III instead of assuming. Lawyer-facing assistance is generally not high-risk on its own; where a feature touches deadlines or legal consequences, we document the classification and keep the audit log." },
     ],
     roadmapTitle: "What we don't have yet — honestly",
     roadmapText: "We'd rather tell you here than have you find out in procurement. In progress, in order:",
@@ -97,8 +108,16 @@ export const SECURITY: Record<Lang, SecurityContent> = {
     complianceTitle: "Was wir heute haben",
     complianceItems: [
       { title: "DSGVO-konforme Verarbeitung", desc: "AVV für gehostete Pläne, EU-Datenstandort, dokumentierte Subprozessoren, Löschung auf Anfrage. Self-Hosted-Deployments verarbeiten auf unserer Seite gar nichts." },
-      { title: "Berufsgeheimnisschutz (§ 203 StGB)", desc: "Self-Hosting heißt: kein Dritter ist beteiligt — die sauberste Antwort auf die Verschwiegenheitspflicht, ganz ohne mitwirkende Person. Gehostete Pläne ergänzen die AVV um eine vertragliche Verschwiegenheitsverpflichtung nach § 203 Abs. 4 StGB." },
+      { title: "Berufsgeheimnisschutz (§ 203 StGB, § 43e BRAO)", desc: "Self-Hosting heißt: kein Dritter ist beteiligt — die sauberste Antwort auf die Verschwiegenheitspflicht, ganz ohne mitwirkende Person. Gehostete Pläne ergänzen die AVV um eine vertragliche Verschwiegenheitsverpflichtung nach § 43e BRAO / § 203 Abs. 4 StGB." },
+      { title: "Eingebaute Anonymisierung vor der Cloud", desc: "Ein Klick schwärzt Mandantennamen, IBANs, Aktenzeichen und Kontaktdaten aus jedem Text, bevor er geteilt oder an ein Cloud-LLM gegeben wird — mit Re-Identifikations-Mapping, das nur der Berechtigte behält. Muster-basiert offline; Namens-Erkennung optional per LLM." },
       { title: "Getestete Isolation", desc: "Multi-Tenant-Scoping wird in der Engine erzwungen und über jeden Lesepfad mit Fuzz-Tests gepinnt — keine Dashboard-Checkbox." },
+    ],
+    aiActTitle: "EU AI Act — wo wir stehen",
+    aiActText: "Die Transparenzpflichten des AI Act (Art. 50) und die meisten Hochrisiko-Pflichten gelten ab dem 2. August 2026. Unsere ehrliche Position vor diesem Stichtag:",
+    aiActItems: [
+      { title: "KI-Output ist gekennzeichnet (Art. 50)", desc: "Jeder KI-generierte Entwurf und jede KI-Antwort ist als KI-generiert markiert — sichtbar in der App und als maschinenlesbares Kennzeichen auf der API-Antwort und in gespeicherten Dokumenten. Ein Mensch zeichnet ab; die Maschine gibt sich nie als Urheber aus." },
+      { title: "Menschliche Aufsicht, immer", desc: "Sigmabrain entwirft und schlägt vor — es reicht nichts ein, bucht nichts und versendet nichts von selbst. Eine qualifizierte Fachkraft prüft und gibt jeden Output frei: der vom Act geforderte Human-in-the-Loop für Hochrisiko-Nutzung." },
+      { title: "Risiko-Einstufung, dokumentiert", desc: "Wir prüfen jedes Feature gegen Annex III, statt zu vermuten. Anwaltsunterstützung allein ist i. d. R. nicht hochrisiko; wo ein Feature Fristen oder Rechtsfolgen berührt, dokumentieren wir die Einstufung und führen das Audit-Log." },
     ],
     roadmapTitle: "Was wir noch nicht haben — ehrlich",
     roadmapText: "Wir sagen es lieber hier, als dass ihr es im Einkauf herausfindet. In Arbeit, in dieser Reihenfolge:",

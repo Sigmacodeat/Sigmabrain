@@ -10,7 +10,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
   // Throttle automated account creation per IP.
-  const ipLimit = hit(`signup:ip:${clientIp(req.headers)}`, 5, 60 * 60_000);
+  const ipLimit = await hit(`signup:ip:${clientIp(req.headers)}`, 5, 60 * 60_000);
   if (!ipLimit.ok) {
     return NextResponse.json(
       { error: "rate_limited" },

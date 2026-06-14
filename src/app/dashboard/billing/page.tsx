@@ -75,7 +75,7 @@ function UsageCard() {
             </div>
           );
         })}
-        <p className="text-xs text-[#4a4a6a] leading-relaxed">
+        <p className="text-xs text-[#8a8aa8] leading-relaxed">
           Fair Use heißt: Beim Erreichen des Limits drosseln wir nicht still und es gibt keine
           Überraschungsrechnung — wir melden uns und besprechen das passende Paket.
         </p>
@@ -98,16 +98,16 @@ interface Me {
 const PLANS = [
   {
     id: "free", name: "Free", price: "0 €",
-    features: ["100 Seiten", "50 Queries/Monat", "1 Brain", "Community-Support"],
+    features: ["100 Seiten", "1 GB Dateispeicher", "50 Queries/Monat", "1 Brain", "Community-Support"],
   },
   {
     id: "pro", name: "Pro", price: "79 €/Monat",
-    features: ["25.000 Seiten", "Fair-Use-Queries", "Dream Cycle 24/7", "E-Mail- & Dokumenten-Import", "Prioritäts-Support"],
+    features: ["25.000 Seiten", "50 GB Cloud-Dateispeicher", "Fair-Use-Queries", "Dream Cycle 24/7", "E-Mail-, Dokumenten- & WhatsApp-Medien-Import", "Prioritäts-Support"],
     highlight: true,
   },
   {
     id: "team", name: "Team", price: "290 €/Monat",
-    features: ["5 Seats inklusive", "Geteiltes Firmen-Brain", "Scoped Access pro Nutzer", "Admin & Analytics", "Onboarding-Session"],
+    features: ["5 Seats inklusive", "250 GB Cloud-Dateispeicher", "Geteiltes Firmen-Brain", "Scoped Access pro Nutzer", "Admin & Analytics", "Onboarding-Session"],
   },
 ];
 
@@ -185,21 +185,21 @@ function BillingInner() {
       <Card>
         <div className="p-6 flex items-center justify-between flex-wrap gap-4">
           <div>
-            <p className="text-xs text-[#4a4a6a] uppercase tracking-wider mb-1">Aktueller Plan</p>
+            <p className="text-xs text-[#8a8aa8] uppercase tracking-wider mb-1">Aktueller Plan</p>
             <div className="flex items-center gap-3">
               <span className="text-xl font-bold text-[#e8e8f0] capitalize">{currentPlan}</span>
               <Badge variant={currentPlan === "free" ? "default" : "accent"}>
                 {currentPlan === "free" ? "Kostenlos" : "Aktiv"}
               </Badge>
             </div>
-            {me?.user && <p className="text-xs text-[#4a4a6a] mt-1">{me.user.email}</p>}
+            {me?.user && <p className="text-xs text-[#8a8aa8] mt-1">{me.user.email}</p>}
           </div>
           {typeof me?.referrals === "number" && (
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
               <Gift size={16} className="text-amber-400" />
               <div>
                 <p className="text-sm font-semibold text-[#e8e8f0]">{me.referrals} Empfehlung{me.referrals === 1 ? "" : "en"}</p>
-                <p className="text-xs text-[#4a4a6a]">= {me.referrals} Gratismonat{me.referrals === 1 ? "" : "e"} verdient</p>
+                <p className="text-xs text-[#8a8aa8]">= {me.referrals} Gratismonat{me.referrals === 1 ? "" : "e"} verdient</p>
               </div>
             </div>
           )}
@@ -248,7 +248,7 @@ function BillingInner() {
         })}
       </div>
 
-      <p className="text-xs text-[#4a4a6a]">
+      <p className="text-xs text-[#8a8aa8]">
         Enterprise (EU-/On-Prem-Hosting, AVV, SSO)?{" "}
         <a href="mailto:hello@sigmabrain.com" className="text-violet-400 hover:underline">Sprich mit uns</a>.
         Jahreszahlung −20 % — im Checkout wählbar.

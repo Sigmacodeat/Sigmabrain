@@ -13,7 +13,7 @@ import { sendMail, siteUrl } from "@/lib/mail";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
-  const ipLimit = hit(`invite:ip:${clientIp(req.headers)}`, 20, 60 * 60_000);
+  const ipLimit = await hit(`invite:ip:${clientIp(req.headers)}`, 20, 60 * 60_000);
   if (!ipLimit.ok) {
     return NextResponse.json(
       { error: "rate_limited" },

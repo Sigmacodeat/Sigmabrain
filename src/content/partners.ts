@@ -20,12 +20,6 @@ export interface PartnersContent {
     href: string;
     highlight?: boolean;
   }[];
-  structureTitle: string;
-  structureSub: string;
-  structureLevels: { level: string; rate: string; desc: string }[];
-  structureNote: string;
-  territoryTitle: string;
-  territoryText: string;
   calcTitle: string;
   calcSub: string;
   calcNote: string;
@@ -40,22 +34,22 @@ export interface PartnersContent {
 
 export const PARTNERS: Record<Lang, PartnersContent> = {
   en: {
-    metaTitle: "Sigmabrain Partner Program — earn 30% recurring",
-    metaDesc: "Recommend Sigmabrain, earn 30% recurring commission for 12 months. Affiliate, referral and certified implementation partner tracks.",
+    metaTitle: "Sigmabrain Partner Program — earn lifetime recurring commission",
+    metaDesc: "Recommend Sigmabrain and earn lifetime recurring commission. Affiliate, referral and certified implementation partner tracks.",
     badge: "Partner program",
     h1a: "Recommend the brain.",
     h1b: "Keep the commission.",
-    sub: "Three ways to earn with Sigmabrain — from a single shared link to a certified implementation practice. All built on one principle: recurring commission on recurring revenue.",
+    sub: "Three ways to earn with Sigmabrain — from a single shared link to a certified implementation practice. All built on one principle: you keep earning as long as your referrals keep paying.",
     tiers: [
       {
         id: "affiliate",
         icon: "Megaphone",
         name: "Affiliates",
-        headline: "30% recurring · 12 months",
+        headline: "30% lifetime recurring",
         desc: "For creators, newsletters, course authors and communities whose audience runs on knowledge.",
         points: [
-          "25% of every payment for 12 months per customer you refer directly",
-          "+5% override on customers referred by affiliates you recruited — two levels, never more",
+          "25% of every payment for as long as your referred customer stays",
+          "+5% override on customers referred by affiliates you recruit — grow your passive income",
           "90-day cookie window",
           "Monthly payouts from €50, real-time dashboard",
           "Ready-made assets: demos, screenshots, comparison pages",
@@ -95,18 +89,9 @@ export const PARTNERS: Record<Lang, PartnersContent> = {
         href: "mailto:partners@sigmabrain.com?subject=Certified%20partner%20application",
       },
     ],
-    structureTitle: "Two levels. Never more.",
-    structureSub: "A state-of-the-art two-tier structure — every cent of commission follows real subscription revenue, nothing else.",
-    structureLevels: [
-      { level: "Level 1 — you refer a customer", rate: "25% recurring · 12 months", desc: "A customer signs up through your link and pays. You earn 25% of every payment for 12 months — upgrades included." },
-      { level: "Level 2 — your recruited affiliate refers a customer", rate: "5% override · 12 months", desc: "You brought another affiliate into the program, and they bring a paying customer. You earn a 5% override on that customer's payments — passive income on distribution you built." },
-    ],
-    structureNote: "Why we hard-cap at two levels: commissions are paid exclusively on actual subscription revenue — never for recruiting partners, never on entry fees (there are none), never on level three. That keeps the program clearly on the right side of German and Austrian law on progressive customer acquisition (§ 16 (2) UWG / § 27 öUWG) — and on the right side of the trust that confidentiality-first customers buy us for.",
-    territoryTitle: "Territory exclusivity?",
-    territoryText: "Honest answer: not yet. Exclusive territories sold before product-market fit are promises, not territories — and EU competition law makes exclusivity contracts a matter for lawyers, not landing pages. What we offer instead, today: become a Regional Launch Partner — performance-gated priority in your region, right of first refusal if we ever introduce exclusivity there, and the full 5% override on every affiliate you recruit locally. Passive income from revenue you helped create, not from a map.",
-    calcTitle: "What 30% recurring actually means",
-    calcSub: "Refer 10 Team customers (€290/month). That's €870 every month — €10,440 over the 12-month commission window. From ten recommendations.",
-    calcNote: "Commission rates at or above 30% are sustainable only for high-margin products — ours is one. Industry standard is 20–30%; we start at the top of the range because early partners matter most.",
+    calcTitle: "What lifetime recurring actually means",
+    calcSub: "Refer 10 Team customers (€290/month). That's €870 every month — for as long as they stay. Year one alone is €10,440. And it keeps compounding.",
+    calcNote: "We pay at the top of the industry range because early partners matter most. The more successful your referrals, the more we all grow.",
     howTitle: "How it works",
     how: [
       { step: "01", title: "Apply & get your link", desc: "We review applications within 48 hours. You get a tracked link and a partner dashboard." },
@@ -115,34 +100,34 @@ export const PARTNERS: Record<Lang, PartnersContent> = {
     ],
     faqTitle: "Partner FAQ",
     faq: [
-      { q: "When do commissions start and stop?", a: "Affiliate commissions run for 12 months per referred customer, starting with their first payment. Certified partners earn 20% for as long as the client stays." },
-      { q: "What if a customer upgrades?", a: "Your commission follows their actual payments. Refer a Pro customer who upgrades to Team — your 30% applies to the Team price." },
+      { q: "When do commissions start?", a: "From the first payment your referral makes. Affiliate commissions continue for as long as they remain a paying customer — no cutoff, no cap." },
+      { q: "What if a customer upgrades?", a: "Your commission follows their actual payments. Refer a Pro customer who upgrades to Team — your percentage applies to the new price, automatically." },
       { q: "Can I be both an affiliate and a certified partner?", a: "Yes. Many partners start with the affiliate track and certify once they've implemented for a few clients." },
-      { q: "Is there a self-referral or coupon abuse policy?", a: "Self-referrals don't pay out, and we monitor for abuse. Honest programs stay generous — that's the deal." },
-      { q: "How exactly does the two-level structure work?", a: "You earn 25% on customers you refer directly. If you recruit another affiliate, you additionally earn a 5% override on the customers they refer — same 12-month window per customer. There is no level three, by design: commission follows product revenue, not recruitment chains." },
-      { q: "Can I get territory exclusivity?", a: "Not today — see the honest answer above. Apply as a Regional Launch Partner instead: performance-gated regional priority, right of first refusal on any future exclusivity, and the 5% override on every affiliate you recruit in your region." },
+      { q: "Is there a self-referral policy?", a: "Self-referrals don't pay out — we keep the program honest so it stays generous for everyone." },
+      { q: "Can I recruit other affiliates?", a: "Yes. When you bring in another affiliate, you earn a 5% override on the customers they refer. It's our way of rewarding you for growing the partner network." },
+      { q: "Can I get territory exclusivity?", a: "Apply as a Regional Launch Partner — performance-gated priority in your region and the full 5% override on every affiliate you recruit locally." },
     ],
     ctaTitle: "Your audience needs a brain. You need recurring revenue.",
     ctaSub: "Applications reviewed within 48 hours.",
     ctaButton: "Apply now",
   },
   de: {
-    metaTitle: "Sigmabrain Partnerprogramm — 30 % wiederkehrend verdienen",
-    metaDesc: "Sigmabrain empfehlen, 30 % wiederkehrende Provision für 12 Monate verdienen. Affiliate-, Referral- und zertifizierte Implementierungspartner-Tracks.",
+    metaTitle: "Sigmabrain Partnerprogramm — lebenslang wiederkehrend verdienen",
+    metaDesc: "Sigmabrain empfehlen und lebenslang wiederkehrende Provision verdienen. Affiliate-, Referral- und zertifizierte Implementierungspartner-Tracks.",
     badge: "Partnerprogramm",
     h1a: "Empfiehl das Brain.",
     h1b: "Behalte die Provision.",
-    sub: "Drei Wege, mit Sigmabrain zu verdienen — vom geteilten Link bis zur zertifizierten Implementierungs-Practice. Alle nach einem Prinzip: wiederkehrende Provision auf wiederkehrenden Umsatz.",
+    sub: "Drei Wege, mit Sigmabrain zu verdienen — vom geteilten Link bis zur zertifizierten Implementierungs-Practice. Alle nach einem Prinzip: Du verdienst weiter, solange deine Empfehlungen zahlen.",
     tiers: [
       {
         id: "affiliate",
         icon: "Megaphone",
         name: "Affiliates",
-        headline: "30 % wiederkehrend · 12 Monate",
+        headline: "30 % lebenslang wiederkehrend",
         desc: "Für Creator, Newsletter, Kurs-Anbieter und Communities, deren Publikum von Wissen lebt.",
         points: [
-          "25 % jeder Zahlung, 12 Monate lang, pro direkt geworbenem Kunden",
-          "+5 % Override auf Kunden von Affiliates, die du rekrutiert hast — zwei Ebenen, nie mehr",
+          "25 % jeder Zahlung, solange dein geworbener Kunde bleibt",
+          "+5 % Override auf Kunden von Affiliates, die du rekrutiert hast — baue dir passives Einkommen auf",
           "90 Tage Cookie-Fenster",
           "Monatliche Auszahlung ab 50 €, Echtzeit-Dashboard",
           "Fertige Assets: Demos, Screenshots, Vergleichsseiten",
@@ -182,18 +167,9 @@ export const PARTNERS: Record<Lang, PartnersContent> = {
         href: "mailto:partners@sigmabrain.com?subject=Partner-Bewerbung",
       },
     ],
-    structureTitle: "Zwei Ebenen. Nie mehr.",
-    structureSub: "Eine State-of-the-Art-Zweistufen-Struktur — jeder Cent Provision folgt echtem Abo-Umsatz, sonst nichts.",
-    structureLevels: [
-      { level: "Ebene 1 — du wirbst einen Kunden", rate: "25 % wiederkehrend · 12 Monate", desc: "Ein Kunde registriert sich über deinen Link und zahlt. Du verdienst 25 % jeder Zahlung, 12 Monate lang — Upgrades inklusive." },
-      { level: "Ebene 2 — dein rekrutierter Affiliate wirbt einen Kunden", rate: "5 % Override · 12 Monate", desc: "Du hast einen weiteren Affiliate ins Programm gebracht, und der bringt einen zahlenden Kunden. Du verdienst 5 % Override auf dessen Zahlungen — passives Einkommen aus Vertrieb, den du aufgebaut hast." },
-    ],
-    structureNote: "Warum wir hart bei zwei Ebenen deckeln: Provisionen fließen ausschließlich auf echten Abo-Umsatz — nie fürs Anwerben von Partnern, nie auf Einstiegsgebühren (es gibt keine), nie auf Ebene drei. Das hält das Programm klar auf der richtigen Seite des Verbots progressiver Kundenwerbung (§ 16 Abs. 2 UWG / § 27 öUWG) — und auf der richtigen Seite des Vertrauens, für das uns verschwiegenheitspflichtige Kunden kaufen.",
-    territoryTitle: "Gebietsexklusivität?",
-    territoryText: "Ehrliche Antwort: noch nicht. Exklusivgebiete, die vor Product-Market-Fit verkauft werden, sind Versprechen, keine Gebiete — und EU-Wettbewerbsrecht macht Exklusivitätsverträge zur Sache von Anwälten, nicht von Landingpages. Was wir stattdessen heute anbieten: Werde Regional Launch Partner — leistungsgebundener Vorrang in deiner Region, Vorkaufsrecht (Right of First Refusal), falls wir dort je Exklusivität einführen, und der volle 5-%-Override auf jeden Affiliate, den du lokal rekrutierst. Passives Einkommen aus Umsatz, den du mit aufgebaut hast — nicht aus einer Landkarte.",
-    calcTitle: "Was 30 % wiederkehrend wirklich heißt",
-    calcSub: "Wirb 10 Team-Kunden (290 €/Monat). Das sind 870 € jeden Monat — 10.440 € über das 12-Monats-Provisionsfenster. Aus zehn Empfehlungen.",
-    calcNote: "Provisionen ab 30 % sind nur bei margenstarken Produkten tragfähig — unseres ist eines. Branchenstandard sind 20–30 %; wir starten am oberen Ende, weil frühe Partner am meisten zählen.",
+    calcTitle: "Was lebenslang wiederkehrend wirklich heißt",
+    calcSub: "Wirb 10 Team-Kunden (290 €/Monat). Das sind 870 € jeden Monat — solange sie bleiben. Allein im ersten Jahr sind das 10.440 €. Und es läuft weiter.",
+    calcNote: "Wir zahlen am oberen Ende der Branche, weil frühe Partner am meisten zählen. Je erfolgreicher deine Empfehlungen, desto mehr wachsen wir gemeinsam.",
     howTitle: "So funktioniert's",
     how: [
       { step: "01", title: "Bewerben & Link erhalten", desc: "Wir prüfen Bewerbungen innerhalb von 48 Stunden. Du bekommst einen getrackten Link und ein Partner-Dashboard." },
@@ -202,12 +178,12 @@ export const PARTNERS: Record<Lang, PartnersContent> = {
     ],
     faqTitle: "Partner-FAQ",
     faq: [
-      { q: "Wann beginnt und endet die Provision?", a: "Affiliate-Provisionen laufen 12 Monate pro geworbenem Kunden, ab dessen erster Zahlung. Zertifizierte Partner verdienen 20 %, solange der Kunde bleibt." },
-      { q: "Was passiert bei einem Upgrade?", a: "Deine Provision folgt den tatsächlichen Zahlungen. Wirbst du einen Pro-Kunden, der auf Team upgradet, gelten deine 30 % auf den Team-Preis." },
+      { q: "Wann beginnt die Provision?", a: "Ab der ersten Zahlung deiner Empfehlung. Affiliate-Provisionen laufen so lange, wie der Kunde zahlt — kein Stichtag, keine Obergrenze." },
+      { q: "Was passiert bei einem Upgrade?", a: "Deine Provision folgt den tatsächlichen Zahlungen. Wirbst du einen Pro-Kunden, der auf Team upgradet, gelten deine Prozente auf den neuen Preis, automatisch." },
       { q: "Kann ich Affiliate UND zertifizierter Partner sein?", a: "Ja. Viele starten als Affiliate und zertifizieren sich nach den ersten Implementierungen." },
-      { q: "Gibt es Regeln gegen Selbst-Empfehlung und Coupon-Missbrauch?", a: "Selbst-Empfehlungen werden nicht ausgezahlt, und wir überwachen Missbrauch. Ehrliche Programme bleiben großzügig — das ist der Deal." },
-      { q: "Wie funktioniert die Zwei-Ebenen-Struktur genau?", a: "Du verdienst 25 % auf direkt geworbene Kunden. Rekrutierst du einen weiteren Affiliate, verdienst du zusätzlich 5 % Override auf dessen geworbene Kunden — gleiches 12-Monats-Fenster pro Kunde. Eine Ebene drei gibt es bewusst nicht: Provision folgt Produktumsatz, nicht Anwerbeketten." },
-      { q: "Kann ich Gebietsexklusivität bekommen?", a: "Heute nicht — siehe die ehrliche Antwort oben. Bewirb dich stattdessen als Regional Launch Partner: leistungsgebundener Regional-Vorrang, Vorkaufsrecht auf etwaige künftige Exklusivität und der 5-%-Override auf jeden Affiliate, den du in deiner Region rekrutierst." },
+      { q: "Gibt es Regeln gegen Selbst-Empfehlung?", a: "Selbst-Empfehlungen werden nicht ausgezahlt — wir halten das Programm ehrlich, damit es für alle großzügig bleibt." },
+      { q: "Kann ich andere Affiliates rekrutieren?", a: "Ja. Wenn du einen weiteren Affiliate einbringst, verdienst du 5 % Override auf dessen geworbene Kunden. So belohnen wir dich fürs Ausbauen des Partner-Netzwerks." },
+      { q: "Kann ich Gebietsexklusivität bekommen?", a: "Bewirb dich als Regional Launch Partner — leistungsgebundener Vorrang in deiner Region und der volle 5-%-Override auf jeden Affiliate, den du lokal rekrutierst." },
     ],
     ctaTitle: "Dein Publikum braucht ein Brain. Du brauchst wiederkehrenden Umsatz.",
     ctaSub: "Bewerbungen werden innerhalb von 48 Stunden geprüft.",

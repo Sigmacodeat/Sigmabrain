@@ -5,13 +5,38 @@
 export interface SessionPayload {
   uid: string;
   email: string;
-  role: "user" | "admin";
+  role: import("./store").KanzleiRole;
   exp: number; // unix seconds
 }
 
 export const SESSION_COOKIE = "sb_session";
 export const REF_COOKIE = "sb_ref";
 export const SESSION_TTL_SECONDS = 30 * 24 * 3600; // 30 days
+
+export interface SessionResult {
+  token: string;
+  cookieOptions: {
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: "strict" | "lax" | "none";
+    maxAge: number;
+    path: string;
+  };
+}
+
+export async function createSession(userId: string, email: string, role: SessionPayload["role"]): Promise<SessionResult> {
+  const token = await signSession({ uid: userId, email, role });
+  return {
+    token,
+    cookieOptions: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: SESSION_TTL_SECONDS * 1000,
+      path: "/",
+    },
+  };
+}
 
 const encoder = new TextEncoder();
 
@@ -24,20 +49,20 @@ export function getAuthSecret(): string {
   return "sigmabrain-dev-secret-change-me";
 }
 
-function b64url(data: ArrayBuffer | string): string {
+export function b64url(data: ArrayBuffer | string): string {
   const bytes = typeof data === "string" ? encoder.encode(data) : new Uint8Array(data);
   let bin = "";
   for (const b of bytes) bin += String.fromCharCode(b);
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-function b64urlDecode(input: string): string {
+export function b64urlDecode(input: string): string {
   const b64 = input.replace(/-/g, "+").replace(/_/g, "/");
   const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
   return atob(padded);
 }
 
-async function hmacKey(secret: string): Promise<CryptoKey> {
+export async function hmacKey(secret: string): Promise<CryptoKey> {
   return crypto.subtle.importKey(
     "raw",
     encoder.encode(secret),

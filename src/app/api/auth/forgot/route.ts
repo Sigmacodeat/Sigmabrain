@@ -5,7 +5,7 @@ import { hit, clientIp } from "@/lib/auth/rate-limit";
 import { sendMail, siteUrl } from "@/lib/mail";
 
 export async function POST(req: NextRequest) {
-  const ipLimit = hit(`forgot:ip:${clientIp(req.headers)}`, 5, 15 * 60_000);
+  const ipLimit = await hit(`forgot:ip:${clientIp(req.headers)}`, 5, 15 * 60_000);
   if (!ipLimit.ok) {
     return NextResponse.json(
       { error: "rate_limited" },
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   const email = (body.email ?? "").trim().toLowerCase();
   if (!email) return NextResponse.json({ error: "invalid_email" }, { status: 400 });
 
-  const emailLimit = hit(`forgot:email:${email}`, 3, 60 * 60_000);
+  const emailLimit = await hit(`forgot:email:${email}`, 3, 60 * 60_000);
   if (!emailLimit.ok) {
     return NextResponse.json(
       { error: "rate_limited" },

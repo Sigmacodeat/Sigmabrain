@@ -1,20 +1,41 @@
-// SaaS admin — customers, plans, referral attribution.
+// SaaS admin — customers, plans, referral attribution, audit trail.
 // Server component; middleware already gates this to role=admin, and we
 // double-check server-side (defense in depth).
 
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Users, CreditCard, Gift, Shield, ArrowLeft } from "lucide-react";
+import { Users, CreditCard, Gift, Shield, ArrowLeft, ClipboardList } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { getSessionUser } from "@/lib/auth/server";
 import { getStore } from "@/lib/auth/store";
+import AuditTrail from "@/components/admin/audit-trail";
 
 export const metadata = { title: "Admin" };
 export const dynamic = "force-dynamic";
 
-export default async function AdminPage() {
+function TabLink({ href, icon: Icon, label, active }: { href: string; icon: LucideIcon; label: string; active?: boolean }) {
+  return (
+    <Link
+      href={href}
+      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+        active
+          ? "bg-violet-600/10 border-violet-500/30 text-violet-400"
+          : "bg-[#0a0a18] border-[#1e1e3a] text-[#8888aa] hover:text-[#e8e8f0] hover:border-[#3a3a6a]"
+      }`}
+    >
+      <Icon size={16} />
+      {label}
+    </Link>
+  );
+}
+
+export default async function AdminPage({ searchParams }: { searchParams?: Promise<{ tab?: string }> }) {
   const me = await getSessionUser();
   if (!me) redirect("/login?next=/admin");
   if (me.role !== "admin") redirect("/dashboard");
+
+  const params = await searchParams;
+  const tab = params?.tab || "customers";
 
   const users = await getStore().list();
   const paying = users.filter((u) => u.plan !== "free");
@@ -81,64 +102,76 @@ export default async function AdminPage() {
           })}
         </div>
 
-        {/* Customers table */}
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] overflow-hidden">
-          <div className="px-5 py-4 border-b border-[#1e1e3a]">
-            <h2 className="text-sm font-semibold text-[#e8e8f0]">Kunden</h2>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-xs text-[#4a4a6a] uppercase tracking-wider border-b border-[#1e1e3a]">
-                  <th className="px-5 py-3 font-medium">Name</th>
-                  <th className="px-5 py-3 font-medium">E-Mail</th>
-                  <th className="px-5 py-3 font-medium">Plan</th>
-                  <th className="px-5 py-3 font-medium">Rolle</th>
-                  <th className="px-5 py-3 font-medium">Geworben von</th>
-                  <th className="px-5 py-3 font-medium">Eigene Referrals</th>
-                  <th className="px-5 py-3 font-medium">Ebene 2</th>
-                  <th className="px-5 py-3 font-medium">Registriert</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.length === 0 && (
-                  <tr>
-                    <td colSpan={8} className="px-5 py-10 text-center text-[#4a4a6a]">
-                      Noch keine Kunden. Der erste Signup wird automatisch Admin.
-                    </td>
-                  </tr>
-                )}
-                {users.map((u) => (
-                  <tr key={u.id} className="border-b border-[#1e1e3a]/50 last:border-0 hover:bg-[#12122a]/50">
-                    <td className="px-5 py-3 text-[#e8e8f0] font-medium">{u.name}</td>
-                    <td className="px-5 py-3 text-[#8888aa]">{u.email}</td>
-                    <td className="px-5 py-3">
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${
-                        u.plan === "free"
-                          ? "bg-[#1e1e3a] text-[#8888aa]"
-                          : "bg-violet-500/15 text-violet-400 border border-violet-500/20"
-                      }`}>
-                        {u.plan}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-[#8888aa] capitalize">{u.role}</td>
-                    <td className="px-5 py-3 font-mono text-xs text-[#8888aa]">{u.referredBy ?? "—"}</td>
-                    <td className="px-5 py-3 text-[#8888aa]">{referralCounts.get(u.referralCode) ?? 0}</td>
-                    <td className="px-5 py-3 text-[#8888aa]">{indirectCounts.get(u.referralCode) ?? 0}</td>
-                    <td className="px-5 py-3 text-[#4a4a6a] text-xs">{u.createdAt.slice(0, 10)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* Tabs */}
+        <div className="flex gap-2">
+          <TabLink href="/admin" icon={Users} label="Kunden" active={tab === "customers"} />
+          <TabLink href="/admin?tab=audit" icon={ClipboardList} label="Audit-Trail" active={tab === "audit"} />
         </div>
 
-        <p className="text-xs text-[#4a4a6a]">
-          Provisions-Auszahlungen an Affiliates laufen über das Affiliate-Tool (siehe Partnerprogramm;
-          für die Zwei-Ebenen-Struktur braucht es FirstPromoter o. ä. — Rewardful kann kein natives 2-Tier) —
-          diese Tabelle zeigt die produktinterne Attribution: direkte Referrals (Ebene 1) und
-          Referrals der eigenen Geworbenen (Ebene 2).
-        </p>
+        {tab === "audit" ? (
+          <AuditTrail />
+        ) : (
+          <>
+            {/* Customers table */}
+            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] overflow-hidden">
+              <div className="px-5 py-4 border-b border-[#1e1e3a]">
+                <h2 className="text-sm font-semibold text-[#e8e8f0]">Kunden</h2>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-xs text-[#4a4a6a] uppercase tracking-wider border-b border-[#1e1e3a]">
+                      <th className="px-5 py-3 font-medium">Name</th>
+                      <th className="px-5 py-3 font-medium">E-Mail</th>
+                      <th className="px-5 py-3 font-medium">Plan</th>
+                      <th className="px-5 py-3 font-medium">Rolle</th>
+                      <th className="px-5 py-3 font-medium">Geworben von</th>
+                      <th className="px-5 py-3 font-medium">Eigene Referrals</th>
+                      <th className="px-5 py-3 font-medium">Ebene 2</th>
+                      <th className="px-5 py-3 font-medium">Registriert</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.length === 0 && (
+                      <tr>
+                        <td colSpan={8} className="px-5 py-10 text-center text-[#4a4a6a]">
+                          Noch keine Kunden. Der erste Signup wird automatisch Admin.
+                        </td>
+                      </tr>
+                    )}
+                    {users.map((u) => (
+                      <tr key={u.id} className="border-b border-[#1e1e3a]/50 last:border-0 hover:bg-[#12122a]/50">
+                        <td className="px-5 py-3 text-[#e8e8f0] font-medium">{u.name}</td>
+                        <td className="px-5 py-3 text-[#8888aa]">{u.email}</td>
+                        <td className="px-5 py-3">
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${
+                            u.plan === "free"
+                              ? "bg-[#1e1e3a] text-[#8888aa]"
+                              : "bg-violet-500/15 text-violet-400 border border-violet-500/20"
+                          }`}>
+                            {u.plan}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 text-[#8888aa] capitalize">{u.role}</td>
+                        <td className="px-5 py-3 font-mono text-xs text-[#8888aa]">{u.referredBy ?? "—"}</td>
+                        <td className="px-5 py-3 text-[#8888aa]">{referralCounts.get(u.referralCode) ?? 0}</td>
+                        <td className="px-5 py-3 text-[#8888aa]">{indirectCounts.get(u.referralCode) ?? 0}</td>
+                        <td className="px-5 py-3 text-[#4a4a6a] text-xs">{u.createdAt.slice(0, 10)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <p className="text-xs text-[#4a4a6a]">
+              Provisions-Auszahlungen an Affiliates laufen über das Affiliate-Tool (siehe Partnerprogramm;
+              für die Zwei-Ebenen-Struktur braucht es FirstPromoter o. ä. — Rewardful kann kein natives 2-Tier) —
+              diese Tabelle zeigt die produktinterne Attribution: direkte Referrals (Ebene 1) und
+              Referrals der eigenen Geworbenen (Ebene 2).
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

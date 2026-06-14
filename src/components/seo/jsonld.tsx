@@ -1,7 +1,7 @@
 // Server-safe JSON-LD injection. Render inside any server page component.
 // Data objects are built per page; keep claims consistent with visible copy.
 
-import type { Lang } from "@/content/site";
+import { ENGINE_REPO_URL, type Lang } from "@/content/site";
 
 export function JsonLd({ data }: { data: object }) {
   return (
@@ -21,7 +21,7 @@ export function organizationLd() {
     name: "Sigmabrain",
     url: BASE,
     logo: `${BASE}/icon-512.png`,
-    sameAs: ["https://github.com/garrytan/gbrain"],
+    sameAs: [ENGINE_REPO_URL],
   };
 }
 
