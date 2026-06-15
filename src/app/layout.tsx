@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import ServiceWorkerRegister from "@/components/pwa/sw-register";
 import RefConsentBanner from "@/components/marketing/ref-consent";
+import SubsumioTheme from "@/components/brand/subsumio-theme";
 import "./globals.css";
 
 // next/font self-hosts at build time — zero runtime requests to Google
@@ -71,6 +72,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} style={{ colorScheme: "dark" }}>
       <body className="min-h-full bg-[#06060f] text-[#e8e8f0] antialiased noise">
+        <SubsumioTheme />
         {children}
         <RefConsentBanner />
         <ServiceWorkerRegister />
