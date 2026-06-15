@@ -115,17 +115,37 @@ export function MarketingNav({ lang }: { lang: Lang }) {
             {solutionsOpen && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 pt-1 w-80">
                 <div className="glass rounded-xl p-2 shadow-2xl shadow-black/50">
-                  {nav.solutionItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={p(lang, item.href)}
-                      className="block px-3 py-2.5 rounded-lg hover:bg-[#1a1a35] group"
-                      onClick={() => setSolutionsOpen(false)}
-                    >
-                    <p className="text-sm font-medium text-[#e8e8f0] group-hover:brand-text">{item.label}</p>
-                      <p className="text-xs text-[#8888aa] mt-0.5">{item.desc}</p>
-                    </Link>
-                  ))}
+                  {nav.solutionItems.map((item) => {
+                    const comingSoon = "comingSoon" in item && item.comingSoon;
+                    if (comingSoon) {
+                      return (
+                        <div
+                          key={item.href}
+                          className="block px-3 py-2.5 rounded-lg cursor-default opacity-55"
+                          aria-disabled="true"
+                        >
+                          <p className="text-sm font-medium text-[#e8e8f0] flex items-center gap-2">
+                            {item.label}
+                            <span className="text-[10px] font-semibold uppercase tracking-wide brand-text brand-soft px-1.5 py-0.5 rounded">
+                              {nav.comingSoonLabel}
+                            </span>
+                          </p>
+                          <p className="text-xs text-[#8888aa] mt-0.5">{item.desc}</p>
+                        </div>
+                      );
+                    }
+                    return (
+                      <Link
+                        key={item.href}
+                        href={p(lang, item.href)}
+                        className="block px-3 py-2.5 rounded-lg hover:bg-[#1a1a35] group"
+                        onClick={() => setSolutionsOpen(false)}
+                      >
+                        <p className="text-sm font-medium text-[#e8e8f0] group-hover:brand-text">{item.label}</p>
+                        <p className="text-xs text-[#8888aa] mt-0.5">{item.desc}</p>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -162,11 +182,22 @@ export function MarketingNav({ lang }: { lang: Lang }) {
       {mobileOpen && (
         <div className="md:hidden mt-3 glass rounded-xl p-3 space-y-1">
           <Link href={p(lang, "/features")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.features}</Link>
-          {nav.solutionItems.map((item) => (
-            <Link key={item.href} href={p(lang, item.href)} className="block px-3 py-2 rounded-lg text-sm text-[#e8e8f0] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>
-              {item.label}
-            </Link>
-          ))}
+          {nav.solutionItems.map((item) => {
+            const comingSoon = "comingSoon" in item && item.comingSoon;
+            if (comingSoon) {
+              return (
+                <div key={item.href} className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-[#8888aa] opacity-60" aria-disabled="true">
+                  {item.label}
+                  <span className="text-[10px] font-semibold uppercase tracking-wide brand-text">{nav.comingSoonLabel}</span>
+                </div>
+              );
+            }
+            return (
+              <Link key={item.href} href={p(lang, item.href)} className="block px-3 py-2 rounded-lg text-sm text-[#e8e8f0] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>
+                {item.label}
+              </Link>
+            );
+          })}
           <Link href={p(lang, "/pricing")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.pricing}</Link>
           <Link href={p(lang, "/compare")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.compare}</Link>
           <Link href={altPath(lang, pathname)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>

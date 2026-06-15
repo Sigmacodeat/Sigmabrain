@@ -64,7 +64,7 @@ import { styleForIndustry } from "@/lib/industry-theme";
 
 // Gruppierte Navigation: jede Sektion mit Überschrift. Alles erreichbar,
 // aber nach Arbeitsbereich sortiert statt 27 flacher Einträge.
-const NAV_SECTIONS: { title: string; items: { href: string; icon: typeof LayoutDashboard; label: string }[] }[] = [
+const NAV_SECTIONS: { title: string; items: { href: string; icon: typeof LayoutDashboard; label: string; comingSoon?: boolean }[] }[] = [
   {
     title: "Gehirn",
     items: [
@@ -130,15 +130,15 @@ const NAV_SECTIONS: { title: string; items: { href: string; icon: typeof LayoutD
     ],
   },
   {
-    title: "Branchen-Workspace",
+    title: "Branchen-Workspace · bald",
     items: [
-      { href: "/dashboard/insurance", icon: ShieldCheck, label: "Versicherung" },
-      { href: "/dashboard/tax", icon: FileSpreadsheet, label: "Steuerberatung" },
-      { href: "/dashboard/realestate", icon: Building2, label: "Immobilien" },
-      { href: "/dashboard/vc", icon: Landmark, label: "VC / Fonds" },
-      { href: "/dashboard/consulting", icon: Briefcase, label: "Beratung" },
-      { href: "/dashboard/recruiting", icon: Users, label: "Recruiting" },
-      { href: "/dashboard/medical", icon: Shield, label: "Medizin" },
+      { href: "/dashboard/insurance", icon: ShieldCheck, label: "Versicherung", comingSoon: true },
+      { href: "/dashboard/tax", icon: FileSpreadsheet, label: "Steuerberatung", comingSoon: true },
+      { href: "/dashboard/realestate", icon: Building2, label: "Immobilien", comingSoon: true },
+      { href: "/dashboard/vc", icon: Landmark, label: "VC / Fonds", comingSoon: true },
+      { href: "/dashboard/consulting", icon: Briefcase, label: "Beratung", comingSoon: true },
+      { href: "/dashboard/recruiting", icon: Users, label: "Recruiting", comingSoon: true },
+      { href: "/dashboard/medical", icon: Shield, label: "Medizin", comingSoon: true },
     ],
   },
 ];
@@ -380,6 +380,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="space-y-0.5">
                 {section.items.map((item) => {
                   const Icon = item.icon;
+                  if (item.comingSoon) {
+                    return (
+                      <div
+                        key={item.href}
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#5a5a78] cursor-default select-none",
+                          collapsed && "justify-center px-0"
+                        )}
+                        title={collapsed ? `${item.label} — bald` : undefined}
+                        aria-disabled="true"
+                      >
+                        <Icon size={16} className="shrink-0 opacity-60" />
+                        {!collapsed && (
+                          <span className="flex items-center justify-between flex-1">
+                            {item.label}
+                            <span className="text-[9px] font-semibold uppercase tracking-wide text-[#6f6f8a] border border-[#2a2a48] rounded px-1 py-0.5">bald</span>
+                          </span>
+                        )}
+                      </div>
+                    );
+                  }
                   const active = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
                   return (
                     <Link

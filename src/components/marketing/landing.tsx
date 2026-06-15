@@ -199,28 +199,45 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         <section className="relative z-10 py-24 px-6 max-w-7xl mx-auto">
           <motion.div {...reveal}><SectionHeading title={t.verticalsTitle} sub={t.verticalsSub} /></motion.div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {t.verticalCards.map((v, i) => (
-              <motion.div
-                key={v.href}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -4 }}
-                viewport={viewport}
-                transition={{ duration: 0.4, delay: (i % 3) * 0.08 }}
-                className="h-full"
-              >
-                <Link
-                  href={p(lang, v.href)}
-                  className="group h-full p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-violet-500/40 hover:bg-[#12122a] transition-colors duration-200 flex flex-col"
+            {t.verticalCards.map((v, i) => {
+              const comingSoon = "comingSoon" in v && v.comingSoon;
+              const soonLabel = lang === "de" ? "Bald verfügbar" : "Coming soon";
+              return (
+                <motion.div
+                  key={v.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={comingSoon ? undefined : { y: -4 }}
+                  viewport={viewport}
+                  transition={{ duration: 0.4, delay: (i % 3) * 0.08 }}
+                  className="h-full"
                 >
-                  <h3 className="text-lg font-bold text-[#e8e8f0] mb-2 group-hover:text-violet-300">{v.title}</h3>
-                  <p className="text-sm text-[#8888aa] leading-relaxed flex-1 mb-5">{v.desc}</p>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-violet-400">
-                    {v.cta} <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-                  </span>
-                </Link>
-              </motion.div>
-            ))}
+                  {comingSoon ? (
+                    <div className="relative h-full p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]/60 flex flex-col cursor-default">
+                      <span className="absolute top-5 right-5 text-[10px] font-semibold uppercase tracking-wide text-violet-300 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full">
+                        {soonLabel}
+                      </span>
+                      <h3 className="text-lg font-bold text-[#c8c8d8] mb-2 pr-24">{v.title}</h3>
+                      <p className="text-sm text-[#6f6f8a] leading-relaxed flex-1 mb-5">{v.desc}</p>
+                      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[#6f6f8a]">
+                        {soonLabel}
+                      </span>
+                    </div>
+                  ) : (
+                    <Link
+                      href={p(lang, v.href)}
+                      className="group h-full p-7 rounded-2xl border border-violet-500/30 bg-[#12122a] hover:border-violet-500/60 hover:bg-[#16163a] transition-colors duration-200 flex flex-col shadow-lg shadow-violet-500/5"
+                    >
+                      <h3 className="text-lg font-bold text-[#e8e8f0] mb-2 group-hover:text-violet-300">{v.title}</h3>
+                      <p className="text-sm text-[#8888aa] leading-relaxed flex-1 mb-5">{v.desc}</p>
+                      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-violet-400">
+                        {v.cta} <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                      </span>
+                    </Link>
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
         </section>
 
