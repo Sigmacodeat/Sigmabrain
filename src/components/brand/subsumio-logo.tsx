@@ -29,7 +29,7 @@ export function SubsumioMark({ size = 36 }: { size?: number }) {
 
 export function SubsumioLogo({
   size = 34,
-  subtitle = "BY SIGMACODE",
+  subtitle = "BY SIGMABRAIN",
   className = "",
 }: {
   size?: number;
