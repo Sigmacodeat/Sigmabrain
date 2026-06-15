@@ -33,7 +33,7 @@ export const FEATURES_PAGE: Record<Lang, FeaturesContent> = {
     badge: "Full capability tour",
     h1a: "Everything it does.",
     h1b: "Nothing hidden.",
-    sub: "Six capability areas, one engine. Click through — every claim here ships in the open-source core you can audit.",
+    sub: "Six capability areas, one engine. Click through — every claim here ships in the product, with deterministic citations you can verify.",
     categories: [
       {
         id: "synthesis",
@@ -159,18 +159,18 @@ export const FEATURES_PAGE: Record<Lang, FeaturesContent> = {
         icon: "Shield",
         label: "Security & Teams",
         title: "Team-safe and audit-friendly by architecture",
-        intro: "Knowledge tools fail on trust. Sigmabrain's answer: open source you can read, infrastructure you can own, and access control that's been attacked on purpose.",
+        intro: "Knowledge tools fail on trust. Sigmabrain's answer: infrastructure you own, auditable answers, and access control that's been attacked on purpose.",
         items: [
           { title: "Scoped access, fuzz-tested", desc: "Per-user, per-source scoping across every read path — search, lists, lookups, multi-source reads. Fuzzed for zero cross-user leaks." },
           { title: "Self-hosted or EU cloud", desc: "Run the full engine on your hardware, or choose managed EU hosting with a DPA. Your data never trains anyone's model." },
-          { title: "Open-source core (MIT)", desc: "Every line that touches your data is auditable. No black box between you and your knowledge." },
+          { title: "Auditable, not a black box", desc: "Deterministic, page-level citations on every answer. You can verify exactly where each claim comes from — no opaque AI between you and your knowledge." },
           { title: "Trust boundaries in code", desc: "Remote callers are untrusted by default — fail-closed design, enforced by tests, not policy documents." },
         ],
       },
     ],
     ctaTitle: "Seen enough?",
-    ctaSub: "Free to start. First answer in minutes.",
-    ctaButton: "Start free",
+    ctaSub: "Up and running in minutes. First answer the same day.",
+    ctaButton: "Get started",
   },
   de: {
     metaTitle: "Features — alles, was Sigmabrain kann",
@@ -178,7 +178,7 @@ export const FEATURES_PAGE: Record<Lang, FeaturesContent> = {
     badge: "Die komplette Capability-Tour",
     h1a: "Alles, was es kann.",
     h1b: "Nichts versteckt.",
-    sub: "Sechs Fähigkeits-Bereiche, eine Engine. Klick dich durch — jede Aussage hier steckt im auditierbaren Open-Source-Kern.",
+    sub: "Sechs Fähigkeits-Bereiche, eine Engine. Klick dich durch — jede Aussage steckt im Produkt, mit deterministischen Zitaten, die du prüfen kannst.",
     categories: [
       {
         id: "synthesis",
@@ -304,17 +304,17 @@ export const FEATURES_PAGE: Record<Lang, FeaturesContent> = {
         icon: "Shield",
         label: "Sicherheit & Teams",
         title: "Team-sicher und audit-freundlich per Architektur",
-        intro: "Wissens-Tools scheitern am Vertrauen. Sigmabrains Antwort: Open Source zum Nachlesen, Infrastruktur zum Besitzen, und Zugriffskontrolle, die absichtlich angegriffen wurde.",
+        intro: "Wissens-Tools scheitern am Vertrauen. Sigmabrains Antwort: Infrastruktur zum Besitzen, auditierbare Antworten, und Zugriffskontrolle, die absichtlich angegriffen wurde.",
         items: [
           { title: "Scoped Access, fuzz-getestet", desc: "Scoping pro Nutzer und Quelle über jeden Lesepfad — Suche, Listen, Lookups, Multi-Source-Reads. Gefuzzt auf null Leaks zwischen Nutzern." },
           { title: "Self-hosted oder EU-Cloud", desc: "Volle Engine auf eigener Hardware, oder verwaltetes EU-Hosting mit AVV. Deine Daten trainieren niemals fremde Modelle." },
-          { title: "Open-Source-Kern (MIT)", desc: "Jede Zeile, die deine Daten berührt, ist auditierbar. Keine Blackbox zwischen dir und deinem Wissen." },
+          { title: "Auditierbar, keine Blackbox", desc: "Deterministische, seitengenaue Zitate in jeder Antwort. Du prüfst exakt, woher jede Aussage stammt — keine undurchsichtige KI zwischen dir und deinem Wissen." },
           { title: "Trust Boundaries im Code", desc: "Remote-Aufrufer sind per Default nicht vertrauenswürdig — Fail-Closed-Design, durch Tests erzwungen, nicht durch Policy-Dokumente." },
         ],
       },
     ],
     ctaTitle: "Genug gesehen?",
-    ctaSub: "Kostenloser Start. Erste Antwort in Minuten.",
-    ctaButton: "Kostenlos starten",
+    ctaSub: "In Minuten startklar. Erste Antwort am selben Tag.",
+    ctaButton: "Jetzt starten",
   },
 };

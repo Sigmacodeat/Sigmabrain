@@ -38,7 +38,7 @@ export const NAV = {
     partners: "Partners",
     docs: "Docs",
     signIn: "Sign in",
-    cta: "Start free",
+    cta: "Get started",
     comingSoonLabel: "Coming soon",
     solutionItems: [
       { label: "Law Firms — Subsumio", href: "/subsumio", desc: "Matters, deadlines, WhatsApp intake, time, expenses and invoicing" },
@@ -59,7 +59,7 @@ export const NAV = {
     partners: "Partner",
     docs: "Docs",
     signIn: "Anmelden",
-    cta: "Kostenlos starten",
+    cta: "Jetzt starten",
     comingSoonLabel: "Bald verfügbar",
     solutionItems: [
       { label: "Kanzleien — Subsumio", href: "/subsumio", desc: "Akten, Fristen, WhatsApp-Eingang, Zeiten, Auslagen und Rechnungen" },
@@ -236,7 +236,7 @@ export const LANDING = {
     h1a: "Your firm forgets.",
     h1b: "Sigmabrain doesn't.",
     sub: "Every meeting, deal, email and document — turned into one answer instead of ten search results. With citations, and an honest note on what it doesn't know yet.",
-    ctaPrimary: "Start free",
+    ctaPrimary: "Get started",
     ctaSecondary: "See it answer",
     demo: {
       windowTitle: "sigmabrain — ask",
@@ -309,7 +309,7 @@ export const LANDING = {
     h1a: "Deine Firma vergisst.",
     h1b: "Sigmabrain nicht.",
     sub: "Jedes Meeting, jeder Deal, jede Mail, jedes Dokument — als eine Antwort statt zehn Suchtreffern. Mit Quellen und einem ehrlichen Hinweis, was noch fehlt.",
-    ctaPrimary: "Kostenlos starten",
+    ctaPrimary: "Jetzt starten",
     ctaSecondary: "Antwort ansehen",
     demo: {
       windowTitle: "sigmabrain — fragen",
