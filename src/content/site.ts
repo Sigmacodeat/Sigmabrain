@@ -86,7 +86,6 @@ export const FOOTER = {
           { label: "Compare us honestly", href: "/compare" },
           { label: "Dashboard", href: "/dashboard", external: false },
           { label: "Download the app", href: "/download" },
-          { label: "Open Source Engine", href: ENGINE_REPO_URL, external: true },
         ],
       },
       {
@@ -114,7 +113,7 @@ export const FOOTER = {
         ],
       },
     ],
-    note: "Built on the open-source Sigmabrain engine (MIT). Your data, your keys, your hardware — or our EU cloud.",
+    note: "Your data, your keys — self-hosted on your hardware or our EU cloud. Built for confidentiality-first work.",
   },
   de: {
     tagline: "Das Gedächtnis deiner Firma.",
@@ -127,7 +126,6 @@ export const FOOTER = {
           { label: "Ehrlicher Vergleich", href: "/compare" },
           { label: "Dashboard", href: "/dashboard", external: false },
           { label: "App herunterladen", href: "/download" },
-          { label: "Open-Source-Engine", href: ENGINE_REPO_URL, external: true },
         ],
       },
       {
@@ -155,7 +153,7 @@ export const FOOTER = {
         ],
       },
     ],
-    note: "Basiert auf der Open-Source-Engine von Sigmabrain (MIT). Deine Daten, deine Keys, deine Hardware — oder unsere EU-Cloud.",
+    note: "Deine Daten, deine Keys — self-hosted auf eurer Hardware oder in unserer EU-Cloud. Gebaut für vertraulichkeitskritische Arbeit.",
   },
 } as const;
 
@@ -177,30 +175,24 @@ export interface PricingTier {
 
 export const PRICING: Record<Lang, { title: string; sub: string; tiers: PricingTier[]; footnote: string }> = {
   en: {
-    title: "Start free. Scale when it pays for itself.",
-    sub: "No credit card to start. No vendor lock-in — the engine is open source.",
+    title: "Premium memory for teams that run on knowledge.",
+    sub: "Per seat, billed annually. Your company's brain on infrastructure you control — EU-hosted or on-premise.",
     tiers: [
       {
-        id: "oss", name: "Open Source", price: "$0", period: "forever",
-        blurb: "Self-hosted. Full engine, your keys, your hardware.",
-        features: ["Complete engine (MIT)", "Hybrid search + knowledge graph", "AI synthesis with citations", "Unlimited pages and files — it's your machine/storage", "Community support"],
-        cta: "Deploy yourself", href: ENGINE_REPO_URL,
-      },
-      {
-        id: "pro", name: "Pro", price: "€79", period: "/month",
-        blurb: "Hosted. For one professional who lives on their knowledge.",
-        features: ["Fully managed — no API keys needed", "25,000 pages", "50 GB cloud file storage included", "Fair-use queries with live usage meter", "24/7 Dream Cycle (dedupe, citations, contradictions)", "Email, document & WhatsApp media import", "Priority email support"],
+        id: "pro", name: "Pro", price: "€190", period: "/seat/mo",
+        blurb: "For the professional who lives on their knowledge.",
+        features: ["Fully managed — no API keys needed", "25,000 pages", "50 GB cloud file storage included", "Fair-use queries with live usage meter", "24/7 Dream Cycle (dedupe, citations, contradictions)", "Email, document & WhatsApp media import", "Priority support"],
         cta: "Start Pro", href: "/signup", highlight: true,
       },
       {
-        id: "team", name: "Team", price: "€290", period: "/month",
-        blurb: "5 seats included, +€49 per extra seat. One shared brain, scoped access.",
+        id: "team", name: "Team", price: "€390", period: "/seat/mo",
+        blurb: "One shared brain, scoped per user. From 5 seats.",
         features: ["Everything in Pro", "Shared institutional memory", "250 GB cloud file storage included", "Per-user scoped access — fuzz-tested, zero leaks", "Admin & usage analytics", "Onboarding session included"],
         cta: "Start Team", href: "/signup",
       },
       {
-        id: "ent", name: "Enterprise", price: "Custom", period: "from €12k/yr",
-        blurb: "Compliance-grade. 25+ seats, your infrastructure or EU cloud.",
+        id: "ent", name: "Enterprise", price: "Custom", period: "annual",
+        blurb: "Compliance-grade. From 20 seats, your infrastructure or EU cloud.",
         features: ["EU cloud, Vercel Blob/S3 or on-prem storage", "Custom storage volumes and retention policy", "DPA, SLA, SSO", "Maximum-recall search mode", "Dedicated support & integration help"],
         cta: "Talk to us", href: "mailto:hello@sigmabrain.com",
       },
@@ -208,30 +200,24 @@ export const PRICING: Record<Lang, { title: string; sub: string; tiers: PricingT
     footnote: "Annual billing −20%. Fair use means generous limits shown transparently in your dashboard — no surprise bills, no silent throttling.",
   },
   de: {
-    title: "Starte kostenlos. Skaliere, wenn es sich rechnet.",
-    sub: "Keine Kreditkarte zum Start. Kein Vendor Lock-in — die Engine ist Open Source.",
+    title: "Premium-Gedächtnis für Teams, die von Wissen leben.",
+    sub: "Pro Seat, jährliche Abrechnung. Das Gehirn eurer Firma auf Infrastruktur, die ihr kontrolliert — EU-gehostet oder On-Premise.",
     tiers: [
       {
-        id: "oss", name: "Open Source", price: "0 €", period: "für immer",
-        blurb: "Self-hosted. Volle Engine, deine Keys, deine Hardware.",
-        features: ["Komplette Engine (MIT)", "Hybrid-Suche + Wissensgraph", "KI-Synthese mit Zitaten", "Unbegrenzte Seiten und Dateien — es ist eure Maschine/euer Speicher", "Community-Support"],
-        cta: "Selbst deployen", href: ENGINE_REPO_URL,
-      },
-      {
-        id: "pro", name: "Pro", price: "79 €", period: "/Monat",
-        blurb: "Gehostet. Für Professionals, die von ihrem Wissen leben.",
-        features: ["Voll verwaltet — keine API-Keys nötig", "25.000 Seiten", "50 GB Cloud-Dateispeicher inklusive", "Fair-Use-Queries mit Live-Verbrauchsanzeige", "24/7 Dream Cycle (Dedupe, Zitate, Widersprüche)", "E-Mail-, Dokumenten- & WhatsApp-Medien-Import", "Priorisierter E-Mail-Support"],
+        id: "pro", name: "Pro", price: "190 €", period: "/Seat/Mon.",
+        blurb: "Für Professionals, die von ihrem Wissen leben.",
+        features: ["Voll verwaltet — keine API-Keys nötig", "25.000 Seiten", "50 GB Cloud-Dateispeicher inklusive", "Fair-Use-Queries mit Live-Verbrauchsanzeige", "24/7 Dream Cycle (Dedupe, Zitate, Widersprüche)", "E-Mail-, Dokumenten- & WhatsApp-Medien-Import", "Priorisierter Support"],
         cta: "Pro starten", href: "/signup", highlight: true,
       },
       {
-        id: "team", name: "Team", price: "290 €", period: "/Monat",
-        blurb: "5 Seats inklusive, +49 € je weiterer Seat. Ein gemeinsames Brain, sauber getrennte Zugriffe.",
+        id: "team", name: "Team", price: "390 €", period: "/Seat/Mon.",
+        blurb: "Ein gemeinsames Brain, pro Nutzer gescoped. Ab 5 Seats.",
         features: ["Alles aus Pro", "Geteiltes Firmen-Gedächtnis", "250 GB Cloud-Dateispeicher inklusive", "Zugriff pro Nutzer gescoped — fuzz-getestet, null Leaks", "Admin & Nutzungs-Analytics", "Onboarding-Session inklusive"],
         cta: "Team starten", href: "/signup",
       },
       {
-        id: "ent", name: "Enterprise", price: "Individuell", period: "ab 12.000 €/Jahr",
-        blurb: "Compliance-tauglich. 25+ Seats, eure Infrastruktur oder EU-Cloud.",
+        id: "ent", name: "Enterprise", price: "Individuell", period: "jährlich",
+        blurb: "Compliance-tauglich. Ab 20 Seats, eure Infrastruktur oder EU-Cloud.",
         features: ["EU-Cloud, Vercel Blob/S3 oder On-Prem-Speicher", "Individuelle Speichermengen und Aufbewahrung", "AVV, SLA, SSO", "Maximum-Recall-Suchmodus", "Dedizierter Support & Integrationshilfe"],
         cta: "Sprich mit uns", href: "mailto:hello@sigmabrain.com",
       },
@@ -246,7 +232,7 @@ export const PRICING: Record<Lang, { title: string; sub: string; tiers: PricingT
 
 export const LANDING = {
   en: {
-    badge: "Open-source engine · Self-hosted or EU cloud",
+    badge: "Self-hosted or EU cloud · confidentiality-first",
     h1a: "Your firm forgets.",
     h1b: "Sigmabrain doesn't.",
     sub: "Every meeting, deal, email and document — turned into one answer instead of ten search results. With citations, and an honest note on what it doesn't know yet.",
@@ -273,7 +259,7 @@ export const LANDING = {
       { value: "146k", label: "pages in the largest production brain" },
       { value: "0", label: "leaks in multi-tenant fuzz testing" },
     ],
-    statsNote: "Engine benchmarks from the open-source core that powers Sigmabrain.",
+    statsNote: "Engine benchmarks from the retrieval core that powers Sigmabrain.",
     featuresTitle: "Not another RAG tool.",
     featuresSub: "The only stack that ships synthesis, graph traversal and gap analysis in one box.",
     features: [
@@ -281,7 +267,7 @@ export const LANDING = {
       { icon: "Network", color: "blue", title: "Self-wiring knowledge graph", desc: "Typed edges (invested_in, works_at, advises) extracted on every write. No extra LLM calls." },
       { icon: "Search", color: "emerald", title: "Hybrid retrieval", desc: "Vector + BM25 + graph traversal, fused. Finds what either method alone misses." },
       { icon: "Zap", color: "amber", title: "Dream Cycle", desc: "A 24/7 background agent dedupes, fixes citations, surfaces contradictions and preps your morning." },
-      { icon: "Shield", color: "rose", title: "Your data stays yours", desc: "Self-host on your hardware, or pick our EU cloud. Open-source core — auditable, no lock-in." },
+      { icon: "Shield", color: "rose", title: "Your data stays yours", desc: "Self-host on your hardware, or pick our EU cloud. Auditable, encrypted, no vendor lock-in." },
       { icon: "Layers", color: "purple", title: "Team-safe by design", desc: "Per-user scoped access across every read path. Fuzz-tested for zero cross-user leaks." },
     ],
     howTitle: "Signal → Brain → Answer",
@@ -309,17 +295,17 @@ export const LANDING = {
     faqTitle: "Questions, answered",
     faq: [
       { q: "How is this different from Notion AI, Glean or a vector database?", a: "Those return documents or chunks. Sigmabrain returns a synthesized answer with citations, walks a typed knowledge graph for relationship questions (“who invested in X?”), and tells you what it doesn't know — the gap analysis is the part that changes how you work." },
-      { q: "Where does my data live?", a: "Your choice. Self-host the open-source engine on your own hardware, or use our managed EU cloud. Enterprise plans support on-prem and a signed DPA." },
-      { q: "Do I need API keys or a server?", a: "Not on hosted plans — sign up and your brain runs. Self-hosters bring their own keys and get the full engine for free." },
+      { q: "Where does my data live?", a: "Your choice. Self-host the engine on your own hardware, or use our managed EU cloud. Enterprise plans support on-prem and a signed DPA." },
+      { q: "Do I need API keys or a server?", a: "No. Sign up and your brain runs — fully managed, no keys, no infrastructure. Enterprise self-hosting runs on your own hardware with your own keys." },
       { q: "What happens when I hit my plan limits?", a: "You see usage live in the dashboard and we ask before anything changes. No surprise bills, no silent throttling." },
-      { q: "Is the open-source version crippled?", a: "No. The engine is MIT-licensed and complete. Paid plans add managed hosting, team access control, support and compliance — not core features." },
+      { q: "Do you train on our data?", a: "Never. Your knowledge is yours alone — never used to train shared models. Self-hosted, nothing leaves your building; on our EU cloud it stays encrypted and isolated per customer." },
     ],
     ctaTitle: "Your brain is waiting.",
     ctaSub: "Three minutes to first answer on hosted plans. No credit card.",
     ctaButton: "Start Sigmabrain free",
   },
   de: {
-    badge: "Open-Source-Engine · Self-hosted oder EU-Cloud",
+    badge: "Self-hosted oder EU-Cloud · vertraulichkeitskritisch",
     h1a: "Deine Firma vergisst.",
     h1b: "Sigmabrain nicht.",
     sub: "Jedes Meeting, jeder Deal, jede Mail, jedes Dokument — als eine Antwort statt zehn Suchtreffern. Mit Quellen und einem ehrlichen Hinweis, was noch fehlt.",
@@ -346,7 +332,7 @@ export const LANDING = {
       { value: "146k", label: "Seiten im größten Produktions-Brain" },
       { value: "0", label: "Leaks im Multi-Tenant-Fuzz-Test" },
     ],
-    statsNote: "Engine-Benchmarks des Open-Source-Kerns, der Sigmabrain antreibt.",
+    statsNote: "Engine-Benchmarks des Retrieval-Kerns, der Sigmabrain antreibt.",
     featuresTitle: "Kein weiteres RAG-Tool.",
     featuresSub: "Der einzige Stack mit Synthese, Graph-Traversal und Gap-Analyse in einer Box.",
     features: [
@@ -354,7 +340,7 @@ export const LANDING = {
       { icon: "Network", color: "blue", title: "Wissensgraph, der sich selbst verknüpft", desc: "Typisierte Kanten (invested_in, works_at, advises) bei jedem Schreibvorgang — ganz ohne zusätzliche LLM-Calls." },
       { icon: "Search", color: "emerald", title: "Hybrid-Retrieval", desc: "Vector + BM25 + Graph-Traversal, fusioniert. Findet, was jede Methode allein übersieht." },
       { icon: "Zap", color: "amber", title: "Dream Cycle", desc: "Ein Hintergrund-Agent rund um die Uhr: entdoppelt Einträge, korrigiert Quellenangaben, deckt Widersprüche auf und bereitet deinen Morgen vor." },
-      { icon: "Shield", color: "rose", title: "Deine Daten bleiben deine", desc: "Self-hosted auf deiner Hardware oder in unserer EU-Cloud. Open-Source-Kern — auditierbar, kein Lock-in." },
+      { icon: "Shield", color: "rose", title: "Deine Daten bleiben deine", desc: "Self-hosted auf deiner Hardware oder in unserer EU-Cloud. Auditierbar, verschlüsselt, kein Vendor-Lock-in." },
       { icon: "Layers", color: "purple", title: "Team-sicher von Grund auf", desc: "Zugriff pro Nutzer abgegrenzt — über jeden einzelnen Lesepfad. Fuzz-getestet auf null Leaks." },
     ],
     howTitle: "Signal → Brain → Antwort",
@@ -382,10 +368,10 @@ export const LANDING = {
     faqTitle: "Fragen, beantwortet",
     faq: [
       { q: "Was unterscheidet das von Notion AI, Glean oder einer Vektor-Datenbank?", a: "Die liefern Dokumente oder Chunks. Sigmabrain liefert eine synthetisierte Antwort mit Zitaten, läuft für Beziehungsfragen („wer hat in X investiert?“) über einen typisierten Wissensgraphen und sagt dir, was es nicht weiß — die Gap-Analyse verändert, wie du arbeitest." },
-      { q: "Wo liegen meine Daten?", a: "Deine Wahl. Self-hoste die Open-Source-Engine auf eigener Hardware oder nutze unsere verwaltete EU-Cloud. Enterprise-Pläne unterstützen On-Prem und einen AVV." },
-      { q: "Brauche ich API-Keys oder einen Server?", a: "Auf gehosteten Plänen nicht — anmelden, Brain läuft. Self-Hoster bringen eigene Keys mit und bekommen die volle Engine kostenlos." },
+      { q: "Wo liegen meine Daten?", a: "Deine Wahl. Self-hoste die Engine auf eigener Hardware oder nutze unsere verwaltete EU-Cloud. Enterprise-Pläne unterstützen On-Prem und einen AVV." },
+      { q: "Brauche ich API-Keys oder einen Server?", a: "Nein. Anmelden, Brain läuft — voll verwaltet, keine Keys, keine Infrastruktur. Enterprise-Self-Hosting läuft auf eurer eigenen Hardware mit euren eigenen Keys." },
       { q: "Was passiert, wenn ich an Plan-Limits stoße?", a: "Du siehst den Verbrauch live im Dashboard, und wir fragen, bevor sich etwas ändert. Keine Überraschungsrechnung, kein stilles Drosseln." },
-      { q: "Ist die Open-Source-Version beschnitten?", a: "Nein. Die Engine ist MIT-lizenziert und vollständig. Bezahlte Pläne ergänzen Hosting, Team-Zugriffe, Support und Compliance — keine Kern-Features." },
+      { q: "Trainiert ihr auf unseren Daten?", a: "Niemals. Euer Wissen gehört allein euch — es wird nie zum Training geteilter Modelle genutzt. Self-hosted verlässt nichts euer Haus; in unserer EU-Cloud bleibt es verschlüsselt und pro Kunde isoliert." },
     ],
     ctaTitle: "Dein Brain wartet.",
     ctaSub: "Drei Minuten bis zur ersten Antwort auf gehosteten Plänen. Keine Kreditkarte.",
