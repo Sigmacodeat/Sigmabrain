@@ -121,7 +121,7 @@ export const VERTICALS: Record<Lang, Record<VerticalSlug, VerticalContent>> = {
         { icon: "Layers", title: "Matter-level isolation", desc: "Scoped access per matter and per user — fuzz-tested, zero leaks between cases or teams." },
       ],
       proofTitle: "Engine-grade retrieval, not a chat wrapper",
-      proof: "Sigmabrain's open-source core benchmarks at 97.9% Recall@5 with hybrid search and a knowledge graph — and because it's MIT-licensed, your IT can audit every line that touches client data.",
+      proof: "Sigmabrain's retrieval core benchmarks at 97.9% Recall@5 with hybrid search and a knowledge graph — and because it runs on infrastructure you control, your IT governs every system that touches client data.",
       faq: [
         { q: "Is this legal advice software?", a: "No. Sigmabrain organizes and synthesizes your documents and notes. Legal judgment stays with the lawyers — the brain just makes sure nothing in the file escapes them." },
         { q: "Can we run it fully offline?", a: "The engine self-hosts on your hardware and the dashboard keeps local caches with a mutation queue for core legal workflows. Synthesis uses LLM APIs of your choosing; enterprise setups can route through EU endpoints or your own gateway." },
@@ -171,7 +171,7 @@ export const VERTICALS: Record<Lang, Record<VerticalSlug, VerticalContent>> = {
         { icon: "CalendarClock", title: "Deadline tracking with email digest", desc: "Filing and objection deadlines per client, computed with weekend roll-forward and surfaced in a daily email digest — overdue and critical items first." },
       ],
       proofTitle: "The firm's knowledge stays, even when people go",
-      proof: "Sigmabrain's open-source core benchmarks at 97.9% Recall@5 with hybrid search and a knowledge graph. For a profession where 7 in 10 firms report staff shortages, that's the difference between knowledge that walks out the door and knowledge that compounds.",
+      proof: "Sigmabrain's retrieval core benchmarks at 97.9% Recall@5 with hybrid search and a knowledge graph. For a profession where 7 in 10 firms report staff shortages, that's the difference between knowledge that walks out the door and knowledge that compounds.",
       faq: [
         { q: "Does it replace our practice software?", a: "No. Your practice management system keeps the structured world — filings, bookkeeping, deadlines. Sigmabrain holds the unstructured layer next to it and answers questions across both worlds' context." },
         { q: "How do we stay compliant with professional secrecy rules?", a: "Self-hosted means client data never leaves your infrastructure — no third party involved at all. Hosted plans run in the EU with a DPA and a contractual confidentiality commitment. Bring your data protection officer; we speak their language." },
@@ -370,7 +370,7 @@ Reusable assets: interview guide (2023), pricing model deck v3.
         { icon: "Layers", title: "Trennung pro Mandat", desc: "Zugriff pro Mandat und Nutzer gescoped — fuzz-getestet, null Leaks zwischen Akten oder Teams." },
       ],
       proofTitle: "Engine-Klasse Retrieval, kein Chat-Wrapper",
-      proof: "Der Open-Source-Kern von Sigmabrain erreicht 97,9 % Recall@5 mit Hybrid-Suche und Wissensgraph — und weil er MIT-lizenziert ist, kann eure IT jede Zeile auditieren, die Mandantendaten berührt.",
+      proof: "Der Retrieval-Kern von Sigmabrain erreicht 97,9 % Recall@5 mit Hybrid-Suche und Wissensgraph — und weil er auf Infrastruktur läuft, die ihr kontrolliert, steuert eure IT jedes System, das Mandantendaten berührt.",
       faq: [
         { q: "Ist das Rechtsberatungs-Software?", a: "Nein. Sigmabrain organisiert und synthetisiert eure Dokumente und Notizen. Die juristische Bewertung bleibt bei den Anwälten — das Brain stellt sicher, dass ihnen nichts aus der Akte entgeht." },
         { q: "Können wir komplett offline arbeiten?", a: "Die Engine läuft self-hosted auf eurer Hardware und das Dashboard hält lokale Caches plus Änderungs-Warteschlange für die wichtigsten Kanzlei-Workflows. Die Synthese nutzt LLM-APIs eurer Wahl; Enterprise-Setups können über EU-Endpunkte oder ein eigenes Gateway routen." },
@@ -420,7 +420,7 @@ Reusable assets: interview guide (2023), pricing model deck v3.
         { icon: "CalendarClock", title: "Fristen-Tracking mit E-Mail-Digest", desc: "Abgabe- und Einspruchsfristen pro Mandant, mit Wochenend-Verschiebung berechnet und im täglichen E-Mail-Digest aufbereitet — überfällige und kritische zuerst." },
       ],
       proofTitle: "Das Kanzleiwissen bleibt — auch wenn Leute gehen",
-      proof: "Der Open-Source-Kern von Sigmabrain erreicht 97,9 % Recall@5 mit Hybrid-Suche und Wissensgraph. In einem Berufsstand, in dem über 70 % der Kanzleien Fachkräftemangel melden, ist das der Unterschied zwischen Wissen, das zur Tür rausgeht, und Wissen, das sich verzinst.",
+      proof: "Der Retrieval-Kern von Sigmabrain erreicht 97,9 % Recall@5 mit Hybrid-Suche und Wissensgraph. In einem Berufsstand, in dem über 70 % der Kanzleien Fachkräftemangel melden, ist das der Unterschied zwischen Wissen, das zur Tür rausgeht, und Wissen, das sich verzinst.",
       faq: [
         { q: "Ersetzt das DATEV?", a: "Nein. DATEV behält die strukturierte Welt — Erklärungen, Buchhaltung, Fristen. Sigmabrain hält die unstrukturierte Ebene daneben und beantwortet Fragen über den Kontext beider Welten." },
         { q: "Wie passt das zu § 203 StGB und der BStBK-Linie?", a: "Self-hosted heißt: Mandantendaten verlassen eure Infrastruktur nicht — es gibt keine mitwirkende Person im Sinne von § 203 Abs. 4 StGB. Gehostete Pläne laufen in der EU mit AVV plus vertraglicher Verschwiegenheitsverpflichtung. Bringt euren Datenschutzbeauftragten mit — wir sprechen seine Sprache." },

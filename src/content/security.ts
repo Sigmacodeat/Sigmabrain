@@ -74,7 +74,7 @@ export const SECURITY: Record<Lang, SecurityContent> = {
       "Source-system permission inheritance for connector-synced content in shared brains — until it lands, we document connectors for single-user brains.",
     ],
     disclosureTitle: "Responsible disclosure",
-    disclosureText: "Found a vulnerability? Email security@sigmabrain.com. We confirm receipt within 48 hours, keep you updated, and credit researchers who wish to be named. Please don't test against systems holding real customer data — self-host a copy instead; it's free.",
+    disclosureText: "Found a vulnerability? Email security@sigmabrain.com. We confirm receipt within 48 hours, keep you updated, and credit researchers who wish to be named. Please don't test against systems holding real customer data — self-host a copy on your own hardware instead.",
     faqTitle: "Security questions, answered plainly",
     faq: [
       { q: "Where exactly does my data live?", a: "Self-hosted: on your machines, full stop. Hosted: in EU data centers, with the location named in your DPA. Synthesis requests go to the LLM provider configured for your plan — enterprise setups can route through EU endpoints or their own gateway." },
@@ -127,7 +127,7 @@ export const SECURITY: Record<Lang, SecurityContent> = {
       "Berechtigungs-Vererbung aus Quellsystemen für Konnektor-Inhalte in geteilten Brains — bis dahin dokumentieren wir Konnektoren für Einzel-Nutzer-Brains.",
     ],
     disclosureTitle: "Responsible Disclosure",
-    disclosureText: "Schwachstelle gefunden? E-Mail an security@sigmabrain.com. Wir bestätigen den Eingang innerhalb von 48 Stunden, halten euch auf dem Laufenden und nennen Researcher auf Wunsch namentlich. Bitte nicht gegen Systeme mit echten Kundendaten testen — self-hostet stattdessen eine Kopie; das ist kostenlos.",
+    disclosureText: "Schwachstelle gefunden? E-Mail an security@sigmabrain.com. Wir bestätigen den Eingang innerhalb von 48 Stunden, halten euch auf dem Laufenden und nennen Researcher auf Wunsch namentlich. Bitte nicht gegen Systeme mit echten Kundendaten testen — self-hostet stattdessen eine Kopie auf eigener Hardware.",
     faqTitle: "Sicherheitsfragen, klar beantwortet",
     faq: [
       { q: "Wo genau liegen meine Daten?", a: "Self-hosted: auf euren Maschinen, Punkt. Gehostet: in EU-Rechenzentren, Standort im AVV benannt. Synthese-Anfragen gehen an den für euren Plan konfigurierten LLM-Provider — Enterprise-Setups können über EU-Endpunkte oder ein eigenes Gateway routen." },

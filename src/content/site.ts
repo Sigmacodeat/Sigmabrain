@@ -302,7 +302,7 @@ export const LANDING = {
     ],
     ctaTitle: "Your brain is waiting.",
     ctaSub: "Three minutes to first answer on hosted plans. No credit card.",
-    ctaButton: "Start Sigmabrain free",
+    ctaButton: "Get started with Sigmabrain",
   },
   de: {
     badge: "Self-hosted oder EU-Cloud · vertraulichkeitskritisch",
@@ -375,6 +375,6 @@ export const LANDING = {
     ],
     ctaTitle: "Dein Brain wartet.",
     ctaSub: "Drei Minuten bis zur ersten Antwort auf gehosteten Plänen. Keine Kreditkarte.",
-    ctaButton: "Sigmabrain kostenlos starten",
+    ctaButton: "Mit Sigmabrain starten",
   },
 } as const;
