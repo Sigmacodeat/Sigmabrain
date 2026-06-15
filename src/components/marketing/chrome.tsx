@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SigmaLogo, SigmaMark } from "@/components/brand/logo";
+import { SubsumioLogo } from "@/components/brand/subsumio-logo";
 import { NAV, FOOTER, p, altPath, ENGINE_REPO_URL, type Lang } from "@/content/site";
 import { brandForHost, SUBSUMIO_SITE_URL, isExternalUrl, type SiteBrand } from "@/lib/brand";
 import SalesAgentWidget from "./sales-agent-widget";
@@ -62,15 +63,7 @@ function useSiteBrand(): SiteBrand {
 // it keeps the Sigma mark and adds the attribution line.
 function BrandLogo({ brand }: { brand: SiteBrand }) {
   if (brand !== "subsumio") return <SigmaLogo size={32} />;
-  return (
-    <span className="inline-flex items-center gap-2.5">
-      <SigmaMark size={32} />
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-lg font-bold text-[#e8e8f0] tracking-tight">Subsumio</span>
-        <span className="text-[10px] font-medium text-[#6f6f8a] tracking-normal mt-0.5">by Sigmabrain</span>
-      </span>
-    </span>
-  );
+  return <SubsumioLogo size={34} />;
 }
 
 // Content files store icon names as strings; resolve them here.
@@ -272,13 +265,7 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
           <div className="col-span-2">
             <div className="mb-3">
               {isSubsumio ? (
-                <span className="inline-flex items-center gap-2.5">
-                  <SigmaMark size={24} />
-                  <span className="flex flex-col leading-none">
-                    <span className="font-display text-sm font-semibold text-[#e8e8f0]">Subsumio</span>
-                    <span className="text-[10px] font-medium text-[#6f6f8a] mt-0.5">by Sigmabrain</span>
-                  </span>
-                </span>
+                <SubsumioLogo size={28} />
               ) : (
                 <SigmaLogo size={24} wordmarkClassName="text-sm font-semibold text-[#e8e8f0]" />
               )}
