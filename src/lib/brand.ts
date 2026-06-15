@@ -49,3 +49,15 @@ export const SUBSUMIO_SITE_URL = process.env.NEXT_PUBLIC_SUBSUMIO_URL || "/subsu
 export function isExternalUrl(url: string): boolean {
   return /^https?:\/\//.test(url);
 }
+
+/** Canonical URL for the Subsumio page in a given language. Consolidates SEO to
+ *  the standalone Subsumio domain once NEXT_PUBLIC_SUBSUMIO_URL points there, so
+ *  sigmabrain.com/subsumio and subsum.io/ don't compete as duplicate content.
+ *  Falls back to the in-app path (resolved against metadataBase) otherwise. */
+export function subsumioCanonical(lang: "en" | "de"): string {
+  if (isExternalUrl(SUBSUMIO_SITE_URL)) {
+    const root = SUBSUMIO_SITE_URL.replace(/\/$/, "");
+    return lang === "de" ? `${root}/de` : root;
+  }
+  return lang === "de" ? "/de/subsumio" : "/subsumio";
+}

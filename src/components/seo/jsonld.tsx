@@ -59,6 +59,42 @@ export function softwareApplicationLd(lang: Lang) {
   };
 }
 
+/** Per-vertical product (e.g. Subsumio, Taxumio). Derived from the platform
+ *  SoftwareApplication via isBasedOn so the brand graph stays connected. */
+export function verticalSoftwareApplicationLd(opts: {
+  name: string;
+  description: string;
+  url: string;
+  price?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: opts.name,
+    applicationCategory: "LegalService",
+    operatingSystem: "Web, Self-hosted",
+    url: opts.url.startsWith("http") ? opts.url : `${BASE}${opts.url}`,
+    description: opts.description,
+    isBasedOn: { "@type": "SoftwareApplication", name: "Sigmabrain", url: BASE },
+    ...(opts.price
+      ? { offers: { "@type": "Offer", price: opts.price, priceCurrency: "EUR" } }
+      : {}),
+  };
+}
+
+export function breadcrumbLd(items: { name: string; url: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url.startsWith("http") ? item.url : `${BASE}${item.url}`,
+    })),
+  };
+}
+
 export function faqPageLd(faq: readonly { q: string; a: string }[]) {
   return {
     "@context": "https://schema.org",
