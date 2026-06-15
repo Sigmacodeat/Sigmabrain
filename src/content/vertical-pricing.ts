@@ -6,7 +6,7 @@
 // pricing section, and launch products (Subsumio) get bespoke tiers.
 
 import type { Lang, PricingTier } from "./site";
-import { ENGINE_REPO_URL, PRICING } from "./site";
+import { PRICING } from "./site";
 import { profileForIndustry } from "@/lib/industry-pack";
 
 export interface VerticalPricing {
@@ -21,30 +21,24 @@ export const VERTICAL_PRICING: Record<Lang, Partial<Record<string, VerticalPrici
   en: {
     legal: {
       title: "Pricing for law firms",
-      sub: "Start free and self-hosted, or let us host it. No seat minimum — one lawyer works.",
+      sub: "Per seat, billed annually. Top-tier case synthesis on infrastructure you control — no client data leaves the EU.",
       tiers: [
         {
-          id: "oss", name: "Self-hosted", price: "€0", period: "forever",
-          blurb: "The full engine on your own infrastructure — client data never leaves the building.",
-          features: ["Complete engine (MIT), auditable", "Case Q&A with page-level citations", "Deadlines, conflict check, RVG fee calc", "Unlimited matters — your hardware", "Community support"],
-          cta: "Deploy yourself", href: ENGINE_REPO_URL,
+          id: "solo", name: "Professional", price: "€590", period: "/seat/mo",
+          blurb: "For solo practitioners and small firms. The full case brain, fully managed.",
+          features: ["Managed EU hosting — no API keys", "Case Q&A with page-level citations", "WhatsApp matter copilot", "ZPO/BGB deadlines + §43a conflict check", "beA intake · 50 GB per seat", "Priority support"],
+          cta: "Start Subsumio", href: "/signup",
         },
         {
-          id: "solo", name: "Einzelanwalt", price: "€79", period: "/lawyer/mo",
-          blurb: "Hosted, for the solo practitioner. Your matters, answerable.",
-          features: ["Fully managed — no API keys", "25,000 pages · 50 GB storage", "beA draft intake, ZPO deadline tracking", "AI output labeled (EU AI Act)", "Priority email support"],
-          cta: "Start Subsumio", href: "/signup", highlight: true,
+          id: "kanzlei", name: "Kanzlei", price: "€790", period: "/seat/mo",
+          blurb: "One shared firm brain, scoped per lawyer. From 5 seats.",
+          features: ["Everything in Professional", "Shared matter memory + firm-wide conflict checks", "Time, expenses, invoicing & DATEV export", "Four-eyes approval, full audit trail", "150 GB per seat", "Onboarding & dedicated support"],
+          cta: "Start Kanzlei", href: "/signup", highlight: true,
         },
         {
-          id: "kanzlei", name: "Kanzlei", price: "€290", period: "/mo",
-          blurb: "5 seats, +€49/extra. One shared firm brain, scoped per lawyer.",
-          features: ["Everything in Einzelanwalt", "Shared matter memory, conflict checks across the firm", "250 GB storage", "Per-lawyer scoped access — fuzz-tested", "Four-eyes approval, audit trail, onboarding"],
-          cta: "Start Kanzlei", href: "/signup",
-        },
-        {
-          id: "ent", name: "Enterprise", price: "Custom", period: "from €12k/yr",
-          blurb: "Compliance-grade. 25+ seats, your infrastructure or EU cloud.",
-          features: ["EU cloud or on-premise", "DPA, SLA, SSO", "DMS / RA-MICRO / Advoware import", "Max-recall search mode", "Dedicated support & integration"],
+          id: "ent", name: "Enterprise", price: "€990", period: "/seat/mo",
+          blurb: "Compliance-grade, on your infrastructure or EU cloud. From 20 seats.",
+          features: ["EU cloud or on-premise deployment", "DPA, SLA, SSO/SAML", "DMS / RA-MICRO / Advoware import", "Maximum-recall search mode", "Dedicated CSM, custom retention & storage"],
           cta: "Talk to us", href: "mailto:hello@sigmabrain.com",
         },
       ],
@@ -53,30 +47,24 @@ export const VERTICAL_PRICING: Record<Lang, Partial<Record<string, VerticalPrici
   de: {
     legal: {
       title: "Preise für Kanzleien",
-      sub: "Kostenlos & self-hosted starten — oder wir hosten. Kein Seat-Minimum, ein Anwalt reicht.",
+      sub: "Pro Seat, jährliche Abrechnung. Spitzen-Synthese auf Infrastruktur, die ihr kontrolliert — keine Mandantendaten verlassen die EU.",
       tiers: [
         {
-          id: "oss", name: "Self-hosted", price: "0 €", period: "für immer",
-          blurb: "Volle Engine auf eigener Infrastruktur — Mandantendaten verlassen das Haus nie.",
-          features: ["Komplette Engine (MIT), auditierbar", "Akten-Q&A mit seitengenauen Zitaten", "Fristen, Kollisionsprüfung, RVG-Berechnung", "Unbegrenzte Akten — eure Hardware", "Community-Support"],
-          cta: "Selbst deployen", href: ENGINE_REPO_URL,
+          id: "solo", name: "Professional", price: "590 €", period: "/Seat/Mon.",
+          blurb: "Für Einzelanwälte und kleine Kanzleien. Das volle Akten-Gehirn, voll verwaltet.",
+          features: ["Verwaltetes EU-Hosting — keine API-Keys", "Akten-Q&A mit seitengenauen Zitaten", "WhatsApp-Akten-Copilot", "ZPO/BGB-Fristen + Kollisionsprüfung §43a", "beA-Eingang · 50 GB pro Seat", "Priorisierter Support"],
+          cta: "Subsumio starten", href: "/signup",
         },
         {
-          id: "solo", name: "Einzelanwalt", price: "79 €", period: "/Anwalt/Mon.",
-          blurb: "Gehostet, für die Einzelkanzlei. Eure Akten, abfragbar.",
-          features: ["Voll verwaltet — keine API-Keys", "25.000 Seiten · 50 GB Speicher", "beA-Entwurfs-Eingang, ZPO-Fristen", "KI-Output gekennzeichnet (EU AI Act)", "Priorisierter E-Mail-Support"],
-          cta: "Subsumio starten", href: "/signup", highlight: true,
+          id: "kanzlei", name: "Kanzlei", price: "790 €", period: "/Seat/Mon.",
+          blurb: "Ein gemeinsames Kanzlei-Gehirn, pro Anwalt gescoped. Ab 5 Seats.",
+          features: ["Alles aus Professional", "Geteiltes Akten-Gedächtnis + kanzleiweite Kollisionsprüfung", "Zeit, Auslagen, Rechnungen & DATEV-Export", "Vier-Augen-Freigabe, voller Audit-Trail", "150 GB pro Seat", "Onboarding & dedizierter Support"],
+          cta: "Kanzlei starten", href: "/signup", highlight: true,
         },
         {
-          id: "kanzlei", name: "Kanzlei", price: "290 €", period: "/Mon.",
-          blurb: "5 Seats, +49 €/weiterer. Ein gemeinsames Kanzlei-Gehirn, pro Anwalt gescoped.",
-          features: ["Alles aus Einzelanwalt", "Geteiltes Akten-Gedächtnis, kanzleiweite Kollisionsprüfung", "250 GB Speicher", "Zugriff pro Anwalt gescoped — fuzz-getestet", "Vier-Augen-Freigabe, Audit-Trail, Onboarding"],
-          cta: "Kanzlei starten", href: "/signup",
-        },
-        {
-          id: "ent", name: "Enterprise", price: "Individuell", period: "ab 12k €/Jahr",
-          blurb: "Compliance-Grade. 25+ Seats, eure Infrastruktur oder EU-Cloud.",
-          features: ["EU-Cloud oder On-Premise", "AVV, SLA, SSO", "DMS / RA-MICRO / Advoware-Import", "Maximaler Recall-Modus", "Dedizierter Support & Integration"],
+          id: "ent", name: "Enterprise", price: "990 €", period: "/Seat/Mon.",
+          blurb: "Compliance-Grade, auf eurer Infrastruktur oder EU-Cloud. Ab 20 Seats.",
+          features: ["EU-Cloud oder On-Premise-Deployment", "AVV, SLA, SSO/SAML", "DMS / RA-MICRO / Advoware-Import", "Maximaler Recall-Modus", "Dedizierter CSM, individuelle Aufbewahrung & Speicher"],
           cta: "Kontakt aufnehmen", href: "mailto:hello@sigmabrain.com",
         },
       ],

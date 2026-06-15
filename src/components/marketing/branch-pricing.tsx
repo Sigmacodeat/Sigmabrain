@@ -19,9 +19,13 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
 
   // Map a tier to its billable plan so the signup CTA can carry it; after
   // signup the user lands on billing with auto-checkout for that plan.
+  // Only the platform self-serve plans (pro/team) auto-checkout. Premium
+  // vertical tiers (e.g. Subsumio's per-seat plans) are sales/onboarding-assisted
+  // — annual, seat minimums — so they route to signup WITHOUT a checkout intent
+  // and must never inherit the platform's lower pro/team price.
   const PLAN_BY_TIER: Record<string, "pro" | "team"> = {
-    pro: "pro", solo: "pro", einzelanwalt: "pro",
-    team: "team", kanzlei: "team",
+    pro: "pro",
+    team: "team",
   };
   // signup hrefs carry the industry (provisioning pack) + plan (checkout intent).
   const hrefFor = (tier: { id: string; href: string }) => {
@@ -42,7 +46,7 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
         <p className="text-lg text-[#8888aa] max-w-2xl mx-auto">{sub}</p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className={`grid md:grid-cols-2 gap-5 ${tiers.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3 max-w-5xl mx-auto"}`}>
         {tiers.map((tier) => {
           const href = hrefFor(tier);
           const isExternal = href.startsWith("http") || href.startsWith("mailto");

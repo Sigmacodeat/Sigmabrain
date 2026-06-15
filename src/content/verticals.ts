@@ -89,7 +89,7 @@ export const VERTICALS: Record<Lang, Record<VerticalSlug, VerticalContent>> = {
       pains: [
         { title: "Case knowledge buried in PDFs", desc: "The decisive detail is on page 347 of a brief someone else read eight months ago." },
         { title: "US clouds are a non-starter", desc: "Client files in a US-hosted AI tool? Your professional duty of confidentiality says no — and so do your clients." },
-        { title: "Enterprise legal AI costs like a partner", desc: "Six-figure annual contracts with 20-seat minimums lock out everyone below Big Law." },
+        { title: "Knowledge walks out with people", desc: "When a senior associate leaves, years of matter context leave too — unless the firm's knowledge lives somewhere durable and answerable." },
       ],
       demo: {
         windowTitle: "sigmabrain — case brain",
@@ -127,7 +127,7 @@ export const VERTICALS: Record<Lang, Record<VerticalSlug, VerticalContent>> = {
         { q: "Can we run it fully offline?", a: "The engine self-hosts on your hardware and the dashboard keeps local caches with a mutation queue for core legal workflows. Synthesis uses LLM APIs of your choosing; enterprise setups can route through EU endpoints or your own gateway." },
         { q: "How much data can we store?", a: "Self-hosted uses your own disk or S3-compatible storage. Hosted plans include cloud file storage by package and can scale to custom retention and storage volumes for enterprise firms." },
         { q: "What about GDPR and our bar obligations?", a: "Self-hosted means data never leaves your infrastructure. Hosted plans come with EU hosting and a DPA. Have your data protection officer talk to us — we speak their language." },
-        { q: "How is this different from Harvey, Legora or Noxtua?", a: "Those are enterprise legal-AI workspaces — strong products, built for Big Law budgets with seat minimums and six-figure contracts. Sigmabrain is the knowledge layer for everyone else: an open-source engine you can self-host, EU cloud if you prefer, starting at €79. And it isn't legal research — it's your firm's own files, made answerable." },
+        { q: "How is this different from Harvey, Legora or Noxtua?", a: "They're excellent enterprise legal-AI workspaces — and they run on someone else's cloud and someone else's model. Subsumio gives you the same calibre of synthesis on infrastructure YOU control: self-hosted or EU cloud, your own files made answerable, with a WhatsApp copilot your lawyers use every day. It isn't legal research — it's your firm's own matters, with page-level citations and confidentiality by architecture." },
       ],
       ctaTitle: "The file knows the answer. Now you do too.",
       ctaSub: "Start with one closed matter as a pilot. No client data needs to leave your building.",
@@ -338,7 +338,7 @@ Reusable assets: interview guide (2023), pricing model deck v3.
       pains: [
         { title: "Aktenwissen begraben in PDFs", desc: "Das entscheidende Detail steht auf Seite 347 eines Schriftsatzes, den jemand anderes vor acht Monaten gelesen hat." },
         { title: "US-Clouds sind ein No-Go", desc: "Mandantenakten in einem US-gehosteten KI-Tool? Verschwiegenheitspflicht und Mandanten sagen Nein." },
-        { title: "Enterprise-Legal-AI kostet wie ein Partner", desc: "Sechsstellige Jahresverträge mit 20-Seat-Minimum sperren alle unterhalb von Big Law aus." },
+        { title: "Wissen geht mit den Köpfen", desc: "Wenn ein erfahrener Anwalt geht, gehen Jahre an Aktenkontext mit — außer das Kanzleiwissen liegt dauerhaft und abfragbar an einem Ort." },
       ],
       demo: {
         windowTitle: "sigmabrain — case brain",
@@ -376,7 +376,7 @@ Reusable assets: interview guide (2023), pricing model deck v3.
         { q: "Können wir komplett offline arbeiten?", a: "Die Engine läuft self-hosted auf eurer Hardware und das Dashboard hält lokale Caches plus Änderungs-Warteschlange für die wichtigsten Kanzlei-Workflows. Die Synthese nutzt LLM-APIs eurer Wahl; Enterprise-Setups können über EU-Endpunkte oder ein eigenes Gateway routen." },
         { q: "Wie viel Daten können wir speichern?", a: "Self-hosted nutzt euren eigenen Speicher oder S3-kompatiblen Objektspeicher. Hosted-Pakete enthalten Cloud-Dateispeicher je Paket; Enterprise bekommt individuelle Speichermengen und Aufbewahrungsregeln." },
         { q: "Was ist mit DSGVO und Berufsrecht?", a: "Self-hosted heißt: Daten verlassen eure Infrastruktur nicht. Gehostete Pläne kommen mit EU-Hosting und AVV. Lasst euren Datenschutzbeauftragten mit uns sprechen — wir sprechen seine Sprache." },
-        { q: "Was unterscheidet das von Harvey, Legora oder Noxtua?", a: "Das sind Enterprise-Legal-AI-Workspaces — starke Produkte, gebaut für Big-Law-Budgets mit Seat-Minimum und sechsstelligen Verträgen. Sigmabrain ist die Wissensschicht für alle anderen: Open-Source-Engine zum Selbst-Hosten, auf Wunsch EU-Cloud, ab 79 €. Und es ist keine Rechtsrecherche — es sind die eigenen Akten eurer Kanzlei, abfragbar gemacht." },
+        { q: "Was unterscheidet das von Harvey, Legora oder Noxtua?", a: "Das sind exzellente Enterprise-Legal-AI-Workspaces — und sie laufen auf fremder Cloud und fremdem Modell. Subsumio liefert dieselbe Synthese-Qualität auf Infrastruktur, die IHR kontrolliert: self-hosted oder EU-Cloud, eure eigenen Akten abfragbar gemacht, mit einem WhatsApp-Copilot, den eure Anwälte täglich nutzen. Es ist keine Rechtsrecherche — es sind die eigenen Mandate eurer Kanzlei, mit seitengenauen Zitaten und Vertraulichkeit per Architektur." },
       ],
       ctaTitle: "Die Akte kennt die Antwort. Jetzt du auch.",
       ctaSub: "Startet mit einem abgeschlossenen Mandat als Pilot. Keine Mandantendaten müssen das Haus verlassen.",
