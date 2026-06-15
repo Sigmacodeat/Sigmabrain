@@ -4,10 +4,11 @@
 
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Users, CreditCard, Gift, Shield, ArrowLeft, ClipboardList } from "lucide-react";
+import { Users, CreditCard, Gift, Shield, ArrowLeft, ClipboardList, MessageSquare } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getSessionUser } from "@/lib/auth/server";
 import { getStore } from "@/lib/auth/store";
+import { listMarketingLeads } from "@/lib/marketing/leads";
 import AuditTrail from "@/components/admin/audit-trail";
 
 export const metadata = { title: "Admin" };
@@ -38,6 +39,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
   const tab = params?.tab || "customers";
 
   const users = await getStore().list();
+  const leads = await listMarketingLeads();
   const paying = users.filter((u) => u.plan !== "free");
   const referred = users.filter((u) => u.referredBy);
   const mrr = paying.reduce((sum, u) => sum + (u.plan === "pro" ? 79 : u.plan === "team" ? 290 : 0), 0);
@@ -70,6 +72,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
     { icon: CreditCard, label: "MRR", value: `${mrr} €` },
     { icon: Gift, label: "Über Empfehlung", value: String(referred.length) },
     { icon: Gift, label: "davon Ebene 2", value: String(level2Total) },
+    { icon: MessageSquare, label: "Sales-Leads", value: String(leads.length) },
   ];
 
   return (
@@ -105,11 +108,75 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
         {/* Tabs */}
         <div className="flex gap-2">
           <TabLink href="/admin" icon={Users} label="Kunden" active={tab === "customers"} />
+          <TabLink href="/admin?tab=leads" icon={MessageSquare} label="Sales-Leads" active={tab === "leads"} />
           <TabLink href="/admin?tab=audit" icon={ClipboardList} label="Audit-Trail" active={tab === "audit"} />
         </div>
 
         {tab === "audit" ? (
           <AuditTrail />
+        ) : tab === "leads" ? (
+          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] overflow-hidden">
+            <div className="px-5 py-4 border-b border-[#1e1e3a]">
+              <h2 className="text-sm font-semibold text-[#e8e8f0]">Sales-Leads aus dem Product Advisor</h2>
+              <p className="text-xs text-[#8888aa] mt-1">
+                Nur Chats mit expliziter Zustimmung werden gespeichert.
+              </p>
+            </div>
+            <div className="divide-y divide-[#1e1e3a]">
+              {leads.length === 0 && (
+                <div className="px-5 py-10 text-center text-sm text-[#4a4a6a]">
+                  Noch keine gespeicherten Advisor-Leads.
+                </div>
+              )}
+              {leads.map((lead) => (
+                <div key={lead.id} className="p-5 hover:bg-[#12122a]/45">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-sm font-semibold text-[#e8e8f0]">{lead.email}</h3>
+                        <span className="rounded-full border border-violet-500/20 bg-violet-500/10 px-2 py-0.5 text-[11px] text-violet-300">
+                          {lead.product} · {lead.plan}
+                        </span>
+                        <span className={`rounded-full border px-2 py-0.5 text-[11px] ${
+                          lead.leadScore === "enterprise"
+                            ? "border-amber-500/25 bg-amber-500/10 text-amber-300"
+                            : lead.leadScore === "high"
+                              ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-300"
+                              : "border-[#2a2a4a] bg-[#111124] text-[#8888aa]"
+                        }`}>
+                          {lead.leadScore}
+                        </span>
+                      </div>
+                      <p className="text-xs text-[#4a4a6a] mt-1">
+                        {lead.createdAt.slice(0, 16).replace("T", " ")} · {lead.path}
+                      </p>
+                    </div>
+                    <div className="text-right text-[11px] text-[#666684]">
+                      Mail: {lead.notified.email ? "sent" : "not configured"} · Slack: {lead.notified.slack ? "sent" : "off"}
+                    </div>
+                  </div>
+                  <pre className="mt-4 whitespace-pre-wrap rounded-lg border border-[#1e1e3a] bg-[#080812] p-3 text-xs leading-relaxed text-[#aaaac4]">
+                    {lead.summary}
+                  </pre>
+                  <details className="mt-3">
+                    <summary className="cursor-pointer text-xs text-violet-300 hover:text-violet-200">Transcript anzeigen</summary>
+                    <div className="mt-3 space-y-2">
+                      {lead.transcript.map((msg, i) => (
+                        <div key={i} className={`rounded-lg border p-3 text-xs leading-relaxed ${
+                          msg.role === "user"
+                            ? "border-violet-500/20 bg-violet-500/10 text-[#e8e8f0]"
+                            : "border-[#1e1e3a] bg-[#080812] text-[#aaaac4]"
+                        }`}>
+                          <span className="font-semibold uppercase tracking-wider text-[10px] text-[#666684]">{msg.role}</span>
+                          <p className="mt-1 whitespace-pre-wrap">{msg.content}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </details>
+                </div>
+              ))}
+            </div>
+          </div>
         ) : (
           <>
             {/* Customers table */}
