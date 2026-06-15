@@ -11,6 +11,7 @@ import { ChevronRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SigmaMark } from "@/components/brand/logo";
 import { LANDING, PRICING, p, type Lang } from "@/content/site";
+import { SUBSUMIO_SITE_URL, isExternalUrl } from "@/lib/brand";
 import { PricingGrid } from "./pricing-grid";
 import LiveDemo from "./live-demo";
 import NeuralHero from "./neural-hero";
@@ -223,18 +224,24 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                         {soonLabel}
                       </span>
                     </div>
-                  ) : (
-                    <Link
-                      href={p(lang, v.href)}
-                      className="group h-full p-7 rounded-2xl border border-violet-500/30 bg-[#12122a] hover:border-violet-500/60 hover:bg-[#16163a] transition-colors duration-200 flex flex-col shadow-lg shadow-violet-500/5"
-                    >
-                      <h3 className="text-lg font-bold text-[#e8e8f0] mb-2 group-hover:text-violet-300">{v.title}</h3>
-                      <p className="text-sm text-[#8888aa] leading-relaxed flex-1 mb-5">{v.desc}</p>
-                      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-violet-400">
-                        {v.cta} <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-                      </span>
-                    </Link>
-                  )}
+                  ) : (() => {
+                    const resolvedHref = v.href === "/subsumio" ? SUBSUMIO_SITE_URL : v.href;
+                    const cardCls = "group h-full p-7 rounded-2xl border border-violet-500/30 bg-[#12122a] hover:border-violet-500/60 hover:bg-[#16163a] transition-colors duration-200 flex flex-col shadow-lg shadow-violet-500/5";
+                    const cardInner = (
+                      <>
+                        <h3 className="text-lg font-bold text-[#e8e8f0] mb-2 group-hover:text-violet-300">{v.title}</h3>
+                        <p className="text-sm text-[#8888aa] leading-relaxed flex-1 mb-5">{v.desc}</p>
+                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-violet-400">
+                          {v.cta} <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                        </span>
+                      </>
+                    );
+                    return isExternalUrl(resolvedHref) ? (
+                      <a href={resolvedHref} className={cardCls}>{cardInner}</a>
+                    ) : (
+                      <Link href={p(lang, resolvedHref)} className={cardCls}>{cardInner}</Link>
+                    );
+                  })()}
                 </motion.div>
               );
             })}

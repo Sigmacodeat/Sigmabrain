@@ -39,3 +39,13 @@ export function brandForHost(host: string | null | undefined): SiteBrand {
   const h = host.split(":")[0].trim().toLowerCase();
   return SUBSUMIO_HOSTS.includes(h) ? "subsumio" : "sigmabrain";
 }
+
+/** Canonical public URL for the Subsumio product, used by the platform site's
+ *  "Solutions → Subsumio" link. Defaults to the in-app path (always works); set
+ *  NEXT_PUBLIC_SUBSUMIO_URL="https://subsum.io" once the domain is attached to
+ *  the Vercel project so the platform links out to the standalone site. */
+export const SUBSUMIO_SITE_URL = process.env.NEXT_PUBLIC_SUBSUMIO_URL || "/subsumio";
+
+export function isExternalUrl(url: string): boolean {
+  return /^https?:\/\//.test(url);
+}

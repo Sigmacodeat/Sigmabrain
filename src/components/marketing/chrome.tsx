@@ -38,7 +38,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SigmaLogo, SigmaMark } from "@/components/brand/logo";
 import { NAV, FOOTER, p, altPath, ENGINE_REPO_URL, type Lang } from "@/content/site";
-import { brandForHost, type SiteBrand } from "@/lib/brand";
+import { brandForHost, SUBSUMIO_SITE_URL, isExternalUrl, type SiteBrand } from "@/lib/brand";
 import SalesAgentWidget from "./sales-agent-widget";
 
 // Resolve the active brand from the request host on the client. On a Subsumio
@@ -170,15 +170,22 @@ export function MarketingNav({ lang }: { lang: Lang }) {
                         </div>
                       );
                     }
-                    return (
-                      <Link
-                        key={item.href}
-                        href={p(lang, item.href)}
-                        className="block px-3 py-2.5 rounded-lg hover:bg-[#1a1a35] group"
-                        onClick={() => setSolutionsOpen(false)}
-                      >
+                    const resolvedHref = item.href === "/subsumio" ? SUBSUMIO_SITE_URL : item.href;
+                    const external = isExternalUrl(resolvedHref);
+                    const inner = (
+                      <>
                         <p className="text-sm font-medium text-[#e8e8f0] group-hover:brand-text">{item.label}</p>
                         <p className="text-xs text-[#8888aa] mt-0.5">{item.desc}</p>
+                      </>
+                    );
+                    const cls = "block px-3 py-2.5 rounded-lg hover:bg-[#1a1a35] group";
+                    return external ? (
+                      <a key={item.href} href={resolvedHref} className={cls} onClick={() => setSolutionsOpen(false)}>
+                        {inner}
+                      </a>
+                    ) : (
+                      <Link key={item.href} href={p(lang, resolvedHref)} className={cls} onClick={() => setSolutionsOpen(false)}>
+                        {inner}
                       </Link>
                     );
                   })}
@@ -229,8 +236,14 @@ export function MarketingNav({ lang }: { lang: Lang }) {
                 </div>
               );
             }
-            return (
-              <Link key={item.href} href={p(lang, item.href)} className="block px-3 py-2 rounded-lg text-sm text-[#e8e8f0] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>
+            const resolvedHref = item.href === "/subsumio" ? SUBSUMIO_SITE_URL : item.href;
+            const cls = "block px-3 py-2 rounded-lg text-sm text-[#e8e8f0] hover:bg-[#1a1a35]";
+            return isExternalUrl(resolvedHref) ? (
+              <a key={item.href} href={resolvedHref} className={cls} onClick={() => setMobileOpen(false)}>
+                {item.label}
+              </a>
+            ) : (
+              <Link key={item.href} href={p(lang, resolvedHref)} className={cls} onClick={() => setMobileOpen(false)}>
                 {item.label}
               </Link>
             );
