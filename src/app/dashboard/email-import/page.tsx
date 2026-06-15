@@ -93,7 +93,7 @@ export default function EmailImportPage() {
           const files = Array.from(e.dataTransfer.files).filter((f) => f.name.endsWith(".eml") || f.name.endsWith(".msg"));
           void onDrop(files);
         }}
-        className="rounded-xl border-2 border-dashed border-[#1e1e3a] bg-[#0d0d1a] p-8 text-center hover:border-blue-500/30 transition-all cursor-pointer"
+        className="rounded-xl border border-dashed border-[#23233f] bg-[#0d0d1a] p-8 text-center hover:border-blue-500/30 hover:bg-blue-500/[0.02] transition-all duration-300 cursor-pointer"
         onClick={() => document.getElementById("email-file-input")?.click()}
       >
         <Upload size={32} className="mx-auto text-[#1e1e3a] mb-3" />

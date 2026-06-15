@@ -103,13 +103,23 @@ export default function VerticalPage({
           </h1>
         )}
         <p className="text-lg md:text-xl text-[#8888aa] max-w-2xl mx-auto mb-12 leading-relaxed">{t.sub}</p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <Link href={signupHref}>
             <Button size="xl" variant="glow" className="min-w-[220px]">
               <SigmaMark size={18} tile={false} /> {t.ctaButton}
             </Button>
           </Link>
+          <a href="#in-action">
+            <Button size="xl" variant="ghost" className="min-w-[200px]">
+              {lang === "de" ? "Live ansehen" : "See it live"} <ArrowRight size={18} />
+            </Button>
+          </a>
         </div>
+        <p className="text-xs text-[#6f6f8a] mb-16">
+          {lang === "de"
+            ? "Self-hosted · EU-Cloud · Open-Source-Kern · DSGVO-konform · keine Kreditkarte"
+            : "Self-hosted · EU cloud · Open-source core · GDPR-ready · no credit card"}
+        </p>
         <div className="max-w-3xl mx-auto">
           <LiveDemo lang={lang} {...t.demo} />
         </div>
@@ -121,7 +131,7 @@ export default function VerticalPage({
       <ProductWorkflowShowcase lang={lang} industry={industry} />
 
       {/* Product reel — Sigmabrain in action for this vertical */}
-      <section className="relative z-10 py-20 px-6 max-w-5xl mx-auto">
+      <section id="in-action" className="relative z-10 py-20 px-6 max-w-5xl mx-auto scroll-mt-24">
         <SectionHeading title={lang === "de" ? "Sigmabrain in Aktion" : "Sigmabrain in action"} />
         <p className="text-center text-[#8888aa] -mt-4 mb-8 max-w-2xl mx-auto">
           {lang === "de"
