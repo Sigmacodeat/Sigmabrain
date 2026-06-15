@@ -86,8 +86,8 @@ export const DOWNLOAD: Record<Lang, DownloadContent> = {
       { q: "When do the store apps arrive?", a: "After the hosted cloud is live — Apple's review requires a complete signup flow. The Capacitor build setup is already in the repository (mobile/README.md)." },
     ],
     ctaTitle: "Install it now, thank yourself in the next meeting.",
-    ctaSub: "Free account, first answer in minutes — on whatever device is in your hand.",
-    ctaButton: "Start free",
+    ctaSub: "Set up in minutes, first answer the same day — on whatever device is in your hand.",
+    ctaButton: "Get started",
   },
   de: {
     metaTitle: "Download — Sigmabrain auf jedem Gerät",
@@ -147,7 +147,7 @@ export const DOWNLOAD: Record<Lang, DownloadContent> = {
       { q: "Wann kommen die Store-Apps?", a: "Nach dem Cloud-Launch — Apples Review verlangt einen vollständigen Signup-Flow. Das Capacitor-Build-Setup liegt bereits im Repository (mobile/README.md)." },
     ],
     ctaTitle: "Jetzt installieren, im nächsten Meeting dafür danken.",
-    ctaSub: "Kostenloses Konto, erste Antwort in Minuten — auf dem Gerät, das gerade in deiner Hand liegt.",
-    ctaButton: "Kostenlos starten",
+    ctaSub: "In Minuten eingerichtet, erste Antwort am selben Tag — auf dem Gerät, das gerade in deiner Hand liegt.",
+    ctaButton: "Jetzt starten",
   },
 };

@@ -68,15 +68,17 @@ export const INDUSTRY_PROFILES = {
         { en: "Cited drafting context", de: "Zitierter Schriftsatzkontext" },
       ],
     },
+    // Serious legal palette: royal blue + navy, no violet. Matches the Subsumio
+    // scales-of-justice mark and reads as trust/authority for a law-firm audience.
     theme: {
-      primary: "#4f46e5",
-      primaryHover: "#6366f1",
+      primary: "#1d4ed8",
+      primaryHover: "#2563eb",
       secondary: "#38bdf8",
-      tertiary: "#a78bfa",
-      glow: "rgba(79, 70, 229, 0.24)",
+      tertiary: "#60a5fa",
+      glow: "rgba(29, 78, 216, 0.26)",
       gradientFrom: "#38bdf8",
-      gradientVia: "#4f46e5",
-      gradientTo: "#a78bfa",
+      gradientVia: "#2563eb",
+      gradientTo: "#1e3a8a",
     },
   },
   tax: {

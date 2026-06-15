@@ -11,7 +11,7 @@ export function PricingGrid({ lang }: { lang: Lang }) {
   const pricing = PRICING[lang];
   return (
     <>
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className={`grid md:grid-cols-2 gap-5 ${pricing.tiers.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3 max-w-5xl mx-auto"}`}>
         {pricing.tiers.map((tier) => (
           <div
             key={tier.id}

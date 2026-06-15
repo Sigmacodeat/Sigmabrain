@@ -19,7 +19,7 @@ export const BILLABLE_PLANS: Record<"pro" | "team", BillablePlan> = {
   pro: {
     id: "pro",
     name: "Pro",
-    monthlyEur: 79,
+    monthlyEur: 190,
     stripePriceEnv: "STRIPE_PRICE_PRO",
     pages: 25_000,
     seats: 1,
@@ -27,7 +27,7 @@ export const BILLABLE_PLANS: Record<"pro" | "team", BillablePlan> = {
   team: {
     id: "team",
     name: "Team",
-    monthlyEur: 290,
+    monthlyEur: 390,
     stripePriceEnv: "STRIPE_PRICE_TEAM",
     pages: 100_000,
     seats: 5,

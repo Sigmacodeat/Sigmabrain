@@ -90,7 +90,7 @@ export const PARTNERS: Record<Lang, PartnersContent> = {
       },
     ],
     calcTitle: "What lifetime recurring actually means",
-    calcSub: "Refer 10 Team customers (€290/month). That's €870 every month — for as long as they stay. Year one alone is €10,440. And it keeps compounding.",
+    calcSub: "Refer 10 Team seats (€390/seat/month). At 30%, that's €1,170 every month — for as long as they stay. Year one alone is €14,040. And it keeps compounding.",
     calcNote: "We pay at the top of the industry range because early partners matter most. The more successful your referrals, the more we all grow.",
     howTitle: "How it works",
     how: [
@@ -168,7 +168,7 @@ export const PARTNERS: Record<Lang, PartnersContent> = {
       },
     ],
     calcTitle: "Was lebenslang wiederkehrend wirklich heißt",
-    calcSub: "Wirb 10 Team-Kunden (290 €/Monat). Das sind 870 € jeden Monat — solange sie bleiben. Allein im ersten Jahr sind das 10.440 €. Und es läuft weiter.",
+    calcSub: "Wirb 10 Team-Seats (390 €/Seat/Monat). Bei 30 % sind das 1.170 € jeden Monat — solange sie bleiben. Allein im ersten Jahr sind das 14.040 €. Und es läuft weiter.",
     calcNote: "Wir zahlen am oberen Ende der Branche, weil frühe Partner am meisten zählen. Je erfolgreicher deine Empfehlungen, desto mehr wachsen wir gemeinsam.",
     howTitle: "So funktioniert's",
     how: [

@@ -24,6 +24,7 @@ import BranchPricing from "./branch-pricing";
 import IndustryHeroMotif from "./industry-hero-motif";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 import DashboardReel from "./dashboard-reel";
+import SubsumioShowcase from "./subsumio-showcase";
 
 /** Product-line branding (Subsumio, Taxumio, …): same funnel body, branded
  *  hero, and signup deep-links carrying the industry for prefill. */
@@ -164,34 +165,39 @@ export default function VerticalPage({
         </div>
       </section>
 
-      {/* Features */}
-      <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
-        <SectionHeading title={t.featuresTitle} />
-        <div className="grid md:grid-cols-2 gap-5">
-          {t.features.map((f, i) => {
-            const Icon = ICONS[f.icon];
-            return (
-              <motion.div
-                key={f.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.4, delay: (i % 2) * 0.1 }}
-                whileHover={{ y: -4 }}
-                className="p-7 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-[#3a3a6a] transition-colors flex gap-5"
-              >
-                <div className="w-10 h-10 rounded-lg brand-soft border brand-border flex items-center justify-center shrink-0">
-                  {Icon && <Icon size={18} className="brand-text" />}
-                </div>
-                <div>
-                  <h3 className="text-base font-semibold text-[#e8e8f0] mb-2">{f.title}</h3>
-                  <p className="text-sm text-[#8888aa] leading-relaxed">{f.desc}</p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
+      {/* Features — Subsumio gets the premium WhatsApp-copilot spotlight +
+          bento showcase; other verticals use the standard card grid. */}
+      {industry === "legal" ? (
+        <SubsumioShowcase lang={lang} />
+      ) : (
+        <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
+          <SectionHeading title={t.featuresTitle} />
+          <div className="grid md:grid-cols-2 gap-5">
+            {t.features.map((f, i) => {
+              const Icon = ICONS[f.icon];
+              return (
+                <motion.div
+                  key={f.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.4, delay: (i % 2) * 0.1 }}
+                  whileHover={{ y: -4 }}
+                  className="p-7 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-[#3a3a6a] transition-colors flex gap-5"
+                >
+                  <div className="w-10 h-10 rounded-lg brand-soft border brand-border flex items-center justify-center shrink-0">
+                    {Icon && <Icon size={18} className="brand-text" />}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-[#e8e8f0] mb-2">{f.title}</h3>
+                    <p className="text-sm text-[#8888aa] leading-relaxed">{f.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {/* Proof */}
       <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
