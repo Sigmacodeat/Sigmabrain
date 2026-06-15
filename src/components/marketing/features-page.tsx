@@ -55,11 +55,11 @@ function GraphHero() {
       <svg viewBox="0 0 460 360" className="w-full h-full" aria-hidden>
         <defs>
           <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.7" />
+            <stop offset="0%" stopColor="var(--brand-secondary)" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="var(--brand-primary)" stopOpacity="0.7" />
           </radialGradient>
           <linearGradient id="edgeGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.55" />
+            <stop offset="0%" stopColor="var(--brand-primary)" stopOpacity="0.55" />
             <stop offset="100%" stopColor="#3a3a6a" stopOpacity="0.35" />
           </linearGradient>
         </defs>
@@ -88,7 +88,7 @@ function GraphHero() {
               cy={n.y}
               r={n.r}
               fill="url(#nodeGlow)"
-              stroke="#c4b5fd"
+              stroke="var(--brand-secondary)"
               strokeWidth={1}
               initial={{ scale: 0, opacity: 0 }}
               animate={
@@ -157,6 +157,85 @@ function CountUp({ to, decimals = 0 }: { to: number; decimals?: number }) {
   return <span ref={ref}>{val.toFixed(decimals)}</span>;
 }
 
+// --- "How it works" pipeline (sequential reveal + animated connector) ----
+
+const HOW = {
+  de: {
+    title: "So funktioniert's — vom Dokument zur belegten Antwort",
+    sub: "Vier Schritte. Kein Tagging, keine Datenpflege — das Brain verdrahtet sich selbst.",
+    steps: [
+      { icon: "Database", title: "Füttern", desc: "Akten, Mails, PDFs, Sprachnotizen, WhatsApp — per Ordner, Upload oder Copilot. OCR holt Text auch aus Scans.", tag: "Upload · OCR · Copilot" },
+      { icon: "Network", title: "Verstehen", desc: "Bei jedem Write extrahiert die Engine typisierte Kanten — Personen, Fristen, Beziehungen — als juristischer Wissensgraph.", tag: "Entitäten · Graph · Embeddings" },
+      { icon: "Search", title: "Fragen", desc: "Frag in normaler Sprache. Hybrid-Suche aus Vektor, Stichwort und Graph findet die entscheidenden Stellen.", tag: "Hybrid-Suche · Reranking" },
+      { icon: "Brain", title: "Belegte Antwort", desc: "Synthetisierte Antwort mit seitengenauen Zitaten — plus ehrlicher Hinweis, was in der Akte noch fehlt.", tag: "Zitate · Lückenanalyse" },
+    ],
+  },
+  en: {
+    title: "How it works — from document to a cited answer",
+    sub: "Four steps. No tagging, no data entry — the brain wires itself.",
+    steps: [
+      { icon: "Database", title: "Feed it", desc: "Matters, emails, PDFs, voice notes, WhatsApp — by folder, upload or copilot. OCR pulls text from scans too.", tag: "Upload · OCR · copilot" },
+      { icon: "Network", title: "It understands", desc: "On every write the engine extracts typed edges — people, deadlines, relationships — as a legal knowledge graph.", tag: "Entities · graph · embeddings" },
+      { icon: "Search", title: "Ask", desc: "Ask in plain language. Hybrid retrieval across vector, keyword and graph finds the decisive passages.", tag: "Hybrid search · reranking" },
+      { icon: "Brain", title: "Cited answer", desc: "A synthesized answer with page-level citations — plus an honest note on what the file is still missing.", tag: "Citations · gap analysis" },
+    ],
+  },
+} as const;
+
+function HowItWorks({ lang }: { lang: Lang }) {
+  const h = HOW[lang];
+  return (
+    <section className="relative z-10 px-6 max-w-6xl mx-auto pb-24">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={viewport}
+        transition={{ duration: 0.4 }}
+        className="text-center mb-14"
+      >
+        <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] mb-3">{h.title}</h2>
+        <p className="text-base text-[#8888aa] max-w-2xl mx-auto">{h.sub}</p>
+      </motion.div>
+
+      <div className="relative grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* animated connector line (lg+) */}
+        <motion.div
+          aria-hidden
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.1, ease: "easeInOut", delay: 0.2 }}
+          className="hidden lg:block absolute top-7 left-[12.5%] right-[12.5%] h-px origin-left"
+          style={{ background: "linear-gradient(90deg, transparent, var(--brand-primary), transparent)" }}
+        />
+        {h.steps.map((s, i) => {
+          const Icon = ICONS[s.icon];
+          return (
+            <motion.div
+              key={s.title}
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewport}
+              transition={{ duration: 0.45, delay: i * 0.18, ease: [0.21, 0.5, 0.27, 1] }}
+              className="relative"
+            >
+              <div className="relative z-10 mx-auto mb-5 w-14 h-14 rounded-2xl brand-soft border brand-border flex items-center justify-center shadow-lg shadow-black/40">
+                {Icon && <Icon size={22} className="brand-text" />}
+                <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full brand-bg text-white text-xs font-bold flex items-center justify-center shadow-md">{i + 1}</span>
+              </div>
+              <div className="text-center">
+                <h3 className="text-base font-bold text-[#e8e8f0] mb-2">{s.title}</h3>
+                <p className="text-sm text-[#8888aa] leading-relaxed mb-3">{s.desc}</p>
+                <span className="inline-block text-[10px] font-mono brand-text brand-soft px-2 py-1 rounded-full">{s.tag}</span>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 export default function FeaturesPage({ lang }: { lang: Lang }) {
   const t = FEATURES_PAGE[lang];
   const [active, setActive] = useState(t.categories[0].id);
@@ -193,8 +272,8 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="text-center lg:text-left"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-xs text-violet-400 font-medium mb-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border brand-border brand-soft text-xs brand-text font-medium mb-8">
+                <span className="w-1.5 h-1.5 rounded-full brand-bg animate-pulse" />
                 {t.badge}
               </div>
               <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
@@ -225,7 +304,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-violet-600/10 blur-3xl rounded-full" />
+              <div className="absolute inset-0 brand-soft blur-3xl rounded-full" />
               <div className="relative glass rounded-3xl p-6 shadow-2xl shadow-black/40">
                 <GraphHero />
                 <p className="text-center text-xs text-[#4a4a6a] font-mono mt-2">
@@ -261,6 +340,9 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
           </div>
         </section>
 
+        {/* How it works — sequential pipeline */}
+        <HowItWorks lang={lang} />
+
         {/* Category explorer */}
         <section className="relative z-10 px-6 max-w-6xl mx-auto pb-24">
           <div
@@ -278,13 +360,13 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                   aria-selected={isActive}
                   onClick={() => setActive(c.id)}
                   className={`relative flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-colors ${
-                    isActive ? "text-violet-200" : "text-[#8888aa] hover:text-[#e8e8f0]"
+                    isActive ? "brand-text" : "text-[#8888aa] hover:text-[#e8e8f0]"
                   }`}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="feature-tab-pill"
-                      className="absolute inset-0 rounded-full bg-violet-600/15 border border-violet-500/40 shadow-lg shadow-violet-900/20"
+                      className="absolute inset-0 rounded-full brand-soft border brand-border shadow-lg shadow-black/30"
                       transition={{ type: "spring", stiffness: 400, damping: 32 }}
                     />
                   )}
@@ -310,8 +392,8 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
               {/* Left: explanation */}
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-                    {CatIcon && <CatIcon size={22} className="text-violet-400" />}
+                  <div className="w-12 h-12 rounded-xl brand-soft border brand-border flex items-center justify-center">
+                    {CatIcon && <CatIcon size={22} className="brand-text" />}
                   </div>
                   <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0]">{cat.title}</h2>
                 </div>
@@ -323,9 +405,9 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.06 * i, duration: 0.22 }}
-                      className="flex gap-3 p-4 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-violet-500/30 hover:bg-[#0f0f20] transition-colors"
+                      className="flex gap-3 p-4 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] hover:brand-border hover:bg-[#0f0f20] transition-colors"
                     >
-                      <CheckCircle2 size={16} className="text-violet-400 shrink-0 mt-0.5" />
+                      <CheckCircle2 size={16} className="brand-text shrink-0 mt-0.5" />
                       <div>
                         <h3 className="text-sm font-semibold text-[#e8e8f0] mb-1">{item.title}</h3>
                         <p className="text-sm text-[#8888aa] leading-relaxed">{item.desc}</p>
@@ -358,7 +440,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                               : line.includes("⚠")
                                 ? "text-amber-400"
                                 : line.startsWith("→") || line.match(/^\d\d:\d\d/)
-                                  ? "text-violet-300"
+                                  ? "brand-text"
                                   : "text-[#8888aa]"
                           }
                         >
@@ -371,11 +453,11 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
               ) : (
                 <div className="hidden lg:flex items-center justify-center h-full min-h-[300px] rounded-2xl border border-dashed border-[#1e1e3a]">
                   <div className="text-center px-8">
-                    {CatIcon && <CatIcon size={32} className="text-violet-500/40 mx-auto mb-4" />}
+                    {CatIcon && <CatIcon size={32} className="brand-text mx-auto mb-4" />}
                     <p className="text-sm text-[#4a4a6a] max-w-xs">
                       {lang === "en"
-                        ? "Audited in code, enforced by tests — read the open-source core."
-                        : "Im Code auditierbar, durch Tests erzwungen — lies den Open-Source-Kern."}
+                        ? "Enforced by tests, not policy docs — deterministic, verifiable behavior."
+                        : "Durch Tests erzwungen, nicht durch Policy-Dokumente — deterministisches, prüfbares Verhalten."}
                     </p>
                   </div>
                 </div>
@@ -404,14 +486,14 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewport}
                   transition={{ duration: 0.35, delay: (i % 3) * 0.08 }}
-                  className="group text-left p-6 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-violet-500/40 hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
+                  className="group text-left p-6 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:brand-border hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
                 >
-                  <div className="w-11 h-11 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    {Icon && <Icon size={20} className="text-violet-400" />}
+                  <div className="w-11 h-11 rounded-xl brand-soft border brand-border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    {Icon && <Icon size={20} className="brand-text" />}
                   </div>
                   <h3 className="text-base font-bold text-[#e8e8f0] mb-1.5">{c.title}</h3>
                   <p className="text-sm text-[#8888aa] leading-relaxed line-clamp-3">{c.intro}</p>
-                  <span className="inline-flex items-center gap-1 text-xs text-violet-400 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="inline-flex items-center gap-1 text-xs brand-text mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     {lang === "en" ? "Explore" : "Ansehen"} <ArrowRight size={12} />
                   </span>
                 </motion.button>
@@ -422,7 +504,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
 
         {/* CTA */}
         <section className="relative z-10 py-24 px-6 text-center max-w-3xl mx-auto border-t border-[#1e1e3a]">
-          <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />
+          <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow" />
           <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
           <p className="text-lg text-[#8888aa] mb-10">{t.ctaSub}</p>
           <Link href={p(lang, "/signup")}>
