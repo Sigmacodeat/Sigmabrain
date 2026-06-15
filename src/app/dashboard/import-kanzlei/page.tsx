@@ -179,8 +179,8 @@ export default function ImportKanzleiPage() {
 
       {/* Upload */}
       <label className={cn(
-        "flex flex-col items-center justify-center gap-2 py-10 rounded-xl border-2 border-dashed cursor-pointer transition-colors",
-        headers.length ? "border-[#1e1e3a] bg-[#0a0a18]" : "border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10"
+        "flex flex-col items-center justify-center gap-2 py-10 rounded-xl border border-dashed cursor-pointer transition-all duration-300",
+        headers.length ? "border-[#23233f] bg-[#0a0a18]" : "border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50"
       )}>
         <UploadCloud size={28} className="text-blue-400" aria-hidden="true" />
         <span className="text-sm text-[#e8e8f0]">{fileName || "CSV-Datei wählen oder hierher ziehen"}</span>

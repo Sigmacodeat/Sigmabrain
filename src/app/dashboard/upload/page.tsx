@@ -290,10 +290,10 @@ export default function UploadPage() {
       <div
         {...getRootProps()}
         className={cn(
-          "relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-200",
+          "relative border border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300",
           isDragActive
-            ? "border-violet-500 bg-violet-500/10"
-            : "border-[#1e1e3a] hover:border-[#3a3a6a] hover:bg-[#0d0d1a]",
+            ? "border-violet-500/60 bg-violet-500/[0.06] ring-1 ring-violet-500/20"
+            : "border-[#23233f] hover:border-violet-500/30 hover:bg-violet-500/[0.02]",
           !isOnline() && "opacity-50 cursor-not-allowed"
         )}
       >

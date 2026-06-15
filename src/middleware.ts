@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { verifySession, SESSION_COOKIE } from "@/lib/auth/session";
+import { brandForHost, OTHER_VERTICAL_PATHS } from "@/lib/brand";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -23,6 +24,24 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
     return NextResponse.next();
+  }
+
+  // --- Subsumio domain: present Subsumio standalone ---
+  // On subsum.io / subsumio.com the Subsumio page IS the homepage, and the
+  // other verticals fold into it (this domain never shows the whole platform).
+  // The URL stays clean; only the rendered route is rewritten.
+  if (brandForHost(req.headers.get("host")) === "subsumio") {
+    let target: string | null = null;
+    if (pathname === "/") target = "/subsumio";
+    else if (pathname === "/de") target = "/de/subsumio";
+    else if (OTHER_VERTICAL_PATHS.some((v) => pathname === v || pathname.startsWith(`${v}/`))) target = "/subsumio";
+    else if (OTHER_VERTICAL_PATHS.some((v) => pathname === `/de${v}` || pathname.startsWith(`/de${v}/`))) target = "/de/subsumio";
+
+    if (target && target !== pathname) {
+      const url = req.nextUrl.clone();
+      url.pathname = target;
+      return NextResponse.rewrite(url);
+    }
   }
 
   return NextResponse.next();

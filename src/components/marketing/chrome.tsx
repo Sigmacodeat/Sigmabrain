@@ -38,7 +38,40 @@ import {
 import { Button } from "@/components/ui/button";
 import { SigmaLogo, SigmaMark } from "@/components/brand/logo";
 import { NAV, FOOTER, p, altPath, ENGINE_REPO_URL, type Lang } from "@/content/site";
+import { brandForHost, type SiteBrand } from "@/lib/brand";
 import SalesAgentWidget from "./sales-agent-widget";
+
+// Resolve the active brand from the request host on the client. On a Subsumio
+// domain (subsum.io / subsumio.com) the chrome renders Subsumio-scoped: a
+// Subsumio wordmark and no platform "Solutions" dropdown. Detected post-mount
+// to keep every marketing page statically rendered.
+function useSiteBrand(): SiteBrand {
+  const [brand, setBrand] = useState<SiteBrand>("sigmabrain");
+  useEffect(() => {
+    const override = new URLSearchParams(window.location.search).get("brand");
+    if (override === "subsumio" || override === "sigmabrain") {
+      setBrand(override);
+      return;
+    }
+    setBrand(brandForHost(window.location.host));
+  }, []);
+  return brand;
+}
+
+// Brand-aware logo lockup for the nav. Subsumio is "powered by Sigmabrain", so
+// it keeps the Sigma mark and adds the attribution line.
+function BrandLogo({ brand }: { brand: SiteBrand }) {
+  if (brand !== "subsumio") return <SigmaLogo size={32} />;
+  return (
+    <span className="inline-flex items-center gap-2.5">
+      <SigmaMark size={32} />
+      <span className="flex flex-col leading-none">
+        <span className="font-display text-lg font-bold text-[#e8e8f0] tracking-tight">Subsumio</span>
+        <span className="text-[10px] font-medium text-[#6f6f8a] tracking-normal mt-0.5">by Sigmabrain</span>
+      </span>
+    </span>
+  );
+}
 
 // Content files store icon names as strings; resolve them here.
 export const ICONS: Record<string, LucideIcon> = {
@@ -81,6 +114,8 @@ export function MarketingBackground() {
 
 export function MarketingNav({ lang }: { lang: Lang }) {
   const nav = NAV[lang];
+  const brand = useSiteBrand();
+  const isSubsumio = brand === "subsumio";
   const pathname = usePathname() || "/";
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -90,12 +125,13 @@ export function MarketingNav({ lang }: { lang: Lang }) {
     <>
     <nav className="relative z-50 max-w-7xl mx-auto px-6 py-4">
       <div className="flex items-center justify-between">
-        <Link href={p(lang, "")} aria-label="Sigmabrain home">
-          <SigmaLogo size={32} />
+        <Link href={p(lang, "")} aria-label={isSubsumio ? "Subsumio home" : "Sigmabrain home"}>
+          <BrandLogo brand={brand} />
         </Link>
 
         <div className="hidden md:flex items-center gap-7">
           <Link href={p(lang, "/features")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.features}</Link>
+          {!isSubsumio && (
           <div
             className="relative"
             onMouseEnter={() => setSolutionsOpen(true)}
@@ -150,8 +186,9 @@ export function MarketingNav({ lang }: { lang: Lang }) {
               </div>
             )}
           </div>
+          )}
           <Link href={p(lang, "/pricing")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.pricing}</Link>
-          <Link href={p(lang, "/compare")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.compare}</Link>
+          {!isSubsumio && <Link href={p(lang, "/compare")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.compare}</Link>}
           <a href={ENGINE_REPO_URL} target="_blank" rel="noreferrer" className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.docs}</a>
         </div>
 
@@ -182,7 +219,7 @@ export function MarketingNav({ lang }: { lang: Lang }) {
       {mobileOpen && (
         <div className="md:hidden mt-3 glass rounded-xl p-3 space-y-1">
           <Link href={p(lang, "/features")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.features}</Link>
-          {nav.solutionItems.map((item) => {
+          {!isSubsumio && nav.solutionItems.map((item) => {
             const comingSoon = "comingSoon" in item && item.comingSoon;
             if (comingSoon) {
               return (
@@ -199,7 +236,7 @@ export function MarketingNav({ lang }: { lang: Lang }) {
             );
           })}
           <Link href={p(lang, "/pricing")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.pricing}</Link>
-          <Link href={p(lang, "/compare")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.compare}</Link>
+          {!isSubsumio && <Link href={p(lang, "/compare")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.compare}</Link>}
           <Link href={altPath(lang, pathname)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>
             <Globe size={13} /> {lang === "en" ? "Deutsch" : "English"}
           </Link>
@@ -213,15 +250,31 @@ export function MarketingNav({ lang }: { lang: Lang }) {
 
 export function MarketingFooter({ lang }: { lang: Lang }) {
   const footer = FOOTER[lang];
+  const brand = useSiteBrand();
+  const isSubsumio = brand === "subsumio";
   return (
     <footer className="relative z-10 border-t border-[#1e1e3a] py-14 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-10">
           <div className="col-span-2">
             <div className="mb-3">
-              <SigmaLogo size={24} wordmarkClassName="text-sm font-semibold text-[#e8e8f0]" />
+              {isSubsumio ? (
+                <span className="inline-flex items-center gap-2.5">
+                  <SigmaMark size={24} />
+                  <span className="flex flex-col leading-none">
+                    <span className="font-display text-sm font-semibold text-[#e8e8f0]">Subsumio</span>
+                    <span className="text-[10px] font-medium text-[#6f6f8a] mt-0.5">by Sigmabrain</span>
+                  </span>
+                </span>
+              ) : (
+                <SigmaLogo size={24} wordmarkClassName="text-sm font-semibold text-[#e8e8f0]" />
+              )}
             </div>
-            <p className="text-sm text-[#8888aa] mb-4">{footer.tagline}</p>
+            <p className="text-sm text-[#8888aa] mb-4">
+              {isSubsumio
+                ? (lang === "de" ? "Das Kanzlei-Gehirn — angetrieben von Sigmabrain." : "The law firm's brain — powered by Sigmabrain.")
+                : footer.tagline}
+            </p>
             <p className="text-xs text-[#4a4a6a] leading-relaxed max-w-xs">{footer.note}</p>
           </div>
           {footer.columns.map((col) => (
