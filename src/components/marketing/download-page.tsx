@@ -199,7 +199,7 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                 ) : (
                   <Link href={p(lang, "/signup")}>
                     <Button size="xl" variant="glow">
-                      {lang === "en" ? "Start free" : "Kostenlos starten"} <ArrowRight size={18} />
+                      {lang === "en" ? "Get started" : "Jetzt starten"} <ArrowRight size={18} />
                     </Button>
                   </Link>
                 )}

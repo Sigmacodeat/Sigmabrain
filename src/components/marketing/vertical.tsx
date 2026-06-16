@@ -118,8 +118,8 @@ export default function VerticalPage({
         </div>
         <p className="text-xs text-[#6f6f8a] mb-16">
           {lang === "de"
-            ? "Self-hosted · EU-Cloud · Open-Source-Kern · DSGVO-konform · keine Kreditkarte"
-            : "Self-hosted · EU cloud · Open-source core · GDPR-ready · no credit card"}
+            ? "Self-hosted · EU-Cloud · DSGVO-konform · § 203 StGB im Blick"
+            : "Self-hosted · EU cloud · GDPR-ready · professional secrecy by design"}
         </p>
         <div className="max-w-3xl mx-auto">
           <LiveDemo lang={lang} {...t.demo} />
