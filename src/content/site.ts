@@ -232,10 +232,10 @@ export const PRICING: Record<Lang, { title: string; sub: string; tiers: PricingT
 
 export const LANDING = {
   en: {
-    badge: "Self-hosted or EU cloud · confidentiality-first",
+    badge: "One brain platform · tuned for every industry",
     h1a: "Your firm forgets.",
     h1b: "Sigmabrain doesn't.",
-    sub: "Every meeting, deal, email and document — turned into one answer instead of ten search results. With citations, and an honest note on what it doesn't know yet.",
+    sub: "One company-brain platform, tuned per industry — every meeting, deal, email and document becomes one cited answer instead of ten search results. Subsumio for law firms is live; more verticals are coming.",
     ctaPrimary: "Get started",
     ctaSecondary: "See it answer",
     demo: {
@@ -276,10 +276,10 @@ export const LANDING = {
       { step: "02", icon: "GitBranch", title: "It wires itself", desc: "People, companies and relationships become a graph — while you sleep, the Dream Cycle keeps it clean." },
       { step: "03", icon: "Brain", title: "Ask, don't search", desc: "Plain-language questions. Synthesized answers with sources and explicit gaps." },
     ],
-    verticalsTitle: "Built for teams that run on knowledge",
-    verticalsSub: "One brain, tuned for your industry.",
+    verticalsTitle: "Choose your solution",
+    verticalsSub: "One platform, a dedicated brain for each industry. Subsumio for law firms is live — the rest are coming.",
     verticalCards: [
-      { href: "/subsumio", title: "Law Firms — Subsumio", desc: "Case files, deadlines, WhatsApp intake, time, expenses and invoices — answerable from your own brain, self-hosted or EU cloud.", cta: "For law firms" },
+      { href: "/subsumio", title: "Law Firms — Subsumio", desc: "Case files, deadlines, WhatsApp intake, time, expenses and invoices — answerable from your own brain, self-hosted or EU cloud.", cta: "Go to Subsumio" },
       { href: "/taxumio", title: "Tax & Accounting — Taxumio", desc: "DATEV knows the numbers. The brain knows the why — advisory history, client context, open items, deadlines.", cta: "For tax & accounting", comingSoon: true },
       { href: "/vc", title: "VC & Private Equity", desc: "Who invested in what? What's open with this founder? Walk into every meeting prepared.", cta: "For investors", comingSoon: true },
       { href: "/consulting", title: "Consulting & Agencies", desc: "Pitch history, project learnings, client context — new hires productive in days.", cta: "For consultancies", comingSoon: true },
@@ -305,10 +305,10 @@ export const LANDING = {
     ctaButton: "Get started with Sigmabrain",
   },
   de: {
-    badge: "Self-hosted oder EU-Cloud · vertraulichkeitskritisch",
+    badge: "Eine Brain-Plattform · für jede Branche abgestimmt",
     h1a: "Deine Firma vergisst.",
     h1b: "Sigmabrain nicht.",
-    sub: "Jedes Meeting, jeder Deal, jede Mail, jedes Dokument — als eine Antwort statt zehn Suchtreffern. Mit Quellen und einem ehrlichen Hinweis, was noch fehlt.",
+    sub: "Eine Firmen-Brain-Plattform, pro Branche abgestimmt — jedes Meeting, jeder Deal, jede Mail, jedes Dokument wird zu einer belegten Antwort statt zehn Suchtreffern. Subsumio für Kanzleien ist live; weitere Branchen folgen.",
     ctaPrimary: "Jetzt starten",
     ctaSecondary: "Antwort ansehen",
     demo: {
@@ -349,10 +349,10 @@ export const LANDING = {
       { step: "02", icon: "GitBranch", title: "Es verdrahtet sich selbst", desc: "Personen, Firmen und Beziehungen werden zum Graphen — nachts hält der Dream Cycle alles sauber." },
       { step: "03", icon: "Brain", title: "Fragen statt suchen", desc: "Fragen in normaler Sprache. Synthetisierte Antworten mit Quellen und expliziten Lücken." },
     ],
-    verticalsTitle: "Gebaut für Teams, die von Wissen leben",
-    verticalsSub: "Ein Brain, abgestimmt auf deine Branche.",
+    verticalsTitle: "Wähle deine Lösung",
+    verticalsSub: "Eine Plattform, ein eigenes Brain pro Branche. Subsumio für Kanzleien ist live — der Rest folgt.",
     verticalCards: [
-      { href: "/subsumio", title: "Kanzleien — Subsumio", desc: "Akten, Fristen, WhatsApp-Eingang, Zeiten, Auslagen und Rechnungen — abfragbar aus eurem eigenen Brain, self-hosted oder EU-Cloud.", cta: "Für Kanzleien" },
+      { href: "/subsumio", title: "Kanzleien — Subsumio", desc: "Akten, Fristen, WhatsApp-Eingang, Zeiten, Auslagen und Rechnungen — abfragbar aus eurem eigenen Brain, self-hosted oder EU-Cloud.", cta: "Auf Subsumio gehen" },
       { href: "/taxumio", title: "Steuerberater & WP — Taxumio", desc: "DATEV kennt die Zahlen. Das Gehirn kennt das Warum — Gestaltungs-Historie, Mandantenkontext, offene Punkte, Fristen.", cta: "Für Steuerkanzleien", comingSoon: true },
       { href: "/vc", title: "VC & Private Equity", desc: "Wer hat in was investiert? Was ist mit diesem Founder offen? In jedes Meeting vorbereitet gehen.", cta: "Für Investoren", comingSoon: true },
       { href: "/consulting", title: "Beratung & Agenturen", desc: "Pitch-Historie, Projekt-Learnings, Kundenkontext — neue Kollegen in Tagen produktiv.", cta: "Für Beratungen", comingSoon: true },
