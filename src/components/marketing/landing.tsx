@@ -18,6 +18,7 @@ import NeuralHero from "./neural-hero";
 import DashboardReel from "./dashboard-reel";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 import SuperbrainAdvantage from "./superbrain-advantage";
+import TrustBand from "./trust-band";
 import {
   MarketingBackground,
   MarketingNav,
@@ -269,6 +270,9 @@ export default function LandingPage({ lang }: { lang: Lang }) {
             </div>
           </div>
         </section>
+
+        {/* Trust band — light section (the serious counterpoint, primes pricing) */}
+        <TrustBand lang={lang} />
 
         {/* Pricing */}
         <section id="pricing" className="relative z-10 py-24 px-6">

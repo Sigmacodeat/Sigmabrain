@@ -13,13 +13,23 @@
   --color-text-primary: #e8e8f0;
   --color-text-secondary: #8888aa;
   --color-text-muted: #4a4a6a;
-  --color-accent: #7c3aed;
-  --color-accent-light: #a78bfa;
-  --color-accent-glow: rgba(124, 58, 237, 0.15);
+  --color-accent: #2f6bff;
+  --color-accent-light: #5b8cff;
+  --color-accent-glow: rgba(47, 107, 255, 0.15);
   --color-success: #34d399;
   --color-warning: #fbbf24;
   --color-danger: #f87171;
   --color-info: #60a5fa;
+  /* Light "trust" surface tokens — for the light bands in the light/dark mix. */
+  --color-light-bg: #f6f5f1;
+  --color-light-surface: #ffffff;
+  --color-light-border: #e7e5dd;
+  --color-light-text: #1a1a24;
+  --color-light-text-muted: #5b5b6b;
+  /* Deliberate, accessible signal accents (text-on-light shades). */
+  --signal-blue: #1d4ed8;
+  --signal-green: #047857;
+  --signal-amber: #b45309;
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-display: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), "Fira Code", monospace;
