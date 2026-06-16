@@ -61,9 +61,14 @@ function useSiteBrand(): SiteBrand {
 
 // Brand-aware logo lockup for the nav. Subsumio is "powered by Sigmabrain", so
 // it keeps the Sigma mark and adds the attribution line.
-function BrandLogo({ brand }: { brand: SiteBrand }) {
-  if (brand !== "subsumio") return <SigmaLogo size={32} />;
-  return <SubsumioLogo size={34} />;
+function BrandLogo({ brand, theme = "dark" }: { brand: SiteBrand; theme?: "light" | "dark" }) {
+  if (brand === "subsumio") return <SubsumioLogo size={34} />;
+  return (
+    <SigmaLogo
+      size={32}
+      wordmarkClassName={`text-lg font-bold tracking-tight ${theme === "light" ? "text-[#1a1a24]" : "text-[#e8e8f0]"}`}
+    />
+  );
 }
 
 // Content files store icon names as strings; resolve them here.
@@ -105,7 +110,7 @@ export function MarketingBackground() {
   );
 }
 
-export function MarketingNav({ lang }: { lang: Lang }) {
+export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "light" | "dark" }) {
   const nav = NAV[lang];
   const brand = useSiteBrand();
   const isSubsumio = brand === "subsumio";
@@ -113,17 +118,19 @@ export function MarketingNav({ lang }: { lang: Lang }) {
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const other: Lang = lang === "en" ? "de" : "en";
+  const light = theme === "light";
+  const linkCls = light ? "text-[#5b5b6b] hover:text-[#1a1a24]" : "text-[#8888aa] hover:text-[#e8e8f0]";
 
   return (
     <>
     <nav className="relative z-50 max-w-7xl mx-auto px-6 py-4">
       <div className="flex items-center justify-between">
         <Link href={p(lang, "")} aria-label={isSubsumio ? "Subsumio home" : "Sigmabrain home"}>
-          <BrandLogo brand={brand} />
+          <BrandLogo brand={brand} theme={theme} />
         </Link>
 
         <div className="hidden md:flex items-center gap-7">
-          <Link href={p(lang, "/features")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.features}</Link>
+          <Link href={p(lang, "/features")} className={`text-sm ${linkCls}`}>{nav.features}</Link>
           {!isSubsumio && (
           <div
             className="relative"
@@ -131,7 +138,7 @@ export function MarketingNav({ lang }: { lang: Lang }) {
             onMouseLeave={() => setSolutionsOpen(false)}
           >
             <button
-              className="flex items-center gap-1 text-sm text-[#8888aa] hover:text-[#e8e8f0] py-2"
+              className={`flex items-center gap-1 text-sm ${linkCls} py-2`}
               aria-expanded={solutionsOpen}
               aria-haspopup="true"
               onClick={() => setSolutionsOpen((o) => !o)}
@@ -187,27 +194,27 @@ export function MarketingNav({ lang }: { lang: Lang }) {
             )}
           </div>
           )}
-          <Link href={p(lang, "/pricing")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.pricing}</Link>
-          {!isSubsumio && <Link href={p(lang, "/compare")} className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.compare}</Link>}
-          <a href={ENGINE_REPO_URL} target="_blank" rel="noreferrer" className="text-sm text-[#8888aa] hover:text-[#e8e8f0]">{nav.docs}</a>
+          <Link href={p(lang, "/pricing")} className={`text-sm ${linkCls}`}>{nav.pricing}</Link>
+          {!isSubsumio && <Link href={p(lang, "/compare")} className={`text-sm ${linkCls}`}>{nav.compare}</Link>}
+          <a href={ENGINE_REPO_URL} target="_blank" rel="noreferrer" className={`text-sm ${linkCls}`}>{nav.docs}</a>
         </div>
 
         <div className="flex items-center gap-3">
           <Link
             href={altPath(lang, pathname)}
-            className="hidden sm:flex items-center gap-1.5 text-xs text-[#8888aa] hover:text-[#e8e8f0] border border-[#1e1e3a] hover:border-[#3a3a6a] rounded-full px-3 py-1.5"
+            className={`hidden sm:flex items-center gap-1.5 text-xs rounded-full px-3 py-1.5 border ${light ? "text-[#5b5b6b] hover:text-[#1a1a24] border-[#e7e5dd] hover:border-[#c9c6bd]" : "text-[#8888aa] hover:text-[#e8e8f0] border-[#1e1e3a] hover:border-[#3a3a6a]"}`}
             aria-label={lang === "en" ? "Auf Deutsch lesen" : "Read in English"}
           >
             <Globe size={12} /> {other.toUpperCase()}
           </Link>
           <Link href={p(lang, "/login")} className="hidden sm:block">
-            <Button variant="ghost" size="sm">{nav.signIn}</Button>
+            <Button variant="ghost" size="sm" className={light ? "text-[#1a1a24] hover:bg-black/5" : undefined}>{nav.signIn}</Button>
           </Link>
           <Link href={p(lang, "/signup")}>
             <Button size="sm" variant="glow">{nav.cta} <ChevronRight size={14} /></Button>
           </Link>
           <button
-            className="md:hidden p-2 text-[#8888aa] hover:text-[#e8e8f0]"
+            className={`md:hidden p-2 ${linkCls}`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Menu"
           >

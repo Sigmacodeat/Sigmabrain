@@ -14,7 +14,6 @@ import { LANDING, PRICING, p, type Lang } from "@/content/site";
 import { SUBSUMIO_SITE_URL, isExternalUrl } from "@/lib/brand";
 import { PricingGrid } from "./pricing-grid";
 import LiveDemo from "./live-demo";
-import NeuralHero from "./neural-hero";
 import DashboardReel from "./dashboard-reel";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 import SuperbrainAdvantage from "./superbrain-advantage";
@@ -56,31 +55,27 @@ export default function LandingPage({ lang }: { lang: Lang }) {
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
         <MarketingBackground />
-        <MarketingNav lang={lang} />
+        {/* Light hero band — nav + hero on a serious light surface (the mix) */}
+        <div className="relative" style={{ background: "var(--color-light-bg)" }}>
+        <MarketingNav lang={lang} theme="light" />
 
         {/* Hero */}
-        <section className="relative z-10 pt-20 pb-28 px-6 max-w-7xl mx-auto text-center">
-          {/* Signature neural-graph backdrop */}
-          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden>
-            <NeuralHero className="absolute inset-0 w-full h-full opacity-70" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#06060f]/10 via-transparent to-[#06060f]" />
-          </div>
-
+        <section className="relative z-10 pt-14 pb-28 px-6 max-w-7xl mx-auto text-center">
           <motion.div
             className="relative z-10"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-xs text-violet-400 font-medium mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-8" style={{ color: "var(--signal-blue)", background: "rgba(29,78,216,0.08)" }}>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "var(--signal-blue)" }} />
               {t.badge}
             </div>
-            <h1 className="text-5xl md:text-7xl font-black text-[#e8e8f0] leading-[1.05] tracking-tight mb-6">
+            <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight mb-6" style={{ color: "var(--color-light-text)" }}>
               {t.h1a}<br />
-              <span className="gradient-text glow-text">{t.h1b}</span>
+              <span style={{ color: "var(--brand-primary)" }}>{t.h1b}</span>
             </h1>
-            <p className="text-lg md:text-xl text-[#8888aa] max-w-2xl mx-auto mb-12 leading-relaxed">{t.sub}</p>
+            <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed" style={{ color: "var(--color-light-text-muted)" }}>{t.sub}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
               <Link href={p(lang, "/signup")}>
                 <Button size="xl" variant="glow" className="min-w-[200px]">
@@ -105,6 +100,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
             <LiveDemo lang={lang} {...t.demo} />
           </motion.div>
         </section>
+        </div>
 
         {/* Stats */}
         <motion.section {...reveal} className="relative z-10 py-16 px-6 border-y border-[#1e1e3a] bg-[#0d0d1a]/50">
