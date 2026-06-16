@@ -299,9 +299,7 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
         <div className="pt-6 border-t border-[#1e1e3a] flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-[#4a4a6a]">© 2026 Sigmabrain</p>
           <p className="text-xs text-[#4a4a6a]">
-            {lang === "en" ? "Powered by the open-source " : "Angetrieben von der Open-Source-"}
-            <a href={ENGINE_REPO_URL} target="_blank" rel="noreferrer" className="brand-text hover:underline">Sigmabrain Engine</a>
-            {lang === "en" ? " (MIT)" : " (MIT)"}
+            {lang === "en" ? "EU-hosted or self-hosted · GDPR-ready · confidentiality-first" : "EU-gehostet oder self-hosted · DSGVO-konform · vertraulichkeitskritisch"}
           </p>
         </div>
       </div>
@@ -311,7 +309,8 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
 
 // --- Shared section primitives -------------------------------------------
 
-export function SectionHeading({ badge, title, sub }: { badge?: string; title: string; sub?: string }) {
+export function SectionHeading({ badge, title, sub, tone = "dark" }: { badge?: string; title: string; sub?: string; tone?: "light" | "dark" }) {
+  const light = tone === "light";
   return (
     <div className="text-center mb-14">
       {badge && (
@@ -319,8 +318,8 @@ export function SectionHeading({ badge, title, sub }: { badge?: string; title: s
           {badge}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{title}</h2>
-      {sub && <p className="text-lg text-[#8888aa] max-w-2xl mx-auto">{sub}</p>}
+      <h2 className={`text-3xl md:text-4xl font-black mb-4 ${light ? "" : "text-[#e8e8f0]"}`} style={light ? { color: "var(--color-light-text)" } : undefined}>{title}</h2>
+      {sub && <p className={`text-lg max-w-2xl mx-auto ${light ? "" : "text-[#8888aa]"}`} style={light ? { color: "var(--color-light-text-muted)" } : undefined}>{sub}</p>}
     </div>
   );
 }

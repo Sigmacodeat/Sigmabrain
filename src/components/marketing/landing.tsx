@@ -26,10 +26,20 @@ import {
   SectionHeading,
   FaqList,
   ICONS,
-  COLOR_MAP,
 } from "./chrome";
 
 const viewport = { once: true, margin: "0px 0px 80px 0px", amount: 0.12 } as const;
+
+// Signal-color icon tiles tuned for LIGHT card surfaces (darker shades for
+// contrast on white) — used by the light Features band in the light/dark mix.
+const LIGHT_COLOR_MAP: Record<string, string> = {
+  violet: "text-violet-700 bg-violet-50 border-violet-200",
+  blue: "text-blue-700 bg-blue-50 border-blue-200",
+  emerald: "text-emerald-700 bg-emerald-50 border-emerald-200",
+  amber: "text-amber-700 bg-amber-50 border-amber-200",
+  rose: "text-rose-700 bg-rose-50 border-rose-200",
+  purple: "text-purple-700 bg-purple-50 border-purple-200",
+};
 // Section/card scroll-reveal preset.
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -137,32 +147,39 @@ export default function LandingPage({ lang }: { lang: Lang }) {
           </motion.div>
         </section>
 
-        {/* Features */}
-        <section id="features" className="relative z-10 py-24 px-6 max-w-7xl mx-auto">
-          <motion.div {...reveal}>
-            <SectionHeading badge="Features" title={t.featuresTitle} sub={t.featuresSub} />
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {t.features.map((f, i) => {
-              const Icon = ICONS[f.icon];
-              return (
-                <motion.div
-                  key={f.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewport}
-                  transition={{ duration: 0.4, delay: (i % 3) * 0.08 }}
-                  whileHover={{ y: -4 }}
-                  className="p-6 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-violet-500/40 hover:bg-[#12122a] transition-colors duration-200"
-                >
-                  <div className={`w-10 h-10 rounded-lg border flex items-center justify-center mb-4 ${COLOR_MAP[f.color]}`}>
-                    {Icon && <Icon size={18} />}
-                  </div>
-                  <h3 className="text-base font-semibold text-[#e8e8f0] mb-2">{f.title}</h3>
-                  <p className="text-sm text-[#8888aa] leading-relaxed">{f.desc}</p>
-                </motion.div>
-              );
-            })}
+        {/* Features — light band (light/dark mix) */}
+        <section id="features" className="relative z-10 py-24 px-6" style={{ background: "var(--color-light-bg)" }}>
+          <div className="max-w-7xl mx-auto">
+            <motion.div {...reveal}>
+              <SectionHeading badge="Features" title={t.featuresTitle} sub={t.featuresSub} tone="light" />
+            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {t.features.map((f, i) => {
+                const Icon = ICONS[f.icon];
+                return (
+                  <motion.div
+                    key={f.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={viewport}
+                    transition={{ duration: 0.4, delay: (i % 3) * 0.08 }}
+                    whileHover={{ y: -4 }}
+                    className="p-6 rounded-2xl"
+                    style={{
+                      background: "var(--color-light-surface)",
+                      border: "1px solid var(--color-light-border)",
+                      boxShadow: "0 1px 2px rgba(20,20,40,0.04), 0 8px 24px rgba(20,20,40,0.05)",
+                    }}
+                  >
+                    <div className={`w-10 h-10 rounded-lg border flex items-center justify-center mb-4 ${LIGHT_COLOR_MAP[f.color] ?? LIGHT_COLOR_MAP.blue}`}>
+                      {Icon && <Icon size={18} />}
+                    </div>
+                    <h3 className="text-base font-semibold mb-2" style={{ color: "var(--color-light-text)" }}>{f.title}</h3>
+                    <p className="text-sm leading-relaxed" style={{ color: "var(--color-light-text-muted)" }}>{f.desc}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
