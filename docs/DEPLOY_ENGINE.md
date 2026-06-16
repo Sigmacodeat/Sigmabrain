@@ -60,7 +60,23 @@ fly deploy
 fly status                        # note the https://<app>.fly.dev URL
 ```
 
-## Option C — any Docker host / VPS
+## Option C — Hetzner (EU, recommended for Subsumio)
+
+Single EU box running Postgres+pgvector + engine+worker + Caddy (auto-HTTPS),
+fully scripted. EU/Germany data residency is the legal confidentiality argument,
+and the cheapest path to **sellable storage** with real margin. Full runbook +
+the "what you provide" checklist:
+
+➡️ **[`server/deploy/hetzner/README.md`](../server/deploy/hetzner/README.md)**
+
+```bash
+cd server/deploy/hetzner
+export HCLOUD_TOKEN=<your Hetzner API token>
+SSH_KEY=<your hcloud ssh key name> bash provision.sh   # creates firewall + server
+# → point DNS, ssh in, cp .env.example .env, edit, docker compose up -d --build
+```
+
+## Option D — any Docker host / VPS
 
 ```bash
 cd server
