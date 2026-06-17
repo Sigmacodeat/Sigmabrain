@@ -57,6 +57,8 @@ import { cn } from "@/lib/utils";
 import { useMutationQueue } from "@/lib/use-mutation";
 import { useBrainSelector } from "@/lib/use-brain-selector";
 import { SigmaMark } from "@/components/brand/logo";
+import { SubsumioMark } from "@/components/brand/subsumio-logo";
+import { brandForHost } from "@/lib/brand";
 import { useNetworkStatus } from "@/lib/use-offline-sync";
 import { ensureRealtime } from "@/lib/realtime";
 import { profileForIndustry } from "@/lib/industry-pack";
@@ -187,6 +189,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [industry, setIndustry] = useState<string | null>(null);
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState<Array<{ id: string; title: string; message: string; type: "deadline" | "dream" | "system"; read: boolean }>>([]);
+
+  // Brand: show the Subsumio wordmark when on a Subsumio host (subsum.io).
+  const [isSubsumio, setIsSubsumio] = useState(false);
+  useEffect(() => {
+    const o = new URLSearchParams(window.location.search).get("brand");
+    setIsSubsumio(o === "subsumio" || (o !== "sigmabrain" && brandForHost(window.location.host) === "subsumio"));
+  }, []);
 
   // Poll for notifications (deadlines + dream cycle)
   useEffect(() => {
@@ -340,13 +349,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           >
             <X size={18} />
           </button>
-          <SigmaMark size={28} className="shrink-0" />
+          {isSubsumio ? <SubsumioMark size={28} /> : <SigmaMark size={28} className="shrink-0" />}
           <span className="font-display text-sm font-bold text-[#e8e8f0] tracking-tight md:hidden">
-            Sigma<span className="brand-text">brain</span>
+            {isSubsumio ? <>Subsum<span className="brand-text">•io</span></> : <>Sigma<span className="brand-text">brain</span></>}
           </span>
           {!collapsed && (
             <span className="hidden md:inline font-display text-sm font-bold text-[#e8e8f0] tracking-tight">
-              Sigma<span className="brand-text">brain</span>
+              {isSubsumio ? <>Subsum<span className="brand-text">•io</span></> : <>Sigma<span className="brand-text">brain</span></>}
             </span>
           )}
         </div>
@@ -385,7 +394,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       <div
                         key={item.href}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#5a5a78] cursor-default select-none",
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 text-[#5a5a78] cursor-default select-none",
                           collapsed && "justify-center px-0"
                         )}
                         title={collapsed ? `${item.label} — bald` : undefined}
@@ -407,7 +416,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150",
+                        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 transition-all duration-150",
                         collapsed && "justify-center px-0",
                         active
                           ? "brand-soft brand-text border brand-border"
@@ -425,17 +434,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           ))}
         </nav>
 
-        {/* Dream Cycle indicator */}
+        {/* Dream Cycle indicator — separated from the nav, active=green / idle=amber */}
         {!collapsed && (
-          <div className="mx-3 mb-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/5">
+          <div className={cn(
+            "mx-3 mt-2 mb-3 px-3 py-2.5 rounded-xl border",
+            dreamCycle ? "border-emerald-500/20 bg-emerald-500/[0.06]" : "border-amber-500/20 bg-amber-500/[0.06]"
+          )}>
             <div className="flex items-center gap-2">
-              <Zap size={12} className="text-amber-400 shrink-0" />
-              <span className="text-xs text-amber-400 font-medium">Dream Cycle</span>
+              <Zap size={12} className={cn("shrink-0", dreamCycle ? "text-emerald-400" : "text-amber-400")} />
+              <span className={cn("text-xs font-semibold", dreamCycle ? "text-emerald-400" : "text-amber-400")}>Dream Cycle</span>
             </div>
-            <p className="text-xs text-[#8a8aa8] mt-0.5">
+            <p className="text-[11px] text-[#8a8aa8] mt-1 leading-snug">
               {dreamCycle
                 ? `Letzter Lauf: ${new Date(dreamCycle).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}`
-                : "Inaktiv — Setup erforderlich"}
+                : "Nächtliche Konsolidierung — noch nicht geplant"}
             </p>
           </div>
         )}
@@ -455,7 +467,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 transition-all duration-150",
                   collapsed && "justify-center px-0",
                 active
                     ? "brand-soft brand-text border brand-border"
