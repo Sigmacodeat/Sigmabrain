@@ -43,10 +43,7 @@ const SIGNAL: Record<string, { text: string; bg: string; ring: string }> = {
 export default function TrustBand({ lang }: { lang: Lang }) {
   const c = COPY[lang];
   return (
-    <section
-      className="relative z-10 py-24 px-6"
-      style={{ background: "var(--color-light-bg)" }}
-    >
+    <section data-tone="light" className="relative z-10 py-28 px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
@@ -62,10 +59,10 @@ export default function TrustBand({ lang }: { lang: Lang }) {
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--signal-blue)" }} />
             {c.eyebrow}
           </span>
-          <h2 className="text-3xl md:text-4xl font-black mb-4" style={{ color: "var(--color-light-text)" }}>
+          <h2 className="text-3xl md:text-4xl font-black mb-4 [color:var(--mk-text)]">
             {c.title}
           </h2>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: "var(--color-light-text-muted)" }}>
+          <p className="text-lg max-w-2xl mx-auto [color:var(--mk-text-muted)]">
             {c.sub}
           </p>
         </motion.div>
@@ -82,12 +79,8 @@ export default function TrustBand({ lang }: { lang: Lang }) {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.45, delay: i * 0.1, ease: [0.21, 0.5, 0.27, 1] }}
                 whileHover={{ y: -4 }}
-                className="rounded-2xl p-6"
-                style={{
-                  background: "var(--color-light-surface)",
-                  border: "1px solid var(--color-light-border)",
-                  boxShadow: "0 1px 2px rgba(20,20,40,0.04), 0 8px 24px rgba(20,20,40,0.06)",
-                }}
+                className="rounded-2xl p-6 [background:var(--mk-surface)] border [border-color:var(--mk-border)]"
+                style={{ boxShadow: "var(--mk-card-shadow)" }}
               >
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
@@ -95,10 +88,10 @@ export default function TrustBand({ lang }: { lang: Lang }) {
                 >
                   <Icon size={19} style={{ color: sig.text }} />
                 </div>
-                <h3 className="text-base font-bold mb-2" style={{ color: "var(--color-light-text)" }}>
+                <h3 className="text-base font-bold mb-2 [color:var(--mk-text)]">
                   {pillar.t}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--color-light-text-muted)" }}>
+                <p className="text-sm leading-relaxed [color:var(--mk-text-muted)]">
                   {pillar.d}
                 </p>
               </motion.div>

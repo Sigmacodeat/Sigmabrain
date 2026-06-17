@@ -20,16 +20,22 @@
   --color-warning: #fbbf24;
   --color-danger: #f87171;
   --color-info: #60a5fa;
-  /* Light "trust" surface tokens — for the light bands in the light/dark mix. */
-  --color-light-bg: #f6f5f1;
-  --color-light-surface: #ffffff;
-  --color-light-border: #e7e5dd;
-  --color-light-text: #1a1a24;
-  --color-light-text-muted: #5b5b6b;
-  /* Deliberate, accessible signal accents (text-on-light shades). */
-  --signal-blue: #1d4ed8;
+  /* Light "trust" surface tokens — cool premium gray, never warm beige.
+     Matches the dashboard light theme (#f5f6f9 family) so the marketing
+     site and the app shell feel like one product. */
+  --color-light-bg: #f0f1f5;
+  --color-light-surface: #f7f8fa;
+  --color-light-surface-2: #ebedf2;
+  --color-light-border: #dbdde6;
+  --color-light-border-strong: #b8bcc8;
+  --color-light-text: #0f0f1a;
+  --color-light-text-muted: #555668;
+  --color-light-text-subtle: #6c6e7a;
+  /* Deliberate, accessible signal accents (text-on-light shades).
+     Tuned for the cool-gray backgrounds above. */
+  --signal-blue: #1e40af;
   --signal-green: #047857;
-  --signal-amber: #b45309;
+  --signal-amber: #92400e;
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-display: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), "Fira Code", monospace;
@@ -44,6 +50,7 @@
   --brand-gradient-from: #20d3c2;
   --brand-gradient-via: #2f6bff;
   --brand-gradient-to: #8b5cf6;
+  --brand-text: var(--brand-secondary);
 
   /* ────────────────────────────────────────────────────────────────
      Design-system neutral scale (--ds-*) — the SINGLE source of truth
@@ -63,6 +70,105 @@
   --ds-text: #e8e8f0;        /* primary text  (AAA on bg)    */
   --ds-text-muted: #8888aa;  /* secondary text               */
   --ds-text-subtle: #6a6a85; /* tertiary / disabled labels   */
+
+  /* ────────────────────────────────────────────────────────────────
+     Marketing surface scale (--mk-*) — the SINGLE source of truth for
+     every neutral on the PUBLIC marketing + legal pages. It is the
+     tone-aware sibling of --ds-* (which scopes the app shell). Sections
+     opt into a tone with `data-tone="light|dark"` (see the <Section>
+     primitive + [data-tone] blocks below); the public site is built
+     light-dominant by wrapping most sections in data-tone="light" and
+     reserving data-tone="dark" for spotlights (live demo, copilot).
+     Defaults here = DARK, so any not-yet-migrated hex keeps its look and
+     un-toned regions match the global dark body. Rule going forward:
+     marketing/legal components reference var(--mk-*); never hardcode a
+     neutral hex. ──────────────────────────────────────────────────── */
+  --mk-bg: #06060f;           /* page background              */
+  --mk-surface: #0d0d1a;      /* card / panel surface         */
+  --mk-surface-2: #12122a;    /* nested / elevated surface    */
+  --mk-hover: #1a1a35;        /* row / control hover          */
+  --mk-border: #1e1e3a;       /* hairline borders + dividers  */
+  --mk-border-strong: #3a3a6a;/* emphasised borders           */
+  --mk-text: #e8e8f0;         /* primary text                 */
+  --mk-text-muted: #8888aa;   /* secondary text               */
+  --mk-text-subtle: #7878a0;  /* tertiary labels              */
+  --mk-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Marketing tone scopes. Both verified WCAG-AA for body + muted text.
+   LIGHT (on #ffffff): text #1a1a24 16.1:1, muted #5b5b6b 6.6:1,
+   subtle #6c6c7e 4.7:1. DARK (on #0d0d1a): text 15.6:1, muted 6.0:1. */
+[data-tone="light"] {
+  --mk-bg: #f0f1f5;
+  --mk-surface: #f7f8fa;
+  --mk-surface-2: #ebedf2;
+  --mk-hover: #e4e6ec;
+  --mk-border: #dbdde6;
+  --mk-border-strong: #b8bcc8;
+  --mk-text: #0f0f1a;
+  --mk-text-muted: #555668;
+  --mk-text-subtle: #6c6e7a;
+  --mk-card-shadow: 0 1px 2px rgba(15, 15, 30, 0.04), 0 8px 24px rgba(15, 15, 30, 0.05);
+  --brand-text: var(--brand-primary);
+  color-scheme: light;
+}
+[data-tone="slate"] {
+  --mk-bg: #0f172a;
+  --mk-surface: #1e293b;
+  --mk-surface-2: #334155;
+  --mk-hover: #273449;
+  --mk-border: #334155;
+  --mk-border-strong: #475569;
+  --mk-text: #f8fafc;
+  --mk-text-muted: #94a3b8;
+  --mk-text-subtle: #64748b;
+  --mk-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --brand-text: var(--brand-secondary);
+  color-scheme: dark;
+}
+[data-tone="dark"] {
+  --mk-bg: #06060f;
+  --mk-surface: #0d0d1a;
+  --mk-surface-2: #12122a;
+  --mk-hover: #1a1a35;
+  --mk-border: #1e1e3a;
+  --mk-border-strong: #3a3a6a;
+  --mk-text: #e8e8f0;
+  --mk-text-muted: #8888aa;
+  --mk-text-subtle: #7878a0;
+  --mk-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --brand-text: var(--brand-secondary);
+  color-scheme: dark;
+}
+
+/* Semantic accent legibility per tone. Icon tiles + accent text use the
+   -700/-50/-200 shades on light surfaces (AA on white) and the
+   -400/-500-alpha shades on dark. The tone-aware accentTile() helper in
+   chrome.tsx returns the right Tailwind classes; these rules cover the
+   handful of accent texts that are set as bare utility classes. */
+[data-tone="light"] .accent-violet { color: #6d28d9; }
+[data-tone="light"] .accent-blue { color: #1d4ed8; }
+[data-tone="light"] .accent-emerald { color: #047857; }
+[data-tone="slate"] .accent-violet { color: #a78bfa; }
+[data-tone="slate"] .accent-blue { color: #60a5fa; }
+[data-tone="slate"] .accent-emerald { color: #34d399; }
+[data-tone="dark"] .accent-violet { color: #a78bfa; }
+[data-tone="dark"] .accent-blue { color: #60a5fa; }
+[data-tone="dark"] .accent-emerald { color: #34d399; }
+
+/* Marketing theme crossfade — surfaces/text glide between toned sections
+   instead of hard-cutting, matching the app-shell behaviour. */
+[data-tone] {
+  transition: color 300ms ease, background-color 300ms ease, border-color 300ms ease, fill 300ms ease, stroke 300ms ease;
+}
+
+/* Section spacing rhythm — remove double borders between adjacent sections
+   of the same tone. Each section handles its own top border; the first child
+   inside a tone group suppresses it. */
+[data-tone="light"] + [data-tone="light"],
+[data-tone="slate"] + [data-tone="slate"],
+[data-tone="dark"] + [data-tone="dark"] {
+  border-top: none !important;
 }
 
 /* LIGHT theme — scoped to the authenticated dashboard shell.
@@ -78,6 +184,7 @@
   --ds-text: #15151d;
   --ds-text-muted: #585866;  /* 6.4:1 on white — AA body    */
   --ds-text-subtle: #6c6c7e; /* 4.7:1 on white — AA (was #9a9aa8 @ 2.6:1, FAILED) */
+  --brand-text: var(--brand-primary);
   color-scheme: light;
 }
 
@@ -93,6 +200,7 @@
   --ds-text: #e9e9f2;
   --ds-text-muted: #a0a0bd;  /* 6.1:1 on #12121f — AA       */
   --ds-text-subtle: #74748f; /* 4.6:1 — AA                  */
+  --brand-text: var(--brand-secondary);
   color-scheme: dark;
 }
 
@@ -228,9 +336,9 @@ body {
 
 /* Glass card */
 .glass {
-  background: rgba(13, 13, 26, 0.8);
+  background: color-mix(in srgb, var(--mk-surface) 82%, transparent);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 30, 58, 0.8);
+  border: 1px solid color-mix(in srgb, var(--mk-border) 80%, transparent);
 }
 
 .brand-bg {
@@ -258,7 +366,7 @@ body {
 }
 
 .brand-text {
-  color: var(--brand-secondary);
+  color: var(--brand-text);
 }
 
 .brand-glow-bg {
@@ -286,7 +394,7 @@ body {
 }
 
 .group:hover .group-hover\:brand-text {
-  color: var(--brand-secondary);
+  color: var(--brand-text);
 }
 
 /* Gradient text */

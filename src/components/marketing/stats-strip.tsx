@@ -76,9 +76,9 @@ export default function StatsStrip({ lang }: { lang: Lang }) {
       ref={ref}
       className="relative z-10 py-16 px-6 overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, #0a0a18 0%, #0d0d22 50%, #080814 100%)",
-        borderTop: "1px solid #1e1e3a",
-        borderBottom: "1px solid #1e1e3a",
+        background: "linear-gradient(135deg, var(--mk-bg) 0%, var(--mk-surface) 50%, var(--mk-bg) 100%)",
+        borderTop: "1px solid var(--mk-border)",
+        borderBottom: "1px solid var(--mk-border)",
       }}
     >
       {/* subtle glow */}
@@ -96,10 +96,10 @@ export default function StatsStrip({ lang }: { lang: Lang }) {
             transition={{ duration: 0.45, delay: i * 0.1 }}
             className="text-center"
           >
-            <p className="text-3xl md:text-4xl font-black text-[#e8e8f0] tracking-tight tabular-nums mb-1 gradient-text">
+            <p className="text-3xl md:text-4xl font-black [color:var(--mk-text)] tracking-tight tabular-nums mb-1 gradient-text">
               <AnimatedNumber stat={stat} trigger={inView} />
             </p>
-            <p className="text-sm font-semibold text-[#c8c8e0] mb-0.5">{stat.label}</p>
+            <p className="text-sm font-semibold [color:var(--mk-text)] mb-0.5">{stat.label}</p>
             {stat.sub && (
               <p className="text-xs text-[#6a6a85]">{stat.sub}</p>
             )}

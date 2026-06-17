@@ -71,7 +71,7 @@ export default function SuperbrainAdvantage({ lang }: { lang: Lang }) {
   const reduced = useReducedMotion();
 
   return (
-    <section className="relative z-10 py-24 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a] overflow-hidden">
+    <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)] overflow-hidden">
       <div className="absolute inset-x-0 top-16 h-72 brand-glow-bg blur-3xl opacity-60" />
       <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.05fr] gap-12 items-center">
         <motion.div
@@ -81,10 +81,10 @@ export default function SuperbrainAdvantage({ lang }: { lang: Lang }) {
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <p className="text-xs font-mono uppercase tracking-wider brand-text mb-4">{t.eyebrow}</p>
-          <h2 className="text-3xl md:text-5xl font-black text-[#e8e8f0] leading-tight mb-5">
+          <h2 className="text-3xl md:text-5xl font-black [color:var(--mk-text)] leading-tight mb-5">
             {t.title}
           </h2>
-          <p className="text-base md:text-lg text-[#aaaac4] leading-relaxed mb-8">{t.sub}</p>
+          <p className="text-base md:text-lg [color:var(--mk-text-muted)] leading-relaxed mb-8">{t.sub}</p>
           <div className="grid sm:grid-cols-2 gap-3">
             {t.proof.map((item, i) => {
               const Icon = item.icon;
@@ -95,11 +95,11 @@ export default function SuperbrainAdvantage({ lang }: { lang: Lang }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.35, delay: i * 0.06 }}
-                  className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4"
+                  className="rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] p-4"
                 >
                   <Icon size={18} className="brand-text mb-3" />
-                  <h3 className="text-sm font-semibold text-[#e8e8f0] mb-1.5">{item.title}</h3>
-                  <p className="text-xs text-[#8888aa] leading-relaxed">{item.desc}</p>
+                  <h3 className="text-sm font-semibold [color:var(--mk-text)] mb-1.5">{item.title}</h3>
+                  <p className="text-xs [color:var(--mk-text-muted)] leading-relaxed">{item.desc}</p>
                 </motion.div>
               );
             })}
@@ -112,7 +112,7 @@ export default function SuperbrainAdvantage({ lang }: { lang: Lang }) {
             transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
             className="absolute inset-8 rounded-full border border-dashed border-[var(--brand-primary)]/20"
           />
-          <div className="relative min-h-[560px] rounded-2xl border border-[#2a2a4a] bg-[#080812] overflow-hidden shadow-2xl shadow-black/50">
+          <div className="relative min-h-[560px] rounded-2xl border [border-color:var(--mk-border-strong)] [background:var(--mk-bg)] overflow-hidden shadow-2xl shadow-black/50">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,var(--brand-glow),transparent_42%)]" />
             <div className="relative h-[300px]">
               <motion.div
@@ -123,8 +123,8 @@ export default function SuperbrainAdvantage({ lang }: { lang: Lang }) {
                 className="absolute left-1/2 top-1/2 w-40 h-40 -translate-x-1/2 -translate-y-1/2 rounded-full brand-soft-strong border brand-border-strong flex flex-col items-center justify-center text-center"
               >
                 <Brain size={34} className="brand-text mb-3" />
-                <span className="text-sm font-bold text-[#e8e8f0]">{t.center}</span>
-                <span className="mt-1 text-[11px] text-[#8888aa]">queryable · cited · scoped</span>
+                <span className="text-sm font-bold [color:var(--mk-text)]">{t.center}</span>
+                <span className="mt-1 text-[11px] [color:var(--mk-text-muted)]">queryable · cited · scoped</span>
               </motion.div>
               {orbitNodes.map((node, i) => {
                 const Icon = node.icon;
@@ -135,10 +135,10 @@ export default function SuperbrainAdvantage({ lang }: { lang: Lang }) {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 0.35, delay: 0.1 + i * 0.08 }}
-                    className={`absolute ${node.className} rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]/95 px-4 py-3 flex items-center gap-2`}
+                    className={`absolute ${node.className} rounded-xl border [border-color:var(--mk-border)] [background:color-mix(in_srgb,var(--mk-surface)_95%,transparent)] px-4 py-3 flex items-center gap-2`}
                   >
                     <Icon size={16} className="brand-text" />
-                    <span className="text-xs font-medium text-[#d8d8e8]">{node.label}</span>
+                    <span className="text-xs font-medium [color:var(--mk-text)]">{node.label}</span>
                   </motion.div>
                 );
               })}
@@ -146,10 +146,10 @@ export default function SuperbrainAdvantage({ lang }: { lang: Lang }) {
               <div className="absolute left-1/2 top-[22%] bottom-[20%] w-px brand-bg opacity-30" />
             </div>
 
-            <div className="relative border-t border-[#1e1e3a] p-5 md:p-6">
+            <div className="relative border-t [border-color:var(--mk-border)] p-5 md:p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles size={16} className="brand-text" />
-                <h3 className="text-sm font-bold text-[#e8e8f0]">{t.comparisonTitle}</h3>
+                <h3 className="text-sm font-bold [color:var(--mk-text)]">{t.comparisonTitle}</h3>
               </div>
               <div className="space-y-3">
                 {t.comparisons.map((row, i) => (
@@ -159,11 +159,11 @@ export default function SuperbrainAdvantage({ lang }: { lang: Lang }) {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 0.35, delay: i * 0.08 }}
-                    className="grid md:grid-cols-[120px_1fr_1fr] gap-3 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3 text-sm"
+                    className="grid md:grid-cols-[120px_1fr_1fr] gap-3 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] p-3 text-sm"
                   >
-                    <span className="font-semibold text-[#e8e8f0]">{row.label}</span>
-                    <span className="text-[#777795]">{row.weak}</span>
-                    <span className="inline-flex items-start gap-2 text-[#d8d8e8]">
+                    <span className="font-semibold [color:var(--mk-text)]">{row.label}</span>
+                    <span className="[color:var(--mk-text-muted)]">{row.weak}</span>
+                    <span className="inline-flex items-start gap-2 [color:var(--mk-text)]">
                       <CheckCircle2 size={16} className="brand-text shrink-0 mt-0.5" />
                       {row.strong}
                     </span>

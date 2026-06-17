@@ -6,19 +6,19 @@ import Link from "next/link";
 
 function Shell({ home, title, subtitle, children }: { home: string; title: string; subtitle: string; children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#06060f] px-6 py-16">
+    <div className="min-h-screen [background:var(--mk-bg)] px-6 py-16">
       <div className="max-w-2xl mx-auto">
         <Link href={home} className="text-sm text-violet-400 hover:underline">← Sigmabrain</Link>
-        <h1 className="text-3xl font-black text-[#e8e8f0] mt-8 mb-2">{title}</h1>
-        <p className="text-xs text-[#7878a0] mb-6">{subtitle}</p>
-        <div className="space-y-3 text-sm text-[#8888aa] leading-relaxed">{children}</div>
+        <h1 className="text-3xl font-black [color:var(--mk-text)] mt-8 mb-2">{title}</h1>
+        <p className="text-xs [color:var(--mk-text-subtle)] mb-6">{subtitle}</p>
+        <div className="space-y-3 text-sm [color:var(--mk-text-muted)] leading-relaxed">{children}</div>
       </div>
     </div>
   );
 }
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-[#e8e8f0] font-semibold text-lg mb-2 mt-8">{children}</h2>;
+  return <h2 className="[color:var(--mk-text)] font-semibold text-lg mb-2 mt-8">{children}</h2>;
 }
 
 function DraftBanner({ children }: { children: React.ReactNode }) {
@@ -34,7 +34,7 @@ function LegalLinks({ home, exclude }: { home: string; exclude: "privacy" | "ter
     { key: "imprint", href: `${home === "/" ? "" : home}/imprint`, label: "Impressum" },
   ].filter((l) => l.key !== exclude);
   return (
-    <p className="pt-6 text-xs text-[#7878a0]">
+    <p className="pt-6 text-xs [color:var(--mk-text-subtle)]">
       Siehe auch:{" "}
       {links.map((l, i) => (
         <span key={l.key}>
@@ -100,9 +100,9 @@ export function PrivacyContent({ home }: { home: string }) {
         unterschiedlichen datenschutzrechtlichen Rollen:
       </p>
       <ul className="list-disc pl-5 mt-2 space-y-1">
-        <li><strong className="text-[#c8c8e0]">Self-Hosting:</strong> Die Engine läuft auf Ihrer eigenen
+        <li><strong className="[color:var(--mk-text)]">Self-Hosting:</strong> Die Engine läuft auf Ihrer eigenen
           Infrastruktur. Inhalte werden nicht an uns übermittelt; wir haben keinen Zugriff.</li>
-        <li><strong className="text-[#c8c8e0]">Gehostete EU-Cloud:</strong> Wir verarbeiten Inhalte
+        <li><strong className="[color:var(--mk-text)]">Gehostete EU-Cloud:</strong> Wir verarbeiten Inhalte
           ausschließlich zur Erbringung des Dienstes — niemals zum Training von KI-Modellen.</li>
       </ul>
 
@@ -125,8 +125,8 @@ export function PrivacyContent({ home }: { home: string }) {
       <H2>5. Inhalte und Mandantendaten — Auftragsverarbeitung</H2>
       <p>
         Soweit Sie personenbezogene Daten Ihrer Mandanten/Kunden einstellen, sind{" "}
-        <strong className="text-[#c8c8e0]">Sie der Verantwortliche</strong> und wir handeln als{" "}
-        <strong className="text-[#c8c8e0]">Auftragsverarbeiter</strong> (Art. 28 DSGVO). Vor einer
+        <strong className="[color:var(--mk-text)]">Sie der Verantwortliche</strong> und wir handeln als{" "}
+        <strong className="[color:var(--mk-text)]">Auftragsverarbeiter</strong> (Art. 28 DSGVO). Vor einer
         solchen Nutzung ist ein AVV abzuschließen (Vorlage wird bereitgestellt).
         Berufsgeheimnisträger (§ 203 StGB) beachten zusätzlich die Anforderungen an mitwirkende
         Personen — hierfür empfehlen wir Self-Hosting oder die EU-Cloud mit gesonderter
@@ -167,7 +167,7 @@ export function PrivacyContent({ home }: { home: string }) {
         Sie haben Rechte auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17),
         Einschränkung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21 DSGVO).
         Einen vollständigen Export Ihrer Konto- und Brain-Daten als JSON können Sie selbst über{" "}
-        <span className="text-[#c8c8e0]">Einstellungen → Account → Daten exportieren</span> auslösen.
+        <span className="[color:var(--mk-text)]">Einstellungen → Account → Daten exportieren</span> auslösen.
         Es besteht ein Beschwerderecht bei einer Aufsichtsbehörde.
       </p>
 
@@ -224,7 +224,7 @@ export function TermsContent({ home }: { home: string }) {
       <p>
         (1) Zugangsdaten geheim halten, Konten angemessen absichern. (2) Nur Inhalte einstellen,
         zu deren Verarbeitung der Kunde berechtigt ist. (3) Der Dienst erbringt{" "}
-        <strong className="text-[#c8c8e0]">keine Rechts-, Steuer- oder sonstige Beratung</strong>; er
+        <strong className="[color:var(--mk-text)]">keine Rechts-, Steuer- oder sonstige Beratung</strong>; er
         ist ein Hilfsmittel zur Organisation und Synthese eigener Unterlagen. Die fachliche und
         berufsrechtliche Verantwortung (inkl. Fristen- und Kollisionskontrolle) verbleibt beim Kunden.
       </p>

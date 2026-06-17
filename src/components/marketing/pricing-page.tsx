@@ -18,7 +18,7 @@ export default function PricingPage({ lang }: { lang: Lang }) {
   const faq = LANDING[lang].faq;
 
   return (
-    <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+    <div className="min-h-screen [background:var(--mk-bg)] overflow-x-hidden" lang={lang}>
       <MarketingBackground />
       <MarketingNav lang={lang} />
 
@@ -29,7 +29,7 @@ export default function PricingPage({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      <section className="relative z-10 py-24 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+      <section className="relative z-10 py-24 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
         <div className="max-w-5xl mx-auto">
           <SectionHeading title={LANDING[lang].faqTitle} />
           <FaqList items={faq} />

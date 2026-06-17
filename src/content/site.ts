@@ -40,6 +40,14 @@ export const NAV = {
     signIn: "Sign in",
     cta: "Get started",
     comingSoonLabel: "Coming soon",
+    // Subsumio-host nav (brand === "subsumio"): the standalone product site has
+    // its own pages, not the platform's Solutions dropdown.
+    subsumioItems: [
+      { label: "Product", href: "/subsumio/produkt" },
+      { label: "WhatsApp copilot", href: "/subsumio/whatsapp" },
+      { label: "Security", href: "/subsumio/sicherheit" },
+      { label: "Pricing", href: "/pricing" },
+    ],
     solutionItems: [
       { label: "Law Firms — Subsumio", href: "/subsumio", desc: "Matters, deadlines, WhatsApp intake, time, expenses and invoicing" },
       { label: "Tax & Accounting — Taxumio", href: "/taxumio", desc: "The practice memory next to DATEV", comingSoon: true },
@@ -61,6 +69,12 @@ export const NAV = {
     signIn: "Anmelden",
     cta: "Jetzt starten",
     comingSoonLabel: "Bald verfügbar",
+    subsumioItems: [
+      { label: "Produkt", href: "/subsumio/produkt" },
+      { label: "WhatsApp-Copilot", href: "/subsumio/whatsapp" },
+      { label: "Sicherheit", href: "/subsumio/sicherheit" },
+      { label: "Preise", href: "/pricing" },
+    ],
     solutionItems: [
       { label: "Kanzleien — Subsumio", href: "/subsumio", desc: "Akten, Fristen, WhatsApp-Eingang, Zeiten, Auslagen und Rechnungen" },
       { label: "Steuerberater & WP — Taxumio", href: "/taxumio", desc: "Das Kanzleigedächtnis neben DATEV", comingSoon: true },
@@ -89,11 +103,12 @@ export const FOOTER = {
         ],
       },
       {
-        title: "Solutions",
+        title: "Subsumio",
         links: [
-          { label: "Law Firms — Subsumio", href: "/subsumio" },
-          { label: "Subsumio · the law firm's brain", href: "/subsumio" },
-          { label: "More verticals — coming soon", href: "/subsumio" },
+          { label: "Overview", href: "/subsumio" },
+          { label: "Product", href: "/subsumio/produkt" },
+          { label: "WhatsApp copilot", href: "/subsumio/whatsapp" },
+          { label: "Security & GDPR", href: "/subsumio/sicherheit" },
         ],
       },
       {
@@ -129,11 +144,12 @@ export const FOOTER = {
         ],
       },
       {
-        title: "Lösungen",
+        title: "Subsumio",
         links: [
-          { label: "Kanzleien — Subsumio", href: "/subsumio" },
-          { label: "Subsumio · das Kanzlei-Gehirn", href: "/subsumio" },
-          { label: "Weitere Branchen — bald", href: "/subsumio" },
+          { label: "Übersicht", href: "/subsumio" },
+          { label: "Produkt", href: "/subsumio/produkt" },
+          { label: "WhatsApp-Copilot", href: "/subsumio/whatsapp" },
+          { label: "Sicherheit & DSGVO", href: "/subsumio/sicherheit" },
         ],
       },
       {

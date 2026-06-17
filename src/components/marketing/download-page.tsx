@@ -58,14 +58,14 @@ function PhoneMockup({ lang }: { lang: Lang }) {
       <motion.div
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="relative rounded-[2.6rem] border border-[#2a2a52] bg-[#0a0a18] p-2.5 shadow-2xl shadow-black/60"
+        className="relative rounded-[2.6rem] border border-[#2a2a52] [background:var(--mk-bg)] p-2.5 shadow-2xl shadow-black/60"
       >
         {/* notch */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-2.5 h-5 w-24 rounded-b-2xl bg-[#0a0a18] z-20" />
+        <div className="absolute left-1/2 -translate-x-1/2 top-2.5 h-5 w-24 rounded-b-2xl [background:var(--mk-bg)] z-20" />
 
-        <div className="relative rounded-[2.1rem] overflow-hidden bg-gradient-to-b from-[#0d0d1a] to-[#06060f] aspect-[9/19]">
+        <div className="relative rounded-[2.1rem] overflow-hidden bg-gradient-to-b from-[var(--mk-surface)] to-[var(--mk-bg)] aspect-[9/19]">
           {/* status bar */}
-          <div className="flex items-center justify-between px-5 pt-3 text-[9px] text-[#8888aa] font-mono">
+          <div className="flex items-center justify-between px-5 pt-3 text-[9px] [color:var(--mk-text-muted)] font-mono">
             <span>9:41</span>
             <span className="flex items-center gap-1">
               <span className="w-1 h-1 rounded-full bg-violet-400" /> Σ
@@ -75,7 +75,7 @@ function PhoneMockup({ lang }: { lang: Lang }) {
           {/* app header */}
           <div className="flex items-center gap-2 px-5 pt-4 pb-3">
             <SigmaMark size={22} className="rounded-md" />
-            <span className="text-sm font-bold text-[#e8e8f0]">Sigmabrain</span>
+            <span className="text-sm font-bold [color:var(--mk-text)]">Sigmabrain</span>
           </div>
 
           {/* search pill */}
@@ -83,10 +83,10 @@ function PhoneMockup({ lang }: { lang: Lang }) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.4 }}
-            className="mx-4 flex items-center gap-2 rounded-xl border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2"
+            className="mx-4 flex items-center gap-2 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-bg)] px-3 py-2"
           >
             <Search size={12} className="text-violet-400" />
-            <span className="text-[10px] text-[#8888aa]">
+            <span className="text-[10px] [color:var(--mk-text-muted)]">
               {lang === "en" ? "Ask your brain…" : "Frag dein Brain…"}
             </span>
           </motion.div>
@@ -98,7 +98,7 @@ function PhoneMockup({ lang }: { lang: Lang }) {
             transition={{ delay: 0.95, duration: 0.45 }}
             className="mx-4 mt-3 rounded-xl border border-violet-500/20 bg-violet-500/[0.05] p-3"
           >
-            <p className="text-[10px] text-[#c8c8d8] leading-relaxed mb-2">
+            <p className="text-[10px] [color:var(--mk-text-muted)] leading-relaxed mb-2">
               {lang === "en"
                 ? "3 open commitments across 4 meetings this week —"
                 : "3 offene Zusagen in 4 Meetings diese Woche —"}
@@ -130,10 +130,10 @@ function PhoneMockup({ lang }: { lang: Lang }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 2.2, duration: 0.4 }}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full border border-[#1e1e3a] bg-[#0d0d1a] px-3 py-1.5"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full border [border-color:var(--mk-border)] [background:var(--mk-surface)] px-3 py-1.5"
           >
             <WifiOff size={10} className="text-emerald-400" />
-            <span className="text-[9px] text-[#8888aa]">
+            <span className="text-[9px] [color:var(--mk-text-muted)]">
               {lang === "en" ? "Works offline" : "Funktioniert offline"}
             </span>
           </motion.div>
@@ -159,7 +159,7 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+      <div className="min-h-screen [background:var(--mk-bg)] overflow-x-hidden" lang={lang}>
         <MarketingBackground />
         <MarketingNav lang={lang} />
 
@@ -176,12 +176,12 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                 <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
                 {t.badge}
               </div>
-              <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
+              <h1 className="text-4xl md:text-6xl font-black [color:var(--mk-text)] leading-[1.08] tracking-tight mb-6">
                 {t.h1a}
                 <br />
                 <span className="gradient-text glow-text">{t.h1b}</span>
               </h1>
-              <p className="text-lg md:text-xl text-[#8888aa] max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+              <p className="text-lg md:text-xl [color:var(--mk-text-muted)] max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
                 {t.sub}
               </p>
 
@@ -227,16 +227,16 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewport}
                   transition={{ delay: idx * 0.08, duration: 0.3 }}
-                  className="p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:border-violet-500/40 hover:bg-[#0f0f20] hover:-translate-y-1 transition-all flex flex-col"
+                  className="p-7 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] hover:border-violet-500/40 hover:bg-[#0f0f20] hover:-translate-y-1 transition-all flex flex-col"
                 >
                   <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-5">
                     <Icon size={22} className="text-violet-400" />
                   </div>
-                  <h2 className="text-lg font-bold text-[#e8e8f0] mb-1">{platform.name}</h2>
+                  <h2 className="text-lg font-bold [color:var(--mk-text)] mb-1">{platform.name}</h2>
                   <p className="text-sm text-violet-400 font-medium mb-5">{platform.tagline}</p>
                   <ol className="space-y-3 flex-1">
                     {platform.steps.map((step, i) => (
-                      <li key={step} className="flex gap-3 text-sm text-[#8888aa] leading-relaxed">
+                      <li key={step} className="flex gap-3 text-sm [color:var(--mk-text-muted)] leading-relaxed">
                         <span className="w-5 h-5 rounded-full bg-violet-600/20 border border-violet-500/30 text-violet-400 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                           {i + 1}
                         </span>
@@ -245,7 +245,7 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                     ))}
                   </ol>
                   {platform.note && (
-                    <p className="text-xs text-[#7878a0] leading-relaxed mt-5 pt-4 border-t border-[#1e1e3a]">
+                    <p className="text-xs [color:var(--mk-text-subtle)] leading-relaxed mt-5 pt-4 border-t [border-color:var(--mk-border)]">
                       {platform.note}
                     </p>
                   )}
@@ -256,10 +256,10 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* Store preview */}
-        <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-20 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] mb-4">{t.storesTitle}</h2>
-            <p className="text-base text-[#8888aa] leading-relaxed mb-8">{t.storesSub}</p>
+            <h2 className="text-2xl md:text-3xl font-black [color:var(--mk-text)] mb-4">{t.storesTitle}</h2>
+            <p className="text-base [color:var(--mk-text-muted)] leading-relaxed mb-8">{t.storesSub}</p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
               {[
@@ -269,7 +269,7 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
               ].map((f) => {
                 const Icon = f.icon;
                 return (
-                  <span key={f.label} className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#1e1e3a] bg-[#0d0d1a] text-xs text-[#8888aa]">
+                  <span key={f.label} className="inline-flex items-center gap-2 px-4 py-2 rounded-full border [border-color:var(--mk-border)] [background:var(--mk-surface)] text-xs [color:var(--mk-text-muted)]">
                     <Icon size={13} className="text-violet-400" /> {f.label}
                   </span>
                 );
@@ -282,19 +282,19 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                 <div
                   key={store}
                   aria-disabled="true"
-                  className="flex items-center gap-3 px-6 py-3 rounded-xl border border-dashed border-[#3a3a6a] bg-[#0a0a18] opacity-70 select-none"
+                  className="flex items-center gap-3 px-6 py-3 rounded-xl border border-dashed [border-color:var(--mk-border-strong)] [background:var(--mk-bg)] opacity-70 select-none"
                 >
-                  <DownloadIcon size={16} className="text-[#7878a0]" />
+                  <DownloadIcon size={16} className="[color:var(--mk-text-subtle)]" />
                   <div className="text-left">
-                    <p className="text-[10px] text-[#7878a0] uppercase tracking-wide">
+                    <p className="text-[10px] [color:var(--mk-text-subtle)] uppercase tracking-wide">
                       {lang === "en" ? "Coming soon to" : "Bald im"}
                     </p>
-                    <p className="text-sm font-semibold text-[#8888aa]">{store}</p>
+                    <p className="text-sm font-semibold [color:var(--mk-text-muted)]">{store}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-[#7878a0] max-w-xl mx-auto leading-relaxed">{t.storesNote}</p>
+            <p className="text-xs [color:var(--mk-text-subtle)] max-w-xl mx-auto leading-relaxed">{t.storesNote}</p>
           </div>
         </section>
 
@@ -307,10 +307,10 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* CTA */}
-        <section className="relative z-10 py-24 px-6 text-center max-w-3xl mx-auto border-t border-[#1e1e3a]">
+        <section className="relative z-10 py-24 px-6 text-center max-w-3xl mx-auto border-t [border-color:var(--mk-border)]">
           <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />
-          <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
-          <p className="text-lg text-[#8888aa] mb-10">{t.ctaSub}</p>
+          <h2 className="text-3xl md:text-4xl font-black [color:var(--mk-text)] mb-4">{t.ctaTitle}</h2>
+          <p className="text-lg [color:var(--mk-text-muted)] mb-10">{t.ctaSub}</p>
           <Link href={p(lang, "/signup")}>
             <Button size="xl" variant="glow">
               {t.ctaButton} <ArrowRight size={18} />

@@ -21,7 +21,7 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
   const t = SECURITY[lang];
 
   return (
-    <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+    <div className="min-h-screen [background:var(--mk-bg)] overflow-x-hidden" lang={lang}>
       <MarketingBackground />
       <MarketingNav lang={lang} />
 
@@ -31,12 +31,12 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
           <span className="inline-block px-3 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-xs font-medium mb-6">
             {t.badge}
           </span>
-          <h1 className="text-4xl md:text-5xl font-bold text-[#e8e8f0] leading-tight mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold [color:var(--mk-text)] leading-tight mb-6">
             {t.h1a}
             <br />
             <span className="text-violet-400">{t.h1b}</span>
           </h1>
-          <p className="text-lg text-[#8888aa] leading-relaxed max-w-3xl mx-auto">{t.sub}</p>
+          <p className="text-lg [color:var(--mk-text-muted)] leading-relaxed max-w-3xl mx-auto">{t.sub}</p>
         </div>
       </section>
 
@@ -46,10 +46,10 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
           {t.pillars.map((pillar) => {
             const Icon = PILLAR_ICONS[pillar.icon] ?? Shield;
             return (
-              <div key={pillar.title} className="p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]">
+              <div key={pillar.title} className="p-7 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]">
                 <Icon size={22} className="text-violet-400 mb-4" />
-                <h3 className="text-base font-bold text-[#e8e8f0] mb-2">{pillar.title}</h3>
-                <p className="text-sm text-[#8888aa] leading-relaxed">{pillar.desc}</p>
+                <h3 className="text-base font-bold [color:var(--mk-text)] mb-2">{pillar.title}</h3>
+                <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{pillar.desc}</p>
               </div>
             );
           })}
@@ -57,16 +57,16 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
       </section>
 
       {/* Hosting options */}
-      <section className="relative z-10 py-16 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+      <section className="relative z-10 py-16 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
         <div className="max-w-5xl mx-auto">
           <SectionHeading title={t.hostingTitle} sub={t.hostingSub} />
           <div className="grid md:grid-cols-2 gap-6">
             {t.hostingOptions.map((opt) => (
-              <div key={opt.title} className="p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]">
-                <h3 className="text-base font-bold text-[#e8e8f0] mb-4">{opt.title}</h3>
+              <div key={opt.title} className="p-7 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]">
+                <h3 className="text-base font-bold [color:var(--mk-text)] mb-4">{opt.title}</h3>
                 <ul className="space-y-2.5">
                   {opt.points.map((point, i) => (
-                    <li key={i} className="flex gap-2.5 text-sm text-[#8888aa] leading-relaxed">
+                    <li key={i} className="flex gap-2.5 text-sm [color:var(--mk-text-muted)] leading-relaxed">
                       <Check size={14} className="text-emerald-400 shrink-0 mt-1" />
                       {point}
                     </li>
@@ -84,9 +84,9 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
           <SectionHeading title={t.complianceTitle} />
           <div className="space-y-4">
             {t.complianceItems.map((item) => (
-              <div key={item.title} className="p-6 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]">
-                <h3 className="text-sm font-bold text-[#e8e8f0] mb-1.5">{item.title}</h3>
-                <p className="text-sm text-[#8888aa] leading-relaxed">{item.desc}</p>
+              <div key={item.title} className="p-6 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]">
+                <h3 className="text-sm font-bold [color:var(--mk-text)] mb-1.5">{item.title}</h3>
+                <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -103,7 +103,7 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
               <div key={item.title} className="flex gap-2.5">
                 <Check size={14} className="text-violet-400 shrink-0 mt-1" />
                 <div>
-                  <h3 className="text-sm font-bold text-[#e8e8f0] mb-1">{item.title}</h3>
+                  <h3 className="text-sm font-bold [color:var(--mk-text)] mb-1">{item.title}</h3>
                   <p className="text-sm text-[#a8a8be] leading-relaxed">{item.desc}</p>
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
       </section>
 
       {/* FAQ */}
-      <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+      <section className="relative z-10 py-20 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
         <div className="max-w-5xl mx-auto">
           <SectionHeading title={t.faqTitle} />
           <FaqList items={t.faq} />
@@ -138,17 +138,17 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
 
       {/* Responsible disclosure */}
       <section className="relative z-10 py-16 px-6">
-        <div className="max-w-4xl mx-auto p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]">
-          <h3 className="text-sm font-bold text-[#e8e8f0] mb-2">{t.disclosureTitle}</h3>
-          <p className="text-sm text-[#8888aa] leading-relaxed">{t.disclosureText}</p>
+        <div className="max-w-4xl mx-auto p-7 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]">
+          <h3 className="text-sm font-bold [color:var(--mk-text)] mb-2">{t.disclosureTitle}</h3>
+          <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{t.disclosureText}</p>
         </div>
       </section>
 
       {/* CTA */}
       <section className="relative z-10 py-24 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
-          <p className="text-[#8888aa] mb-8">{t.ctaSub}</p>
+          <h2 className="text-3xl font-bold [color:var(--mk-text)] mb-4">{t.ctaTitle}</h2>
+          <p className="[color:var(--mk-text-muted)] mb-8">{t.ctaSub}</p>
           <Link
             href={p(lang, "/signup")}
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold transition-colors"

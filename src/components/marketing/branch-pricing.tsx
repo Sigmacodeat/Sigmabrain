@@ -42,8 +42,8 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
         <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium brand-soft brand-text border brand-border mb-4">
           Pricing
         </span>
-        <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{title}</h2>
-        <p className="text-lg text-[#8888aa] max-w-2xl mx-auto">{sub}</p>
+        <h2 className="text-3xl md:text-4xl font-black [color:var(--mk-text)] mb-4">{title}</h2>
+        <p className="text-lg [color:var(--mk-text-muted)] max-w-2xl mx-auto">{sub}</p>
       </div>
 
       <div className={`grid md:grid-cols-2 gap-5 ${tiers.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3 max-w-5xl mx-auto"}`}>
@@ -59,7 +59,7 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
             <div
               key={tier.id}
               className={`relative flex flex-col p-6 rounded-2xl border ${
-                tier.highlight ? "brand-border-strong brand-soft" : "border-[#1e1e3a] bg-[#0d0d1a]"
+                tier.highlight ? "brand-border-strong brand-soft" : "[border-color:var(--mk-border)] [background:var(--mk-surface)]"
               }`}
             >
               {tier.highlight && (
@@ -67,12 +67,12 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
                   {lang === "en" ? "Most popular" : "Beliebt"}
                 </span>
               )}
-              <p className="text-sm font-medium text-[#8888aa] mb-1">{tier.name}</p>
+              <p className="text-sm font-medium [color:var(--mk-text-muted)] mb-1">{tier.name}</p>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-[#e8e8f0]">{tier.price}</span>
-                <span className="text-xs text-[#8888aa]">{tier.period}</span>
+                <span className="text-3xl font-bold [color:var(--mk-text)]">{tier.price}</span>
+                <span className="text-xs [color:var(--mk-text-muted)]">{tier.period}</span>
               </div>
-              <p className="text-xs text-[#8888aa] mt-2 leading-relaxed">{tier.blurb}</p>
+              <p className="text-xs [color:var(--mk-text-muted)] mt-2 leading-relaxed">{tier.blurb}</p>
               <ul className="space-y-2 my-5 flex-1">
                 {tier.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-xs text-[#a8a8be] leading-relaxed">
@@ -90,7 +90,7 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
         })}
       </div>
 
-      <p className="text-center text-xs text-[#7878a0] mt-6">
+      <p className="text-center text-xs [color:var(--mk-text-subtle)] mt-6">
         {PRICING[lang].footnote}{" "}
         <Link href={p(lang, "/pricing")} className="brand-text hover:underline">
           {lang === "en" ? "Full pricing & FAQ" : "Alle Preise & FAQ"}

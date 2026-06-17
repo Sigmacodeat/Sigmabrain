@@ -53,10 +53,10 @@ export default function LandingPage({ lang }: { lang: Lang }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+      <div className="min-h-screen [background:var(--mk-bg)] overflow-x-hidden" lang={lang}>
         <MarketingBackground />
-        {/* Light hero band — nav + hero on a serious light surface (the mix) */}
-        <div className="relative" style={{ background: "var(--color-light-bg)" }}>
+        {/* Light hero band — nav + hero on a cool premium gray surface */}
+        <div data-tone="light" className="relative">
         <MarketingNav lang={lang} theme="light" />
 
         {/* Hero */}
@@ -71,11 +71,11 @@ export default function LandingPage({ lang }: { lang: Lang }) {
               <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "var(--signal-blue)" }} />
               {t.badge}
             </div>
-            <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight mb-6" style={{ color: "var(--color-light-text)" }}>
+            <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight mb-6 [color:var(--mk-text)]">
               {t.h1a}<br />
-              <span style={{ color: "var(--brand-primary)" }}>{t.h1b}</span>
+              <span className="[color:var(--brand-primary)]">{t.h1b}</span>
             </h1>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed" style={{ color: "var(--color-light-text-muted)" }}>{t.sub}</p>
+            <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed [color:var(--mk-text-muted)]">{t.sub}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
               <Link href={p(lang, "/signup")}>
                 <Button size="xl" variant="glow" className="min-w-[200px]">
@@ -97,13 +97,17 @@ export default function LandingPage({ lang }: { lang: Lang }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
           >
-            <LiveDemo lang={lang} {...t.demo} />
+            {/* Pin the demo mockup to dark so it keeps its terminal look
+                even when the surrounding hero is light-toned. */}
+            <div data-tone="dark">
+              <LiveDemo lang={lang} {...t.demo} />
+            </div>
           </motion.div>
         </section>
         </div>
 
         {/* Stats */}
-        <motion.section {...reveal} className="relative z-10 py-16 px-6 border-y border-[#1e1e3a] bg-[#0d0d1a]/50">
+        <motion.section {...reveal} className="relative z-10 py-28 px-6 border-y [border-color:var(--mk-border)] [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)]">
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center mb-6">
               {t.stats.map((stat, i) => (
@@ -115,11 +119,11 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                   transition={{ duration: 0.4, delay: i * 0.08 }}
                 >
                   <p className="text-3xl font-black gradient-text mb-1">{stat.value}</p>
-                  <p className="text-sm text-[#8888aa]">{stat.label}</p>
+                  <p className="text-sm [color:var(--mk-text-muted)]">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
-            <p className="text-center text-xs text-[#7878a0]">{t.statsNote}</p>
+            <p className="text-center text-xs [color:var(--mk-text-subtle)]">{t.statsNote}</p>
           </div>
         </motion.section>
 
@@ -128,7 +132,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         <ProductWorkflowShowcase lang={lang} />
 
         {/* Dashboard in action */}
-        <section className="relative z-10 py-24 px-6 max-w-5xl mx-auto">
+        <section className="relative z-10 py-28 px-6 max-w-5xl mx-auto">
           <motion.div {...reveal}>
             <SectionHeading
               badge={lang === "de" ? "In Aktion" : "In action"}
@@ -143,11 +147,11 @@ export default function LandingPage({ lang }: { lang: Lang }) {
           </motion.div>
         </section>
 
-        {/* Features — light band (light/dark mix) */}
-        <section id="features" className="relative z-10 py-24 px-6" style={{ background: "var(--color-light-bg)" }}>
+        {/* Features — light band (cool premium gray, never warm beige) */}
+        <section id="features" data-tone="light" className="relative z-10 py-28 px-6">
           <div className="max-w-7xl mx-auto">
             <motion.div {...reveal}>
-              <SectionHeading badge="Features" title={t.featuresTitle} sub={t.featuresSub} tone="light" />
+              <SectionHeading badge="Features" title={t.featuresTitle} sub={t.featuresSub} />
             </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {t.features.map((f, i) => {
@@ -160,18 +164,14 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                     viewport={viewport}
                     transition={{ duration: 0.4, delay: (i % 3) * 0.08 }}
                     whileHover={{ y: -4 }}
-                    className="p-6 rounded-2xl"
-                    style={{
-                      background: "var(--color-light-surface)",
-                      border: "1px solid var(--color-light-border)",
-                      boxShadow: "0 1px 2px rgba(20,20,40,0.04), 0 8px 24px rgba(20,20,40,0.05)",
-                    }}
+                    className="p-6 rounded-2xl [background:var(--mk-surface)] border [border-color:var(--mk-border)]"
+                    style={{ boxShadow: "var(--mk-card-shadow)" }}
                   >
                     <div className={`w-10 h-10 rounded-lg border flex items-center justify-center mb-4 ${LIGHT_COLOR_MAP[f.color] ?? LIGHT_COLOR_MAP.blue}`}>
                       {Icon && <Icon size={18} />}
                     </div>
-                    <h3 className="text-base font-semibold mb-2" style={{ color: "var(--color-light-text)" }}>{f.title}</h3>
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--color-light-text-muted)" }}>{f.desc}</p>
+                    <h3 className="text-base font-semibold mb-2 [color:var(--mk-text)]">{f.title}</h3>
+                    <p className="text-sm leading-relaxed [color:var(--mk-text-muted)]">{f.desc}</p>
                   </motion.div>
                 );
               })}
@@ -180,7 +180,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* How it works */}
-        <section className="relative z-10 py-24 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-5xl mx-auto">
             <motion.div {...reveal}><SectionHeading title={t.howTitle} /></motion.div>
             <div className="grid md:grid-cols-3 gap-6">
@@ -193,16 +193,16 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={viewport}
                     transition={{ duration: 0.4, delay: i * 0.1 }}
-                    className="p-6 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]"
+                    className="p-6 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
                   >
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="text-xs font-mono text-[#7878a0]">{item.step}</span>
+                      <span className="text-xs font-mono [color:var(--mk-text-subtle)]">{item.step}</span>
                       <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
                         {Icon && <Icon size={15} className="text-violet-400" />}
                       </div>
                     </div>
-                    <h3 className="text-base font-semibold text-[#e8e8f0] mb-2">{item.title}</h3>
-                    <p className="text-sm text-[#8888aa] leading-relaxed">{item.desc}</p>
+                    <h3 className="text-base font-semibold [color:var(--mk-text)] mb-2">{item.title}</h3>
+                    <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{item.desc}</p>
                   </motion.div>
                 );
               })}
@@ -211,7 +211,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* Verticals */}
-        <section className="relative z-10 py-24 px-6 max-w-7xl mx-auto">
+        <section className="relative z-10 py-28 px-6 max-w-7xl mx-auto">
           <motion.div {...reveal}><SectionHeading title={t.verticalsTitle} sub={t.verticalsSub} /></motion.div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {t.verticalCards.map((v, i) => {
@@ -228,23 +228,23 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                   className="h-full"
                 >
                   {comingSoon ? (
-                    <div className="relative h-full p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]/60 flex flex-col cursor-default">
+                    <div className="relative h-full p-7 rounded-2xl border [border-color:var(--mk-border)] [background:color-mix(in_srgb,var(--mk-surface)_60%,transparent)] flex flex-col cursor-default">
                       <span className="absolute top-5 right-5 text-[10px] font-semibold uppercase tracking-wide text-violet-300 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full">
                         {soonLabel}
                       </span>
-                      <h3 className="text-lg font-bold text-[#c8c8d8] mb-2 pr-24">{v.title}</h3>
-                      <p className="text-sm text-[#6f6f8a] leading-relaxed flex-1 mb-5">{v.desc}</p>
-                      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[#6f6f8a]">
+                      <h3 className="text-lg font-bold [color:var(--mk-text-muted)] mb-2 pr-24">{v.title}</h3>
+                      <p className="text-sm [color:var(--mk-text-subtle)] leading-relaxed flex-1 mb-5">{v.desc}</p>
+                      <span className="inline-flex items-center gap-1.5 text-sm font-medium [color:var(--mk-text-subtle)]">
                         {soonLabel}
                       </span>
                     </div>
                   ) : (() => {
                     const resolvedHref = v.href === "/subsumio" ? SUBSUMIO_SITE_URL : v.href;
-                    const cardCls = "group h-full p-7 rounded-2xl border border-violet-500/30 bg-[#12122a] hover:border-violet-500/60 hover:bg-[#16163a] transition-colors duration-200 flex flex-col shadow-lg shadow-violet-500/5";
+                    const cardCls = "group h-full p-7 rounded-2xl border border-violet-500/30 [background:var(--mk-surface-2)] hover:border-violet-500/60 hover:bg-[#16163a] transition-colors duration-200 flex flex-col shadow-lg shadow-violet-500/5";
                     const cardInner = (
                       <>
-                        <h3 className="text-lg font-bold text-[#e8e8f0] mb-2 group-hover:text-violet-300">{v.title}</h3>
-                        <p className="text-sm text-[#8888aa] leading-relaxed flex-1 mb-5">{v.desc}</p>
+                        <h3 className="text-lg font-bold [color:var(--mk-text)] mb-2 group-hover:text-violet-300">{v.title}</h3>
+                        <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed flex-1 mb-5">{v.desc}</p>
                         <span className="inline-flex items-center gap-1.5 text-sm font-medium text-violet-400">
                           {v.cta} <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                         </span>
@@ -263,7 +263,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* Scenarios (honest — no fake testimonials) */}
-        <section className="relative z-10 py-24 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-7xl mx-auto">
             <motion.div {...reveal}><SectionHeading title={t.scenariosTitle} sub={t.scenariosSub} /></motion.div>
             <div className="grid md:grid-cols-3 gap-6">
@@ -274,10 +274,10 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewport}
                   transition={{ duration: 0.4, delay: i * 0.08 }}
-                  className="p-6 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]"
+                  className="p-6 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
                 >
                   <p className="text-xs font-semibold text-violet-400 uppercase tracking-wider mb-3">{s.role}</p>
-                  <p className="text-sm text-[#8888aa] leading-relaxed">{s.text}</p>
+                  <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{s.text}</p>
                 </motion.div>
               ))}
             </div>
@@ -288,7 +288,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         <TrustBand lang={lang} />
 
         {/* Pricing */}
-        <section id="pricing" className="relative z-10 py-24 px-6">
+        <section id="pricing" className="relative z-10 py-28 px-6">
           <motion.div {...reveal} className="max-w-6xl mx-auto">
             <SectionHeading badge="Pricing" title={pricing.title} sub={pricing.sub} />
             <PricingGrid lang={lang} />
@@ -296,7 +296,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* FAQ */}
-        <section className="relative z-10 py-24 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <motion.div {...reveal} className="max-w-5xl mx-auto">
             <SectionHeading title={t.faqTitle} />
             <FaqList items={t.faq} />
@@ -304,10 +304,10 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* Final CTA */}
-        <motion.section {...reveal} className="relative z-10 py-24 px-6 text-center max-w-3xl mx-auto">
+        <motion.section {...reveal} className="relative z-10 py-28 px-6 text-center max-w-3xl mx-auto">
           <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />
-          <h2 className="text-4xl font-black text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
-          <p className="text-lg text-[#8888aa] mb-10">{t.ctaSub}</p>
+          <h2 className="text-4xl font-black [color:var(--mk-text)] mb-4">{t.ctaTitle}</h2>
+          <p className="text-lg [color:var(--mk-text-muted)] mb-10">{t.ctaSub}</p>
           <Link href={p(lang, "/signup")}>
             <Button size="xl" variant="glow">
               <SigmaMark size={18} tile={false} /> {t.ctaButton} <ArrowRight size={18} />

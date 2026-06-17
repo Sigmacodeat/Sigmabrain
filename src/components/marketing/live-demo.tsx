@@ -9,6 +9,8 @@
 import { useState } from "react";
 import { Send, Loader2, Sparkles } from "lucide-react";
 import { SigmaMark } from "@/components/brand/logo";
+import { SubsumioMark } from "@/components/brand/subsumio-logo";
+import { useSiteBrand } from "./chrome";
 import type { Lang } from "@/content/site";
 
 interface DemoResult {
@@ -24,7 +26,7 @@ function renderStrongText(text: string) {
   return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
-        <strong key={i} className="font-semibold text-[#d8d8e6]">
+        <strong key={i} className="font-semibold [color:var(--mk-text)]">
           {part.slice(2, -2)}
         </strong>
       );
@@ -50,6 +52,8 @@ export default function LiveDemo({
   sourcesLabel: string;
   sources: readonly string[];
 }) {
+  const brand = useSiteBrand();
+  const isSubsumio = brand === "subsumio";
   const [input, setInput] = useState(q);
   const [loading, setLoading] = useState(false);
   const [live, setLive] = useState<DemoResult[] | null>(null);
@@ -91,13 +95,13 @@ export default function LiveDemo({
   }
 
   return (
-    <div className="rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] shadow-2xl shadow-black/50 overflow-hidden text-left">
+    <div className="rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] shadow-2xl shadow-black/50 overflow-hidden text-left">
       {/* window bar */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1e1e3a] bg-[#0a0a18]">
+      <div className="flex items-center gap-2 px-4 py-3 border-b [border-color:var(--mk-border)] [background:var(--mk-bg)]">
         <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-        <div className="flex-1 ml-4 text-xs text-[#7878a0] font-mono">{windowTitle}</div>
+        <div className="flex-1 ml-4 text-xs [color:var(--mk-text-subtle)] font-mono">{windowTitle}</div>
       </div>
 
       {/* editable question */}
@@ -106,14 +110,14 @@ export default function LiveDemo({
           <div className="w-7 h-7 rounded-full brand-soft border brand-border flex items-center justify-center shrink-0 mt-0.5">
             <span className="text-[10px] brand-text font-semibold">{you}</span>
           </div>
-          <div className="flex-1 flex items-end gap-2 rounded-xl border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 focus-within:brand-border-strong transition-colors">
+          <div className="flex-1 flex items-end gap-2 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-bg)] px-3 py-2 focus-within:brand-border-strong transition-colors">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(); } }}
               rows={2}
               placeholder={t.placeholder}
-              className="flex-1 bg-transparent text-sm text-[#e8e8f0] placeholder:text-[#7878a0] resize-none focus:outline-none leading-relaxed"
+              className="flex-1 bg-transparent text-sm [color:var(--mk-text)] placeholder:[color:var(--mk-text-subtle)] resize-none focus:outline-none leading-relaxed"
             />
             <button
               onClick={ask}
@@ -130,22 +134,22 @@ export default function LiveDemo({
       {/* answer */}
       <div className="px-5 pb-4 pt-4">
         <div className="flex items-start gap-3">
-          <SigmaMark size={28} className="shrink-0 mt-0.5" />
+          {isSubsumio ? <SubsumioMark size={28} className="shrink-0 mt-0.5" /> : <SigmaMark size={28} className="shrink-0 mt-0.5" />}
           <div className="flex-1 min-w-0">
             {live ? (
               <div>
                 <p className="text-xs brand-text mb-2 flex items-center gap-1.5"><Sparkles size={12} /> {t.liveLabel}</p>
                 <ul className="space-y-2">
                   {live.map((r, i) => (
-                    <li key={(r.slug ?? "") + i} className="text-sm text-[#8888aa] leading-relaxed">
-                      <span className="text-[#c8c8d8]">{r.snippet || r.chunk_text || r.text || r.evidence || r.title}</span>
+                    <li key={(r.slug ?? "") + i} className="text-sm [color:var(--mk-text-muted)] leading-relaxed">
+                      <span className="[color:var(--mk-text-muted)]">{r.snippet || r.chunk_text || r.text || r.evidence || r.title}</span>
                       {r.slug && <span className="ml-2 text-xs font-mono brand-text brand-soft px-1.5 py-0.5 rounded">{r.slug}</span>}
                     </li>
                   ))}
                 </ul>
               </div>
             ) : (
-              <div className="text-sm text-[#8888aa] leading-relaxed whitespace-pre-line">
+              <div className="text-sm [color:var(--mk-text-muted)] leading-relaxed whitespace-pre-line">
                 {renderStrongText(a)}
               </div>
             )}
@@ -154,18 +158,18 @@ export default function LiveDemo({
       </div>
 
       {/* sources / note */}
-      <div className="px-5 py-3 border-t border-[#1e1e3a] bg-[#0a0a18] flex items-center gap-2 flex-wrap min-h-[40px]">
+      <div className="px-5 py-3 border-t [border-color:var(--mk-border)] [background:var(--mk-bg)] flex items-center gap-2 flex-wrap min-h-[40px]">
         {note ? (
           <span className="text-xs text-amber-400/80">{note}</span>
         ) : !live ? (
           <>
-            <span className="text-xs text-[#7878a0]">{sourcesLabel}</span>
+            <span className="text-xs [color:var(--mk-text-subtle)]">{sourcesLabel}</span>
             {sources.map((slug) => (
               <span key={slug} className="text-xs font-mono brand-text brand-soft px-2 py-0.5 rounded">{slug}</span>
             ))}
           </>
         ) : (
-          <span className="text-xs text-[#7878a0]">{lang === "en" ? "Read-only demo brain · your data stays yours" : "Read-only Demo-Brain · deine Daten bleiben deine"}</span>
+          <span className="text-xs [color:var(--mk-text-subtle)]">{lang === "en" ? "Read-only demo brain · your data stays yours" : "Read-only Demo-Brain · deine Daten bleiben deine"}</span>
         )}
       </div>
     </div>

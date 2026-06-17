@@ -28,7 +28,7 @@ function CellValue({ value }: { value: string }) {
     return (
       <span className="inline-flex items-start gap-1.5 text-emerald-400">
         <Check size={14} className="shrink-0 mt-0.5" />
-        <span className="text-[#c8c8d8]">{value.slice(1).trim() || "Ja"}</span>
+        <span className="[color:var(--mk-text-muted)]">{value.slice(1).trim() || "Ja"}</span>
       </span>
     );
   }
@@ -36,7 +36,7 @@ function CellValue({ value }: { value: string }) {
     return (
       <span className="inline-flex items-start gap-1.5 text-rose-400">
         <X size={14} className="shrink-0 mt-0.5" />
-        <span className="text-[#8888aa]">{value.slice(1).trim() || "Nein"}</span>
+        <span className="[color:var(--mk-text-muted)]">{value.slice(1).trim() || "Nein"}</span>
       </span>
     );
   }
@@ -50,7 +50,7 @@ function CellValue({ value }: { value: string }) {
   }
   if (value === "k. A." || value === "n/a") {
     return (
-      <span className="inline-flex items-center gap-1.5 text-[#7878a0]">
+      <span className="inline-flex items-center gap-1.5 [color:var(--mk-text-subtle)]">
         <CircleHelp size={13} className="shrink-0" />
         {value}
       </span>
@@ -72,14 +72,14 @@ function CompareMatrix({ table }: { table: CompareTable }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={viewport}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="hidden md:block overflow-x-auto rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]"
+        className="hidden md:block overflow-x-auto rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
       >
         <table className="w-full text-sm min-w-[760px]">
           <thead>
-            <tr className="border-b border-[#1e1e3a]">
+            <tr className="border-b [border-color:var(--mk-border)]">
               <th
                 scope="col"
-                className="sticky top-0 z-10 bg-[#0d0d1a] text-left p-4 text-[#8888aa] font-medium w-64"
+                className="sticky top-0 z-10 [background:var(--mk-surface)] text-left p-4 [color:var(--mk-text-muted)] font-medium w-64"
               >
                 <span className="sr-only">Feature</span>
               </th>
@@ -90,7 +90,7 @@ function CompareMatrix({ table }: { table: CompareTable }) {
                   className={`sticky top-0 z-10 text-left p-4 font-semibold ${
                     i === 0
                       ? "text-violet-300 bg-[#13102a]"
-                      : "text-[#e8e8f0] bg-[#0d0d1a]"
+                      : "[color:var(--mk-text)] [background:var(--mk-surface)]"
                   }`}
                 >
                   {col}
@@ -98,7 +98,7 @@ function CompareMatrix({ table }: { table: CompareTable }) {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#1e1e3a]">
+          <tbody className="divide-y divide-[var(--mk-border)]">
             {table.rows.map((row, ri) => (
               <motion.tr
                 key={row.label}
@@ -108,7 +108,7 @@ function CompareMatrix({ table }: { table: CompareTable }) {
                 viewport={viewport}
                 transition={{ duration: 0.3, delay: Math.min(ri * 0.025, 0.3) }}
               >
-                <th scope="row" className="p-4 text-left text-[#e8e8f0] font-medium">
+                <th scope="row" className="p-4 text-left [color:var(--mk-text)] font-medium">
                   {row.label}
                 </th>
                 {row.cells.map((cell, i) => (
@@ -131,12 +131,12 @@ function CompareMatrix({ table }: { table: CompareTable }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewport}
             transition={{ duration: 0.3, delay: Math.min(ri * 0.03, 0.25) }}
-            className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] overflow-hidden"
+            className="rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] overflow-hidden"
           >
-            <p className="px-4 py-3 text-sm font-semibold text-[#e8e8f0] border-b border-[#1e1e3a] bg-white/[0.02]">
+            <p className="px-4 py-3 text-sm font-semibold [color:var(--mk-text)] border-b [border-color:var(--mk-border)] bg-white/[0.02]">
               {row.label}
             </p>
-            <dl className="divide-y divide-[#1e1e3a]">
+            <dl className="divide-y divide-[var(--mk-border)]">
               {row.cells.map((cell, i) => (
                 <div
                   key={i}
@@ -146,7 +146,7 @@ function CompareMatrix({ table }: { table: CompareTable }) {
                 >
                   <dt
                     className={`text-xs shrink-0 ${
-                      i === 0 ? "text-violet-300 font-semibold" : "text-[#8888aa]"
+                      i === 0 ? "text-violet-300 font-semibold" : "[color:var(--mk-text-muted)]"
                     }`}
                   >
                     {table.cols[i]}
@@ -163,7 +163,7 @@ function CompareMatrix({ table }: { table: CompareTable }) {
 
       <ul className="mt-4 space-y-1.5">
         {table.footnotes.map((note, i) => (
-          <li key={i} className="text-xs text-[#7878a0] leading-relaxed">
+          <li key={i} className="text-xs [color:var(--mk-text-subtle)] leading-relaxed">
             {note}
           </li>
         ))}
@@ -177,7 +177,7 @@ export default function ComparePage({ lang }: { lang: Lang }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+      <div className="min-h-screen [background:var(--mk-bg)] overflow-x-hidden" lang={lang}>
         <MarketingBackground />
         <MarketingNav lang={lang} />
 
@@ -192,13 +192,13 @@ export default function ComparePage({ lang }: { lang: Lang }) {
             <span className="inline-block px-3 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-xs font-medium mb-6">
               {t.badge}
             </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-[#e8e8f0] leading-tight mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold [color:var(--mk-text)] leading-tight mb-6">
               {t.h1a}
               <br />
               <span className="text-violet-400">{t.h1b}</span>
             </h1>
-            <p className="text-lg text-[#8888aa] leading-relaxed max-w-3xl mx-auto">{t.sub}</p>
-            <p className="text-xs text-[#7878a0] mt-6">{t.snapshot}</p>
+            <p className="text-lg [color:var(--mk-text-muted)] leading-relaxed max-w-3xl mx-auto">{t.sub}</p>
+            <p className="text-xs [color:var(--mk-text-subtle)] mt-6">{t.snapshot}</p>
           </motion.div>
         </section>
 
@@ -224,7 +224,7 @@ export default function ComparePage({ lang }: { lang: Lang }) {
         </section>
 
         {/* Matrix 2: governance & EU compliance */}
-        <section className="relative z-10 py-16 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-16 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-6xl mx-auto">
             <CompareMatrix table={t.gov} />
           </div>
@@ -238,20 +238,20 @@ export default function ComparePage({ lang }: { lang: Lang }) {
         </section>
 
         {/* When them / when us */}
-        <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-20 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
             <motion.div
               initial={{ opacity: 0, x: -16 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={viewport}
               transition={{ duration: 0.4 }}
-              className="p-7 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]"
+              className="p-7 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
             >
-              <h3 className="text-base font-bold text-[#e8e8f0] mb-4">{t.whenThem.title}</h3>
+              <h3 className="text-base font-bold [color:var(--mk-text)] mb-4">{t.whenThem.title}</h3>
               <ul className="space-y-3">
                 {t.whenThem.items.map((item, i) => (
-                  <li key={i} className="text-sm text-[#8888aa] leading-relaxed flex gap-2.5">
-                    <ArrowRight size={14} className="text-[#7878a0] shrink-0 mt-1" />
+                  <li key={i} className="text-sm [color:var(--mk-text-muted)] leading-relaxed flex gap-2.5">
+                    <ArrowRight size={14} className="[color:var(--mk-text-subtle)] shrink-0 mt-1" />
                     {item}
                   </li>
                 ))}
@@ -286,9 +286,9 @@ export default function ComparePage({ lang }: { lang: Lang }) {
         </section>
 
         {/* Sources + disclaimer */}
-        <section className="relative z-10 py-16 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-16 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-sm font-semibold text-[#8888aa] mb-4">{t.sourcesTitle}</h3>
+            <h3 className="text-sm font-semibold [color:var(--mk-text-muted)] mb-4">{t.sourcesTitle}</h3>
             <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-2 mb-8">
               {t.sources.map((s) => (
                 <li key={s.href}>
@@ -303,15 +303,15 @@ export default function ComparePage({ lang }: { lang: Lang }) {
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-[#7878a0] leading-relaxed">{t.disclaimer}</p>
+            <p className="text-xs [color:var(--mk-text-subtle)] leading-relaxed">{t.disclaimer}</p>
           </div>
         </section>
 
         {/* CTA */}
         <section className="relative z-10 py-24 px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
-            <p className="text-[#8888aa] mb-8">{t.ctaSub}</p>
+            <h2 className="text-3xl font-bold [color:var(--mk-text)] mb-4">{t.ctaTitle}</h2>
+            <p className="[color:var(--mk-text-muted)] mb-8">{t.ctaSub}</p>
             <Link
               href={p(lang, "/signup")}
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold transition-colors"

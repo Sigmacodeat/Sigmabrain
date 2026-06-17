@@ -20,7 +20,7 @@ const buttonVariants = cva(
         success:
           "bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-900/30",
         glow:
-          "brand-bg text-white shadow-lg shadow-[var(--brand-glow)] ring-1 ring-[color-mix(in_srgb,var(--brand-primary)_45%,transparent)]",
+          "brand-bg text-white shadow-lg shadow-[var(--brand-glow)]",
         outline:
           "border brand-border brand-text hover:brand-border-strong hover:brand-soft",
       },

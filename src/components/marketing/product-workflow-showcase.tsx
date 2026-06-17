@@ -74,7 +74,7 @@ export default function ProductWorkflowShowcase({
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 py-24 px-6 overflow-hidden"
+      className="relative z-10 py-28 px-6 overflow-hidden"
       style={industry ? styleForIndustry(industry) : undefined}
     >
       <div className="absolute inset-x-0 top-1/3 h-64 brand-glow-bg blur-3xl opacity-80" />
@@ -86,11 +86,11 @@ export default function ProductWorkflowShowcase({
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <p className="text-xs font-mono uppercase tracking-wider brand-text mb-4">{c.eyebrow}</p>
-          <h2 className="text-3xl md:text-5xl font-black text-[#e8e8f0] leading-tight mb-5">
+          <h2 className="text-3xl md:text-5xl font-black [color:var(--mk-text)] leading-tight mb-5">
             {brand}<br />
             <span className="gradient-text glow-text">{signature}</span>
           </h2>
-          <p className="text-base md:text-lg text-[#aaaac4] leading-relaxed mb-8">{c.sub}</p>
+          <p className="text-base md:text-lg [color:var(--mk-text-muted)] leading-relaxed mb-8">{c.sub}</p>
           <div className="grid gap-3">
             {c.steps.map((step, i) => (
               <motion.div
@@ -99,13 +99,13 @@ export default function ProductWorkflowShowcase({
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{ duration: 0.35, delay: i * 0.08 }}
-                className="flex items-center gap-3 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]/85 px-4 py-3"
+                className="flex items-center gap-3 rounded-xl border [border-color:var(--mk-border)] [background:color-mix(in_srgb,var(--mk-surface)_85%,transparent)] px-4 py-3"
               >
                 <span className="w-7 h-7 rounded-lg brand-soft border brand-border flex items-center justify-center text-xs font-mono brand-text">
                   0{i + 1}
                 </span>
-                <span className="text-sm font-semibold text-[#e8e8f0]">{step}</span>
-                <ArrowRight size={14} className="ml-auto text-[#666684]" />
+                <span className="text-sm font-semibold [color:var(--mk-text)]">{step}</span>
+                <ArrowRight size={14} className="ml-auto [color:var(--mk-text-subtle)]" />
               </motion.div>
             ))}
           </div>
@@ -113,33 +113,33 @@ export default function ProductWorkflowShowcase({
 
         <motion.div style={{ y: yPanel }} className="relative">
           <div className="absolute -inset-6 brand-glow-bg blur-3xl rounded-full" />
-          <div className="relative overflow-hidden rounded-2xl border border-[#2a2a4a] bg-[#080812] shadow-2xl shadow-black/50">
-            <div className="flex items-center justify-between border-b border-[#1e1e3a] bg-[#0d0d1a] px-4 py-3">
+          <div className="relative overflow-hidden rounded-2xl border [border-color:var(--mk-border-strong)] [background:var(--mk-bg)] shadow-2xl shadow-black/50">
+            <div className="flex items-center justify-between border-b [border-color:var(--mk-border)] [background:var(--mk-surface)] px-4 py-3">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
                 <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
                 <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
               </div>
-              <div className="text-xs font-mono text-[#666684]">{brand} workspace</div>
+              <div className="text-xs font-mono [color:var(--mk-text-subtle)]">{brand} workspace</div>
             </div>
 
             <div className="grid md:grid-cols-[180px_1fr] min-h-[470px]">
-              <aside className="hidden md:block border-r border-[#1e1e3a] bg-[#0a0a18] p-4">
+              <aside className="hidden md:block border-r [border-color:var(--mk-border)] [background:var(--mk-bg)] p-4">
                 <div className="flex items-center gap-2 mb-6">
                   <Brain size={17} className="brand-text" />
-                  <span className="text-sm font-bold text-[#e8e8f0]">{brand}</span>
+                  <span className="text-sm font-bold [color:var(--mk-text)]">{brand}</span>
                 </div>
                 {["Inbox", "Graph", "Answers", "Audit"].map((item, i) => (
-                  <div key={item} className={`mb-2 rounded-lg px-3 py-2 text-xs ${i === 1 ? "brand-soft brand-text" : "text-[#8888aa]"}`}>
+                  <div key={item} className={`mb-2 rounded-lg px-3 py-2 text-xs ${i === 1 ? "brand-soft brand-text" : "[color:var(--mk-text-muted)]"}`}>
                     {item}
                   </div>
                 ))}
               </aside>
 
               <div className="relative p-4 md:p-6">
-                <div className="flex items-center gap-3 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] px-4 py-3 mb-5">
+                <div className="flex items-center gap-3 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] px-4 py-3 mb-5">
                   <Search size={16} className="brand-text" />
-                  <span className="text-sm text-[#d8d8e8]">{c.query}</span>
+                  <span className="text-sm [color:var(--mk-text)]">{c.query}</span>
                   <Sparkles size={16} className="ml-auto text-[#fbbf24]" />
                 </div>
 
@@ -162,10 +162,10 @@ export default function ProductWorkflowShowcase({
                         >
                           <div className="flex items-center gap-3">
                             <Icon size={17} className="brand-text" />
-                            <span className="text-sm font-medium text-[#e8e8f0]">{source.label}</span>
+                            <span className="text-sm font-medium [color:var(--mk-text)]">{source.label}</span>
                             <CheckCircle2 size={16} className="ml-auto text-emerald-400" />
                           </div>
-                          <div className="mt-3 h-1.5 rounded-full bg-[#1e1e3a] overflow-hidden">
+                          <div className="mt-3 h-1.5 rounded-full [background:var(--mk-border)] overflow-hidden">
                             <motion.div
                               initial={{ width: "20%" }}
                               whileInView={{ width: `${72 + i * 8}%` }}
@@ -179,10 +179,10 @@ export default function ProductWorkflowShowcase({
                     })}
                   </motion.div>
 
-                  <motion.div style={{ y: yGraph }} className="rounded-xl border border-[#1e1e3a] bg-[#06060f] p-4 min-h-[250px]">
+                  <motion.div style={{ y: yGraph }} className="rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-bg)] p-4 min-h-[250px]">
                     <div className="flex items-center gap-2 mb-4">
                       <GitBranch size={16} className="brand-text" />
-                      <span className="text-sm font-semibold text-[#e8e8f0]">{c.graph}</span>
+                      <span className="text-sm font-semibold [color:var(--mk-text)]">{c.graph}</span>
                     </div>
                     <div className="relative h-44">
                       {[
@@ -198,7 +198,7 @@ export default function ProductWorkflowShowcase({
                           whileInView={{ scale: 1, opacity: 1 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.35, delay: 0.12 * i }}
-                          className={`absolute ${pos} rounded-full border brand-border bg-[#0d0d1a] px-3 py-2 text-[11px] text-[#d8d8e8] shadow-lg`}
+                          className={`absolute ${pos} rounded-full border brand-border [background:var(--mk-surface)] px-3 py-2 text-[11px] [color:var(--mk-text)] shadow-lg`}
                         >
                           {label}
                         </motion.div>
@@ -215,15 +215,15 @@ export default function ProductWorkflowShowcase({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.35 }}
                   transition={{ duration: 0.45, delay: 0.25 }}
-                  className="mt-4 rounded-xl border brand-border bg-[#0d0d1a] p-4"
+                  className="mt-4 rounded-xl border brand-border [background:var(--mk-surface)] p-4"
                 >
                   <div className="flex items-start gap-3">
                     <Brain size={18} className="brand-text mt-0.5" />
                     <div>
-                      <p className="text-sm font-semibold text-[#e8e8f0] mb-1">{c.answer}</p>
+                      <p className="text-sm font-semibold [color:var(--mk-text)] mb-1">{c.answer}</p>
                       <div className="flex flex-wrap gap-2 text-[11px]">
                         <span className="rounded-full brand-soft brand-text px-2 py-1">{c.risk}</span>
-                        <span className="rounded-full bg-[#1e1e3a] text-[#aaaac4] px-2 py-1">{c.route}</span>
+                        <span className="rounded-full [background:var(--mk-border)] [color:var(--mk-text-muted)] px-2 py-1">{c.route}</span>
                       </div>
                     </div>
                   </div>

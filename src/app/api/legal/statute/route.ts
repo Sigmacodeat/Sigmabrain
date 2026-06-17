@@ -38,6 +38,32 @@ const CORPUS_META: Record<string, { jurisdiction: "at" | "de" | "ch"; label: str
 
 const CORPUS_DIR = path.join(process.cwd(), "law-corpus");
 
+const CORPUS_SPLIT_DIR = path.join(process.cwd(), "law-corpus-split");
+
+/**
+ * Try to load a specific paragraph from the pre-split corpus directory.
+ * Returns the page content or null if not found.
+ */
+async function loadSplitPage(
+  meta: (typeof CORPUS_META)[string],
+  paragraph: string,
+): Promise<string | null> {
+  const abbr = meta.label.match(/^([A-ZÄÖÜ][A-Za-zÄÖÜäöüß_]+)/)?.[1] || "";
+  if (!abbr) return null;
+
+  const paraClean = paragraph.replace(/^§\s*/, "").trim();
+  const slug = `${abbr.toLowerCase()}-par-${paraClean.toLowerCase()}`;
+  const filePath = path.join(CORPUS_SPLIT_DIR, meta.jurisdiction, `${slug}.md`);
+
+  try {
+    const content = await fs.readFile(filePath, "utf8");
+    const fmEnd = content.indexOf("---", 3);
+    return fmEnd !== -1 ? content.slice(fmEnd + 3).trimStart() : content;
+  } catch {
+    return null;
+  }
+}
+
 /** Read and search a statute file for paragraph matches. */
 async function searchStatute(
   fileKey: string,
@@ -47,6 +73,19 @@ async function searchStatute(
   const meta = CORPUS_META[fileKey];
   if (!meta) return [];
 
+  // ── Fast path: exact paragraph lookup from pre-split corpus ──────────
+  if (paragraph) {
+    const splitContent = await loadSplitPage(meta, paragraph);
+    if (splitContent) {
+      const paraNum = paragraph.replace(/^§\s*/, "").trim();
+      return [{
+        excerpt: splitContent.slice(0, 1500).trim(),
+        paragraphHit: `§ ${paraNum}`,
+      }];
+    }
+  }
+
+  // ── Slow path: full-text search in raw corpus file ───────────────────
   const fullPath = path.join(CORPUS_DIR, meta.file);
   let text: string;
   try {
@@ -55,40 +94,69 @@ async function searchStatute(
     return [];
   }
 
-  const lines = text.split("\n");
-  const results: { excerpt: string; paragraphHit?: string }[] = [];
   const queryLower = query.toLowerCase();
+  const results: { excerpt: string; paragraphHit?: string }[] = [];
 
-  // Find paragraph sections (e.g., ## § 42, ## Art. 15, ## § 433 BGB)
-  const SECTION_RE = /^#{1,4}\s*(?:§|Art\.?|Artikel)\s*(\d+[a-z]?)/i;
-  let currentSection = "";
-  let currentLines: string[] = [];
+  if (meta.jurisdiction === "de") {
+    // DE: split on markdown `## §` headings
+    const lines = text.split("\n");
+    const SECTION_RE = /^#{1,4}\s*§\s*(\d+[a-zA-Z]?)/;
+    let currentSection = "";
+    let currentLines: string[] = [];
 
-  const flush = () => {
-    if (currentLines.length === 0) return;
-    const block = currentLines.join("\n");
-    const matches =
-      (paragraph && currentSection.includes(paragraph)) ||
-      (!paragraph && block.toLowerCase().includes(queryLower));
-    if (matches) {
-      results.push({
-        excerpt: block.slice(0, 1200).trim(),
-        paragraphHit: currentSection || undefined,
-      });
+    const flush = () => {
+      if (currentLines.length === 0) return;
+      const block = currentLines.join("\n");
+      const hits =
+        (paragraph && currentSection.replace(/^§\s*/, "").startsWith(paragraph)) ||
+        (!paragraph && block.toLowerCase().includes(queryLower));
+      if (hits) {
+        results.push({
+          excerpt: block.slice(0, 1500).trim(),
+          paragraphHit: currentSection || undefined,
+        });
+      }
+      currentLines = [];
+    };
+
+    for (const line of lines) {
+      const m = line.match(SECTION_RE);
+      if (m) {
+        flush();
+        currentSection = `§ ${m[1]}`;
+      }
+      currentLines.push(line);
+      if (results.length >= 10) break;
     }
-    currentLines = [];
-  };
+    flush();
+  } else {
+    // AT/CH: search inline `§ N.` patterns in flat text
+    const body = text.includes("---") ? text.slice(text.indexOf("---", 3) + 3) : text;
+    const paraRe = /§\s*(\d+[a-zA-Z]?)\./g;
+    let m: RegExpExecArray | null;
+    const positions: { num: string; idx: number }[] = [];
 
-  for (const line of lines) {
-    const secMatch = line.match(SECTION_RE);
-    if (secMatch) {
-      flush();
-      currentSection = secMatch[0].replace(/^#+\s*/, "").trim();
+    while ((m = paraRe.exec(body)) !== null) {
+      positions.push({ num: m[1], idx: m.index });
     }
-    currentLines.push(line);
-    if (results.length >= 10) break;
+
+    for (let i = 0; i < positions.length && results.length < 10; i++) {
+      const { num, idx } = positions[i];
+      const endIdx = i + 1 < positions.length ? positions[i + 1].idx : idx + 2000;
+      const block = body.slice(idx, endIdx).trim();
+
+      const hits =
+        (paragraph && num === paragraph.replace(/^§\s*/, "").trim()) ||
+        (!paragraph && block.toLowerCase().includes(queryLower));
+
+      if (hits) {
+        results.push({
+          excerpt: block.slice(0, 1500).trim(),
+          paragraphHit: `§ ${num}`,
+        });
+      }
+    }
   }
-  flush();
 
   return results.slice(0, 10);
 }

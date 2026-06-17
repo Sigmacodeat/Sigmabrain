@@ -66,23 +66,28 @@ export async function POST(req: NextRequest) {
     if (upstream.ok) {
       void recordQuota(ctx, "uploads");
       // ── Auto-analysis: fire-and-forget ────────────────────────────────
-      try {
-        const uploadResult = JSON.parse(text) as { slug?: string; title?: string };
-        if (uploadResult.slug) {
-          void fetch(`${req.nextUrl.origin}/api/legal/analyze`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              document_slug: uploadResult.slug,
-              source: "auto_upload",
-              brain_id: ctx.brainId,
-              // Pass through the engine auth context
-              _engine_headers: ctx.headers,
-            }),
-          }).catch(() => {/* silent: analysis is best-effort */});
+      // Uses x-internal-secret for service-to-service auth.
+      // NEVER pass engine headers in the request body.
+      const internalSecret = process.env.SIGMABRAIN_INTERNAL_SECRET;
+      if (internalSecret) {
+        try {
+          const uploadResult = JSON.parse(text) as { slug?: string; title?: string };
+          if (uploadResult.slug) {
+            void fetch(`${req.nextUrl.origin}/api/legal/analyze`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-internal-secret": internalSecret,
+              },
+              body: JSON.stringify({
+                document_slug: uploadResult.slug,
+                brain_id: ctx.brainId,
+              }),
+            }).catch(() => {/* silent: analysis is best-effort */});
+          }
+        } catch {
+          // JSON parse failed or no slug — skip auto-analysis
         }
-      } catch {
-        // JSON parse failed — skip auto-analysis
       }
       // ──────────────────────────────────────────────────────────────────
     }

@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SigmaMark } from "@/components/brand/logo";
+import { SubsumioMark } from "@/components/brand/subsumio-logo";
 import { p, type Lang } from "@/content/site";
 import { profileForIndustry } from "@/lib/industry-pack";
 import { styleForIndustry } from "@/lib/industry-theme";
@@ -95,13 +96,13 @@ function SignatureBand({
   const icons = iconMap[industry] ?? ["Brain", "Network", "FileText"];
 
   return (
-    <section className="relative z-10 px-6 pb-20 max-w-6xl mx-auto">
+    <section className="relative z-10 py-28 px-6 max-w-6xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={viewport}
         transition={{ duration: 0.45, ease: "easeOut" }}
-        className="relative overflow-hidden rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]"
+        className="relative overflow-hidden rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
       >
         <div className="absolute inset-0 opacity-35" aria-hidden>
           <div className="absolute inset-y-0 left-0 w-1/2 brand-glow-bg blur-3xl" />
@@ -112,7 +113,7 @@ function SignatureBand({
             <p className="text-xs font-mono uppercase tracking-wider brand-text mb-3">
               {profile.brand} signature
             </p>
-            <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] mb-3">
+            <h2 className="text-2xl md:text-3xl font-black [color:var(--mk-text)] mb-3">
               {profile.signature.title[lang]}
             </h2>
             <p className="text-sm md:text-base text-[#a8a8be] leading-relaxed max-w-2xl">
@@ -123,11 +124,11 @@ function SignatureBand({
             {profile.signature.items.map((item, i) => {
               const Icon = SIGNATURE_ICONS[icons[i]];
               return (
-                <div key={item.en} className="flex items-center gap-3 rounded-xl border border-[#1e1e3a] bg-[#06060f]/55 p-3">
+                <div key={item.en} className="flex items-center gap-3 rounded-xl border [border-color:var(--mk-border)] [background:color-mix(in_srgb,var(--mk-bg)_55%,transparent)] p-3">
                   <div className="w-9 h-9 rounded-lg brand-soft border brand-border flex items-center justify-center shrink-0">
                     {Icon && <Icon size={16} className="brand-text" />}
                   </div>
-                  <span className="text-sm font-semibold text-[#e8e8f0]">{item[lang]}</span>
+                  <span className="text-sm font-semibold [color:var(--mk-text)]">{item[lang]}</span>
                 </div>
               );
             })}
@@ -150,13 +151,13 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="relative rounded-2xl border border-[#1e1e3a] bg-[#0a0a18] shadow-2xl shadow-black/50 overflow-hidden"
+        className="relative rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-bg)] shadow-2xl shadow-black/50 overflow-hidden"
       >
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1e1e3a]">
+        <div className="flex items-center gap-2 px-4 py-3 border-b [border-color:var(--mk-border)]">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-          <div className="flex-1 ml-3 text-xs text-[#7878a0] font-mono">{c.title}</div>
+          <div className="flex-1 ml-3 text-xs [color:var(--mk-text-subtle)] font-mono">{c.title}</div>
         </div>
 
         <div className="p-4 space-y-3">
@@ -164,11 +165,11 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5, duration: 0.4 }}
-            className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3"
+            className="rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] p-3"
           >
             <div className="flex items-center gap-2 mb-2">
               <CalendarClock size={13} className="brand-text" />
-              <span className="text-xs font-semibold text-[#e8e8f0]">{c.digestLabel}</span>
+              <span className="text-xs font-semibold [color:var(--mk-text)]">{c.digestLabel}</span>
             </div>
             <ul className="space-y-1.5">
               {c.digestItems.map((it, i) => (
@@ -177,7 +178,7 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 + i * 0.15, duration: 0.3 }}
-                  className="flex items-center gap-2 text-[11px] text-[#8888aa]"
+                  className="flex items-center gap-2 text-[11px] [color:var(--mk-text-muted)]"
                 >
                   <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${it.includes("!") || it.includes("today") || it.includes("heute") || it.includes("überfällig") || it.includes("overdue") ? "bg-rose-400" : "bg-amber-400"}`} />
                   {it}
@@ -194,7 +195,7 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
           >
             <div className="flex items-center gap-2">
               <Check size={13} className="text-emerald-400 shrink-0" />
-              <span className="text-[11px] text-[#c8c8d8]">{c.invoiceLabel}</span>
+              <span className="text-[11px] [color:var(--mk-text-muted)]">{c.invoiceLabel}</span>
             </div>
             <span className="text-xs font-bold text-emerald-300 font-mono">{c.invoiceValue}</span>
           </motion.div>
@@ -205,7 +206,7 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
             transition={{ delay: 1.35, duration: 0.4 }}
             className="flex items-center justify-between gap-2"
           >
-            <span className="inline-flex items-center gap-1.5 text-[11px] text-[#8888aa]">
+            <span className="inline-flex items-center gap-1.5 text-[11px] [color:var(--mk-text-muted)]">
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)]" /> {c.datevLabel}
             </span>
             <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[9px] text-amber-300">
@@ -231,7 +232,7 @@ export default function BrandedVerticalPage({
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang} style={styleForIndustry(signupIndustry)}>
+      <div className="min-h-screen [background:var(--mk-bg)] overflow-x-hidden" lang={lang} style={styleForIndustry(signupIndustry)}>
         <MarketingBackground />
         <MarketingNav lang={lang} />
 
@@ -249,18 +250,18 @@ export default function BrandedVerticalPage({
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-pulse" />
                 {t.badge}
               </div>
-              <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
+              <h1 className="text-4xl md:text-6xl font-black [color:var(--mk-text)] leading-[1.08] tracking-tight mb-6">
                 {t.h1a}
                 <br />
                 <span className="gradient-text glow-text">{t.h1b}</span>
               </h1>
-              <p className="text-lg md:text-xl text-[#8888aa] max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+              <p className="text-lg md:text-xl [color:var(--mk-text-muted)] max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
                 {t.sub}
               </p>
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
                 <Link href={signupHref}>
                   <Button size="xl" variant="glow">
-                    <SigmaMark size={18} tile={false} /> {t.ctaPrimary}
+                    {signupIndustry === "legal" ? <SubsumioMark size={18} /> : <SigmaMark size={18} tile={false} />} {t.ctaPrimary}
                   </Button>
                 </Link>
                 <Link href={p(lang, "/compare")}>
@@ -278,7 +279,7 @@ export default function BrandedVerticalPage({
         <ProductWorkflowShowcase lang={lang} industry={signupIndustry} />
 
         {/* Product reel — Sigmabrain in action for this vertical */}
-        <section className="relative z-10 py-20 px-6 max-w-5xl mx-auto">
+        <section className="relative z-10 py-28 px-6 max-w-5xl mx-auto">
           <SectionHeading
             title={lang === "de" ? "Sigmabrain in Aktion" : "Sigmabrain in action"}
             sub={lang === "de"
@@ -289,16 +290,16 @@ export default function BrandedVerticalPage({
         </section>
 
         {/* Brain demo */}
-        <section className="relative z-10 px-6 pb-20 max-w-3xl mx-auto">
+        <section className="relative z-10 py-28 px-6 max-w-3xl mx-auto">
           <LiveDemo lang={lang} {...t.demo} />
         </section>
 
         {/* A day in the workflow — timeline */}
-        <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-4xl mx-auto">
             <SectionHeading title={t.dayTitle} sub={t.daySub} />
             <div className="relative">
-              <div className="absolute left-[19px] md:left-1/2 top-2 bottom-2 w-px bg-[#1e1e3a] md:-translate-x-1/2" />
+              <div className="absolute left-[19px] md:left-1/2 top-2 bottom-2 w-px [background:var(--mk-border)] md:-translate-x-1/2" />
               <div className="space-y-6">
                 {t.steps.map((s, i) => {
                   const Icon = ICONS[s.icon];
@@ -317,10 +318,10 @@ export default function BrandedVerticalPage({
                           {Icon && <Icon size={18} className="brand-text" />}
                         </div>
                       </div>
-                      <div className="flex-1 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 hover:brand-border transition-colors">
+                      <div className="flex-1 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] p-4 hover:brand-border transition-colors">
                         <span className="text-xs font-mono brand-text">{s.time}</span>
-                        <h3 className="text-sm font-semibold text-[#e8e8f0] mt-1 mb-1.5">{s.title}</h3>
-                        <p className="text-sm text-[#8888aa] leading-relaxed">{s.desc}</p>
+                        <h3 className="text-sm font-semibold [color:var(--mk-text)] mt-1 mb-1.5">{s.title}</h3>
+                        <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{s.desc}</p>
                       </div>
                     </motion.div>
                   );
@@ -331,7 +332,7 @@ export default function BrandedVerticalPage({
         </section>
 
         {/* Tools that ship today */}
-        <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
+        <section className="relative z-10 py-28 px-6 max-w-6xl mx-auto">
           <SectionHeading title={t.toolsTitle} sub={t.toolsSub} />
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {t.tools.map((tool, i) => {
@@ -346,13 +347,13 @@ export default function BrandedVerticalPage({
                 >
                   <Link
                     href={tool.href}
-                    className="group block h-full p-6 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:brand-border-strong hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
+                    className="group block h-full p-6 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] hover:brand-border-strong hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
                   >
                     <div className="w-11 h-11 rounded-xl brand-soft border brand-border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       {Icon && <Icon size={20} className="brand-text" />}
                     </div>
-                    <h3 className="text-base font-bold text-[#e8e8f0] mb-1.5">{tool.title}</h3>
-                    <p className="text-sm text-[#8888aa] leading-relaxed">{tool.desc}</p>
+                    <h3 className="text-base font-bold [color:var(--mk-text)] mb-1.5">{tool.title}</h3>
+                    <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{tool.desc}</p>
                     <span className="inline-flex items-center gap-1 text-xs brand-text mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
                       {lang === "en" ? "Open" : "Öffnen"} <ArrowRight size={12} />
                     </span>
@@ -364,7 +365,7 @@ export default function BrandedVerticalPage({
         </section>
 
         {/* Trust band */}
-        <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-6xl mx-auto">
             <SectionHeading title={t.trustTitle} />
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -377,28 +378,28 @@ export default function BrandedVerticalPage({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={viewport}
                     transition={{ duration: 0.35, delay: i * 0.06 }}
-                    className="p-5 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a]"
+                    className="p-5 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
                   >
                     <div className="w-10 h-10 rounded-lg brand-soft border brand-border flex items-center justify-center mb-4">
                       {Icon && <Icon size={18} className="brand-text" />}
                     </div>
-                    <h3 className="text-sm font-semibold text-[#e8e8f0] mb-1.5">{tr.title}</h3>
-                    <p className="text-xs text-[#8888aa] leading-relaxed">{tr.desc}</p>
+                    <h3 className="text-sm font-semibold [color:var(--mk-text)] mb-1.5">{tr.title}</h3>
+                    <p className="text-xs [color:var(--mk-text-muted)] leading-relaxed">{tr.desc}</p>
                   </motion.div>
                 );
               })}
             </div>
-            <p className="text-xs text-[#7878a0] leading-relaxed max-w-3xl mx-auto text-center mt-8">{t.honesty}</p>
+            <p className="text-xs [color:var(--mk-text-subtle)] leading-relaxed max-w-3xl mx-auto text-center mt-8">{t.honesty}</p>
           </div>
         </section>
 
         {/* Pricing — this branch's own tiers (or global fallback) */}
-        <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+        <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <BranchPricing lang={lang} industry={signupIndustry} />
         </section>
 
         {/* FAQ */}
-        <section className="relative z-10 py-24 px-6">
+        <section className="relative z-10 py-28 px-6">
           <div className="max-w-5xl mx-auto">
             <SectionHeading title={t.faqTitle} />
             <FaqList items={t.faq} />
@@ -406,10 +407,10 @@ export default function BrandedVerticalPage({
         </section>
 
         {/* CTA */}
-        <section className="relative z-10 py-24 px-6 text-center max-w-3xl mx-auto border-t border-[#1e1e3a]">
-          <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />
-          <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
-          <p className="text-lg text-[#8888aa] mb-10">{t.ctaSub}</p>
+        <section className="relative z-10 py-28 px-6 text-center max-w-3xl mx-auto border-t [border-color:var(--mk-border)]">
+          {signupIndustry === "legal" ? <SubsumioMark size={56} className="mx-auto mb-7" /> : <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />}
+          <h2 className="text-3xl md:text-4xl font-black [color:var(--mk-text)] mb-4">{t.ctaTitle}</h2>
+          <p className="text-lg [color:var(--mk-text-muted)] mb-10">{t.ctaSub}</p>
           <Link href={signupHref}>
             <Button size="xl" variant="glow">
               {t.ctaButton} <ArrowRight size={18} />

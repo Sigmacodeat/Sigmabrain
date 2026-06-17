@@ -44,10 +44,10 @@ export default function CommentThread({ parentSlug, parentType, currentUserId, c
   }
 
   return (
-    <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
+    <div className="rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] p-4 space-y-3">
       <div className="flex items-center gap-2">
         <MessageSquare size={14} className="text-violet-400" />
-        <h4 className="text-xs font-semibold text-[#e8e8f0] uppercase tracking-wider">Kommentare</h4>
+        <h4 className="text-xs font-semibold [color:var(--mk-text)] uppercase tracking-wider">Kommentare</h4>
         <span className="text-[10px] text-[#8a8aa8]">({comments.length})</span>
       </div>
 
@@ -58,18 +58,18 @@ export default function CommentThread({ parentSlug, parentType, currentUserId, c
       ) : (
         <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
           {comments.map((c) => (
-            <div key={c.id} className="flex gap-2 p-2 rounded-lg bg-[#0a0a18] border border-[#1e1e3a]">
+            <div key={c.id} className="flex gap-2 p-2 rounded-lg [background:var(--mk-bg)] border [border-color:var(--mk-border)]">
               <div className="w-6 h-6 rounded-full bg-violet-600/15 flex items-center justify-center shrink-0">
                 <User size={12} className="text-violet-400" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-[#e8e8f0]">{c.authorName}</span>
+                  <span className="text-xs font-medium [color:var(--mk-text)]">{c.authorName}</span>
                   <span className="text-[10px] text-[#8a8aa8]">
                     {new Date(c.createdAt).toLocaleString("de-DE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
                   </span>
                 </div>
-                <p className="text-xs text-[#8888aa] mt-0.5 whitespace-pre-wrap">{c.content}</p>
+                <p className="text-xs [color:var(--mk-text-muted)] mt-0.5 whitespace-pre-wrap">{c.content}</p>
               </div>
             </div>
           ))}
@@ -83,7 +83,7 @@ export default function CommentThread({ parentSlug, parentType, currentUserId, c
           onChange={(e) => setNewText(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && submit()}
           placeholder="Kommentar hinzufügen…"
-          className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+          className="flex-1 [background:var(--mk-bg)] border [border-color:var(--mk-border)] rounded-lg px-3 py-2 text-xs [color:var(--mk-text)] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
         />
         <button
           onClick={submit}

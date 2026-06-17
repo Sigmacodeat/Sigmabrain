@@ -56,12 +56,12 @@ export default function RefConsentBanner() {
     <div
       role="dialog"
       aria-live="polite"
-      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:max-w-md z-[100] p-5 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] shadow-2xl shadow-black/60"
+      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:max-w-md z-[100] p-5 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] shadow-2xl shadow-black/60"
     >
-      <p className="text-sm font-semibold text-[#e8e8f0] mb-1.5">
+      <p className="text-sm font-semibold [color:var(--mk-text)] mb-1.5">
         {isGerman ? "Empfehlungslink erkannt" : "Referral link detected"}
       </p>
-      <p className="text-xs text-[#8888aa] leading-relaxed mb-4">
+      <p className="text-xs [color:var(--mk-text-muted)] leading-relaxed mb-4">
         {isGerman
           ? "Du bist über eine Empfehlung hier. Dürfen wir den Empfehlungs-Code 90 Tage als Cookie speichern, damit dein Werber seine Provision bekommt und du deinen Gratismonat? Sonst passiert nichts — die Seite funktioniert auch ohne."
           : "You arrived via a referral. May we store the referral code as a cookie for 90 days so your referrer gets their commission and you get your free month? Nothing else happens — the site works fine without it."}
@@ -75,7 +75,7 @@ export default function RefConsentBanner() {
         </button>
         <button
           onClick={decline}
-          className="px-4 py-2 rounded-lg border border-[#1e1e3a] hover:border-[#3a3a6a] text-[#8888aa] text-xs font-medium transition-colors"
+          className="px-4 py-2 rounded-lg border [border-color:var(--mk-border)] hover:[border-color:var(--mk-border-strong)] [color:var(--mk-text-muted)] text-xs font-medium transition-colors"
         >
           {isGerman ? "Ablehnen" : "Decline"}
         </button>

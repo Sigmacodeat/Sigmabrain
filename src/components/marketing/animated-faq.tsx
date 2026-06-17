@@ -16,10 +16,9 @@ export function AnimatedFaqList({
   tone?: "dark" | "light";
 }) {
   const [open, setOpen] = useState<number | null>(null);
-  const light = tone === "light";
 
   return (
-    <div className="max-w-3xl mx-auto space-y-3">
+    <div data-tone={tone} className="max-w-3xl mx-auto space-y-3">
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
@@ -31,24 +30,16 @@ export function AnimatedFaqList({
             transition={{ duration: 0.35, delay: i * 0.055 }}
           >
             <div
-              className={`rounded-xl overflow-hidden transition-all duration-200 ${
-                light
-                  ? isOpen
-                    ? "border border-[var(--signal-blue)]/30 shadow-md shadow-blue-900/5"
-                    : "border border-[var(--color-light-border)]"
-                  : isOpen
-                  ? "border border-[#3a3a6a]"
-                  : "border border-[#1e1e3a]"
+              className={`rounded-xl overflow-hidden border transition-all duration-200 ${
+                isOpen ? "[border-color:var(--mk-border-strong)]" : "[border-color:var(--mk-border)]"
               }`}
-              style={{
-                background: light ? "var(--color-light-surface)" : "#0d0d1a",
-              }}
+              style={{ background: "var(--mk-surface)" }}
             >
               <button
                 onClick={() => setOpen(isOpen ? null : i)}
                 className="w-full flex items-center justify-between px-5 py-4 text-sm font-medium text-left gap-4"
                 aria-expanded={isOpen}
-                style={{ color: light ? "var(--color-light-text)" : "#e8e8f0" }}
+                style={{ color: "var(--mk-text)" }}
               >
                 <span>{item.q}</span>
                 <motion.span
@@ -58,7 +49,7 @@ export function AnimatedFaqList({
                 >
                   <ChevronDown
                     size={15}
-                    style={{ color: light ? "var(--color-light-text-muted)" : "#7878a0" }}
+                    style={{ color: "var(--mk-text-subtle)" }}
                   />
                 </motion.span>
               </button>
@@ -75,7 +66,7 @@ export function AnimatedFaqList({
                   >
                     <p
                       className="px-5 pb-5 text-sm leading-relaxed"
-                      style={{ color: light ? "var(--color-light-text-muted)" : "#8888aa" }}
+                      style={{ color: "var(--mk-text-muted)" }}
                     >
                       {item.a}
                     </p>

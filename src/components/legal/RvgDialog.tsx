@@ -19,7 +19,7 @@ export default function RvgDialog() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] text-xs text-[#8888aa] hover:text-[#e8e8f0] hover:border-[#3a3a6a] transition-all"
+        className="flex items-center gap-2 px-3 py-2 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] text-xs [color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[border-color:var(--mk-border-strong)] transition-all"
       >
         <Scale size={14} />
         RVG-Rechner
@@ -27,18 +27,18 @@ export default function RvgDialog() {
 
       {open && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] shadow-xl max-w-md w-full p-5 space-y-4">
+          <div className="rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] shadow-xl max-w-md w-full p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Scale size={18} className="text-emerald-400" />
-                <h2 className="text-lg font-bold text-[#e8e8f0]">RVG-Rechner</h2>
+                <h2 className="text-lg font-bold [color:var(--mk-text)]">RVG-Rechner</h2>
               </div>
-              <button onClick={() => setOpen(false)} className="text-[#8a8aa8] hover:text-[#e8e8f0]">
+              <button onClick={() => setOpen(false)} className="text-[#8a8aa8] hover:[color:var(--mk-text)]">
                 <X size={18} />
               </button>
             </div>
 
-            <p className="text-xs text-[#8888aa]">
+            <p className="text-xs [color:var(--mk-text-muted)]">
               Gebührenberechnung nach § 13 RVG (Rechtsanwaltsvergütungsgesetz).
               Inkl. Verfahrensgebühr (1,3), Terminsgebühr (1,2), Einigungsgebühr (1,5) und Auslagenpauschale.
             </p>
@@ -49,7 +49,7 @@ export default function RvgDialog() {
                 value={streitwert}
                 onChange={(e) => setStreitwert(e.target.value)}
                 placeholder="Streitwert in €"
-                className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-emerald-500/50"
+                className="flex-1 [background:var(--mk-bg)] border [border-color:var(--mk-border)] rounded-lg px-3 py-2 text-sm [color:var(--mk-text)] placeholder:text-[#8a8aa8] focus:outline-none focus:border-emerald-500/50"
                 onKeyDown={(e) => e.key === "Enter" && compute()}
               />
               <Button
@@ -65,39 +65,39 @@ export default function RvgDialog() {
             {result && (
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-[#8888aa]">Streitwert</span>
-                  <span className="text-[#e8e8f0] font-medium">{result.streitwert.toLocaleString("de-DE")} €</span>
+                  <span className="[color:var(--mk-text-muted)]">Streitwert</span>
+                  <span className="[color:var(--mk-text)] font-medium">{result.streitwert.toLocaleString("de-DE")} €</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#8888aa]">Basisgebühr (1,0)</span>
-                  <span className="text-[#e8e8f0]">{result.basisGebuehr.toFixed(2)} €</span>
+                  <span className="[color:var(--mk-text-muted)]">Basisgebühr (1,0)</span>
+                  <span className="[color:var(--mk-text)]">{result.basisGebuehr.toFixed(2)} €</span>
                 </div>
-                <div className="border-t border-[#1e1e3a] pt-2 space-y-1">
+                <div className="border-t [border-color:var(--mk-border)] pt-2 space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-[#8888aa]">Verfahrensgebühr (1,3)</span>
-                    <span className="text-[#e8e8f0]">{result.verfahrensgebuehr.toFixed(2)} €</span>
+                    <span className="[color:var(--mk-text-muted)]">Verfahrensgebühr (1,3)</span>
+                    <span className="[color:var(--mk-text)]">{result.verfahrensgebuehr.toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#8888aa]">Terminsgebühr (1,2)</span>
-                    <span className="text-[#e8e8f0]">{result.terminsgebuehr.toFixed(2)} €</span>
+                    <span className="[color:var(--mk-text-muted)]">Terminsgebühr (1,2)</span>
+                    <span className="[color:var(--mk-text)]">{result.terminsgebuehr.toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#8888aa]">Einigungsgebühr (1,5)</span>
-                    <span className="text-[#e8e8f0]">{result.einigungsgebuehr.toFixed(2)} €</span>
+                    <span className="[color:var(--mk-text-muted)]">Einigungsgebühr (1,5)</span>
+                    <span className="[color:var(--mk-text)]">{result.einigungsgebuehr.toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#8888aa]">Auslagenpauschale</span>
-                    <span className="text-[#e8e8f0]">{result.auslagenpauschale.toFixed(2)} €</span>
+                    <span className="[color:var(--mk-text-muted)]">Auslagenpauschale</span>
+                    <span className="[color:var(--mk-text)]">{result.auslagenpauschale.toFixed(2)} €</span>
                   </div>
                 </div>
-                <div className="border-t border-[#1e1e3a] pt-2 space-y-1">
+                <div className="border-t [border-color:var(--mk-border)] pt-2 space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-[#8888aa]">Summe netto</span>
-                    <span className="text-[#e8e8f0] font-medium">{result.summeNetto.toFixed(2)} €</span>
+                    <span className="[color:var(--mk-text-muted)]">Summe netto</span>
+                    <span className="[color:var(--mk-text)] font-medium">{result.summeNetto.toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#8888aa]">MwSt (19%)</span>
-                    <span className="text-[#e8e8f0]">{result.mwst.toFixed(2)} €</span>
+                    <span className="[color:var(--mk-text-muted)]">MwSt (19%)</span>
+                    <span className="[color:var(--mk-text)]">{result.mwst.toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between text-emerald-400 font-bold">
                     <span>Summe brutto</span>

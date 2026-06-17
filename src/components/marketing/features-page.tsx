@@ -76,7 +76,7 @@ function GraphHero() {
           </radialGradient>
           <linearGradient id="edgeGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="var(--brand-primary)" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#3a3a6a" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="var(--mk-border-strong)" stopOpacity="0.35" />
           </linearGradient>
         </defs>
 
@@ -209,8 +209,8 @@ function HowItWorks({ lang }: { lang: Lang }) {
         transition={{ duration: 0.4 }}
         className="text-center mb-14"
       >
-        <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] mb-3">{h.title}</h2>
-        <p className="text-base text-[#8888aa] max-w-2xl mx-auto">{h.sub}</p>
+        <h2 className="text-2xl md:text-3xl font-black [color:var(--mk-text)] mb-3">{h.title}</h2>
+        <p className="text-base [color:var(--mk-text-muted)] max-w-2xl mx-auto">{h.sub}</p>
       </motion.div>
 
       <div className="relative grid md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -240,8 +240,8 @@ function HowItWorks({ lang }: { lang: Lang }) {
                 <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full brand-bg text-white text-xs font-bold flex items-center justify-center shadow-md">{i + 1}</span>
               </div>
               <div className="text-center">
-                <h3 className="text-base font-bold text-[#e8e8f0] mb-2">{s.title}</h3>
-                <p className="text-sm text-[#8888aa] leading-relaxed mb-3">{s.desc}</p>
+                <h3 className="text-base font-bold [color:var(--mk-text)] mb-2">{s.title}</h3>
+                <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed mb-3">{s.desc}</p>
                 <span className="inline-block text-[10px] font-mono brand-text brand-soft px-2 py-1 rounded-full">{s.tag}</span>
               </div>
             </motion.div>
@@ -277,7 +277,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="min-h-screen bg-[#06060f] overflow-x-hidden" lang={lang}>
+      <div className="min-h-screen [background:var(--mk-bg)] overflow-x-hidden" lang={lang}>
         <MarketingBackground />
         <MarketingNav lang={lang} />
 
@@ -294,12 +294,12 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                 <span className="w-1.5 h-1.5 rounded-full brand-bg animate-pulse" />
                 {t.badge}
               </div>
-              <h1 className="text-4xl md:text-6xl font-black text-[#e8e8f0] leading-[1.08] tracking-tight mb-6">
+              <h1 className="text-4xl md:text-6xl font-black [color:var(--mk-text)] leading-[1.08] tracking-tight mb-6">
                 {t.h1a}
                 <br />
                 <span className="gradient-text glow-text">{t.h1b}</span>
               </h1>
-              <p className="text-lg md:text-xl text-[#8888aa] max-w-xl mx-auto lg:mx-0 leading-relaxed mb-8">
+              <p className="text-lg md:text-xl [color:var(--mk-text-muted)] max-w-xl mx-auto lg:mx-0 leading-relaxed mb-8">
                 {t.sub}
               </p>
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
@@ -325,7 +325,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
               <div className="absolute inset-0 brand-soft blur-3xl rounded-full" />
               <div className="relative glass rounded-3xl p-6 shadow-2xl shadow-black/40">
                 <GraphHero />
-                <p className="text-center text-xs text-[#7878a0] font-mono mt-2">
+                <p className="text-center text-xs [color:var(--mk-text-subtle)] font-mono mt-2">
                   {lang === "en"
                     ? "typed edges, extracted on every write"
                     : "typisierte Kanten, bei jedem Write extrahiert"}
@@ -345,14 +345,14 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={viewport}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] p-5 text-center hover:border-[#3a3a6a] transition-colors"
+                className="rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] p-5 text-center hover:[border-color:var(--mk-border-strong)] transition-colors"
               >
                 <div className="text-3xl md:text-4xl font-black gradient-text mb-1">
                   {s.prefix ?? ""}
                   <CountUp to={s.to} decimals={s.dec} />
                   {s.suffix ?? ""}
                 </div>
-                <p className="text-xs text-[#8888aa] leading-snug">{s.label}</p>
+                <p className="text-xs [color:var(--mk-text-muted)] leading-snug">{s.label}</p>
               </motion.div>
             ))}
           </div>
@@ -382,7 +382,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                   aria-selected={isActive}
                   onClick={() => setActive(c.id)}
                   className={`relative flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-colors ${
-                    isActive ? "brand-text" : "text-[#8888aa] hover:text-[#e8e8f0]"
+                    isActive ? "brand-text" : "[color:var(--mk-text-muted)] hover:[color:var(--mk-text)]"
                   }`}
                 >
                   {isActive && (
@@ -417,9 +417,9 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                   <div className="w-12 h-12 rounded-xl brand-soft border brand-border flex items-center justify-center">
                     {CatIcon && <CatIcon size={22} className="brand-text" />}
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0]">{cat.title}</h2>
+                  <h2 className="text-2xl md:text-3xl font-black [color:var(--mk-text)]">{cat.title}</h2>
                 </div>
-                <p className="text-base text-[#8888aa] leading-relaxed mb-8">{cat.intro}</p>
+                <p className="text-base [color:var(--mk-text-muted)] leading-relaxed mb-8">{cat.intro}</p>
                 <div className="space-y-4">
                   {cat.items.map((item, i) => (
                     <motion.div
@@ -427,12 +427,12 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.06 * i, duration: 0.22 }}
-                      className="flex gap-3 p-4 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] hover:brand-border hover:bg-[#0f0f20] transition-colors"
+                      className="flex gap-3 p-4 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] hover:brand-border hover:bg-[#0f0f20] transition-colors"
                     >
                       <CheckCircle2 size={16} className="brand-text shrink-0 mt-0.5" />
                       <div>
-                        <h3 className="text-sm font-semibold text-[#e8e8f0] mb-1">{item.title}</h3>
-                        <p className="text-sm text-[#8888aa] leading-relaxed">{item.desc}</p>
+                        <h3 className="text-sm font-semibold [color:var(--mk-text)] mb-1">{item.title}</h3>
+                        <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{item.desc}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -442,12 +442,12 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
               {/* Right: terminal demo */}
               {cat.demo ? (
                 <div className="lg:sticky lg:top-8">
-                  <div className="rounded-2xl border border-[#1e1e3a] bg-[#0a0a18] shadow-2xl shadow-black/50 overflow-hidden">
-                    <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1e1e3a]">
+                  <div className="rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-bg)] shadow-2xl shadow-black/50 overflow-hidden">
+                    <div className="flex items-center gap-2 px-4 py-3 border-b [border-color:var(--mk-border)]">
                       <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
                       <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                      <div className="flex-1 ml-4 text-xs text-[#7878a0] font-mono">{cat.demo.windowTitle}</div>
+                      <div className="flex-1 ml-4 text-xs [color:var(--mk-text-subtle)] font-mono">{cat.demo.windowTitle}</div>
                     </div>
                     <div className="p-5 font-mono text-xs leading-relaxed space-y-1.5">
                       {cat.demo.lines.map((line, i) => (
@@ -458,12 +458,12 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                           transition={{ delay: 0.12 * i, duration: 0.25 }}
                           className={
                             line.startsWith("$") || line.startsWith(">")
-                              ? "text-[#e8e8f0]"
+                              ? "[color:var(--mk-text)]"
                               : line.includes("⚠")
                                 ? "text-amber-400"
                                 : line.startsWith("→") || line.match(/^\d\d:\d\d/)
                                   ? "brand-text"
-                                  : "text-[#8888aa]"
+                                  : "[color:var(--mk-text-muted)]"
                           }
                         >
                           {line}
@@ -473,10 +473,10 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                   </div>
                 </div>
               ) : (
-                <div className="hidden lg:flex items-center justify-center h-full min-h-[300px] rounded-2xl border border-dashed border-[#1e1e3a]">
+                <div className="hidden lg:flex items-center justify-center h-full min-h-[300px] rounded-2xl border border-dashed [border-color:var(--mk-border)]">
                   <div className="text-center px-8">
                     {CatIcon && <CatIcon size={32} className="brand-text mx-auto mb-4" />}
-                    <p className="text-sm text-[#7878a0] max-w-xs">
+                    <p className="text-sm [color:var(--mk-text-subtle)] max-w-xs">
                       {lang === "en"
                         ? "Enforced by tests, not policy docs — deterministic, verifiable behavior."
                         : "Durch Tests erzwungen, nicht durch Policy-Dokumente — deterministisches, prüfbares Verhalten."}
@@ -490,7 +490,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
 
         {/* Everything at a glance */}
         <section className="relative z-10 px-6 max-w-6xl mx-auto pb-24">
-          <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] text-center mb-12">
+          <h2 className="text-2xl md:text-3xl font-black [color:var(--mk-text)] text-center mb-12">
             {lang === "en" ? "Six capability areas, one engine" : "Sechs Fähigkeits-Bereiche, eine Engine"}
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -508,13 +508,13 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewport}
                   transition={{ duration: 0.35, delay: (i % 3) * 0.08 }}
-                  className="group text-left p-6 rounded-2xl border border-[#1e1e3a] bg-[#0d0d1a] hover:brand-border hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
+                  className="group text-left p-6 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] hover:brand-border hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
                 >
                   <div className="w-11 h-11 rounded-xl brand-soft border brand-border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     {Icon && <Icon size={20} className="brand-text" />}
                   </div>
-                  <h3 className="text-base font-bold text-[#e8e8f0] mb-1.5">{c.title}</h3>
-                  <p className="text-sm text-[#8888aa] leading-relaxed line-clamp-3">{c.intro}</p>
+                  <h3 className="text-base font-bold [color:var(--mk-text)] mb-1.5">{c.title}</h3>
+                  <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed line-clamp-3">{c.intro}</p>
                   <span className="inline-flex items-center gap-1 text-xs brand-text mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     {lang === "en" ? "Explore" : "Ansehen"} <ArrowRight size={12} />
                   </span>
@@ -525,10 +525,10 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* CTA */}
-        <section className="relative z-10 py-24 px-6 text-center max-w-3xl mx-auto border-t border-[#1e1e3a]">
+        <section className="relative z-10 py-24 px-6 text-center max-w-3xl mx-auto border-t [border-color:var(--mk-border)]">
           <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow" />
-          <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{t.ctaTitle}</h2>
-          <p className="text-lg text-[#8888aa] mb-10">{t.ctaSub}</p>
+          <h2 className="text-3xl md:text-4xl font-black [color:var(--mk-text)] mb-4">{t.ctaTitle}</h2>
+          <p className="text-lg [color:var(--mk-text-muted)] mb-10">{t.ctaSub}</p>
           <Link href={p(lang, "/signup")}>
             <Button size="xl" variant="glow">
               {t.ctaButton} <ArrowRight size={18} />

@@ -2,36 +2,60 @@
  * Bulk import split statute pages into the Brain engine.
  *
  * Reads law-corpus-split/{de,at,ch}/ and POSTs each .md as a page.
- * Requires a running engine and either:
- *   - SIGMABRAIN_WEB_API_KEY env var (service-to-service)
- *   - A valid user session (interactive, slower)
+ * Idempotent: 409 Conflict = already exists = treated as success.
+ * Includes exponential-backoff retry for transient network errors.
  *
- * Usage on the engine host (e.g. Hetzner prod):
- *   bun server/scripts/import-statutes.ts [--engine http://localhost:3001] [--key KEY] [--brain law] [--source law-de|law-at|law-all]
+ * Prerequisites:
+ *   1. Run split-statutes.ts first to populate law-corpus-split/
+ *   2. Engine must be running: gbrain serve --http --port 3001
+ *   3. SIGMABRAIN_WEB_API_KEY or --key must be set
  *
- * The script is idempotent: re-running updates existing pages by slug.
+ * Usage on engine host (e.g. Hetzner prod):
+ *   bun server/scripts/import-statutes.ts \
+ *     [--engine http://localhost:3001] \
+ *     [--key API_KEY] \
+ *     [--brain BRAIN_ID] \
+ *     [--source law-de|law-at|law-all] \
+ *     [--jur de|at|ch] \
+ *     [--dry-run] \
+ *     [--concurrency 10]
  */
 
 import { readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
 
-const ENGINE = process.argv.includes("--engine")
-  ? process.argv[process.argv.indexOf("--engine") + 1]
-  : (process.env.SIGMABRAIN_API_URL || process.env.GBRAIN_API_URL || "http://localhost:3001");
+const ENGINE =
+  getArg("--engine") ??
+  process.env.SIGMABRAIN_API_URL ??
+  process.env.GBRAIN_API_URL ??
+  "http://localhost:3001";
 
-const API_KEY = process.argv.includes("--key")
-  ? process.argv[process.argv.indexOf("--key") + 1]
-  : (process.env.SIGMABRAIN_WEB_API_KEY || process.env.GBRAIN_WEB_API_KEY || "");
+const API_KEY =
+  getArg("--key") ??
+  process.env.SIGMABRAIN_WEB_API_KEY ??
+  process.env.GBRAIN_WEB_API_KEY ??
+  "";
 
-const BRAIN = process.argv.includes("--brain")
-  ? process.argv[process.argv.indexOf("--brain") + 1]
-  : (process.env.IMPORT_BRAIN_ID || "law");
+const BRAIN = getArg("--brain") ?? process.env.IMPORT_BRAIN_ID ?? "";
 
-const SOURCE_ARG = process.argv.includes("--source")
-  ? process.argv[process.argv.indexOf("--source") + 1]
-  : "law-all";
+const SOURCE = getArg("--source") ?? "law-all";
 
-interface ImportResult { ok: boolean; slug: string; error?: string }
+const JUR_FILTER = getArg("--jur");
+
+const DRY_RUN = process.argv.includes("--dry-run");
+
+const CONCURRENCY = Number(getArg("--concurrency") ?? "10");
+
+const MAX_RETRIES = 3;
+const RETRY_BASE_MS = 500;
+
+// ── CLI helpers ───────────────────────────────────────────────────────
+
+function getArg(flag: string): string | undefined {
+  const idx = process.argv.indexOf(flag);
+  return idx !== -1 ? process.argv[idx + 1] : undefined;
+}
+
+// ── Frontmatter parser ────────────────────────────────────────────────
 
 function parseFrontmatter(text: string): Record<string, string> {
   if (!text.startsWith("---")) return {};
@@ -41,139 +65,257 @@ function parseFrontmatter(text: string): Record<string, string> {
   const fm: Record<string, string> = {};
   for (const line of raw.split("\n")) {
     const m = line.match(/^([a-z_]+):\s*(.*)$/);
-    if (m) fm[m[1]] = m[2].replace(/^"|"$/g, "");
+    if (m) fm[m[1]] = m[2].replace(/^"|"$/g, "").trim();
   }
   return fm;
 }
 
-async function importPage(path: string): Promise<ImportResult> {
-  const text = readFileSync(path, "utf8");
+// ── Retry helper ──────────────────────────────────────────────────────
+
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  label: string,
+  retries = MAX_RETRIES,
+): Promise<T> {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      if (attempt < retries) {
+        const wait = RETRY_BASE_MS * 2 ** attempt;
+        await new Promise((r) => setTimeout(r, wait));
+      }
+    }
+  }
+  throw new Error(`${label} failed after ${retries + 1} attempts: ${String(lastErr)}`);
+}
+
+// ── Import a single page ──────────────────────────────────────────────
+
+interface ImportResult {
+  ok: boolean;
+  slug: string;
+  existing?: boolean;
+  error?: string;
+}
+
+async function importPage(filePath: string): Promise<ImportResult> {
+  const text = readFileSync(filePath, "utf8");
   const fm = parseFrontmatter(text);
-  const slug = fm.slug || join("law", fm.jurisdiction || "unknown", fm.abbreviation?.toLowerCase() || "unknown", (fm.paragraph || "").replace(/\s+/g, ""));
-  const title = fm.title || slug;
-  const body = text.slice(text.indexOf("---", 3) + 3).trimStart();
+
+  const abbr = fm.abbreviation || "unknown";
+  const jur = fm.jurisdiction || "unknown";
+  const para = fm.paragraph || "";
+
+  // Build a deterministic, URL-safe slug using forward slashes (not path.join!)
+  const slug =
+    fm.slug ||
+    `law/${jur}/${abbr.toLowerCase()}/${para.replace(/[^a-z0-9]/gi, "").toLowerCase()}`;
+
+  const title = fm.title || `${abbr} ${para}`.trim();
+
+  // Extract body (everything after frontmatter)
+  const fmEnd = text.indexOf("---", 3);
+  const body = fmEnd !== -1 ? text.slice(fmEnd + 3).trimStart() : text;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    "x-sigmabrain-source": BRAIN,
   };
   if (API_KEY) headers["x-sigmabrain-api-key"] = API_KEY;
+  if (BRAIN) headers["x-sigmabrain-source"] = BRAIN;
 
   const payload = {
     slug,
     title,
     content: body,
     type: fm.type || "law",
-    jurisdiction: fm.jurisdiction,
-    abbreviation: fm.abbreviation,
-    paragraph: fm.paragraph,
-    parent_law: fm.parent_law,
-    version_date: fm.version_date,
-    source_url: fm.source_url,
-    license: fm.license,
-    tags: ["statute", fm.jurisdiction, fm.abbreviation?.toLowerCase()].filter(Boolean),
-    source: SOURCE_ARG,
+    tags: ["statute", jur, abbr.toLowerCase()].filter(Boolean),
+    source: SOURCE,
+    // Metadata fields stored on the page
+    meta: {
+      jurisdiction: jur,
+      abbreviation: abbr,
+      paragraph: para,
+      parent_law: fm.parent_law || "",
+      version_date: fm.version_date || "",
+      source_url: fm.source_url || "",
+      license: fm.license || "",
+    },
   };
 
-  try {
+  if (DRY_RUN) {
+    return { ok: true, slug };
+  }
+
+  return withRetry(async () => {
     const res = await fetch(`${ENGINE}/api/pages`, {
       method: "POST",
       headers,
       body: JSON.stringify(payload),
     });
-    if (res.ok || res.status === 409) {
-      // 409 = page already exists (idempotent)
-      return { ok: true, slug };
+
+    if (res.ok) return { ok: true, slug };
+    if (res.status === 409) return { ok: true, slug, existing: true };
+
+    // Non-retryable client errors
+    if (res.status >= 400 && res.status < 500) {
+      const body = await res.text().catch(() => `HTTP ${res.status}`);
+      return { ok: false, slug, error: `${res.status}: ${body.slice(0, 200)}` };
     }
-    const err = await res.text().catch(() => `HTTP ${res.status}`);
-    return { ok: false, slug, error: err };
-  } catch (e) {
-    return { ok: false, slug, error: e instanceof Error ? e.message : String(e) };
-  }
+
+    // 5xx = potentially transient, let withRetry handle it
+    throw new Error(`HTTP ${res.status}`);
+  }, `import ${slug}`);
 }
 
-async function ensureSource(): Promise<boolean> {
+// ── Source registration ───────────────────────────────────────────────
+
+async function ensureSource(sourceId: string): Promise<void> {
+  if (DRY_RUN || !API_KEY) return;
+
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    "x-sigmabrain-source": BRAIN,
   };
   if (API_KEY) headers["x-sigmabrain-api-key"] = API_KEY;
+  if (BRAIN) headers["x-sigmabrain-source"] = BRAIN;
 
   try {
     const res = await fetch(`${ENGINE}/api/sources`, {
       method: "POST",
       headers,
-      body: JSON.stringify({ id: SOURCE_ARG, name: SOURCE_ARG, public: true }),
+      body: JSON.stringify({ id: sourceId, name: sourceId, public: true }),
     });
-    return res.ok || res.status === 409;
-  } catch {
-    return false;
+    if (res.ok) {
+      console.log(`  Source "${sourceId}" created`);
+    } else if (res.status === 409) {
+      console.log(`  Source "${sourceId}" already exists`);
+    } else {
+      console.warn(`  Warning: source creation returned ${res.status}`);
+    }
+  } catch (err) {
+    console.warn(`  Warning: source creation failed: ${String(err)}`);
   }
 }
 
-// ── Main ──────────────────────────────────────────────────────────────
+// ── Concurrency limiter ───────────────────────────────────────────────
+
+async function runWithConcurrency<T>(
+  items: T[],
+  fn: (item: T) => Promise<void>,
+  limit: number,
+): Promise<void> {
+  let idx = 0;
+  async function worker() {
+    while (idx < items.length) {
+      const i = idx++;
+      await fn(items[i]);
+    }
+  }
+  await Promise.all(Array.from({ length: limit }, worker));
+}
+
+// ── Main ─────────────────────────────────────────────────────────────
 
 async function main() {
-  if (!API_KEY) {
-    console.error("ERROR: No API key. Set SIGMABRAIN_WEB_API_KEY or pass --key");
+  if (!API_KEY && !DRY_RUN) {
+    console.error("ERROR: No API key. Set SIGMABRAIN_WEB_API_KEY or pass --key KEY");
+    console.error("       Or run with --dry-run to validate files without importing.");
     process.exit(1);
   }
 
-  console.log(`Engine: ${ENGINE}`);
-  console.log(`Brain:  ${BRAIN}`);
-  console.log(`Source: ${SOURCE_ARG}`);
+  console.log("Statute Import");
+  console.log(`  Engine:      ${ENGINE}`);
+  console.log(`  Brain:       ${BRAIN || "(default)"}`);
+  console.log(`  Source:      ${SOURCE}`);
+  console.log(`  Jurisdiction: ${JUR_FILTER || "all"}`);
+  console.log(`  Concurrency: ${CONCURRENCY}`);
+  console.log(`  Dry-run:     ${DRY_RUN}`);
   console.log("");
 
   // Verify engine reachable
-  try {
-    const health = await fetch(`${ENGINE}/api/health`, { method: "GET" });
-    if (!health.ok) throw new Error(`HTTP ${health.status}`);
-    console.log("Engine: OK");
-  } catch {
-    console.error("ERROR: Engine not reachable. Start it first: gbrain serve");
+  if (!DRY_RUN) {
+    try {
+      const health = await fetch(`${ENGINE}/api/health`);
+      if (!health.ok) throw new Error(`HTTP ${health.status}`);
+      console.log("Engine: reachable\n");
+    } catch {
+      console.error("ERROR: Engine not reachable. Start it first: gbrain serve");
+      process.exit(1);
+    }
+  }
+
+  // Ensure sources exist
+  const sources = SOURCE === "law-all"
+    ? ["law-de", "law-at", "law-ch", "law-all"]
+    : [SOURCE];
+  for (const s of sources) {
+    await ensureSource(s);
+  }
+  console.log("");
+
+  // Collect files from split corpus
+  const dirs = (JUR_FILTER ? [JUR_FILTER] : ["de", "at", "ch"]) as string[];
+  const files: string[] = [];
+  for (const d of dirs) {
+    const dir = `law-corpus-split/${d}`;
+    try {
+      for (const f of readdirSync(dir)) {
+        if (f.endsWith(".md")) files.push(`${dir}/${f}`);
+      }
+    } catch {
+      console.warn(`  Skipping ${dir} (not found — run split-statutes.ts first)`);
+    }
+  }
+
+  if (files.length === 0) {
+    console.error("No files to import. Run split-statutes.ts first.");
     process.exit(1);
   }
 
-  // Ensure source exists
-  console.log("Ensuring source...");
-  const sourceOk = await ensureSource();
-  if (!sourceOk) console.warn("Warning: could not create source (may already exist)");
-
-  // Collect files
-  const dirs = ["de", "at", "ch"];
-  const files: string[] = [];
-  for (const d of dirs) {
-    const dir = join("law-corpus-split", d);
-    try {
-      for (const f of readdirSync(dir)) {
-        if (f.endsWith(".md")) files.push(join(dir, f));
-      }
-    } catch { /* skip missing */ }
-  }
-
-  console.log(`Importing ${files.length} pages...\n`);
+  console.log(`Importing ${files.length} pages with concurrency=${CONCURRENCY}...\n`);
 
   let ok = 0;
+  let existing = 0;
   let fail = 0;
-  const batch = 10;
+  const failures: { slug: string; error: string }[] = [];
+  let processed = 0;
 
-  for (let i = 0; i < files.length; i += batch) {
-    const chunk = files.slice(i, i + batch);
-    const results = await Promise.all(chunk.map(importPage));
-    for (const r of results) {
-      if (r.ok) ok++;
-      else {
-        fail++;
-        if (fail <= 5) console.error(`  FAIL ${r.slug}: ${r.error}`);
-      }
+  await runWithConcurrency(files, async (filePath) => {
+    const result = await importPage(filePath);
+    processed++;
+
+    if (result.ok) {
+      if (result.existing) existing++;
+      else ok++;
+    } else {
+      fail++;
+      failures.push({ slug: result.slug, error: result.error || "unknown" });
     }
-    if ((i + batch) % 100 === 0 || i + batch >= files.length) {
-      console.log(`  ${Math.min(i + batch, files.length)}/${files.length} done (ok=${ok}, fail=${fail})`);
+
+    // Progress every 200 pages
+    if (processed % 200 === 0) {
+      console.log(
+        `  [${processed}/${files.length}] ok=${ok} existing=${existing} fail=${fail}`,
+      );
     }
+  }, CONCURRENCY);
+
+  // Final report
+  console.log(`\n${"─".repeat(60)}`);
+  console.log(`Done: ${processed} processed`);
+  console.log(`  New:      ${ok}`);
+  console.log(`  Existing: ${existing} (idempotent)`);
+  console.log(`  Failed:   ${fail}`);
+
+  if (failures.length > 0) {
+    console.error("\nAll failures:");
+    for (const f of failures) {
+      console.error(`  ${f.slug}: ${f.error}`);
+    }
+    process.exit(1);
   }
-
-  console.log(`\nDone: ${ok} ok, ${fail} failed`);
-  if (fail > 0) process.exit(1);
 }
 
 main();

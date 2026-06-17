@@ -265,21 +265,21 @@ export default function DashboardReel({
   const step = STEPS[phase];
 
   return (
-    <div className={`relative rounded-2xl border border-[#1e1e3a] bg-[#0a0a14] shadow-2xl shadow-black/60 overflow-hidden ${className}`}>
+    <div className={`relative rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-bg)] shadow-2xl shadow-black/60 overflow-hidden ${className}`}>
       {/* window bar */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1e1e3a] bg-[#0d0d1a]">
+      <div className="flex items-center gap-2 px-4 py-3 border-b [border-color:var(--mk-border)] [background:var(--mk-surface)]">
         <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-        <div className="flex-1 ml-3 text-xs text-[#7878a0] font-mono">sigmabrain — dashboard</div>
+        <div className="flex-1 ml-3 text-xs [color:var(--mk-text-subtle)] font-mono">sigmabrain — dashboard</div>
         <span className="text-[10px] brand-text font-medium">live</span>
       </div>
 
       <div className="grid grid-cols-[120px_1fr] h-[330px]">
         {/* mini sidebar */}
-        <div className="border-r border-[#1e1e3a] bg-[#0b0b16] p-3 hidden sm:flex flex-col gap-1.5">
+        <div className="border-r [border-color:var(--mk-border)] [background:var(--mk-surface-2)] p-3 hidden sm:flex flex-col gap-1.5">
           {sidebar.map((t, i) => (
-            <div key={t} className={`text-[11px] px-2 py-1.5 rounded-md ${i === 0 ? "brand-soft brand-text" : "text-[#8888aa]"}`}>{t}</div>
+            <div key={t} className={`text-[11px] px-2 py-1.5 rounded-md ${i === 0 ? "brand-soft brand-text" : "[color:var(--mk-text-muted)]"}`}>{t}</div>
           ))}
         </div>
 
@@ -288,8 +288,8 @@ export default function DashboardReel({
           <div className="flex-1 space-y-3 overflow-hidden">
             {userSent && (
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex justify-end">
-                <div className="max-w-[80%] rounded-xl rounded-tr-sm bg-[#13132a] border border-[#1e1e3a] px-3 py-2">
-                  <p className="text-xs text-[#e8e8f0]">{r.question}</p>
+                <div className="max-w-[80%] rounded-xl rounded-tr-sm [background:var(--mk-surface)] border [border-color:var(--mk-border)] px-3 py-2">
+                  <p className="text-xs [color:var(--mk-text)]">{r.question}</p>
                   <span className="mt-1 inline-flex items-center gap-1 text-[10px] brand-text">
                     <FileText size={10} /> {r.file}
                   </span>
@@ -297,7 +297,7 @@ export default function DashboardReel({
               </motion.div>
             )}
             {thinking && (
-              <div className="flex items-center gap-1.5 text-[#8888aa] text-xs">
+              <div className="flex items-center gap-1.5 [color:var(--mk-text-muted)] text-xs">
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-bounce" />
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-bounce [animation-delay:0.15s]" />
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-bounce [animation-delay:0.3s]" />
@@ -309,7 +309,7 @@ export default function DashboardReel({
                   <Sparkles size={12} className="brand-text" />
                 </div>
                 <div className="max-w-[85%]">
-                  <p className="text-xs text-[#c8c8d8] leading-relaxed">{r.answer}</p>
+                  <p className="text-xs [color:var(--mk-text-muted)] leading-relaxed">{r.answer}</p>
                   <div className="mt-2 flex flex-wrap gap-1">
                     {r.sources.map((s) => (
                       <span key={s} className="text-[9px] font-mono brand-text brand-soft px-1.5 py-0.5 rounded">{s}</span>
@@ -321,11 +321,11 @@ export default function DashboardReel({
           </div>
 
           {/* input bar */}
-          <div className="mt-3 flex items-center gap-2 rounded-xl border border-[#1e1e3a] bg-[#0b0b16] px-2 py-2">
+          <div className="mt-3 flex items-center gap-2 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface-2)] px-2 py-2">
             <div className={`flex items-center gap-1 rounded-lg px-1.5 py-1 ${fileAttached ? "brand-soft" : ""}`}>
-              <Paperclip size={14} className={fileAttached ? "brand-text" : "text-[#7878a0]"} />
+              <Paperclip size={14} className={fileAttached ? "brand-text" : "[color:var(--mk-text-subtle)]"} />
             </div>
-            <div className="flex-1 text-xs text-[#e8e8f0] min-h-[16px]">
+            <div className="flex-1 text-xs [color:var(--mk-text)] min-h-[16px]">
               {fileAttached && !userSent && (
                 <span className="mr-1 inline-flex items-center gap-1 text-[10px] brand-text align-middle">
                   <FileText size={10} /> {r.file}

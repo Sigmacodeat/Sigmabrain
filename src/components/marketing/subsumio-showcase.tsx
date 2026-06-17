@@ -64,11 +64,13 @@ const reveal = (i: number) => ({
   transition: { duration: 0.5, delay: Math.min(i * 0.06, 0.4), ease: [0.21, 0.5, 0.27, 1] as const },
 });
 
-function PhoneCopilot({ lang }: { lang: Lang }) {
+export function PhoneCopilot({ lang }: { lang: Lang }) {
   const reduce = useReducedMotion();
   const c = COPY[lang];
   return (
-    <div className="relative mx-auto w-[300px]">
+    // Always-dark device mock: pin data-tone="dark" so --mk-* inside resolves
+    // dark even when the phone sits on a light page.
+    <div data-tone="dark" className="relative mx-auto w-[300px]">
       {/* glow behind the phone */}
       <div className="absolute -inset-6 rounded-[3rem] blur-2xl opacity-40" style={{ background: "radial-gradient(circle, var(--brand-glow), transparent 70%)" }} />
       <div className="relative rounded-[2.5rem] border border-[#23233f] bg-[#0a0a14] p-2.5 shadow-2xl shadow-black/60">
@@ -79,7 +81,7 @@ function PhoneCopilot({ lang }: { lang: Lang }) {
               <ShieldCheck size={15} className="text-white" />
             </div>
             <div className="leading-tight">
-              <p className="text-xs font-semibold text-[#e8e8f0]">{c.phoneHeader}</p>
+              <p className="text-xs font-semibold [color:var(--mk-text)]">{c.phoneHeader}</p>
               <p className="text-[10px] text-emerald-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />{c.phoneStatus}</p>
             </div>
           </div>
@@ -102,7 +104,7 @@ function PhoneCopilot({ lang }: { lang: Lang }) {
                   {"chips" in m && m.chips && (
                     <span className="mt-2 flex gap-1.5">
                       {m.chips.map((ch) => (
-                        <span key={ch} className={`text-[10px] px-2 py-0.5 rounded-full border ${ch === m.chips![0] ? "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" : "border-[#2a3a55] text-[#8fa6c5]"}`}>{ch}</span>
+                        <span key={ch} className={`text-[10px] px-2 py-0.5 rounded-full border ${ch === m.chips![0] ? "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" : "[border-color:var(--mk-border-strong)] text-[#8fa6c5]"}`}>{ch}</span>
                       ))}
                     </span>
                   )}
@@ -116,80 +118,96 @@ function PhoneCopilot({ lang }: { lang: Lang }) {
   );
 }
 
-export default function SubsumioShowcase({ lang }: { lang: Lang }) {
+/** WhatsApp-Copilot spotlight — the winning USP. Always a DARK spotlight band
+ *  (pins data-tone="dark"); reused on the homepage teaser and the /whatsapp
+ *  deep-dive page. */
+export function WhatsAppSpotlight({ lang, children }: { lang: Lang; children?: React.ReactNode }) {
   const c = COPY[lang];
-  const features = VERTICALS[lang].legal.features;
 
   return (
-    <>
-      {/* WhatsApp Copilot spotlight */}
-      <section className="relative z-10 py-24 px-6 border-y border-[#15233a] overflow-hidden" style={{ background: "linear-gradient(180deg, rgba(13,25,45,0.35), transparent)" }}>
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
-          <motion.div {...reveal(0)}>
-            <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold brand-text brand-soft border brand-border mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-pulse" /> {c.waEyebrow}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4 leading-tight">{c.waTitle}</h2>
-            <p className="text-base text-[#9aa3b8] leading-relaxed mb-8 max-w-lg">{c.waSub}</p>
-            <div className="space-y-4">
-              {c.waPoints.map((pt, i) => {
-                const Icon = pt.icon;
-                return (
-                  <motion.div key={pt.t} {...reveal(i + 1)} className="flex gap-3.5">
-                    <div className="w-9 h-9 rounded-xl brand-soft border brand-border flex items-center justify-center shrink-0">
-                      <Icon size={16} className="brand-text" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-[#e8e8f0]">{pt.t}</p>
-                      <p className="text-sm text-[#8a93a8] leading-relaxed mt-0.5">{pt.d}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
-          <motion.div {...reveal(1)}>
-            <PhoneCopilot lang={lang} />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Bento feature grid — every capability */}
-      <section className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
-        <motion.div {...reveal(0)} className="text-center mb-14">
-          <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium brand-soft brand-text border brand-border mb-4">{c.bentoEyebrow}</span>
-          <h2 className="text-3xl md:text-4xl font-black text-[#e8e8f0] mb-4">{c.bentoTitle}</h2>
-          <p className="text-lg text-[#8a93a8] max-w-2xl mx-auto">{c.bentoSub}</p>
-        </motion.div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
-          {features.map((f, i) => {
-            const Icon = ICONS[f.icon];
-            const featured = i === 0 || i === 4; // two emphasis tiles
-            return (
-              <motion.div
-                key={f.title}
-                {...reveal(i)}
-                whileHover={{ y: -4 }}
-                className={`group relative p-6 rounded-2xl border bg-[#0b1020] overflow-hidden transition-colors duration-300 ${featured ? "sm:col-span-2 brand-border" : "border-[#1a2236] hover:border-[#2a3a55]"}`}
-              >
-                {featured && (
-                  <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full blur-2xl opacity-30" style={{ background: "radial-gradient(circle, var(--brand-glow), transparent 70%)" }} />
-                )}
-                <div className="relative">
-                  <div className="w-11 h-11 rounded-xl brand-soft border brand-border flex items-center justify-center mb-4">
-                    {Icon && <Icon size={19} className="brand-text" />}
+    <section data-tone="dark" className="relative z-10 py-28 px-6 border-y [border-color:var(--mk-border)] overflow-hidden" style={{ background: "linear-gradient(180deg, rgba(13,25,45,0.35), var(--mk-bg))" }}>
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
+        <motion.div {...reveal(0)}>
+          <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold brand-text brand-soft border brand-border mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)] animate-pulse" /> {c.waEyebrow}
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black [color:var(--mk-text)] mb-4 leading-tight">{c.waTitle}</h2>
+          <p className="text-base [color:var(--mk-text-muted)] leading-relaxed mb-8 max-w-lg">{c.waSub}</p>
+          <div className="space-y-4">
+            {c.waPoints.map((pt, i) => {
+              const Icon = pt.icon;
+              return (
+                <motion.div key={pt.t} {...reveal(i + 1)} className="flex gap-3.5">
+                  <div className="w-9 h-9 rounded-xl brand-soft border brand-border flex items-center justify-center shrink-0">
+                    <Icon size={16} className="brand-text" />
                   </div>
-                  <h3 className="text-base font-semibold text-[#e8e8f0] mb-2 flex items-center gap-2">
-                    {f.title}
-                    {featured && <Check size={14} className="brand-text" />}
-                  </h3>
-                  <p className="text-sm text-[#8a93a8] leading-relaxed">{f.desc}</p>
+                  <div>
+                    <p className="text-sm font-semibold [color:var(--mk-text)]">{pt.t}</p>
+                    <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed mt-0.5">{pt.d}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+          {children}
+        </motion.div>
+        <motion.div {...reveal(1)}>
+          <PhoneCopilot lang={lang} />
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/** Bento feature grid — every capability. Tone-flexible: inherits the
+ *  surrounding section tone (place inside a <Section tone=…>). */
+export function FeatureBento({ lang }: { lang: Lang }) {
+  const c = COPY[lang];
+  const features = VERTICALS[lang].legal.features;
+  return (
+    <div className="relative z-10 py-28 px-6 max-w-6xl mx-auto">
+      <motion.div {...reveal(0)} className="text-center mb-14">
+        <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium brand-soft brand-text border brand-border mb-4">{c.bentoEyebrow}</span>
+        <h2 className="text-3xl md:text-4xl font-black [color:var(--mk-text)] mb-4">{c.bentoTitle}</h2>
+        <p className="text-lg [color:var(--mk-text-muted)] max-w-2xl mx-auto">{c.bentoSub}</p>
+      </motion.div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
+        {features.map((f, i) => {
+          const Icon = ICONS[f.icon];
+          const featured = i === 0 || i === 4; // two emphasis tiles
+          return (
+            <motion.div
+              key={f.title}
+              {...reveal(i)}
+              whileHover={{ y: -4 }}
+              className={`group relative p-6 rounded-2xl border [background:var(--mk-surface)] overflow-hidden transition-colors duration-300 ${featured ? "sm:col-span-2 brand-border" : "[border-color:var(--mk-border)] hover:[border-color:var(--mk-border-strong)]"}`}
+            >
+              {featured && (
+                <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full blur-2xl opacity-30" style={{ background: "radial-gradient(circle, var(--brand-glow), transparent 70%)" }} />
+              )}
+              <div className="relative">
+                <div className="w-11 h-11 rounded-xl brand-soft border brand-border flex items-center justify-center mb-4">
+                  {Icon && <Icon size={19} className="brand-text" />}
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
+                <h3 className="text-base font-semibold [color:var(--mk-text)] mb-2 flex items-center gap-2">
+                  {f.title}
+                  {featured && <Check size={14} className="brand-text" />}
+                </h3>
+                <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{f.desc}</p>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default function SubsumioShowcase({ lang }: { lang: Lang }) {
+  return (
+    <>
+      <WhatsAppSpotlight lang={lang} />
+      <FeatureBento lang={lang} />
     </>
   );
 }
