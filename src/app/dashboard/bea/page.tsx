@@ -136,8 +136,8 @@ export default function BeaPage() {
             <Mail size={20} className="text-blue-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">beA — elektronischer Rechtsverkehr</h1>
-            <p className="text-sm text-[#8888aa]">Nachrichten-Import und Entwurfsvorbereitung</p>
+            <h1 className="text-xl font-bold text-[#15151d]">beA — elektronischer Rechtsverkehr</h1>
+            <p className="text-sm text-[#585866]">Nachrichten-Import und Entwurfsvorbereitung</p>
           </div>
         </div>
         <Button
@@ -172,7 +172,7 @@ export default function BeaPage() {
       )}
 
       {/* Status feedback for save actions */}
-      <div aria-live="polite" className="min-h-5 text-xs text-[#8888aa]">{statusMessage}</div>
+      <div aria-live="polite" className="min-h-5 text-xs text-[#585866]">{statusMessage}</div>
 
       {/* Compose */}
       {showCompose && (
@@ -183,47 +183,47 @@ export default function BeaPage() {
           <h2 className="text-sm font-semibold text-blue-400">Neuer beA-Entwurf</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="bea-recipient" className="text-xs text-[#8888aa] block mb-1">Empfänger (Gericht/Behörde) *</label>
+              <label htmlFor="bea-recipient" className="text-xs text-[#585866] block mb-1">Empfänger (Gericht/Behörde) *</label>
               <input
                 id="bea-recipient"
                 value={recipient}
                 onChange={(e) => setRecipient(e.target.value)}
                 placeholder="z. B. Amtsgericht München"
                 required
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8888aa] focus:outline-none focus:border-blue-500/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-blue-500/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
               />
             </div>
             <div>
-              <label htmlFor="bea-case" className="text-xs text-[#8888aa] block mb-1">Aktenzeichen</label>
+              <label htmlFor="bea-case" className="text-xs text-[#585866] block mb-1">Aktenzeichen</label>
               <input
                 id="bea-case"
                 value={caseNumber}
                 onChange={(e) => setCaseNumber(e.target.value)}
                 placeholder="2026-001"
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8888aa] focus:outline-none focus:border-blue-500/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-blue-500/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
               />
             </div>
           </div>
           <div>
-            <label htmlFor="bea-subject" className="text-xs text-[#8888aa] block mb-1">Betreff *</label>
+            <label htmlFor="bea-subject" className="text-xs text-[#585866] block mb-1">Betreff *</label>
             <input
               id="bea-subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="z. B. Klageerwiderung"
               required
-              className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8888aa] focus:outline-none focus:border-blue-500/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
+              className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-blue-500/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
             />
           </div>
           <div>
-            <label htmlFor="bea-body" className="text-xs text-[#8888aa] block mb-1">Nachrichtentext</label>
+            <label htmlFor="bea-body" className="text-xs text-[#585866] block mb-1">Nachrichtentext</label>
             <textarea
               id="bea-body"
               value={body}
               onChange={(e) => setBody(e.target.value)}
               rows={6}
               placeholder="Nachrichtentext…"
-              className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8888aa] focus:outline-none focus:border-blue-500/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400 resize-y"
+              className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-blue-500/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400 resize-y"
             />
           </div>
           {/* EU AI Act Art. 50: Nutzer markiert KI-generierten Inhalt, damit der
@@ -236,7 +236,7 @@ export default function BeaPage() {
               onChange={(e) => setAiGenerated(e.target.checked)}
               className="mt-0.5 accent-amber-500"
             />
-            <span className="text-xs text-[#8888aa] leading-relaxed">
+            <span className="text-xs text-[#585866] leading-relaxed">
               Inhalt KI-generiert — als „{AI_BADGE_LABEL}&quot; kennzeichnen (EU AI Act Art. 50)
             </span>
           </label>
@@ -260,24 +260,24 @@ export default function BeaPage() {
         <>
           {/* Drafts */}
           <section aria-labelledby="bea-drafts-heading">
-            <h2 id="bea-drafts-heading" className="text-sm font-semibold text-[#e8e8f0] mb-2">
+            <h2 id="bea-drafts-heading" className="text-sm font-semibold text-[#15151d] mb-2">
               Entwürfe ({drafts.length})
             </h2>
             <div className="space-y-2">
               {drafts.length === 0 ? (
-                <p className="text-sm text-[#8888aa] py-4">Keine Entwürfe vorhanden.</p>
+                <p className="text-sm text-[#585866] py-4">Keine Entwürfe vorhanden.</p>
               ) : (
                 drafts.map((msg) => (
                   <div
                     key={msg.slug}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff]"
                   >
                     <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0" aria-hidden="true">
                       <FileText size={14} className="text-amber-400" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-[#e8e8f0]">{msg.subject}</span>
+                        <span className="text-sm font-medium text-[#15151d]">{msg.subject}</span>
                         <Badge variant="default" className="text-[10px] bg-amber-500/10 text-amber-400 border-amber-500/20">
                           Entwurf
                         </Badge>
@@ -287,7 +287,7 @@ export default function BeaPage() {
                           </Badge>
                         )}
                       </div>
-                      <div className="text-xs text-[#8888aa] mt-0.5">
+                      <div className="text-xs text-[#585866] mt-0.5">
                         An: {msg.recipient} {msg.caseNumber && `· Akte ${msg.caseNumber}`} · {msg.createdAt}
                       </div>
                     </div>
@@ -299,12 +299,12 @@ export default function BeaPage() {
 
           {/* Imported messages from the bea-import connector */}
           <section aria-labelledby="bea-imported-heading">
-            <h2 id="bea-imported-heading" className="text-sm font-semibold text-[#e8e8f0] mb-2">
+            <h2 id="bea-imported-heading" className="text-sm font-semibold text-[#15151d] mb-2">
               Importierte Nachrichten ({imported.length})
             </h2>
             <div className="space-y-2">
               {imported.length === 0 ? (
-                <div className="text-sm text-[#8888aa] py-4 space-y-1">
+                <div className="text-sm text-[#585866] py-4 space-y-1">
                   <p>Keine importierten beA-Nachrichten.</p>
                   <p className="text-xs">
                     Import einrichten: <code className="font-mono text-blue-400">gbrain connector add bea-import --watch-dir ~/Downloads/bea</code>
@@ -314,14 +314,14 @@ export default function BeaPage() {
                 imported.map((msg) => (
                   <div
                     key={msg.slug}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff]"
                   >
                     <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0" aria-hidden="true">
                       <Inbox size={14} className="text-blue-400" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="text-sm font-medium text-[#e8e8f0]">{msg.subject}</span>
-                      <div className="text-xs text-[#8888aa] mt-0.5">
+                      <span className="text-sm font-medium text-[#15151d]">{msg.subject}</span>
+                      <div className="text-xs text-[#585866] mt-0.5">
                         Von: {msg.sender} · {msg.sentDate}
                       </div>
                     </div>

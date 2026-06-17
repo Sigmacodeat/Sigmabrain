@@ -80,8 +80,8 @@ export default function ControllingPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#e8e8f0]">Leistungscontrolling</h1>
-          <p className="text-sm text-[#8888aa]">Übersicht über Anwälte, Stunden und Umsatz</p>
+          <h1 className="text-xl font-semibold text-[#15151d]">Leistungscontrolling</h1>
+          <p className="text-sm text-[#585866]">Übersicht über Anwälte, Stunden und Umsatz</p>
         </div>
         <div className="flex gap-2">
           {(["month", "quarter", "year"] as const).map((p) => (
@@ -91,7 +91,7 @@ export default function ControllingPage() {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 period === p
                   ? "bg-violet-500/20 text-violet-400 border border-violet-500/30"
-                  : "bg-[#12122a] text-[#8888aa] border border-[#1e1e3a] hover:border-[#3a3a6a]"
+                  : "bg-[#eceef3] text-[#585866] border border-[#e2e4ec] hover:border-[#b4b9c8]"
               }`}
             >
               {p === "month" ? "Monat" : p === "quarter" ? "Quartal" : "Jahr"}
@@ -101,48 +101,48 @@ export default function ControllingPage() {
       </div>
 
       {loading ? (
-        <div className="text-sm text-[#8888aa]">Lade Daten …</div>
+        <div className="text-sm text-[#585866]">Lade Daten …</div>
       ) : (
         <>
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-              <div className="flex items-center gap-2 text-[#8888aa] mb-2">
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+              <div className="flex items-center gap-2 text-[#585866] mb-2">
                 <Users size={14} />
                 <span className="text-xs">Anwälte</span>
               </div>
-              <div className="text-2xl font-semibold text-[#e8e8f0]">{stats.length}</div>
+              <div className="text-2xl font-semibold text-[#15151d]">{stats.length}</div>
             </div>
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-              <div className="flex items-center gap-2 text-[#8888aa] mb-2">
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+              <div className="flex items-center gap-2 text-[#585866] mb-2">
                 <Clock size={14} />
                 <span className="text-xs">Gesamtstunden</span>
               </div>
-              <div className="text-2xl font-semibold text-[#e8e8f0]">{totalHours.toFixed(1)} h</div>
+              <div className="text-2xl font-semibold text-[#15151d]">{totalHours.toFixed(1)} h</div>
             </div>
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-              <div className="flex items-center gap-2 text-[#8888aa] mb-2">
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+              <div className="flex items-center gap-2 text-[#585866] mb-2">
                 <Euro size={14} />
                 <span className="text-xs">Gesamtumsatz</span>
               </div>
               <div className="text-2xl font-semibold text-emerald-400">{totalRevenue.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</div>
             </div>
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-              <div className="flex items-center gap-2 text-[#8888aa] mb-2">
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+              <div className="flex items-center gap-2 text-[#585866] mb-2">
                 <TrendingUp size={14} />
                 <span className="text-xs">Ø Stundensatz</span>
               </div>
-              <div className="text-2xl font-semibold text-[#e8e8f0]">
+              <div className="text-2xl font-semibold text-[#15151d]">
                 {totalHours > 0 ? Math.round(totalRevenue / totalHours) : 0} €
               </div>
             </div>
           </div>
 
           {/* Lawyer Table */}
-          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] overflow-hidden">
+          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1e1e3a] text-[#8888aa]">
+                <tr className="border-b border-[#e2e4ec] text-[#585866]">
                   <th className="text-left px-4 py-3 font-medium">Anwalt</th>
                   <th className="text-right px-4 py-3 font-medium">Akten</th>
                   <th className="text-right px-4 py-3 font-medium">Stunden</th>
@@ -155,14 +155,14 @@ export default function ControllingPage() {
                 {stats.map((s) => {
                   const utilization = Math.min(100, Math.round((s.totalHours / s.targetHours) * 100));
                   return (
-                    <tr key={s.name} className="border-b border-[#1e1e3a]/50 hover:bg-[#0a0a18] transition-colors">
-                      <td className="px-4 py-3 text-[#e8e8f0]">{s.name}</td>
-                      <td className="px-4 py-3 text-right text-[#8888aa]">{s.caseCount}</td>
-                      <td className="px-4 py-3 text-right text-[#e8e8f0]">{s.totalHours.toFixed(1)} h</td>
-                      <td className="px-4 py-3 text-right text-[#e8e8f0]">{s.billedHours.toFixed(1)} h</td>
+                    <tr key={s.name} className="border-b border-[#e2e4ec]/50 hover:bg-[#ffffff] transition-colors">
+                      <td className="px-4 py-3 text-[#15151d]">{s.name}</td>
+                      <td className="px-4 py-3 text-right text-[#585866]">{s.caseCount}</td>
+                      <td className="px-4 py-3 text-right text-[#15151d]">{s.totalHours.toFixed(1)} h</td>
+                      <td className="px-4 py-3 text-right text-[#15151d]">{s.billedHours.toFixed(1)} h</td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <div className="w-20 h-1.5 rounded-full bg-[#1e1e3a] overflow-hidden">
+                          <div className="w-20 h-1.5 rounded-full bg-[#e2e4ec] overflow-hidden">
                             <div
                               className={`h-full rounded-full ${
                                 utilization >= 80 ? "bg-emerald-400" : utilization >= 50 ? "bg-amber-400" : "bg-red-400"
@@ -170,7 +170,7 @@ export default function ControllingPage() {
                               style={{ width: `${utilization}%` }}
                             />
                           </div>
-                          <span className="text-xs text-[#8888aa]">{utilization}%</span>
+                          <span className="text-xs text-[#585866]">{utilization}%</span>
                         </div>
                       </td>
                       <td className="px-4 py-3 text-right font-medium text-emerald-400">

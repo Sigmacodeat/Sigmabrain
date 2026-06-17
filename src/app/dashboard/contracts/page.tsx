@@ -52,7 +52,7 @@ const RISK_LABELS: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-[#12122a] border-[#1e1e3a] text-[#8888aa]",
+  draft: "bg-[#eceef3] border-[#e2e4ec] text-[#585866]",
   reviewed: "bg-violet-500/10 border-violet-500/20 text-violet-300",
   approved: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
   signed: "bg-blue-500/10 border-blue-500/20 text-blue-400",
@@ -259,12 +259,12 @@ export default function ContractsPage() {
             <ShieldCheck size={20} className="text-violet-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">Vertrags-Intelligenz</h1>
-            <p className="text-sm text-[#8888aa]">KI-gestützte Vertragsanalyse, Risikobewertung und Massen-Review</p>
+            <h1 className="text-xl font-bold text-[#15151d]">Vertrags-Intelligenz</h1>
+            <p className="text-sm text-[#585866]">KI-gestützte Vertragsanalyse, Risikobewertung und Massen-Review</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="secondary" className="bg-[#12122a] border border-[#1e1e3a] text-[#e8e8f0] hover:bg-[#1a1a3a] gap-2" onClick={() => setShowReview(!showReview)}>
+          <Button variant="secondary" className="bg-[#eceef3] border border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a] gap-2" onClick={() => setShowReview(!showReview)}>
             <Table2 size={14} /> Massen-Review
           </Button>
           <Button onClick={() => setCreating(!creating)} className="bg-violet-600 hover:bg-violet-500 text-white gap-2">
@@ -274,19 +274,19 @@ export default function ContractsPage() {
       </div>
 
       {creating && (
-        <div className="rounded-xl border border-violet-500/20 bg-[#0d0d1a] p-5 space-y-4">
+        <div className="rounded-xl border border-violet-500/20 bg-[#ffffff] p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-[#e8e8f0]">Neuer Vertrag</h3>
-            <button onClick={() => setCreating(false)} className="text-[#8a8aa8] hover:text-[#e8e8f0]"><X size={16} /></button>
+            <h3 className="text-sm font-semibold text-[#15151d]">Neuer Vertrag</h3>
+            <button onClick={() => setCreating(false)} className="text-[#585866] hover:text-[#15151d]"><X size={16} /></button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Vertragsbezeichnung" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-            <input value={newParties} onChange={(e) => setNewParties(e.target.value)} placeholder="Parteien (z.B. Käufer A — Verkäufer B)" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+            <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Vertragsbezeichnung" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+            <input value={newParties} onChange={(e) => setNewParties(e.target.value)} placeholder="Parteien (z.B. Käufer A — Verkäufer B)" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
           </div>
-          <select value={newType} onChange={(e) => setNewType(e.target.value)} className="w-full md:w-auto bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50">
+          <select value={newType} onChange={(e) => setNewType(e.target.value)} className="w-full md:w-auto bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50">
             {["Kaufvertrag","Dienstvertrag","Werkvertrag","Mietvertrag","NDA / Geheimhaltung","Arbeitsvertrag","Lizenzvertrag","GmbH-Vertrag","Sonstige"].map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
-          <textarea value={newContent} onChange={(e) => setNewContent(e.target.value)} rows={8} placeholder="Vertragstext hier einfügen…" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+          <textarea value={newContent} onChange={(e) => setNewContent(e.target.value)} rows={8} placeholder="Vertragstext hier einfügen…" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
           {createError && <p className="text-xs text-red-400">{createError}</p>}
           <div className="flex justify-end">
             <Button onClick={createContract} disabled={!newTitle.trim()} className="bg-violet-600 hover:bg-violet-500 text-white gap-2"><Save size={14} /> Speichern</Button>
@@ -295,16 +295,16 @@ export default function ContractsPage() {
       )}
 
       {showReview && (
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-5 space-y-4">
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-[#e8e8f0]">Massen-Review über alle Verträge</h3>
-            <button onClick={() => setShowReview(false)} className="text-[#8a8aa8] hover:text-[#e8e8f0]"><X size={16} /></button>
+            <h3 className="text-sm font-semibold text-[#15151d]">Massen-Review über alle Verträge</h3>
+            <button onClick={() => setShowReview(false)} className="text-[#585866] hover:text-[#15151d]"><X size={16} /></button>
           </div>
           <div className="space-y-2">
             {reviewQuestions.map((q, i) => (
               <div key={i} className="flex items-center gap-2">
-                <input value={q} onChange={(e) => setReviewQuestions((qs) => qs.map((qq, idx) => (idx === i ? e.target.value : qq)))} placeholder={`Frage ${i + 1}`} className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-                <button onClick={() => setReviewQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="text-[#8a8aa8] hover:text-red-400"><X size={14} /></button>
+                <input value={q} onChange={(e) => setReviewQuestions((qs) => qs.map((qq, idx) => (idx === i ? e.target.value : qq)))} placeholder={`Frage ${i + 1}`} className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+                <button onClick={() => setReviewQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="text-[#585866] hover:text-red-400"><X size={14} /></button>
               </div>
             ))}
             {reviewQuestions.length < 8 && <button onClick={() => setReviewQuestions((qs) => [...qs, ""])} className="text-xs text-violet-400 hover:underline">+ Frage hinzufügen</button>}
@@ -315,7 +315,7 @@ export default function ContractsPage() {
               {reviewLoading ? "Wird analysiert…" : "Massen-Review starten"}
             </Button>
             {reviewResult && reviewResult.rows.length > 0 && (
-              <Button variant="secondary" className="bg-[#12122a] border border-[#1e1e3a] text-[#e8e8f0] hover:bg-[#1a1a3a] gap-2" onClick={() => {
+              <Button variant="secondary" className="bg-[#eceef3] border border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a] gap-2" onClick={() => {
                 const csv = [["Vertrag", ...reviewResult.questions].join(";"), ...reviewResult.rows.map((r) => [r.title, ...r.cells.map((cell) => cell.answer.replace(/"/g, '""'))].join(";"))].join("\n");
                 const blob = new Blob([csv], { type: "text/csv" }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = `contract-review-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
               }}><Download size={14} /> CSV Export</Button>
@@ -325,8 +325,8 @@ export default function ContractsPage() {
           {reviewResult && reviewResult.rows.length > 0 && (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="border-b border-[#1e1e3a]"><th className="text-left px-3 py-2 text-[#8888aa] font-medium">Vertrag</th>{reviewResult.questions.map((q, i) => <th key={i} className="text-left px-3 py-2 text-[#8888aa] font-medium min-w-[200px]">{q}</th>)}</tr></thead>
-                <tbody>{reviewResult.rows.map((row, i) => <tr key={i} className="border-b border-[#1e1e3a]/50 hover:bg-[#12122a]"><td className="px-3 py-2 text-[#e8e8f0] whitespace-nowrap">{row.title}</td>{row.cells.map((cell, j) => <td key={j} className="px-3 py-2 text-[#8a8aa8] max-w-xs truncate" title={cell.answer}>{cell.answer}</td>)}</tr>)}</tbody>
+                <thead><tr className="border-b border-[#e2e4ec]"><th className="text-left px-3 py-2 text-[#585866] font-medium">Vertrag</th>{reviewResult.questions.map((q, i) => <th key={i} className="text-left px-3 py-2 text-[#585866] font-medium min-w-[200px]">{q}</th>)}</tr></thead>
+                <tbody>{reviewResult.rows.map((row, i) => <tr key={i} className="border-b border-[#e2e4ec]/50 hover:bg-[#eceef3]"><td className="px-3 py-2 text-[#15151d] whitespace-nowrap">{row.title}</td>{row.cells.map((cell, j) => <td key={j} className="px-3 py-2 text-[#585866] max-w-xs truncate" title={cell.answer}>{cell.answer}</td>)}</tr>)}</tbody>
               </table>
             </div>
           )}
@@ -334,8 +334,8 @@ export default function ContractsPage() {
       )}
 
       <div className="relative">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8aa8]" />
-        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Verträge suchen…" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
+        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Verträge suchen…" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg pl-9 pr-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
       </div>
 
       {loadError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{loadError}</div>}
@@ -343,52 +343,52 @@ export default function ContractsPage() {
       {/* Summary stats */}
       {!loading && contracts.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3 flex items-center gap-3">
+          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
               <BarChart3 size={14} className="text-violet-400" />
             </div>
             <div>
-              <p className="text-lg font-bold text-[#e8e8f0]">{contracts.length}</p>
-              <p className="text-[10px] text-[#8a8aa8]">Verträge</p>
+              <p className="text-lg font-bold text-[#15151d]">{contracts.length}</p>
+              <p className="text-[10px] text-[#585866]">Verträge</p>
             </div>
           </div>
-          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3 flex items-center gap-3">
+          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <ShieldCheck size={14} className="text-emerald-400" />
             </div>
             <div>
-              <p className="text-lg font-bold text-[#e8e8f0]">{contracts.filter(c => c.status === "approved" || c.status === "signed").length}</p>
-              <p className="text-[10px] text-[#8a8aa8]">Freigegeben</p>
+              <p className="text-lg font-bold text-[#15151d]">{contracts.filter(c => c.status === "approved" || c.status === "signed").length}</p>
+              <p className="text-[10px] text-[#585866]">Freigegeben</p>
             </div>
           </div>
-          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3 flex items-center gap-3">
+          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
               <AlertTriangle size={14} className="text-amber-400" />
             </div>
             <div>
-              <p className="text-lg font-bold text-[#e8e8f0]">{contracts.filter(c => c.riskLevel === "medium" || c.riskLevel === "high" || c.riskLevel === "critical").length}</p>
-              <p className="text-[10px] text-[#8a8aa8]">Risiko</p>
+              <p className="text-lg font-bold text-[#15151d]">{contracts.filter(c => c.riskLevel === "medium" || c.riskLevel === "high" || c.riskLevel === "critical").length}</p>
+              <p className="text-[10px] text-[#585866]">Risiko</p>
             </div>
           </div>
-          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3 flex items-center gap-3">
+          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
               <AlertTriangle size={14} className="text-red-400" />
             </div>
             <div>
-              <p className="text-lg font-bold text-[#e8e8f0]">{contracts.filter(c => c.riskLevel === "critical").length}</p>
-              <p className="text-[10px] text-[#8a8aa8]">Kritisch</p>
+              <p className="text-lg font-bold text-[#15151d]">{contracts.filter(c => c.riskLevel === "critical").length}</p>
+              <p className="text-[10px] text-[#585866]">Kritisch</p>
             </div>
           </div>
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-20 text-[#8888aa]">Lade Verträge…</div>
+        <div className="text-center py-20 text-[#585866]">Lade Verträge…</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 space-y-3">
-          <FileText size={44} className="mx-auto text-[#1e1e3a]" />
-          <p className="text-sm text-[#8888aa]">Noch keine Verträge angelegt.</p>
-          <p className="text-xs text-[#8a8aa8]">Nutze den „Vertrag anlegen“-Button um einen Vertrag einzufügen und analysieren zu lassen.</p>
+          <FileText size={44} className="mx-auto text-[#e2e4ec]" />
+          <p className="text-sm text-[#585866]">Noch keine Verträge angelegt.</p>
+          <p className="text-xs text-[#585866]">Nutze den „Vertrag anlegen“-Button um einen Vertrag einzufügen und analysieren zu lassen.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -397,22 +397,22 @@ export default function ContractsPage() {
             const isAnalyzing = analyzingSlug === contract.slug;
             if (isEditing) {
               return (
-                <div key={contract.slug} className="rounded-xl border border-violet-500/20 bg-[#0d0d1a] p-5 space-y-4">
+                <div key={contract.slug} className="rounded-xl border border-violet-500/20 bg-[#ffffff] p-5 space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-[#e8e8f0]">Vertrag bearbeiten</h3>
-                    <button onClick={() => setEditingSlug(null)} className="text-[#8a8aa8] hover:text-[#e8e8f0]"><X size={16} /></button>
+                    <h3 className="text-sm font-semibold text-[#15151d]">Vertrag bearbeiten</h3>
+                    <button onClick={() => setEditingSlug(null)} className="text-[#585866] hover:text-[#15151d]"><X size={16} /></button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} placeholder="Titel" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50" />
-                    <input value={editParties} onChange={(e) => setEditParties(e.target.value)} placeholder="Parteien" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50" />
+                    <input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} placeholder="Titel" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50" />
+                    <input value={editParties} onChange={(e) => setEditParties(e.target.value)} placeholder="Parteien" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50" />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <input value={editType} onChange={(e) => setEditType(e.target.value)} placeholder="Vertragstyp" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50" />
-                    <select value={editStatus} onChange={(e) => setEditStatus(e.target.value as ContractItem["status"])} className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50">
+                    <input value={editType} onChange={(e) => setEditType(e.target.value)} placeholder="Vertragstyp" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50" />
+                    <select value={editStatus} onChange={(e) => setEditStatus(e.target.value as ContractItem["status"])} className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50">
                       {Object.entries(STATUS_LABELS).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
                     </select>
                   </div>
-                  <textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} rows={6} placeholder="Vertragstext" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50" />
+                  <textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} rows={6} placeholder="Vertragstext" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50" />
                   {editError && <p className="text-xs text-red-400">{editError}</p>}
                   <div className="flex justify-end">
                     <Button onClick={saveEdit} disabled={!editTitle.trim()} className="bg-violet-600 hover:bg-violet-500 text-white gap-2"><Save size={14} /> Speichern</Button>
@@ -421,19 +421,19 @@ export default function ContractsPage() {
               );
             }
             return (
-              <div key={contract.slug} className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
+              <div key={contract.slug} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-medium text-[#e8e8f0]">{contract.title}</span>
+                      <span className="font-medium text-[#15151d]">{contract.title}</span>
                       {contract.contractType && <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{contract.contractType}</Badge>}
                       <Badge variant="default" className={`text-[10px] border ${STATUS_COLORS[contract.status || "draft"]}`}>{STATUS_LABELS[contract.status || "draft"]}</Badge>
                     </div>
-                    {contract.parties && <p className="text-xs text-[#8a8aa8] mt-1">{contract.parties}</p>}
+                    {contract.parties && <p className="text-xs text-[#585866] mt-1">{contract.parties}</p>}
                     {/* Risk score bar */}
                     {contract.riskLevel && (
                       <div className="mt-2 flex items-center gap-2">
-                        <div className="flex-1 h-1.5 bg-[#1e1e3a] rounded-full overflow-hidden">
+                        <div className="flex-1 h-1.5 bg-[#e2e4ec] rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all ${
                               contract.riskLevel === "low" ? "bg-emerald-400" :
@@ -456,20 +456,20 @@ export default function ContractsPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <button onClick={() => analyzeContract(contract)} disabled={isAnalyzing} className="p-1.5 rounded-lg text-[#8a8aa8] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="KI-Analyse">
+                    <button onClick={() => analyzeContract(contract)} disabled={isAnalyzing} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="KI-Analyse">
                       {isAnalyzing ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
                     </button>
-                    <button onClick={() => startEdit(contract)} className="p-1.5 rounded-lg text-[#8a8aa8] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="Bearbeiten"><Pencil size={14} /></button>
-                    <button onClick={() => deleteContract(contract.slug)} className="p-1.5 rounded-lg text-[#8a8aa8] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen"><Trash2 size={14} /></button>
+                    <button onClick={() => startEdit(contract)} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="Bearbeiten"><Pencil size={14} /></button>
+                    <button onClick={() => deleteContract(contract.slug)} className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen"><Trash2 size={14} /></button>
                   </div>
                 </div>
-                <div className="text-xs text-[#8a8aa8] line-clamp-2">{contract.content.slice(0, 200)}…</div>
+                <div className="text-xs text-[#585866] line-clamp-2">{contract.content.slice(0, 200)}…</div>
                 {isAnalyzing && <div className="flex items-center gap-2 text-xs text-violet-400"><Loader2 size={14} className="animate-spin" /> KI analysiert Vertrag…</div>}
                 {analyzingSlug === contract.slug && analysisResult && (
-                  <div className="rounded-xl border border-[#1e1e3a] bg-[#0a0a18] p-4 space-y-3">
+                  <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold text-[#e8e8f0]">KI-Analyse</h4>
-                      <button onClick={() => { setAnalysisResult(null); setAnalyzingSlug(null); }} className="text-[#8a8aa8] hover:text-[#e8e8f0]"><X size={14} /></button>
+                      <h4 className="text-sm font-semibold text-[#15151d]">KI-Analyse</h4>
+                      <button onClick={() => { setAnalysisResult(null); setAnalyzingSlug(null); }} className="text-[#585866] hover:text-[#15151d]"><X size={14} /></button>
                     </div>
                     <div className="prose prose-invert prose-sm max-w-none text-[#c8c8e0] overflow-auto max-h-[400px]"
                       dangerouslySetInnerHTML={{ __html: renderMarkdown(analysisResult) }}

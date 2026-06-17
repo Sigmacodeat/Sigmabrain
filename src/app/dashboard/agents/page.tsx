@@ -308,7 +308,7 @@ function AgentDAG({ jobs, selectedJob, onSelectJob }: {
                   width={140}
                   height={60}
                   rx={8}
-                  fill={isSelected ? "#4c1d95" : "#1e1e3a"}
+                  fill={isSelected ? "#4c1d95" : "#e2e4ec"}
                   stroke={isSelected ? "#8b5cf6" : "#2e2e5a"}
                   strokeWidth={isSelected ? 2 : 1}
                 />
@@ -325,7 +325,7 @@ function AgentDAG({ jobs, selectedJob, onSelectJob }: {
                     x={x + 130}
                     y={y + 16}
                     textAnchor="end"
-                    fill="#8888aa"
+                    fill="#585866"
                     fontSize={10}
                     fontFamily="monospace"
                   >
@@ -336,7 +336,7 @@ function AgentDAG({ jobs, selectedJob, onSelectJob }: {
                 <text
                   x={x + 12}
                   y={y + 32}
-                  fill="#e8e8f0"
+                  fill="#15151d"
                   fontSize={12}
                   fontWeight={600}
                 >
@@ -346,7 +346,7 @@ function AgentDAG({ jobs, selectedJob, onSelectJob }: {
                 <text
                   x={x + 12}
                   y={y + 50}
-                  fill="#4a4a6a"
+                  fill="#8a8a98"
                   fontSize={10}
                   fontFamily="monospace"
                 >
@@ -425,12 +425,12 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className={`w-3 h-3 rounded-full ${statusColor(job.status)}`} />
-          <h3 className="text-lg font-semibold text-[#e8e8f0]">
+          <h3 className="text-lg font-semibold text-[#15151d]">
             {job.name === "supervisor" ? "Supervisor" : job.subagentDef?.replace("legal-", "").replace(/-/g, " ") || "Agent"}
           </h3>
-          <span className="text-xs text-[#8a8aa8] font-mono">#{job.id}</span>
+          <span className="text-xs text-[#585866] font-mono">#{job.id}</span>
         </div>
-        <span className="text-xs px-2 py-1 rounded-full bg-[#1e1e3a] text-[#8888aa]">
+        <span className="text-xs px-2 py-1 rounded-full bg-[#e2e4ec] text-[#585866]">
           {statusLabel(job.status)}
         </span>
       </div>
@@ -499,31 +499,31 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
         )}
       </div>
 
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-        <h4 className="text-xs font-semibold text-[#8a8aa8] uppercase tracking-wider mb-2">Prompt</h4>
-        <p className="text-sm text-[#e8e8f0] leading-relaxed">{job.prompt}</p>
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+        <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Prompt</h4>
+        <p className="text-sm text-[#15151d] leading-relaxed">{job.prompt}</p>
       </div>
 
       {job.model && (
         <div className="flex items-center gap-2">
           <Sparkles size={14} className="text-violet-400" />
-          <span className="text-sm text-[#8888aa]">Modell: <span className="text-[#e8e8f0]">{job.model}</span></span>
+          <span className="text-sm text-[#585866]">Modell: <span className="text-[#15151d]">{job.model}</span></span>
         </div>
       )}
 
       {job.tokens && (
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-lg border border-[#1e1e3a] bg-[#0d0d1a] p-3 text-center">
-            <div className="text-lg font-mono font-semibold text-[#e8e8f0]">{job.tokens.input.toLocaleString()}</div>
-            <div className="text-xs text-[#8a8aa8]">Input Tokens</div>
+          <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+            <div className="text-lg font-mono font-semibold text-[#15151d]">{job.tokens.input.toLocaleString()}</div>
+            <div className="text-xs text-[#585866]">Input Tokens</div>
           </div>
-          <div className="rounded-lg border border-[#1e1e3a] bg-[#0d0d1a] p-3 text-center">
-            <div className="text-lg font-mono font-semibold text-[#e8e8f0]">{job.tokens.output.toLocaleString()}</div>
-            <div className="text-xs text-[#8a8aa8]">Output Tokens</div>
+          <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+            <div className="text-lg font-mono font-semibold text-[#15151d]">{job.tokens.output.toLocaleString()}</div>
+            <div className="text-xs text-[#585866]">Output Tokens</div>
           </div>
-          <div className="rounded-lg border border-[#1e1e3a] bg-[#0d0d1a] p-3 text-center">
+          <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
             <div className="text-lg font-mono font-semibold text-emerald-400">${job.cost?.toFixed(2) ?? "0.00"}</div>
-            <div className="text-xs text-[#8a8aa8]">Kosten</div>
+            <div className="text-xs text-[#585866]">Kosten</div>
           </div>
         </div>
       )}
@@ -531,10 +531,10 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       {job.progress && (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[#8888aa]">{job.progress.message}</span>
-            <span className="text-[#e8e8f0] font-mono">{job.progress.step}/{job.progress.total}</span>
+            <span className="text-[#585866]">{job.progress.message}</span>
+            <span className="text-[#15151d] font-mono">{job.progress.step}/{job.progress.total}</span>
           </div>
-          <div className="h-2 rounded-full bg-[#1e1e3a] overflow-hidden">
+          <div className="h-2 rounded-full bg-[#e2e4ec] overflow-hidden">
             <div
               className="h-full rounded-full bg-violet-500 transition-all"
               style={{ width: `${(job.progress.step / job.progress.total) * 100}%` }}
@@ -544,21 +544,21 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       )}
 
       {job.result && (
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-          <h4 className="text-xs font-semibold text-[#8a8aa8] uppercase tracking-wider mb-2">Ergebnis</h4>
-          <p className="text-sm text-[#e8e8f0] leading-relaxed whitespace-pre-wrap">{job.result}</p>
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+          <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Ergebnis</h4>
+          <p className="text-sm text-[#15151d] leading-relaxed whitespace-pre-wrap">{job.result}</p>
         </div>
       )}
 
       {children.length > 0 && (
         <div>
-          <h4 className="text-xs font-semibold text-[#8a8aa8] uppercase tracking-wider mb-2">Children</h4>
+          <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Children</h4>
           <div className="space-y-2">
             {children.map(child => (
-              <div key={child.id} className="flex items-center gap-3 p-2 rounded-lg bg-[#0d0d1a] border border-[#1e1e3a]">
+              <div key={child.id} className="flex items-center gap-3 p-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
                 <div className={`w-2 h-2 rounded-full ${statusColor(child.status)}`} />
-                <span className="text-sm text-[#e8e8f0]">{child.subagentDef?.replace("legal-", "") || "subagent"}</span>
-                <span className="text-xs text-[#8a8aa8] font-mono">#{child.id}</span>
+                <span className="text-sm text-[#15151d]">{child.subagentDef?.replace("legal-", "") || "subagent"}</span>
+                <span className="text-xs text-[#585866] font-mono">#{child.id}</span>
               </div>
             ))}
           </div>
@@ -566,11 +566,11 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       )}
 
       {/* Inbox / Chat Panel */}
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] flex flex-col" style={{ maxHeight: 380 }}>
-        <div className="px-4 py-3 border-b border-[#1e1e3a] flex items-center justify-between">
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] flex flex-col" style={{ maxHeight: 380 }}>
+        <div className="px-4 py-3 border-b border-[#e2e4ec] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MessageSquare size={14} className="text-violet-400" />
-            <h4 className="text-xs font-semibold text-[#8a8aa8] uppercase tracking-wider">Inbox</h4>
+            <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider">Inbox</h4>
             {messages.length > 0 && (
               <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20">
                 {messages.length}
@@ -578,16 +578,16 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
             )}
           </div>
           {inboxLoading && messages.length === 0 && (
-            <Loader2 size={12} className="animate-spin text-[#8a8aa8]" />
+            <Loader2 size={12} className="animate-spin text-[#585866]" />
           )}
         </div>
 
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3 min-h-[120px]">
           {messages.length === 0 && !inboxLoading && (
             <div className="text-center py-6">
-              <Bot size={24} className="mx-auto text-[#1e1e3a] mb-2" />
-              <p className="text-xs text-[#8a8aa8]">Noch keine Nachrichten.</p>
-              <p className="text-[10px] text-[#7878a0] mt-1">
+              <Bot size={24} className="mx-auto text-[#e2e4ec] mb-2" />
+              <p className="text-xs text-[#585866]">Noch keine Nachrichten.</p>
+              <p className="text-[10px] text-[#74748a] mt-1">
                 {job.status === "active" || job.status === "waiting"
                   ? "Schreibe dem Agenten eine Steuerungsnachricht."
                   : "Inbox ist nur für aktive Jobs verfügbar."}
@@ -618,11 +618,11 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
                 <div className={cn(
                   "max-w-[80%] rounded-xl px-3 py-2 text-sm",
                   isUser
-                    ? "bg-violet-600/15 text-[#e8e8f0] border border-violet-500/20"
-                    : "bg-[#12122a] text-[#8888aa] border border-[#1e1e3a]"
+                    ? "bg-violet-600/15 text-[#15151d] border border-violet-500/20"
+                    : "bg-[#eceef3] text-[#585866] border border-[#e2e4ec]"
                 )}>
                   <p className="leading-relaxed whitespace-pre-wrap break-words">{text}</p>
-                  <span className="text-[10px] text-[#7878a0] mt-1 block">
+                  <span className="text-[10px] text-[#74748a] mt-1 block">
                     {new Date(msg.sent_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                     {msg.read_at && <span className="ml-1">· gelesen</span>}
                   </span>
@@ -636,8 +636,8 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
               <div className="w-6 h-6 rounded-full bg-violet-600/20 flex items-center justify-center shrink-0">
                 <Loader2 size={12} className="text-violet-400 animate-spin" />
               </div>
-              <div className="bg-violet-600/15 text-[#e8e8f0] border border-violet-500/20 rounded-xl px-3 py-2 text-sm">
-                <span className="text-[#8a8aa8]">Senden…</span>
+              <div className="bg-violet-600/15 text-[#15151d] border border-violet-500/20 rounded-xl px-3 py-2 text-sm">
+                <span className="text-[#585866]">Senden…</span>
               </div>
             </div>
           )}
@@ -645,7 +645,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
 
         {/* Input */}
         {(job.status === "active" || job.status === "waiting" || job.status === "paused") && (
-          <div className="p-3 border-t border-[#1e1e3a]">
+          <div className="p-3 border-t border-[#e2e4ec]">
             <div className="flex gap-2">
               <input
                 value={inboxInput}
@@ -654,7 +654,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
                 placeholder="Nachricht an Agenten…"
                 aria-label="Nachricht an Agenten"
                 disabled={inboxSending}
-                className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#7878a0] focus:outline-none focus:border-violet-500/50 transition-colors disabled:opacity-50"
+                className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#74748a] focus:outline-none focus:border-violet-500/50 transition-colors disabled:opacity-50"
               />
               <button
                 onClick={handleSendMessage}
@@ -669,7 +669,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
         )}
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-[#8a8aa8]">
+      <div className="flex items-center gap-4 text-xs text-[#585866]">
         {job.startedAt && <span>Gestartet: {new Date(job.startedAt).toLocaleString("de-DE")}</span>}
         {job.completedAt && <span>Fertig: {new Date(job.completedAt).toLocaleString("de-DE")}</span>}
       </div>
@@ -713,12 +713,12 @@ export default function AgentsPage() {
   return (
     <div className="flex h-[calc(100vh-3.5rem)]">
       {/* Left: Job List + Submit */}
-      <div className="w-80 border-r border-[#1e1e3a] bg-[#0a0a18] flex flex-col">
+      <div className="w-80 border-r border-[#e2e4ec] bg-[#ffffff] flex flex-col">
         {/* Workflow Templates */}
-        <div className="p-4 border-b border-[#1e1e3a] space-y-2">
+        <div className="p-4 border-b border-[#e2e4ec] space-y-2">
           <div className="flex items-center gap-2">
             <Sparkles size={14} className="text-violet-400" />
-            <span className="text-xs font-semibold text-[#e8e8f0]">Workflow Templates</span>
+            <span className="text-xs font-semibold text-[#15151d]">Workflow Templates</span>
           </div>
           <div className="space-y-1.5">
             {[
@@ -731,7 +731,7 @@ export default function AgentsPage() {
               <button
                 key={template.label}
                 onClick={() => { setSubmitPrompt(template.prompt); }}
-                className="w-full text-left px-2.5 py-1.5 rounded-lg bg-[#0d0d1a] border border-[#1e1e3a] text-xs text-[#8a8aa8] hover:border-violet-500/30 hover:text-[#e8e8f0] transition-all"
+                className="w-full text-left px-2.5 py-1.5 rounded-lg bg-[#ffffff] border border-[#e2e4ec] text-xs text-[#585866] hover:border-violet-500/30 hover:text-[#15151d] transition-all"
               >
                 <span className="mr-1.5">{template.icon}</span>
                 {template.label}
@@ -741,18 +741,18 @@ export default function AgentsPage() {
         </div>
 
         {/* Submit Form */}
-        <div className="p-4 border-b border-[#1e1e3a]">
+        <div className="p-4 border-b border-[#e2e4ec]">
           <form onSubmit={handleSubmit} className="space-y-2">
             <div className="flex items-center gap-2">
               <Sparkles size={14} className="text-violet-400" />
-              <span className="text-xs font-semibold text-[#e8e8f0]">Neuer Supervisor</span>
+              <span className="text-xs font-semibold text-[#15151d]">Neuer Supervisor</span>
             </div>
             <input
               value={submitPrompt}
               onChange={e => setSubmitPrompt(e.target.value)}
               placeholder="Beschreibe die Aufgabe..."
               aria-label="Beschreibe die Aufgabe..."
-              className="w-full px-2.5 py-1.5 rounded-lg bg-[#0d0d1a] border border-[#1e1e3a] text-xs text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/40"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-[#ffffff] border border-[#e2e4ec] text-xs text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/40"
             />
             <button
               type="submit"
@@ -766,12 +766,12 @@ export default function AgentsPage() {
         </div>
 
         {/* Header */}
-        <div className="p-4 border-b border-[#1e1e3a]">
+        <div className="p-4 border-b border-[#e2e4ec]">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-[#e8e8f0]">Agent Jobs</h2>
+            <h2 className="text-sm font-semibold text-[#15151d]">Agent Jobs</h2>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-xs text-[#8888aa]">{activeCount} aktiv</span>
+              <span className="text-xs text-[#585866]">{activeCount} aktiv</span>
             </div>
           </div>
 
@@ -784,7 +784,7 @@ export default function AgentsPage() {
                   "px-2 py-1 rounded-md text-xs font-medium transition-all",
                   filter === f
                     ? "bg-violet-600/20 text-violet-400 border border-violet-500/20"
-                    : "text-[#8a8aa8] hover:text-[#8888aa] hover:bg-[#12122a]"
+                    : "text-[#585866] hover:text-[#585866] hover:bg-[#eceef3]"
                 )}
               >
                 {f === "all" ? "Alle" : f === "active" ? "Aktiv" : f === "completed" ? "Fertig" : "Fehler"}
@@ -808,19 +808,19 @@ export default function AgentsPage() {
                 "w-full text-left p-3 rounded-lg border transition-all",
                 selectedJob === job.id
                   ? "bg-violet-600/10 border-violet-500/20"
-                  : "bg-[#0d0d1a] border-[#1e1e3a] hover:border-[#2e2e5a]"
+                  : "bg-[#ffffff] border-[#e2e4ec] hover:border-[#2e2e5a]"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
                 {statusIcon(job.status)}
-                <span className="text-xs font-medium text-[#e8e8f0]">
+                <span className="text-xs font-medium text-[#15151d]">
                   {job.name === "supervisor" ? "Supervisor" : job.subagentDef?.replace("legal-", "") || "subagent"}
                 </span>
-                <span className="text-[10px] text-[#8a8aa8] font-mono ml-auto">#{job.id}</span>
+                <span className="text-[10px] text-[#585866] font-mono ml-auto">#{job.id}</span>
               </div>
-              <p className="text-xs text-[#8888aa] line-clamp-2">{job.prompt}</p>
+              <p className="text-xs text-[#585866] line-clamp-2">{job.prompt}</p>
               {job.progress && (
-                <div className="mt-2 h-1 rounded-full bg-[#1e1e3a] overflow-hidden">
+                <div className="mt-2 h-1 rounded-full bg-[#e2e4ec] overflow-hidden">
                   <div
                     className="h-full rounded-full bg-violet-500"
                     style={{ width: `${(job.progress.step / job.progress.total) * 100}%` }}
@@ -833,21 +833,21 @@ export default function AgentsPage() {
       </div>
 
       {/* Middle: DAG Visualization */}
-      <div className="flex-1 flex flex-col bg-[#06060f] overflow-hidden">
-        <div className="p-4 border-b border-[#1e1e3a] flex items-center justify-between">
+      <div className="flex-1 flex flex-col bg-[#f5f6f9] overflow-hidden">
+        <div className="p-4 border-b border-[#e2e4ec] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Bot size={16} className="text-violet-400" />
-            <h2 className="text-sm font-semibold text-[#e8e8f0]">Agent DAG</h2>
+            <h2 className="text-sm font-semibold text-[#15151d]">Agent DAG</h2>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => refresh()}
-              className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#12122a] transition-all"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3] transition-all"
             >
               <RefreshCw size={12} />
               Aktualisieren
             </button>
-            <div className="flex items-center gap-3 text-xs text-[#8a8aa8]">
+            <div className="flex items-center gap-3 text-xs text-[#585866]">
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Fertig</span>
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500" /> Aktiv</span>
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500" /> Wartend</span>
@@ -866,9 +866,9 @@ export default function AgentsPage() {
       </div>
 
       {/* Right: Detail Panel */}
-      <div className="w-96 border-l border-[#1e1e3a] bg-[#0a0a18] overflow-y-auto">
-        <div className="p-4 border-b border-[#1e1e3a]">
-          <h2 className="text-sm font-semibold text-[#e8e8f0]">Details</h2>
+      <div className="w-96 border-l border-[#e2e4ec] bg-[#ffffff] overflow-y-auto">
+        <div className="p-4 border-b border-[#e2e4ec]">
+          <h2 className="text-sm font-semibold text-[#15151d]">Details</h2>
         </div>
         <div className="p-4">
           {selectedJobData ? (
@@ -879,8 +879,8 @@ export default function AgentsPage() {
             />
           ) : (
             <div className="text-center py-12">
-              <Bot size={32} className="mx-auto text-[#1e1e3a] mb-3" />
-              <p className="text-sm text-[#8a8aa8]">Wähle einen Job aus der Liste</p>
+              <Bot size={32} className="mx-auto text-[#e2e4ec] mb-3" />
+              <p className="text-sm text-[#585866]">Wähle einen Job aus der Liste</p>
             </div>
           )}
         </div>

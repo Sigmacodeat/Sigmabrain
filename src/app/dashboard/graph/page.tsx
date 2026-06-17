@@ -107,14 +107,14 @@ export default function GraphPage() {
 
         const midX = (src.x + tgt.x) / 2;
         const midY = (src.y + tgt.y) / 2;
-        ctx.fillStyle = "#4a4a6a";
+        ctx.fillStyle = "#8a8a98";
         ctx.font = "10px JetBrains Mono, monospace";
         ctx.textAlign = "center";
         ctx.fillText(link.type, midX, midY - 4);
       });
 
       layoutNodes.forEach((node) => {
-        const color = NODE_COLORS[node.type] || "#8888aa";
+        const color = NODE_COLORS[node.type] || "#585866";
         const radius = 8 + node.connections * 2;
         const pulse = Math.sin(tick * 2) * 2;
 
@@ -134,12 +134,12 @@ export default function GraphPage() {
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        ctx.fillStyle = "#e8e8f0";
+        ctx.fillStyle = "#15151d";
         ctx.font = "12px Inter, sans-serif";
         ctx.textAlign = "center";
         ctx.fillText(node.name, node.x, node.y + radius + 16);
 
-        ctx.fillStyle = "#4a4a6a";
+        ctx.fillStyle = "#8a8a98";
         ctx.font = "10px JetBrains Mono, monospace";
         ctx.fillText(node.type, node.x, node.y + radius + 28);
       });
@@ -183,17 +183,17 @@ export default function GraphPage() {
 
   return (
     <div className="flex h-full overflow-hidden">
-      <div className="flex-1 relative bg-[#06060f]">
+      <div className="flex-1 relative bg-[#f5f6f9]">
         {loading ? (
           <div className="flex flex-col items-center justify-center h-full">
-            <Loader2 size={32} className="animate-spin text-[#8a8aa8] mb-3" />
-            <p className="text-sm text-[#8a8aa8]">Graph wird geladen…</p>
+            <Loader2 size={32} className="animate-spin text-[#585866] mb-3" />
+            <p className="text-sm text-[#585866]">Graph wird geladen…</p>
           </div>
         ) : isEmpty ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <Network size={40} className="text-[#1e1e3a] mb-4" />
-            <h3 className="text-lg font-semibold text-[#e8e8f0] mb-2">Graph ist leer</h3>
-            <p className="text-sm text-[#8a8aa8] mb-2">Lade Dokumente hoch um den Wissensgraph zu befüllen</p>
+            <Network size={40} className="text-[#e2e4ec] mb-4" />
+            <h3 className="text-lg font-semibold text-[#15151d] mb-2">Graph ist leer</h3>
+            <p className="text-sm text-[#585866] mb-2">Lade Dokumente hoch um den Wissensgraph zu befüllen</p>
             {error && <p className="text-xs text-red-400">{error}</p>}
           </div>
         ) : (
@@ -205,52 +205,52 @@ export default function GraphPage() {
             />
 
             <div className="absolute top-4 left-4 flex items-center gap-2">
-              <div className="flex items-center gap-1 bg-[#0d0d1a]/90 backdrop-blur border border-[#1e1e3a] rounded-lg p-1">
+              <div className="flex items-center gap-1 bg-[#ffffff]/90 backdrop-blur border border-[#e2e4ec] rounded-lg p-1">
                 <button
                   onClick={() => setZoom((z) => Math.min(z + 0.2, 3))}
-                  className="p-2 rounded text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#1e1e3a] transition-all"
+                  className="p-2 rounded text-[#585866] hover:text-[#15151d] hover:bg-[#e2e4ec] transition-all"
                 >
                   <ZoomIn size={14} />
                 </button>
-                <span className="text-xs text-[#8a8aa8] px-2 font-mono">{Math.round(zoom * 100)}%</span>
+                <span className="text-xs text-[#585866] px-2 font-mono">{Math.round(zoom * 100)}%</span>
                 <button
                   onClick={() => setZoom((z) => Math.max(z - 0.2, 0.3))}
-                  className="p-2 rounded text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#1e1e3a] transition-all"
+                  className="p-2 rounded text-[#585866] hover:text-[#15151d] hover:bg-[#e2e4ec] transition-all"
                 >
                   <ZoomOut size={14} />
                 </button>
                 <button
                   onClick={() => setZoom(1)}
-                  className="p-2 rounded text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#1e1e3a] transition-all"
+                  className="p-2 rounded text-[#585866] hover:text-[#15151d] hover:bg-[#e2e4ec] transition-all"
                 >
                   <Maximize2 size={14} />
                 </button>
               </div>
               <button
                 onClick={loadGraph}
-                className="p-2 bg-[#0d0d1a]/90 backdrop-blur border border-[#1e1e3a] rounded-lg text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#12122a] transition-all"
+                className="p-2 bg-[#ffffff]/90 backdrop-blur border border-[#e2e4ec] rounded-lg text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3] transition-all"
               >
                 <RefreshCw size={14} />
               </button>
             </div>
 
-            <div className="absolute bottom-4 left-4 bg-[#0d0d1a]/90 backdrop-blur border border-[#1e1e3a] rounded-xl p-4">
-              <p className="text-xs text-[#8a8aa8] uppercase tracking-wider font-medium mb-3">Legende</p>
+            <div className="absolute bottom-4 left-4 bg-[#ffffff]/90 backdrop-blur border border-[#e2e4ec] rounded-xl p-4">
+              <p className="text-xs text-[#585866] uppercase tracking-wider font-medium mb-3">Legende</p>
               <div className="space-y-2">
                 {Object.entries(NODE_COLORS).slice(0, 4).map(([type, color]) => (
                   <div key={type} className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full border-2" style={{ borderColor: color, backgroundColor: color + "20" }} />
-                    <span className="text-xs text-[#8888aa] capitalize">{type}</span>
+                    <span className="text-xs text-[#585866] capitalize">{type}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="absolute top-4 right-4 bg-[#0d0d1a]/90 backdrop-blur border border-[#1e1e3a] rounded-xl p-4 text-right">
-              <div className="text-xs text-[#8a8aa8] mb-2">Graph</div>
+            <div className="absolute top-4 right-4 bg-[#ffffff]/90 backdrop-blur border border-[#e2e4ec] rounded-xl p-4 text-right">
+              <div className="text-xs text-[#585866] mb-2">Graph</div>
               <div className="space-y-1">
-                <div className="text-sm font-mono text-[#e8e8f0]">{nodes.length} <span className="text-[#8a8aa8]">Knoten</span></div>
-                <div className="text-sm font-mono text-[#e8e8f0]">{links.length} <span className="text-[#8a8aa8]">Kanten</span></div>
+                <div className="text-sm font-mono text-[#15151d]">{nodes.length} <span className="text-[#585866]">Knoten</span></div>
+                <div className="text-sm font-mono text-[#15151d]">{links.length} <span className="text-[#585866]">Kanten</span></div>
               </div>
             </div>
           </>
@@ -258,16 +258,16 @@ export default function GraphPage() {
       </div>
 
       {selected && (
-        <div className="w-72 shrink-0 border-l border-[#1e1e3a] bg-[#0a0a18] overflow-y-auto p-5">
+        <div className="w-72 shrink-0 border-l border-[#e2e4ec] bg-[#ffffff] overflow-y-auto p-5">
           <div className="flex items-start gap-3 mb-5">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: (NODE_COLORS[selected.type] || "#8888aa") + "20", border: `1px solid ${(NODE_COLORS[selected.type] || "#8888aa")}40` }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: (NODE_COLORS[selected.type] || "#585866") + "20", border: `1px solid ${(NODE_COLORS[selected.type] || "#585866")}40` }}>
               {(() => {
                 const Icon = typeIconMap[selected.type] || FileText;
-                return <Icon size={16} style={{ color: NODE_COLORS[selected.type] || "#8888aa" }} />;
+                return <Icon size={16} style={{ color: NODE_COLORS[selected.type] || "#585866" }} />;
               })()}
             </div>
             <div>
-              <h3 className="text-base font-semibold text-[#e8e8f0]">{selected.name}</h3>
+              <h3 className="text-base font-semibold text-[#15151d]">{selected.name}</h3>
               <Badge variant={(selected.type as Parameters<typeof Badge>[0]["variant"]) || "default"} className="mt-1">
                 {selected.type}
               </Badge>
@@ -276,16 +276,16 @@ export default function GraphPage() {
 
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-[#8a8aa8] uppercase tracking-wider mb-2">Slug</p>
+              <p className="text-xs text-[#585866] uppercase tracking-wider mb-2">Slug</p>
               <p className="text-sm font-mono text-violet-400 bg-violet-500/10 px-3 py-2 rounded-lg">{selected.id}</p>
             </div>
             <div>
-              <p className="text-xs text-[#8a8aa8] uppercase tracking-wider mb-2">Verbindungen</p>
-              <p className="text-2xl font-bold text-[#e8e8f0] font-mono">{selected.connections}</p>
+              <p className="text-xs text-[#585866] uppercase tracking-wider mb-2">Verbindungen</p>
+              <p className="text-2xl font-bold text-[#15151d] font-mono">{selected.connections}</p>
             </div>
 
             <div>
-              <p className="text-xs text-[#8a8aa8] uppercase tracking-wider mb-2">Kanten</p>
+              <p className="text-xs text-[#585866] uppercase tracking-wider mb-2">Kanten</p>
               {links.filter((l) => {
                 const src = typeof l.source === "string" ? l.source : l.source.id;
                 const tgt = typeof l.target === "string" ? l.target : l.target.id;
@@ -298,8 +298,8 @@ export default function GraphPage() {
                 return (
                   <div key={i} className="flex items-center gap-2 text-xs mb-2">
                     <span className="font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded">{link.type}</span>
-                    <span className="text-[#8888aa]">→</span>
-                    <span className="text-[#e8e8f0]">{otherNode?.name || other}</span>
+                    <span className="text-[#585866]">→</span>
+                    <span className="text-[#15151d]">{otherNode?.name || other}</span>
                   </div>
                 );
               })}

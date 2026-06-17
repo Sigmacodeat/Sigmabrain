@@ -115,8 +115,8 @@ export default function ApprovalsPage() {
           <Gavel size={20} className="text-violet-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">Freigaben</h1>
-          <p className="text-sm text-[#8888aa]">Vier-Augen-Prinzip — KI-/Agenten-Vorschläge werden erst durch eine zweite Person wirksam</p>
+          <h1 className="text-xl font-bold text-[#15151d]">Freigaben</h1>
+          <p className="text-sm text-[#585866]">Vier-Augen-Prinzip — KI-/Agenten-Vorschläge werden erst durch eine zweite Person wirksam</p>
         </div>
       </div>
 
@@ -143,10 +143,10 @@ export default function ApprovalsPage() {
           <section className="space-y-2">
             <div className="flex items-center gap-2">
               <Clock size={14} className="text-amber-400" aria-hidden="true" />
-              <h2 className="text-sm font-semibold text-[#e8e8f0]">Offen ({pending.length})</h2>
+              <h2 className="text-sm font-semibold text-[#15151d]">Offen ({pending.length})</h2>
             </div>
             {pending.length === 0 ? (
-              <p className="text-sm text-[#8888aa] py-6 text-center">Keine offenen Freigaben.</p>
+              <p className="text-sm text-[#585866] py-6 text-center">Keine offenen Freigaben.</p>
             ) : (
               pending.map((item) => (
                 <div key={item.slug} className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4 space-y-3">
@@ -156,9 +156,9 @@ export default function ApprovalsPage() {
                         <Badge variant="default" className="text-[10px] border bg-violet-500/10 text-violet-400 border-violet-500/20">
                           {ACTION_LABELS[item.action_type]}
                         </Badge>
-                        <span className="text-sm font-medium text-[#e8e8f0] truncate">{item.summary}</span>
+                        <span className="text-sm font-medium text-[#15151d] truncate">{item.summary}</span>
                       </div>
-                      <p className="text-xs text-[#8888aa] mt-1">
+                      <p className="text-xs text-[#585866] mt-1">
                         Eingereicht von {item.proposed_by}
                         {item.proposed_at ? ` · ${new Date(item.proposed_at).toLocaleString("de-DE")}` : ""}
                       </p>
@@ -181,7 +181,7 @@ export default function ApprovalsPage() {
                         rows={2}
                         placeholder="Grund der Ablehnung (für die Akte dokumentiert)…"
                         aria-label="Grund der Ablehnung"
-                        className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-red-500/50 resize-y"
+                        className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-red-500/50 resize-y"
                       />
                       <div className="flex items-center gap-2">
                         <button
@@ -194,7 +194,7 @@ export default function ApprovalsPage() {
                         </button>
                         <button
                           onClick={() => { setRejecting(null); setReason(""); }}
-                          className="px-3 py-1.5 rounded-lg text-xs text-[#8888aa] hover:text-[#e8e8f0]"
+                          className="px-3 py-1.5 rounded-lg text-xs text-[#585866] hover:text-[#15151d]"
                         >
                           Abbrechen
                         </button>
@@ -213,7 +213,7 @@ export default function ApprovalsPage() {
                       <button
                         onClick={() => { setRejecting(item.slug); setReason(""); }}
                         disabled={busy === item.slug}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1e1e3a] text-xs text-[#8888aa] hover:text-red-400 hover:border-red-500/30 disabled:opacity-60"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e2e4ec] text-xs text-[#585866] hover:text-red-400 hover:border-red-500/30 disabled:opacity-60"
                       >
                         <XCircle size={13} />
                         Ablehnen
@@ -229,20 +229,20 @@ export default function ApprovalsPage() {
           {decided.length > 0 && (
             <section className="space-y-2">
               <div className="flex items-center gap-2">
-                <UserCheck size={14} className="text-[#8888aa]" aria-hidden="true" />
-                <h2 className="text-sm font-semibold text-[#e8e8f0]">Entschieden ({decided.length})</h2>
+                <UserCheck size={14} className="text-[#585866]" aria-hidden="true" />
+                <h2 className="text-sm font-semibold text-[#15151d]">Entschieden ({decided.length})</h2>
               </div>
               {decided.map((item) => (
-                <div key={item.slug} className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3">
+                <div key={item.slug} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     {item.status === "approved" ? (
                       <Badge variant="default" className="text-[10px] border bg-emerald-500/10 text-emerald-400 border-emerald-500/20">Freigegeben</Badge>
                     ) : (
                       <Badge variant="default" className="text-[10px] border bg-red-500/10 text-red-400 border-red-500/20">Abgelehnt</Badge>
                     )}
-                    <span className="text-sm text-[#e8e8f0] truncate">{item.summary}</span>
+                    <span className="text-sm text-[#15151d] truncate">{item.summary}</span>
                   </div>
-                  <p className="text-xs text-[#8888aa] mt-1">
+                  <p className="text-xs text-[#585866] mt-1">
                     {item.decided_by ? `${item.decided_by} · ` : ""}
                     {item.decided_at ? new Date(item.decided_at).toLocaleString("de-DE") : ""}
                   </p>

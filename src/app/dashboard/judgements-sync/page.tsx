@@ -97,8 +97,8 @@ export default function JudgementsSyncPage() {
             <Landmark size={20} className="text-violet-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">Rechtsprechungs-Sync</h1>
-            <p className="text-sm text-[#8888aa]">OGH, BGH, EuGH Urteile ins Brain laden</p>
+            <h1 className="text-xl font-bold text-[#15151d]">Rechtsprechungs-Sync</h1>
+            <p className="text-sm text-[#585866]">OGH, BGH, EuGH Urteile ins Brain laden</p>
           </div>
         </div>
         <Button
@@ -114,23 +114,23 @@ export default function JudgementsSyncPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0a0a18] p-3 text-center">
-          <div className="text-xs text-[#8a8aa8]">Im Brain</div>
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+          <div className="text-xs text-[#585866]">Im Brain</div>
           <div className="text-xl font-bold text-violet-400">{existingCount.toLocaleString("de-DE")}</div>
         </div>
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0a0a18] p-3 text-center">
-          <div className="text-xs text-[#8a8aa8]">Quellen</div>
-          <div className="text-xl font-bold text-[#e8e8f0]">{sources.length}</div>
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+          <div className="text-xs text-[#585866]">Quellen</div>
+          <div className="text-xl font-bold text-[#15151d]">{sources.length}</div>
         </div>
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0a0a18] p-3 text-center">
-          <div className="text-xs text-[#8a8aa8]">Gerichte</div>
-          <div className="text-xl font-bold text-[#e8e8f0]">{sources.reduce((s, src) => s + src.courts.length, 0)}</div>
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+          <div className="text-xs text-[#585866]">Gerichte</div>
+          <div className="text-xl font-bold text-[#15151d]">{sources.reduce((s, src) => s + src.courts.length, 0)}</div>
         </div>
       </div>
 
       {/* CLI Reference */}
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-        <h2 className="text-sm font-semibold text-[#e8e8f0]">CLI-Befehle</h2>
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+        <h2 className="text-sm font-semibold text-[#15151d]">CLI-Befehle</h2>
         <div className="space-y-2">
           {[
             "gbrain connector add legal-judgements --jurisdiction at --query 'Haftung'",
@@ -138,12 +138,12 @@ export default function JudgementsSyncPage() {
             "gbrain connector sync legal-judgements",
             "gbrain search 'Haftung' --type court_decision",
           ].map((cmd) => (
-            <div key={cmd} className="flex items-center gap-2 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2">
+            <div key={cmd} className="flex items-center gap-2 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2">
               <code className="text-xs font-mono text-violet-400 flex-1">{cmd}</code>
               <button
                 onClick={() => navigator.clipboard.writeText(cmd)}
                 aria-label={`Befehl kopieren: ${cmd}`}
-                className="text-[#8a8aa8] hover:text-[#e8e8f0] transition-colors text-xs"
+                className="text-[#585866] hover:text-[#15151d] transition-colors text-xs"
               >
                 Kopieren
               </button>
@@ -157,22 +157,22 @@ export default function JudgementsSyncPage() {
         {sources.map((src) => (
           <div
             key={src.id}
-            className="flex items-start gap-4 px-4 py-4 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]"
+            className="flex items-start gap-4 px-4 py-4 rounded-xl border border-[#e2e4ec] bg-[#ffffff]"
           >
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
               src.status === "done" ? "bg-emerald-500/10" :
               src.status === "running" ? "bg-violet-500/10" :
               src.status === "error" ? "bg-red-500/10" :
-              "bg-[#12122a]"
+              "bg-[#eceef3]"
             }`}>
               {src.status === "done" ? <CheckCircle2 size={18} className="text-emerald-400" /> :
                src.status === "running" ? <RefreshCw size={18} className="text-violet-400 animate-spin" /> :
                src.status === "error" ? <AlertTriangle size={18} className="text-red-400" /> :
-               <Database size={18} className="text-[#8a8aa8]" />}
+               <Database size={18} className="text-[#585866]" />}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-[#e8e8f0]">{src.name}</span>
+                <span className="text-sm font-medium text-[#15151d]">{src.name}</span>
                 {src.status === "done" && (
                   <Badge variant="default" className="text-[10px] bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
                     {src.count > 0 ? `+${src.count} Urteile importiert` : "Keine neuen Urteile"}
@@ -189,10 +189,10 @@ export default function JudgementsSyncPage() {
                   </Badge>
                 )}
               </div>
-              <p className="text-xs text-[#8888aa] mt-1">{src.description}</p>
+              <p className="text-xs text-[#585866] mt-1">{src.description}</p>
               <div className="flex flex-wrap gap-1 mt-2">
                 {src.courts.map((court) => (
-                  <span key={court} className="text-[10px] px-2 py-0.5 rounded bg-[#12122a] text-[#8a8aa8] border border-[#1e1e3a]">
+                  <span key={court} className="text-[10px] px-2 py-0.5 rounded bg-[#eceef3] text-[#585866] border border-[#e2e4ec]">
                     {court}
                   </span>
                 ))}
@@ -202,7 +202,7 @@ export default function JudgementsSyncPage() {
               href={src.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#8a8aa8] hover:text-violet-400 transition-colors shrink-0"
+              className="text-[#585866] hover:text-violet-400 transition-colors shrink-0"
             >
               <Globe size={14} />
             </a>

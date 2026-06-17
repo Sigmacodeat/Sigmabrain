@@ -638,8 +638,8 @@ export default function InvoicingPage() {
             <FileText size={20} className="text-emerald-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">Rechnungen</h1>
-            <p className="text-sm text-[#8888aa]">Abrechnung & PDF-Export</p>
+            <h1 className="text-xl font-bold text-[#15151d]">Rechnungen</h1>
+            <p className="text-sm text-[#585866]">Abrechnung & PDF-Export</p>
           </div>
         </div>
         <Button
@@ -654,17 +654,17 @@ export default function InvoicingPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0a0a18] p-3 text-center">
-          <div className="text-xs text-[#8a8aa8]">Offen</div>
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+          <div className="text-xs text-[#585866]">Offen</div>
           <div className="text-xl font-bold text-amber-400">{totalOutstanding.toLocaleString("de-DE")} €</div>
         </div>
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0a0a18] p-3 text-center">
-          <div className="text-xs text-[#8a8aa8]">Bezahlt</div>
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+          <div className="text-xs text-[#585866]">Bezahlt</div>
           <div className="text-xl font-bold text-emerald-400">{totalPaid.toLocaleString("de-DE")} €</div>
         </div>
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0a0a18] p-3 text-center">
-          <div className="text-xs text-[#8a8aa8]">Rechnungen</div>
-          <div className="text-xl font-bold text-[#e8e8f0]">{invoices.length}</div>
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+          <div className="text-xs text-[#585866]">Rechnungen</div>
+          <div className="text-xl font-bold text-[#15151d]">{invoices.length}</div>
         </div>
       </div>
 
@@ -686,11 +686,11 @@ export default function InvoicingPage() {
           <div className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs text-[#8888aa] block mb-1">Akte wählen</label>
+                <label className="text-xs text-[#585866] block mb-1">Akte wählen</label>
                 <select
                   value={selectedCase}
                   onChange={(e) => setSelectedCase(e.target.value)}
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-emerald-500/50"
                 >
                   <option value="">— Akte auswählen —</option>
                   {cases.map((c) => (
@@ -701,11 +701,11 @@ export default function InvoicingPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-[#8888aa] block mb-1">Rechnungstyp</label>
+                <label className="text-xs text-[#585866] block mb-1">Rechnungstyp</label>
                 <select
                   value={invoiceType}
                   onChange={(e) => setInvoiceType(e.target.value as Invoice["invoiceType"])}
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-emerald-500/50"
                 >
                   <option value="standard">Standard</option>
                   <option value="teilrechnung">Teilrechnung</option>
@@ -724,7 +724,7 @@ export default function InvoicingPage() {
               const totalMinutes = openTime.reduce((s, e) => s + (e.minutes || 0), 0);
               const expenseTotal = openExpenses.reduce((s, e) => s + e.amount, 0);
               return (
-                <div className="text-sm text-[#8888aa]">
+                <div className="text-sm text-[#585866]">
                   {openTime.length} offene Buchungen · {Math.floor(totalMinutes / 60)}h {totalMinutes % 60}min ·
                   {' '}{openExpenses.length} Auslagen ({expenseTotal.toFixed(2)} €) ·
                   {' '}Honorar geschätzt: {Math.round((totalMinutes / 60) * (parseInt(kanzlei?.stundensatz || "200", 10))).toLocaleString("de-DE")} €
@@ -732,14 +732,14 @@ export default function InvoicingPage() {
               );
             })()}
             <div>
-              <label className="text-xs text-[#8888aa] block mb-1">Vorschuss / Anzahlung (€)</label>
+              <label className="text-xs text-[#585866] block mb-1">Vorschuss / Anzahlung (€)</label>
               <input
                 type="number"
                 step="0.01"
                 value={advancePayment}
                 onChange={(e) => setAdvancePayment(e.target.value)}
                 placeholder="0,00"
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-emerald-500/50"
               />
             </div>
             <div className="flex gap-2">
@@ -761,25 +761,25 @@ export default function InvoicingPage() {
 
       {/* Search */}
       <div className="relative">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8aa8]" />
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Rechnung suchen…"
           aria-label="Rechnung suchen"
-          className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-emerald-500/50"
+          className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg pl-9 pr-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-emerald-500/50"
         />
       </div>
 
       {/* Invoice List */}
       {loading ? (
-        <div className="text-center py-20 text-[#8888aa]">Lade Rechnungen…</div>
+        <div className="text-center py-20 text-[#585866]">Lade Rechnungen…</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20 space-y-4">
-          <FileText size={48} className="mx-auto text-[#1e1e3a]" />
-          <p className="text-[#8888aa]">Noch keine Rechnungen vorhanden.</p>
-          <p className="text-[#8a8aa8] text-sm">Erstellen Sie eine Rechnung aus einer Akte mit Zeiterfassung.</p>
+          <FileText size={48} className="mx-auto text-[#e2e4ec]" />
+          <p className="text-[#585866]">Noch keine Rechnungen vorhanden.</p>
+          <p className="text-[#585866] text-sm">Erstellen Sie eine Rechnung aus einer Akte mit Zeiterfassung.</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -789,14 +789,14 @@ export default function InvoicingPage() {
             return (
               <div
                 key={inv.id}
-                className="flex items-center gap-4 px-4 py-3 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] hover:bg-[#12122a] transition-all"
+                className="flex items-center gap-4 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:bg-[#eceef3] transition-all"
               >
                 <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center shrink-0", STATUS_BG[status.color])} aria-hidden="true">
                   <StatusIcon size={18} className={STATUS_TEXT[status.color]} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-[#e8e8f0]">{inv.number}</span>
+                    <span className="text-sm font-medium text-[#15151d]">{inv.number}</span>
                     <Badge variant="default" className={cn("text-[10px] border", statusBadgeClasses(status.color))}>
                       {status.label}
                     </Badge>
@@ -806,26 +806,26 @@ export default function InvoicingPage() {
                       </Badge>
                     ) : null}
                   </div>
-                  <div className="text-xs text-[#8888aa] mt-0.5">
+                  <div className="text-xs text-[#585866] mt-0.5">
                     {inv.client} · {inv.items.length + inv.expenses.length} Positionen · {inv.date}
                     {inv.paidAt ? ` · bezahlt ${new Date(inv.paidAt).toLocaleDateString("de-DE")}` : ""}
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-sm font-bold text-[#e8e8f0]">{inv.total.toFixed(2)} €</div>
-                  <div className="text-xs text-[#8a8aa8]">inkl. MwSt.</div>
+                  <div className="text-sm font-bold text-[#15151d]">{inv.total.toFixed(2)} €</div>
+                  <div className="text-xs text-[#585866]">inkl. MwSt.</div>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
                   <button
                     onClick={() => void printInvoice(inv)}
-                    className="p-2 rounded-lg text-[#8a8aa8] hover:text-emerald-400 hover:bg-emerald-500/10 transition-all"
+                    className="p-2 rounded-lg text-[#585866] hover:text-emerald-400 hover:bg-emerald-500/10 transition-all"
                     title="Drucken"
                   >
                     <Printer size={14} />
                   </button>
                   <button
                     onClick={() => void downloadPdf(inv)}
-                    className="p-2 rounded-lg text-[#8a8aa8] hover:text-violet-400 hover:bg-violet-500/10 transition-all"
+                    className="p-2 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all"
                     title="PDF herunterladen"
                   >
                     <FileText size={14} />
@@ -833,7 +833,7 @@ export default function InvoicingPage() {
                   {(userRole === "admin" || userRole === "lawyer" || userRole === "assistant") && (
                     <button
                       onClick={() => void sendInvoiceEmail(inv)}
-                      className="p-2 rounded-lg text-[#8a8aa8] hover:text-blue-400 hover:bg-blue-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-blue-400 hover:bg-blue-500/10 transition-all"
                       title="Per E-Mail senden"
                     >
                       <Mail size={14} />
@@ -842,7 +842,7 @@ export default function InvoicingPage() {
                   {inv.status === "draft" && (
                     <button
                       onClick={() => updateStatus(inv, "sent")}
-                      className="p-2 rounded-lg text-[#8a8aa8] hover:text-blue-400 hover:bg-blue-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-blue-400 hover:bg-blue-500/10 transition-all"
                       title="Als gesendet markieren"
                     >
                       <Send size={14} />
@@ -851,7 +851,7 @@ export default function InvoicingPage() {
                   {inv.status === "sent" && (
                     <button
                       onClick={() => updateStatus(inv, "paid")}
-                      className="p-2 rounded-lg text-[#8a8aa8] hover:text-emerald-400 hover:bg-emerald-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-emerald-400 hover:bg-emerald-500/10 transition-all"
                       title="Als bezahlt markieren"
                     >
                       <CheckCircle2 size={14} />
@@ -860,7 +860,7 @@ export default function InvoicingPage() {
                   {inv.status !== "paid" && inv.status !== "cancelled" && (userRole === "admin" || userRole === "lawyer") && (
                     <button
                       onClick={() => updateStatus(inv, "cancelled")}
-                      className="p-2 rounded-lg text-[#8a8aa8] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
                       title="Stornieren"
                     >
                       <XCircle size={14} />
@@ -869,7 +869,7 @@ export default function InvoicingPage() {
                   {(inv.status === "sent" || inv.status === "overdue") && (userRole === "admin" || userRole === "lawyer") && (
                     <button
                       onClick={() => void sendReminder(inv)}
-                      className="p-2 rounded-lg text-[#8a8aa8] hover:text-amber-400 hover:bg-amber-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-amber-400 hover:bg-amber-500/10 transition-all"
                       title={`${inv.reminderCount ? `${inv.reminderCount}. ` : ""}Mahnung senden`}
                     >
                       <AlertTriangle size={14} />
@@ -878,7 +878,7 @@ export default function InvoicingPage() {
                   {(userRole === "admin" || userRole === "lawyer") && (
                     <button
                       onClick={() => deleteInvoice(inv)}
-                      className="p-2 rounded-lg text-[#8a8aa8] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
                       title="Löschen"
                     >
                       <Trash2 size={14} />
@@ -903,17 +903,17 @@ function RvgDialog() {
     <>
       <Button
         variant="outline"
-        className="text-sm border-[#1e1e3a] text-[#8888aa] hover:text-[#e8e8f0] hover:border-[#3a3a6a]"
+        className="text-sm border-[#e2e4ec] text-[#585866] hover:text-[#15151d] hover:border-[#b4b9c8]"
         onClick={() => setOpen(true)}
       >
         RVG berechnen
       </Button>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={() => setOpen(false)}>
-          <div className="w-full max-w-md rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-6 space-y-4" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-base font-semibold text-[#e8e8f0]">RVG-Gebührenberechnung</h3>
+          <div className="w-full max-w-md rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-6 space-y-4" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-base font-semibold text-[#15151d]">RVG-Gebührenberechnung</h3>
             <div>
-              <label className="text-xs text-[#8888aa] block mb-1">Streitwert (€)</label>
+              <label className="text-xs text-[#585866] block mb-1">Streitwert (€)</label>
               <input
                 type="number"
                 value={streitwert}
@@ -927,17 +927,17 @@ function RvgDialog() {
                   }
                 }}
                 placeholder="z. B. 10000"
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
               />
             </div>
             {result && (
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-[#8888aa]">Basisgebühr (1,0)</span><span className="text-[#e8e8f0]">{result.basisGebuehr.toFixed(2)} €</span></div>
-                <div className="flex justify-between"><span className="text-[#8888aa]">Verfahrensgebühr (1,3)</span><span className="text-[#e8e8f0]">{result.verfahrensgebuehr.toFixed(2)} €</span></div>
-                <div className="flex justify-between"><span className="text-[#8888aa]">Terminsgebühr (1,2)</span><span className="text-[#e8e8f0]">{result.terminsgebuehr.toFixed(2)} €</span></div>
-                <div className="flex justify-between"><span className="text-[#8888aa]">Auslagenpauschale</span><span className="text-[#e8e8f0]">{result.auslagenpauschale.toFixed(2)} €</span></div>
-                <div className="flex justify-between border-t border-[#1e1e3a] pt-2"><span className="text-[#8888aa]">Netto</span><span className="text-[#e8e8f0] font-medium">{result.summeNetto.toFixed(2)} €</span></div>
-                <div className="flex justify-between"><span className="text-[#8888aa]">MwSt (19 %)</span><span className="text-[#e8e8f0]">{result.mwst.toFixed(2)} €</span></div>
+                <div className="flex justify-between"><span className="text-[#585866]">Basisgebühr (1,0)</span><span className="text-[#15151d]">{result.basisGebuehr.toFixed(2)} €</span></div>
+                <div className="flex justify-between"><span className="text-[#585866]">Verfahrensgebühr (1,3)</span><span className="text-[#15151d]">{result.verfahrensgebuehr.toFixed(2)} €</span></div>
+                <div className="flex justify-between"><span className="text-[#585866]">Terminsgebühr (1,2)</span><span className="text-[#15151d]">{result.terminsgebuehr.toFixed(2)} €</span></div>
+                <div className="flex justify-between"><span className="text-[#585866]">Auslagenpauschale</span><span className="text-[#15151d]">{result.auslagenpauschale.toFixed(2)} €</span></div>
+                <div className="flex justify-between border-t border-[#e2e4ec] pt-2"><span className="text-[#585866]">Netto</span><span className="text-[#15151d] font-medium">{result.summeNetto.toFixed(2)} €</span></div>
+                <div className="flex justify-between"><span className="text-[#585866]">MwSt (19 %)</span><span className="text-[#15151d]">{result.mwst.toFixed(2)} €</span></div>
                 <div className="flex justify-between text-emerald-400 font-semibold"><span>Brutto</span><span>{result.summeBrutto.toFixed(2)} €</span></div>
               </div>
             )}

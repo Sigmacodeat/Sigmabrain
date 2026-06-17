@@ -405,8 +405,8 @@ export default function CaseDetailPage() {
   if (!caseData) {
     return (
       <div className="flex flex-col items-center justify-center h-full space-y-4">
-        <Briefcase size={48} className="text-[#1e1e3a]" />
-        <p className="text-[#8888aa]">Akte nicht gefunden</p>
+        <Briefcase size={48} className="text-[#e2e4ec]" />
+        <p className="text-[#585866]">Akte nicht gefunden</p>
         <Link href="/dashboard/cases">
           <Button variant="primary" className="bg-violet-600 hover:bg-violet-500 text-white gap-2">
             <ArrowLeft size={16} />
@@ -444,14 +444,14 @@ export default function CaseDetailPage() {
         )}
       </div>
       {/* Header */}
-      <div className="shrink-0 border-b border-[#1e1e3a] bg-[#0a0a18] px-6 py-4">
+      <div className="shrink-0 border-b border-[#e2e4ec] bg-[#ffffff] px-6 py-4">
         <div className="flex items-center gap-2 mb-3">
-          <Link href="/dashboard/cases" aria-label="Zurück zur Aktenliste" className="text-[#8a8aa8] hover:text-[#8888aa] transition-colors">
+          <Link href="/dashboard/cases" aria-label="Zurück zur Aktenliste" className="text-[#585866] hover:text-[#585866] transition-colors">
             <ArrowLeft size={16} aria-hidden="true" />
           </Link>
-          <span className="text-xs text-[#8a8aa8]">Akten</span>
-          <ChevronRight size={12} className="text-[#8a8aa8]" />
-          <span className="text-xs text-[#8888aa] font-mono">{caseData.caseNumber}</span>
+          <span className="text-xs text-[#585866]">Akten</span>
+          <ChevronRight size={12} className="text-[#585866]" />
+          <span className="text-xs text-[#585866] font-mono">{caseData.caseNumber}</span>
         </div>
 
         <div className="flex items-start justify-between">
@@ -460,7 +460,7 @@ export default function CaseDetailPage() {
               <StatusIcon size={22} className={STATUS_TEXT[statusCfg.color]} />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-[#e8e8f0]">{caseData.title}</h1>
+              <h1 className="text-lg font-bold text-[#15151d]">{caseData.title}</h1>
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="default" className={cn("text-[10px] border",
                   caseData.priority === "critical" ? "bg-red-500/10 text-red-400 border-red-500/20" :
@@ -471,7 +471,7 @@ export default function CaseDetailPage() {
                   {caseData.priority}
                 </Badge>
                 {caseData.legalArea && (
-                  <span className="text-xs text-[#8888aa] flex items-center gap-1">
+                  <span className="text-xs text-[#585866] flex items-center gap-1">
                     <Scale size={10} />{caseData.legalArea}
                   </span>
                 )}
@@ -483,7 +483,7 @@ export default function CaseDetailPage() {
               {statusCfg.label}
             </Badge>
             {caseData.estimatedValue && (
-              <p className="text-xs text-[#8a8aa8] mt-1">
+              <p className="text-xs text-[#585866] mt-1">
                 Streitwert: {caseData.estimatedValue.min.toLocaleString()}–{caseData.estimatedValue.max.toLocaleString()} {caseData.estimatedValue.currency}
               </p>
             )}
@@ -491,31 +491,31 @@ export default function CaseDetailPage() {
         </div>
 
         {/* Meta bar */}
-        <div className="flex items-center gap-4 mt-3 text-xs text-[#8a8aa8] flex-wrap">
+        <div className="flex items-center gap-4 mt-3 text-xs text-[#585866] flex-wrap">
           {caseData.clientName && (
             <span className="flex items-center gap-1">
               <Users size={10} />Mandant:{" "}
               {caseData.clientSlug ? (
                 <Link href={`/dashboard/contacts?highlight=${encodeURIComponent(caseData.clientSlug)}`} className="text-violet-400 hover:underline">{caseData.clientName}</Link>
               ) : (
-                <span className="text-[#8888aa]">{caseData.clientName}</span>
+                <span className="text-[#585866]">{caseData.clientName}</span>
               )}
             </span>
           )}
           {caseData.opponentName && (
-            <span className="flex items-center gap-1"><ShieldAlert size={10} />Gegner: <span className="text-[#8888aa]">{caseData.opponentName}</span></span>
+            <span className="flex items-center gap-1"><ShieldAlert size={10} />Gegner: <span className="text-[#585866]">{caseData.opponentName}</span></span>
           )}
           {caseData.courtName && (
-            <span className="flex items-center gap-1"><Briefcase size={10} />Gericht: <span className="text-[#8888aa]">{caseData.courtName}</span></span>
+            <span className="flex items-center gap-1"><Briefcase size={10} />Gericht: <span className="text-[#585866]">{caseData.courtName}</span></span>
           )}
           {caseData.ownLawyerName && (
-            <span className="flex items-center gap-1"><Users size={10} />Anwalt: <span className="text-[#8888aa]">{caseData.ownLawyerName}</span></span>
+            <span className="flex items-center gap-1"><Users size={10} />Anwalt: <span className="text-[#585866]">{caseData.ownLawyerName}</span></span>
           )}
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="shrink-0 border-b border-[#1e1e3a] bg-[#0a0a18] px-6">
+      <div className="shrink-0 border-b border-[#e2e4ec] bg-[#ffffff] px-6">
         <div className="flex gap-1 overflow-x-auto">
           {TABS.map((tab) => {
             const Icon = tab.icon;
@@ -527,7 +527,7 @@ export default function CaseDetailPage() {
                   "flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-all whitespace-nowrap",
                   activeTab === tab.key
                     ? "border-violet-400 text-violet-400"
-                    : "border-transparent text-[#8888aa] hover:text-[#e8e8f0]"
+                    : "border-transparent text-[#585866] hover:text-[#15151d]"
                 )}
               >
                 <Icon size={14} />
@@ -554,7 +554,7 @@ export default function CaseDetailPage() {
               </Button>
 	              <Button
 	                variant="secondary"
-                className="bg-[#12122a] border border-[#1e1e3a] text-[#e8e8f0] hover:bg-[#1a1a3a] gap-2 text-sm"
+                className="bg-[#eceef3] border border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a] gap-2 text-sm"
                 onClick={() => { setActiveTab("query"); setQuery("Bewerte die Erfolgsaussichten dieser Akte."); }}
               >
                 <Scale size={14} />
@@ -568,7 +568,7 @@ export default function CaseDetailPage() {
                         "border text-sm",
                         caseData.portalEnabled
                           ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/15"
-                          : "bg-[#12122a] border-[#1e1e3a] text-[#e8e8f0] hover:bg-[#1a1a3a]"
+                          : "bg-[#eceef3] border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a]"
                       )}
                       onClick={() => {
                         const updated = { ...caseData, portalEnabled: !caseData.portalEnabled };
@@ -583,7 +583,7 @@ export default function CaseDetailPage() {
                     {caseData.portalEnabled && (
                       <Button
                         variant="secondary"
-                        className="bg-[#12122a] border border-[#1e1e3a] text-[#e8e8f0] hover:bg-[#1a1a3a] gap-2 text-sm"
+                        className="bg-[#eceef3] border border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a] gap-2 text-sm"
                         onClick={async () => {
                           setGeneratingPortal(true);
                           try {
@@ -624,7 +624,7 @@ export default function CaseDetailPage() {
                   <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 space-y-2">
                     <p className="text-xs text-emerald-400 font-medium mb-1">Portal-Link (30 Tage gültig)</p>
                     <div className="flex items-center gap-2">
-                      <code className="text-xs font-mono text-[#8888aa] flex-1 break-all">{portalUrl}</code>
+                      <code className="text-xs font-mono text-[#585866] flex-1 break-all">{portalUrl}</code>
                       <button
                         onClick={() => { navigator.clipboard.writeText(portalUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
                         className="text-xs text-violet-400 hover:underline shrink-0"
@@ -660,12 +660,12 @@ export default function CaseDetailPage() {
                 )}
 
             {/* Stammdaten — Kontakte verknüpfen */}
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-[#e8e8f0]">Stammdaten</h3>
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-[#15151d]">Stammdaten</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {/* Client */}
                 <div className="space-y-1">
-                  <label className="text-xs text-[#8a8aa8]">Mandant</label>
+                  <label className="text-xs text-[#585866]">Mandant</label>
                   <select
                     value={caseData.clientSlug || ""}
                     onChange={(e) => {
@@ -674,7 +674,7 @@ export default function CaseDetailPage() {
                       setCaseData(updated);
                       saveCaseUpdate({ clientSlug: updated.clientSlug, clientName: updated.clientName });
                     }}
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   >
                     <option value="">— Auswählen —</option>
                     {contacts.filter((c) => c.role === "client").map((c) => (
@@ -684,7 +684,7 @@ export default function CaseDetailPage() {
                 </div>
                 {/* Opponent */}
                 <div className="space-y-1">
-                  <label className="text-xs text-[#8a8aa8]">Gegner</label>
+                  <label className="text-xs text-[#585866]">Gegner</label>
                   <select
                     value={(caseData.opponentSlugs ?? [])[0] || ""}
                     onChange={(e) => {
@@ -694,7 +694,7 @@ export default function CaseDetailPage() {
                       setCaseData(updated);
                       saveCaseUpdate({ opponentSlugs: updated.opponentSlugs, opponentName: updated.opponentName });
                     }}
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   >
                     <option value="">— Auswählen —</option>
                     {contacts.filter((c) => c.role === "opponent").map((c) => (
@@ -704,7 +704,7 @@ export default function CaseDetailPage() {
                 </div>
                 {/* Court */}
                 <div className="space-y-1">
-                  <label className="text-xs text-[#8a8aa8]">Gericht</label>
+                  <label className="text-xs text-[#585866]">Gericht</label>
                   <select
                     value={caseData.courtSlug || ""}
                     onChange={(e) => {
@@ -713,7 +713,7 @@ export default function CaseDetailPage() {
                       setCaseData(updated);
                       saveCaseUpdate({ courtSlug: updated.courtSlug, courtName: updated.courtName });
                     }}
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   >
                     <option value="">— Auswählen —</option>
                     {contacts.filter((c) => c.role === "court").map((c) => (
@@ -723,7 +723,7 @@ export default function CaseDetailPage() {
                 </div>
               </div>
               {contactsLoading && (
-                <p className="text-xs text-[#8a8aa8]">Kontakte werden geladen…</p>
+                <p className="text-xs text-[#585866]">Kontakte werden geladen…</p>
               )}
               {contacts.length === 0 && !contactsLoading && (
                 <p className="text-xs text-amber-400">
@@ -735,9 +735,9 @@ export default function CaseDetailPage() {
 
             {/* Facts */}
             {caseData.facts && (
-              <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-                <h3 className="text-sm font-semibold text-[#e8e8f0] mb-2">Sachverhalt</h3>
-                <div className="text-sm text-[#8888aa] whitespace-pre-wrap leading-relaxed">
+              <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+                <h3 className="text-sm font-semibold text-[#15151d] mb-2">Sachverhalt</h3>
+                <div className="text-sm text-[#585866] whitespace-pre-wrap leading-relaxed">
                   {parseCitations(caseData.facts).map((segment, i) =>
                     segment.isCitation ? (
                       <CitationLink key={i} citation={segment.text} />
@@ -751,11 +751,11 @@ export default function CaseDetailPage() {
 
             {/* Claims */}
             {caseData.claims.length > 0 && (
-              <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-                <h3 className="text-sm font-semibold text-[#e8e8f0] mb-2">Ansprüche / Klageanträge</h3>
+              <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+                <h3 className="text-sm font-semibold text-[#15151d] mb-2">Ansprüche / Klageanträge</h3>
                 <ul className="space-y-1.5">
                   {caseData.claims.map((claim, i) => (
-                    <li key={i} className="text-sm text-[#8888aa] flex items-start gap-2">
+                    <li key={i} className="text-sm text-[#585866] flex items-start gap-2">
                       <span className="text-violet-400 mt-0.5">•</span>
                       {claim}
                     </li>
@@ -766,11 +766,11 @@ export default function CaseDetailPage() {
 
             {/* Defenses */}
             {caseData.defenses.length > 0 && (
-              <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-                <h3 className="text-sm font-semibold text-[#e8e8f0] mb-2">Verteidigung / Einwände</h3>
+              <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+                <h3 className="text-sm font-semibold text-[#15151d] mb-2">Verteidigung / Einwände</h3>
                 <ul className="space-y-1.5">
                   {caseData.defenses.map((def, i) => (
-                    <li key={i} className="text-sm text-[#8888aa] flex items-start gap-2">
+                    <li key={i} className="text-sm text-[#585866] flex items-start gap-2">
                       <span className="text-emerald-400 mt-0.5">•</span>
                       {def}
                     </li>
@@ -783,13 +783,13 @@ export default function CaseDetailPage() {
             {caseData.strategy && (
               <div className="rounded-xl border border-violet-500/20 bg-violet-600/5 p-4">
                 <h3 className="text-sm font-semibold text-violet-400 mb-2">Empfohlene Strategie</h3>
-                <p className="text-sm text-[#8888aa] mb-3">{caseData.strategy.recommended}</p>
+                <p className="text-sm text-[#585866] mb-3">{caseData.strategy.recommended}</p>
                 {caseData.strategy.risks && caseData.strategy.risks.length > 0 && (
                   <div className="mt-3">
                     <h4 className="text-xs font-semibold text-red-400 mb-1">Risiken</h4>
                     <ul className="space-y-1">
                       {(caseData.strategy.risks ?? []).map((r, i) => (
-                        <li key={i} className="text-xs text-[#8888aa]">
+                        <li key={i} className="text-xs text-[#585866]">
                           • {r.description} ({r.probability} / {r.impact})
                         </li>
                       ))}
@@ -803,7 +803,7 @@ export default function CaseDetailPage() {
             {caseData.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
                 {caseData.tags.map((tag) => (
-                  <Badge key={tag} variant="default" className="text-[10px] bg-[#12122a] border border-[#1e1e3a] text-[#8888aa]">
+                  <Badge key={tag} variant="default" className="text-[10px] bg-[#eceef3] border border-[#e2e4ec] text-[#585866]">
                     {tag}
                   </Badge>
                 ))}
@@ -825,14 +825,14 @@ export default function CaseDetailPage() {
               </Button>
             </div>
             <div className="relative pl-6 space-y-4">
-              <div className="absolute left-2 top-0 bottom-0 w-px bg-[#1e1e3a]" />
+              <div className="absolute left-2 top-0 bottom-0 w-px bg-[#e2e4ec]" />
               {/* Creation */}
               <div className="relative">
                 <div className="absolute -left-4 w-2 h-2 rounded-full bg-violet-500" />
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3">
-                  <div className="text-xs text-[#8a8aa8]">{new Date(caseData.createdAt).toLocaleDateString("de-DE")}</div>
-                  <div className="text-sm text-[#e8e8f0]">Akte erstellt</div>
-                  <div className="text-xs text-[#8888aa]">{caseData.caseNumber}</div>
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
+                  <div className="text-xs text-[#585866]">{new Date(caseData.createdAt).toLocaleDateString("de-DE")}</div>
+                  <div className="text-sm text-[#15151d]">Akte erstellt</div>
+                  <div className="text-xs text-[#585866]">{caseData.caseNumber}</div>
                 </div>
               </div>
               {/* Dynamic timeline events from frontmatter */}
@@ -843,12 +843,12 @@ export default function CaseDetailPage() {
                     ev.type === "hearing" ? "bg-blue-500" :
                     ev.type === "filing" ? "bg-emerald-500" :
                     ev.type === "status_change" ? "bg-violet-500" :
-                    "bg-[#4a4a6a]"
+                    "bg-[#8a8a98]"
                   }`} />
-                  <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3">
-                    <div className="text-xs text-[#8a8aa8]">{ev.date ? new Date(ev.date).toLocaleDateString("de-DE") : "—"}</div>
-                    <div className="text-sm text-[#e8e8f0]">{ev.title}</div>
-                    {ev.description && <div className="text-xs text-[#8888aa]">{ev.description}</div>}
+                  <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
+                    <div className="text-xs text-[#585866]">{ev.date ? new Date(ev.date).toLocaleDateString("de-DE") : "—"}</div>
+                    <div className="text-sm text-[#15151d]">{ev.title}</div>
+                    {ev.description && <div className="text-xs text-[#585866]">{ev.description}</div>}
                   </div>
                 </div>
               ))}
@@ -856,9 +856,9 @@ export default function CaseDetailPage() {
               {caseData.status !== "open" && (
                 <div className="relative">
                   <div className="absolute -left-4 w-2 h-2 rounded-full bg-amber-500" />
-                  <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3">
-                    <div className="text-xs text-[#8a8aa8]">{new Date(caseData.updatedAt).toLocaleDateString("de-DE")}</div>
-                    <div className="text-sm text-[#e8e8f0]">Status geändert: {STATUS_CONFIG[caseData.status]?.label || caseData.status}</div>
+                  <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
+                    <div className="text-xs text-[#585866]">{new Date(caseData.updatedAt).toLocaleDateString("de-DE")}</div>
+                    <div className="text-sm text-[#15151d]">Status geändert: {STATUS_CONFIG[caseData.status]?.label || caseData.status}</div>
                   </div>
                 </div>
               )}
@@ -866,10 +866,10 @@ export default function CaseDetailPage() {
               {caseData.strategy && (
                 <div className="relative">
                   <div className="absolute -left-4 w-2 h-2 rounded-full bg-emerald-500" />
-                  <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-3">
-                    <div className="text-xs text-[#8a8aa8]">{new Date(caseData.strategy.generatedAt || caseData.updatedAt).toLocaleDateString("de-DE")}</div>
-                    <div className="text-sm text-[#e8e8f0]">Strategie generiert</div>
-                    <div className="text-xs text-[#8888aa]">{caseData.strategy.recommendedApproach}</div>
+                  <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
+                    <div className="text-xs text-[#585866]">{new Date(caseData.strategy.generatedAt || caseData.updatedAt).toLocaleDateString("de-DE")}</div>
+                    <div className="text-sm text-[#15151d]">Strategie generiert</div>
+                    <div className="text-xs text-[#585866]">{caseData.strategy.recommendedApproach}</div>
                   </div>
                 </div>
               )}
@@ -916,18 +916,18 @@ export default function CaseDetailPage() {
 
             {caseData.documents.length === 0 ? (
               <div className="text-center py-20 space-y-4">
-                <FileText size={48} className="mx-auto text-[#1e1e3a]" />
-                <p className="text-[#8888aa]">Noch keine Dokumente zugeordnet.</p>
-                <p className="text-[#8a8aa8] text-sm">Nutze den Upload-Button um Verträge, Gutachten oder Schriftsätze anzuhängen.</p>
+                <FileText size={48} className="mx-auto text-[#e2e4ec]" />
+                <p className="text-[#585866]">Noch keine Dokumente zugeordnet.</p>
+                <p className="text-[#585866] text-sm">Nutze den Upload-Button um Verträge, Gutachten oder Schriftsätze anzuhängen.</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {caseData.documents.map((doc) => (
-                  <div key={doc.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-[#1e1e3a] bg-[#0a0a18]">
+                  <div key={doc.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-[#e2e4ec] bg-[#ffffff]">
                     <FileText size={16} className="text-violet-400 shrink-0" />
 	                    <div className="flex-1 min-w-0">
-	                      <div className="text-sm text-[#e8e8f0] truncate">{doc.name}</div>
-	                      <div className="text-xs text-[#8a8aa8]">
+	                      <div className="text-sm text-[#15151d] truncate">{doc.name}</div>
+	                      <div className="text-xs text-[#585866]">
                           {new Date(doc.uploadedAt).toLocaleDateString("de-DE")}
                           {doc.size ? ` · ${(doc.size / 1024).toFixed(0)} KB` : ""}
                           {doc.kind ? ` · ${doc.kind}` : ""}
@@ -936,7 +936,7 @@ export default function CaseDetailPage() {
                       {(doc.slug || doc.url) && (
                         <Link
                           href={`/dashboard/brain/${encodeURIComponent(doc.slug || doc.url || "")}`}
-                          className="text-[#8a8aa8] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
+                          className="text-[#585866] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
                         >
                           Öffnen
                         </Link>
@@ -947,7 +947,7 @@ export default function CaseDetailPage() {
                         setCaseData({ ...caseData, documents: updated });
                         saveCaseUpdate({ documents: updated });
                       }}
-                      className="text-[#8a8aa8] hover:text-red-400 transition-colors"
+                      className="text-[#585866] hover:text-red-400 transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -961,37 +961,37 @@ export default function CaseDetailPage() {
         {activeTab === "deadlines" && (
           <div className="max-w-3xl space-y-4">
             {/* Add/Edit Form */}
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-[#e8e8f0]">
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-[#15151d]">
                 {editingDeadlineIndex !== null ? "Frist bearbeiten" : "Frist / Termin hinzufügen"}
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-[#8888aa] mb-1">Titel</label>
+                  <label className="block text-xs text-[#585866] mb-1">Titel</label>
                   <input
                     value={deadlineForm.title || ""}
                     onChange={(e) => setDeadlineForm({ ...deadlineForm, title: e.target.value })}
                     placeholder="z.B. Klageerwiderung"
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-[#8888aa] mb-1">Fälligkeitsdatum</label>
+                  <label className="block text-xs text-[#585866] mb-1">Fälligkeitsdatum</label>
                   <input
                     type="date"
                     value={deadlineForm.due_date || deadlineForm.date || ""}
                     onChange={(e) => setDeadlineForm({ ...deadlineForm, due_date: e.target.value, date: e.target.value })}
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-[#8888aa] mb-1">Typ</label>
+                  <label className="block text-xs text-[#585866] mb-1">Typ</label>
                   <select
                     value={deadlineForm.type || "deadline"}
                     onChange={(e) => setDeadlineForm({ ...deadlineForm, type: e.target.value })}
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   >
                     <option value="deadline">Frist</option>
                     <option value="hearing">Verhandlung</option>
@@ -1001,11 +1001,11 @@ export default function CaseDetailPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-[#8888aa] mb-1">Status</label>
+                  <label className="block text-xs text-[#585866] mb-1">Status</label>
                   <select
                     value={deadlineForm.status || "pending"}
                     onChange={(e) => setDeadlineForm({ ...deadlineForm, status: e.target.value })}
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   >
                     <option value="pending">Ausstehend</option>
                     <option value="warning">Bald fällig</option>
@@ -1016,20 +1016,20 @@ export default function CaseDetailPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs text-[#8888aa] mb-1">Beschreibung</label>
+                <label className="block text-xs text-[#585866] mb-1">Beschreibung</label>
                   <textarea
                   value={deadlineForm.description || ""}
                   onChange={(e) => setDeadlineForm({ ...deadlineForm, description: e.target.value })}
                   rows={2}
                   placeholder="Beschreibung…"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50 resize-y"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 resize-y"
                 />
               </div>
               <div className="rounded-lg border border-violet-500/20 bg-violet-500/5 p-3 space-y-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-xs font-medium text-violet-400">Frist aus Regel berechnen</p>
-                    <p className="text-[11px] text-[#8a8aa8]">Erzeugt eine prüfbare Frist mit Rechtsgrundlage und Audit-Eintrag.</p>
+                    <p className="text-[11px] text-[#585866]">Erzeugt eine prüfbare Frist mit Rechtsgrundlage und Audit-Eintrag.</p>
                   </div>
                   <Badge variant="default" className="text-[10px] bg-violet-500/10 border-violet-500/20 text-violet-400">
                     Review erforderlich
@@ -1039,7 +1039,7 @@ export default function CaseDetailPage() {
                   <select
                     value={deadlineRuleKey}
                     onChange={(e) => setDeadlineRuleKey(e.target.value)}
-                    className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-xs text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   >
                     {DEADLINE_RULES.map((rule) => (
                       <option key={rule.key} value={rule.key}>{rule.label} ({rule.law})</option>
@@ -1049,7 +1049,7 @@ export default function CaseDetailPage() {
                     type="date"
                     value={deadlineStartDate}
                     onChange={(e) => setDeadlineStartDate(e.target.value)}
-                    className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-xs text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   />
                   <Button
                     variant="secondary"
@@ -1096,7 +1096,7 @@ export default function CaseDetailPage() {
                 {editingDeadlineIndex !== null && (
                   <Button
                     variant="ghost"
-                    className="text-[#8888aa] hover:text-[#e8e8f0] text-sm"
+                    className="text-[#585866] hover:text-[#15151d] text-sm"
                     onClick={() => { setEditingDeadlineIndex(null); setDeadlineForm({}); }}
                   >
                     Abbrechen
@@ -1114,7 +1114,7 @@ export default function CaseDetailPage() {
                 </div>
                 <Badge variant="default" className="text-[10px] bg-blue-500/10 border-blue-500/20 text-blue-400">Beta</Badge>
               </div>
-              <p className="text-xs text-[#8888aa]">
+              <p className="text-xs text-[#585866]">
                 Fügen Sie E-Mail-Text oder ein Schriftstück ein — die KI erkennt automatisch Fristen und Termine.
               </p>
               <textarea
@@ -1122,7 +1122,7 @@ export default function CaseDetailPage() {
                 onChange={(e) => setAiDetectText(e.target.value)}
                 rows={3}
                 placeholder="Z. B.: 'Binnen 4 Wochen ab Zustellung des Urteils vom 15.06.2026 können Berufung eingelegt werden…'"
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-blue-500/50 resize-y"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-blue-500/50 resize-y"
               />
               <div className="flex gap-2 flex-wrap">
                 <Button
@@ -1157,7 +1157,7 @@ export default function CaseDetailPage() {
                 {aiDetectedDeadlines.length > 0 && (
                   <Button
                     variant="ghost"
-                    className="text-[#8888aa] hover:text-[#e8e8f0] text-sm"
+                    className="text-[#585866] hover:text-[#15151d] text-sm"
                     onClick={() => { setAiDetectedDeadlines([]); setAiDetectText(""); }}
                   >
                     Zurücksetzen
@@ -1167,10 +1167,10 @@ export default function CaseDetailPage() {
               {aiDetectedDeadlines.length > 0 && (
                 <div className="space-y-2">
                   {aiDetectedDeadlines.map((d, i) => (
-                    <div key={i} className="flex items-center justify-between rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
+                    <div key={i} className="flex items-center justify-between rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2">
                       <div className="min-w-0">
-                        <div className="text-sm text-[#e8e8f0]">{d.title}</div>
-                        <div className="text-xs text-[#8a8aa8]">{d.date} · {d.type}</div>
+                        <div className="text-sm text-[#15151d]">{d.title}</div>
+                        <div className="text-xs text-[#585866]">{d.date} · {d.type}</div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         <Badge variant="default" className="text-[10px] bg-emerald-500/10 border-emerald-500/20 text-emerald-400">
@@ -1208,9 +1208,9 @@ export default function CaseDetailPage() {
             {/* Deadlines List */}
             {deadlinesList.length === 0 ? (
               <div className="text-center py-12 space-y-3">
-                <CalendarClock size={40} className="mx-auto text-[#1e1e3a]" />
-                <p className="text-[#8888aa] text-sm">Noch keine Fristen für diese Akte.</p>
-                <p className="text-[#8a8aa8] text-xs">Fügen Sie oben Fristen und Termine hinzu.</p>
+                <CalendarClock size={40} className="mx-auto text-[#e2e4ec]" />
+                <p className="text-[#585866] text-sm">Noch keine Fristen für diese Akte.</p>
+                <p className="text-[#585866] text-xs">Fügen Sie oben Fristen und Termine hinzu.</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -1237,7 +1237,7 @@ export default function CaseDetailPage() {
                     <div key={i} className={cn("rounded-xl border p-4", cfg.border)}>
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-[#e8e8f0]">{dl.title}</span>
+                          <span className="text-sm font-medium text-[#15151d]">{dl.title}</span>
 	                          <Badge variant="default" className={cn("text-[10px] border", statusBadgeClasses(status as StatusColor))}>
 	                            {cfg.label}
 	                          </Badge>
@@ -1271,13 +1271,13 @@ export default function CaseDetailPage() {
                                 setDeadlinesList(updated);
                                 saveCaseUpdate({ deadlines: updated });
                               }}
-                              className="text-[#8a8aa8] hover:text-emerald-400 transition-colors px-2 py-1 text-xs"
+                              className="text-[#585866] hover:text-emerald-400 transition-colors px-2 py-1 text-xs"
                             >
                               {dl.review_status === "approved" ? "Prüfung offen" : "Freigeben"}
                             </button>
 	                          <button
 	                            onClick={() => { setEditingDeadlineIndex(i); setDeadlineForm(dl); }}
-                            className="text-[#8a8aa8] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
+                            className="text-[#585866] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
                           >
                             Bearbeiten
                           </button>
@@ -1287,23 +1287,23 @@ export default function CaseDetailPage() {
                               setDeadlinesList(updated);
                               saveCaseUpdate({ deadlines: updated });
                             }}
-                            className="text-[#8a8aa8] hover:text-red-400 transition-colors px-2 py-1"
+                            className="text-[#585866] hover:text-red-400 transition-colors px-2 py-1"
                           >
                             <Trash2 size={14} />
                           </button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-[#8a8aa8]">
+                      <div className="flex items-center gap-3 text-xs text-[#585866]">
                         <span>{dlDate.toLocaleDateString("de-DE", { weekday: "short", day: "numeric", month: "long", year: "numeric" })}</span>
                         {!isOverdue && status !== "done" && <span className={cfg.color}>({daysUntil} Tage)</span>}
                         {isOverdue && <span className="text-rose-400">({Math.abs(daysUntil)} Tage überfällig)</span>}
-	                        {dl.type && <Badge variant="default" className="text-[10px] bg-[#12122a] border-[#1e1e3a] text-[#8888aa]">{dl.type === "deadline" ? "Frist" : dl.type === "hearing" ? "Verhandlung" : dl.type === "meeting" ? "Besprechung" : dl.type === "filing" ? "Schriftstück" : "Erinnerung"}</Badge>}
-                          {dl.law && <Badge variant="default" className="text-[10px] bg-[#12122a] border-[#1e1e3a] text-[#8888aa]">{dl.law}</Badge>}
+	                        {dl.type && <Badge variant="default" className="text-[10px] bg-[#eceef3] border-[#e2e4ec] text-[#585866]">{dl.type === "deadline" ? "Frist" : dl.type === "hearing" ? "Verhandlung" : dl.type === "meeting" ? "Besprechung" : dl.type === "filing" ? "Schriftstück" : "Erinnerung"}</Badge>}
+                          {dl.law && <Badge variant="default" className="text-[10px] bg-[#eceef3] border-[#e2e4ec] text-[#585866]">{dl.law}</Badge>}
 	                      </div>
-	                      {dl.description && <p className="text-xs text-[#8888aa] mt-1">{dl.description}</p>}
-                        {dl.calculation_note && <p className="text-[11px] text-[#8a8aa8] mt-1">Berechnung: {dl.calculation_note}</p>}
-                        {dl.reviewed_at && <p className="text-[11px] text-[#8a8aa8] mt-1">Geprüft von {dl.reviewed_by || "Kanzlei"} am {new Date(dl.reviewed_at).toLocaleString("de-DE")}</p>}
-                        <div className="mt-3 pt-3 border-t border-[#1e1e3a]/50">
+	                      {dl.description && <p className="text-xs text-[#585866] mt-1">{dl.description}</p>}
+                        {dl.calculation_note && <p className="text-[11px] text-[#585866] mt-1">Berechnung: {dl.calculation_note}</p>}
+                        {dl.reviewed_at && <p className="text-[11px] text-[#585866] mt-1">Geprüft von {dl.reviewed_by || "Kanzlei"} am {new Date(dl.reviewed_at).toLocaleString("de-DE")}</p>}
+                        <div className="mt-3 pt-3 border-t border-[#e2e4ec]/50">
                           <CommentThread
                             parentSlug={`${slug}/deadline/${i}`}
                             parentType="deadline"
@@ -1336,7 +1336,7 @@ export default function CaseDetailPage() {
                   }}
                   placeholder="Neue Aufgabe…"
                   aria-label="Neue Aufgabe"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50 transition-colors"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 transition-colors"
                 />
               </div>
               <Button
@@ -1358,8 +1358,8 @@ export default function CaseDetailPage() {
 
             {tasks.length === 0 ? (
               <div className="text-center py-10 space-y-2">
-                <ListChecks size={32} className="mx-auto text-[#1e1e3a]" />
-                <p className="text-[#8888aa] text-sm">Noch keine Aufgaben für diese Akte.</p>
+                <ListChecks size={32} className="mx-auto text-[#e2e4ec]" />
+                <p className="text-[#585866] text-sm">Noch keine Aufgaben für diese Akte.</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -1370,7 +1370,7 @@ export default function CaseDetailPage() {
                       "flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all",
                       task.done
                         ? "border-emerald-500/20 bg-emerald-500/5"
-                        : "border-[#1e1e3a] bg-[#0a0a18]"
+                        : "border-[#e2e4ec] bg-[#ffffff]"
                     )}
                   >
                     <button
@@ -1383,12 +1383,12 @@ export default function CaseDetailPage() {
                         "w-5 h-5 rounded border flex items-center justify-center transition-all shrink-0",
                         task.done
                           ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-400"
-                          : "border-[#1e1e3a] hover:border-violet-500/30"
+                          : "border-[#e2e4ec] hover:border-violet-500/30"
                       )}
                     >
                       {task.done && <Check size={12} />}
                     </button>
-                    <span className={cn("text-sm flex-1", task.done ? "text-[#8a8aa8] line-through" : "text-[#e8e8f0]")}>
+                    <span className={cn("text-sm flex-1", task.done ? "text-[#585866] line-through" : "text-[#15151d]")}>
                       {task.text}
                     </span>
                     <button
@@ -1397,7 +1397,7 @@ export default function CaseDetailPage() {
                         setTasks(updated);
                         saveCaseUpdate({ tasks: updated });
                       }}
-                      className="text-[#8a8aa8] hover:text-red-400 transition-colors"
+                      className="text-[#585866] hover:text-red-400 transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -1418,110 +1418,110 @@ export default function CaseDetailPage() {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-violet-400">{caseData.title}</div>
-                  <div className="text-xs text-[#8a8aa8]">{caseData.caseNumber} · {caseData.legalArea}</div>
+                  <div className="text-xs text-[#585866]">{caseData.caseNumber} · {caseData.legalArea}</div>
                 </div>
               </div>
 
               {/* Client */}
               {caseData.clientName && (
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 flex items-center gap-3">
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-emerald-600/15 flex items-center justify-center">
                     <Users size={20} className="text-emerald-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#8a8aa8]">Mandant</div>
-                    <div className="text-sm font-medium text-[#e8e8f0] truncate">{caseData.clientName}</div>
+                    <div className="text-xs text-[#585866]">Mandant</div>
+                    <div className="text-sm font-medium text-[#15151d] truncate">{caseData.clientName}</div>
                   </div>
                 </div>
               )}
 
               {/* Opponent */}
               {caseData.opponentName && (
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 flex items-center gap-3">
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-red-600/15 flex items-center justify-center">
                     <ShieldAlert size={20} className="text-red-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#8a8aa8]">Gegner</div>
-                    <div className="text-sm font-medium text-[#e8e8f0] truncate">{caseData.opponentName}</div>
+                    <div className="text-xs text-[#585866]">Gegner</div>
+                    <div className="text-sm font-medium text-[#15151d] truncate">{caseData.opponentName}</div>
                   </div>
                 </div>
               )}
 
               {/* Court */}
               {caseData.courtName && (
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 flex items-center gap-3">
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-600/15 flex items-center justify-center">
                     <Landmark size={20} className="text-blue-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#8a8aa8]">Gericht</div>
-                    <div className="text-sm font-medium text-[#e8e8f0] truncate">{caseData.courtName}</div>
+                    <div className="text-xs text-[#585866]">Gericht</div>
+                    <div className="text-sm font-medium text-[#15151d] truncate">{caseData.courtName}</div>
                   </div>
                 </div>
               )}
 
               {/* Lawyer */}
               {caseData.ownLawyerName && (
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 flex items-center gap-3">
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-amber-600/15 flex items-center justify-center">
                     <User size={20} className="text-amber-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#8a8aa8]">Anwalt</div>
-                    <div className="text-sm font-medium text-[#e8e8f0] truncate">{caseData.ownLawyerName}</div>
+                    <div className="text-xs text-[#585866]">Anwalt</div>
+                    <div className="text-sm font-medium text-[#15151d] truncate">{caseData.ownLawyerName}</div>
                   </div>
                 </div>
               )}
 
               {/* Claims count */}
               {caseData.claims.length > 0 && (
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 flex items-center gap-3">
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-violet-600/15 flex items-center justify-center">
                     <Scale size={20} className="text-violet-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#8a8aa8]">Ansprüche</div>
-                    <div className="text-sm font-medium text-[#e8e8f0]">{caseData.claims.length} Klageanträge</div>
+                    <div className="text-xs text-[#585866]">Ansprüche</div>
+                    <div className="text-sm font-medium text-[#15151d]">{caseData.claims.length} Klageanträge</div>
                   </div>
                 </div>
               )}
 
               {/* Evidence count */}
               {evidenceList.length > 0 && (
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 flex items-center gap-3">
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-orange-600/15 flex items-center justify-center">
                     <ShieldAlert size={20} className="text-orange-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#8a8aa8]">Beweismittel</div>
-                    <div className="text-sm font-medium text-[#e8e8f0]">{evidenceList.length} Mittel</div>
+                    <div className="text-xs text-[#585866]">Beweismittel</div>
+                    <div className="text-sm font-medium text-[#15151d]">{evidenceList.length} Mittel</div>
                   </div>
                 </div>
               )}
 
               {/* Documents count */}
               {caseData.documents.length > 0 && (
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 flex items-center gap-3">
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gray-600/15 flex items-center justify-center">
                     <FileText size={20} className="text-gray-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#8a8aa8]">Dokumente</div>
-                    <div className="text-sm font-medium text-[#e8e8f0]">{caseData.documents.length} Dateien</div>
+                    <div className="text-xs text-[#585866]">Dokumente</div>
+                    <div className="text-sm font-medium text-[#15151d]">{caseData.documents.length} Dateien</div>
                   </div>
                 </div>
               )}
 
               {/* Deadlines count */}
               {deadlinesList.length > 0 && (
-                <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 flex items-center gap-3">
+                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-pink-600/15 flex items-center justify-center">
                     <CalendarClock size={20} className="text-pink-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-[#8a8aa8]">Fristen</div>
-                    <div className="text-sm font-medium text-[#e8e8f0]">{deadlinesList.length} Termine</div>
+                    <div className="text-xs text-[#585866]">Fristen</div>
+                    <div className="text-sm font-medium text-[#15151d]">{deadlinesList.length} Termine</div>
                   </div>
                 </div>
               )}
@@ -1529,12 +1529,12 @@ export default function CaseDetailPage() {
 
             {/* Linked pages / Norms from citations */}
             {caseData.facts && (
-              <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-                <h3 className="text-sm font-semibold text-[#e8e8f0] mb-3">Zitierte Normen</h3>
+              <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+                <h3 className="text-sm font-semibold text-[#15151d] mb-3">Zitierte Normen</h3>
                 <div className="flex flex-wrap gap-2">
                   {(() => {
                     const citations = parseCitations(caseData.facts).filter((s) => s.isCitation).map((s) => s.text);
-                    if (citations.length === 0) return <p className="text-xs text-[#8888aa]">Keine Normen im Sachverhalt zitiert.</p>;
+                    if (citations.length === 0) return <p className="text-xs text-[#585866]">Keine Normen im Sachverhalt zitiert.</p>;
                     return citations.map((c, i) => (
                       <Link key={i} href={`/dashboard/norms?citation=${encodeURIComponent(c)}`} className="text-xs bg-violet-600/10 text-violet-400 border border-violet-500/20 rounded-lg px-2.5 py-1 hover:bg-violet-600/20 transition-colors">
                         {c}
@@ -1550,26 +1550,26 @@ export default function CaseDetailPage() {
         {activeTab === "evidence" && (
           <div className="max-w-3xl space-y-4">
             {/* Add/Edit Form */}
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-[#e8e8f0]">
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-[#15151d]">
                 {editingEvidenceIndex !== null ? "Beweismittel bearbeiten" : "Beweismittel hinzufügen"}
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-[#8888aa] mb-1">Titel</label>
+                  <label className="block text-xs text-[#585866] mb-1">Titel</label>
                   <input
                     value={evidenceForm.title || ""}
                     onChange={(e) => setEvidenceForm({ ...evidenceForm, title: e.target.value })}
                     placeholder="z.B. Vertrag vom 01.03.2026"
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-[#8888aa] mb-1">Typ</label>
+                  <label className="block text-xs text-[#585866] mb-1">Typ</label>
                   <select
                     value={evidenceForm.type || ""}
                     onChange={(e) => setEvidenceForm({ ...evidenceForm, type: e.target.value })}
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
                   >
                     <option value="">Typ wählen…</option>
                     <option value="Dokument">Dokument</option>
@@ -1583,27 +1583,27 @@ export default function CaseDetailPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs text-[#8888aa] mb-1">Beschreibung</label>
+                <label className="block text-xs text-[#585866] mb-1">Beschreibung</label>
                 <textarea
                   value={evidenceForm.description || ""}
                   onChange={(e) => setEvidenceForm({ ...evidenceForm, description: e.target.value })}
                   rows={2}
                   placeholder="Beschreibung des Beweismittels…"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50 resize-y"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 resize-y"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-[#8888aa] mb-1">Quelle</label>
+                  <label className="block text-xs text-[#585866] mb-1">Quelle</label>
                   <input
                     value={evidenceForm.source || ""}
                     onChange={(e) => setEvidenceForm({ ...evidenceForm, source: e.target.value })}
                     placeholder="z.B. Akte 2026-001"
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-[#8888aa] mb-1">Beweisstärke ({Math.round((evidenceForm.weight || 0.5) * 100)}%)</label>
+                  <label className="block text-xs text-[#585866] mb-1">Beweisstärke ({Math.round((evidenceForm.weight || 0.5) * 100)}%)</label>
                   <input
                     type="range"
                     min="0"
@@ -1639,7 +1639,7 @@ export default function CaseDetailPage() {
                 {editingEvidenceIndex !== null && (
                   <Button
                     variant="ghost"
-                    className="text-[#8888aa] hover:text-[#e8e8f0] text-sm"
+                    className="text-[#585866] hover:text-[#15151d] text-sm"
                     onClick={() => { setEditingEvidenceIndex(null); setEvidenceForm({}); }}
                   >
                     Abbrechen
@@ -1651,14 +1651,14 @@ export default function CaseDetailPage() {
             {/* Evidence List */}
             {evidenceList.length === 0 ? (
               <div className="text-center py-12 space-y-3">
-                <ShieldAlert size={40} className="mx-auto text-[#1e1e3a]" />
-                <p className="text-[#8888aa] text-sm">Noch keine Beweismittel erfasst.</p>
-                <p className="text-[#8a8aa8] text-xs">Fügen Sie oben Beweismittel hinzu, um die Beweislage zu dokumentieren.</p>
+                <ShieldAlert size={40} className="mx-auto text-[#e2e4ec]" />
+                <p className="text-[#585866] text-sm">Noch keine Beweismittel erfasst.</p>
+                <p className="text-[#585866] text-xs">Fügen Sie oben Beweismittel hinzu, um die Beweislage zu dokumentieren.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {evidenceList.map((ev, i) => (
-                  <div key={i} className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
+                  <div key={i} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         {ev.type && (
@@ -1666,12 +1666,12 @@ export default function CaseDetailPage() {
                             {ev.type}
                           </Badge>
                         )}
-                        <span className="text-sm font-medium text-[#e8e8f0]">{ev.title || "Beweismittel"}</span>
+                        <span className="text-sm font-medium text-[#15151d]">{ev.title || "Beweismittel"}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => { setEditingEvidenceIndex(i); setEvidenceForm(ev); }}
-                          className="text-[#8a8aa8] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
+                          className="text-[#585866] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
                         >
                           Bearbeiten
                         </button>
@@ -1681,17 +1681,17 @@ export default function CaseDetailPage() {
                             setEvidenceList(updated);
                             saveCaseUpdate({ evidence: updated });
                           }}
-                          className="text-[#8a8aa8] hover:text-red-400 transition-colors px-2 py-1"
+                          className="text-[#585866] hover:text-red-400 transition-colors px-2 py-1"
                         >
                           <Trash2 size={14} />
                         </button>
                       </div>
                     </div>
-                    {ev.description && <p className="text-sm text-[#8888aa] mb-2">{ev.description}</p>}
+                    {ev.description && <p className="text-sm text-[#585866] mb-2">{ev.description}</p>}
                     <div className="flex items-center gap-3">
-                      {ev.source && <span className="text-xs text-[#8a8aa8]">Quelle: {ev.source}</span>}
+                      {ev.source && <span className="text-xs text-[#585866]">Quelle: {ev.source}</span>}
                       <div className="flex-1">
-                        <div className="h-1.5 rounded-full bg-[#1e1e3a] overflow-hidden">
+                        <div className="h-1.5 rounded-full bg-[#e2e4ec] overflow-hidden">
                           <div
                             className={cn(
                               "h-full rounded-full transition-all",
@@ -1701,12 +1701,12 @@ export default function CaseDetailPage() {
                             style={{ width: `${Math.round((ev.weight || 0) * 100)}%` }}
                           />
                         </div>
-                        <div className="text-[10px] text-[#8a8aa8] mt-0.5 text-right">
+                        <div className="text-[10px] text-[#585866] mt-0.5 text-right">
                           Beweisstärke: {Math.round((ev.weight || 0) * 100)}%
                         </div>
                       </div>
                     </div>
-                    <div className="mt-3 pt-3 border-t border-[#1e1e3a]">
+                    <div className="mt-3 pt-3 border-t border-[#e2e4ec]">
                       <CommentThread
                         parentSlug={`${slug}/evidence/${i}`}
                         parentType="evidence"
@@ -1723,14 +1723,14 @@ export default function CaseDetailPage() {
 
         {activeTab === "time" && (
           <div className="max-w-3xl space-y-4">
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-[#e8e8f0]">Zeiterfassung</h3>
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-[#15151d]">Zeiterfassung</h3>
 
               {/* Live Timer */}
               <div className="flex items-center gap-3">
                 <div className={cn(
                   "text-2xl font-mono font-bold tracking-tight",
-                  timerRunning ? "text-emerald-400" : "text-[#8888aa]"
+                  timerRunning ? "text-emerald-400" : "text-[#585866]"
                 )}>
                   {String(Math.floor(elapsedSeconds / 60)).padStart(2, "0")}:{String(elapsedSeconds % 60).padStart(2, "0")}
                 </div>
@@ -1761,7 +1761,7 @@ export default function CaseDetailPage() {
                   </button>
                 )}
                 {elapsedSeconds > 0 && !timerRunning && (
-                  <span className="text-xs text-[#8a8aa8]">→ {timerMinutes} Min. übernommen</span>
+                  <span className="text-xs text-[#585866]">→ {timerMinutes} Min. übernommen</span>
                 )}
               </div>
 
@@ -1771,7 +1771,7 @@ export default function CaseDetailPage() {
                   onChange={(e) => setTimerDescription(e.target.value)}
                   placeholder="Tätigkeit…"
                   aria-label="Tätigkeit"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                 />
                 <input
                   value={timerMinutes}
@@ -1779,7 +1779,7 @@ export default function CaseDetailPage() {
                   type="number"
                   placeholder="Min."
                   aria-label="Minuten"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                 />
                 <input
                   value={timerRate}
@@ -1787,14 +1787,14 @@ export default function CaseDetailPage() {
                   type="number"
                   placeholder="€/h"
                   aria-label="Stundensatz"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-[150px_1fr_auto_auto] gap-3 items-center">
                 <select
                   value={timerActivity}
                   onChange={(e) => setTimerActivity(e.target.value)}
-                  className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+                  className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
                 >
                   <option>Beratung</option>
                   <option>Telefonat</option>
@@ -1809,9 +1809,9 @@ export default function CaseDetailPage() {
                   onChange={(e) => setTimerLawyer(e.target.value)}
                   placeholder="Bearbeiter / Anwalt"
                   aria-label="Bearbeiter oder Anwalt"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                 />
-                <label className="flex items-center gap-2 text-sm text-[#8888aa] whitespace-nowrap">
+                <label className="flex items-center gap-2 text-sm text-[#585866] whitespace-nowrap">
                   <input
                     type="checkbox"
                     checked={timerBillable}
@@ -1852,24 +1852,24 @@ export default function CaseDetailPage() {
             </div>
 
             {timeEntries.length > 0 && (
-              <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-2">
+              <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-2">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-[#e8e8f0]">Buchungen</h3>
-                  <span className="text-xs text-[#8888aa]">
+                  <h3 className="text-sm font-semibold text-[#15151d]">Buchungen</h3>
+                  <span className="text-xs text-[#585866]">
                     Gesamt: {Math.floor(timeEntries.reduce((s, e) => s + e.minutes, 0) / 60)}h {timeEntries.reduce((s, e) => s + e.minutes, 0) % 60}min
                   </span>
                 </div>
                 {timeEntries.map((entry) => (
-                  <div key={entry.id} className="py-2 border-b border-[#1e1e3a] last:border-0">
+                  <div key={entry.id} className="py-2 border-b border-[#e2e4ec] last:border-0">
                     <div className="flex items-center justify-between gap-3">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-sm text-[#e8e8f0]">{entry.description}</span>
+                          <span className="text-sm text-[#15151d]">{entry.description}</span>
                           {entry.activity_type && <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{entry.activity_type}</Badge>}
                           {entry.billed && <Badge variant="success" className="text-[10px]">abgerechnet</Badge>}
                           {entry.billable === false && <Badge variant="warning" className="text-[10px]">intern</Badge>}
                         </div>
-                        <span className="text-xs text-[#8a8aa8]">
+                        <span className="text-xs text-[#585866]">
                           {new Date(entry.date).toLocaleDateString("de-DE")}
                           {entry.lawyer ? ` · ${entry.lawyer}` : ""}
                           {entry.rate ? ` · ${entry.rate.toFixed(2)} €/h` : ""}
@@ -1877,7 +1877,7 @@ export default function CaseDetailPage() {
                         </span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-sm text-[#8888aa] font-mono">{entry.minutes} min</span>
+                        <span className="text-sm text-[#585866] font-mono">{entry.minutes} min</span>
                         {!entry.billed && (
                           <button
                             onClick={() => {
@@ -1885,7 +1885,7 @@ export default function CaseDetailPage() {
                               setTimeEntries(updated);
                               saveCaseUpdate({ timeEntries: updated });
                             }}
-                            className="p-1.5 rounded-lg text-[#8a8aa8] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                            className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
                             title="Buchung löschen"
                           >
                             <Trash2 size={13} />
@@ -1910,15 +1910,15 @@ export default function CaseDetailPage() {
 
         {activeTab === "expenses" && (
           <div className="max-w-3xl space-y-4">
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-[#e8e8f0]">Auslagen</h3>
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-[#15151d]">Auslagen</h3>
               <div className="grid grid-cols-1 md:grid-cols-[1fr_130px_auto_auto] gap-3 items-center">
                 <input
                   value={expenseDescription}
                   onChange={(e) => setExpenseDescription(e.target.value)}
                   placeholder="z. B. Gerichtskosten, Porto, Fahrtkosten"
                   aria-label="Auslage"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                 />
                 <input
                   value={expenseAmount}
@@ -1927,9 +1927,9 @@ export default function CaseDetailPage() {
                   step="0.01"
                   placeholder="Betrag €"
                   aria-label="Betrag"
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50"
+                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
                 />
-                <label className="flex items-center gap-2 text-sm text-[#8888aa] whitespace-nowrap">
+                <label className="flex items-center gap-2 text-sm text-[#585866] whitespace-nowrap">
                   <input type="checkbox" checked={expenseBillable} onChange={(e) => setExpenseBillable(e.target.checked)} className="accent-violet-500" />
                   abrechenbar
                 </label>
@@ -1961,29 +1961,29 @@ export default function CaseDetailPage() {
             </div>
 
             {expensesList.length > 0 && (
-              <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-2">
+              <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-2">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-[#e8e8f0]">Auslagenliste</h3>
-                  <span className="text-xs text-[#8888aa]">
+                  <h3 className="text-sm font-semibold text-[#15151d]">Auslagenliste</h3>
+                  <span className="text-xs text-[#585866]">
                     Gesamt: {expensesList.reduce((s, e) => s + e.amount, 0).toFixed(2)} €
                   </span>
                 </div>
                 {expensesList.map((entry) => (
-                  <div key={entry.id} className="py-2 border-b border-[#1e1e3a] last:border-0">
+                  <div key={entry.id} className="py-2 border-b border-[#e2e4ec] last:border-0">
                     <div className="flex items-center justify-between gap-3">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-sm text-[#e8e8f0]">{entry.description}</span>
+                          <span className="text-sm text-[#15151d]">{entry.description}</span>
                           {entry.billed && <Badge variant="success" className="text-[10px]">abgerechnet</Badge>}
                           {entry.billable === false && <Badge variant="warning" className="text-[10px]">intern</Badge>}
                         </div>
-                        <span className="text-xs text-[#8a8aa8]">
+                        <span className="text-xs text-[#585866]">
                           {new Date(entry.date).toLocaleDateString("de-DE")}
                           {entry.invoice_number ? ` · ${entry.invoice_number}` : ""}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-sm text-[#8888aa] font-mono">{entry.amount.toFixed(2)} €</span>
+                        <span className="text-sm text-[#585866] font-mono">{entry.amount.toFixed(2)} €</span>
                         {!entry.billed && (
                           <button
                             onClick={() => {
@@ -1991,7 +1991,7 @@ export default function CaseDetailPage() {
                               setExpensesList(updated);
                               saveCaseUpdate({ expenses: updated });
                             }}
-                            className="p-1.5 rounded-lg text-[#8a8aa8] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                            className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
                             title="Auslage löschen"
                           >
                             <Trash2 size={13} />
@@ -2016,21 +2016,21 @@ export default function CaseDetailPage() {
 
         {activeTab === "audit" && (
           <div className="max-w-3xl space-y-4">
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-[#e8e8f0]">Audit-Trail</h3>
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-[#15151d]">Audit-Trail</h3>
               {caseData.auditLog && caseData.auditLog.length > 0 ? (
                 <div className="space-y-2">
                   {caseData.auditLog.slice().reverse().map((entry) => (
-                    <div key={entry.id} className="flex items-start gap-3 px-3 py-2 rounded-lg bg-[#0a0a18] border border-[#1e1e3a]">
+                    <div key={entry.id} className="flex items-start gap-3 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
                       <div className="w-1.5 h-1.5 rounded-full bg-violet-400 mt-2 shrink-0" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-sm text-[#e8e8f0]">{entry.note}</span>
-                          <Badge variant="default" className="text-[10px] bg-[#12122a] border border-[#1e1e3a] text-[#8888aa]">
+                          <span className="text-sm text-[#15151d]">{entry.note}</span>
+                          <Badge variant="default" className="text-[10px] bg-[#eceef3] border border-[#e2e4ec] text-[#585866]">
                             {entry.field}
                           </Badge>
                         </div>
-                        <div className="text-xs text-[#8a8aa8] mt-0.5">
+                        <div className="text-xs text-[#585866] mt-0.5">
                           {entry.actor} · {new Date(entry.at).toLocaleString("de-DE")}
                         </div>
                       </div>
@@ -2038,7 +2038,7 @@ export default function CaseDetailPage() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-sm text-[#8888aa]">
+                <div className="text-center py-8 text-sm text-[#585866]">
                   Noch keine Audit-Einträge vorhanden.
                 </div>
               )}
@@ -2048,20 +2048,20 @@ export default function CaseDetailPage() {
 
         {activeTab === "query" && (
           <div className="max-w-3xl space-y-4">
-            <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-              <p className="text-sm text-[#8888aa] mb-3">
+            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+              <p className="text-sm text-[#585866] mb-3">
                 Stelle eine Frage im Kontext dieser Akte. Das Brain durchsucht alle zugehörigen Dokumente und Gesetze.
               </p>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <MessageSquare size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8aa8]" />
+                  <MessageSquare size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
                   <input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleQuery()}
                     placeholder="Frage zur Akte…"
                     aria-label="Frage zur Akte"
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50 transition-colors"
+                    className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 transition-colors"
                   />
                 </div>
                 <Button
@@ -2081,12 +2081,12 @@ export default function CaseDetailPage() {
                   <span className="text-xs text-violet-400 font-medium">KI-Antwort</span>
                   <button
                     onClick={() => copyToClipboard(queryResult)}
-                    className="text-[#8a8aa8] hover:text-[#8888aa] transition-colors"
+                    className="text-[#585866] hover:text-[#585866] transition-colors"
                   >
                     {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                   </button>
                 </div>
-                <div className="text-sm text-[#e8e8f0] whitespace-pre-wrap leading-relaxed">
+                <div className="text-sm text-[#15151d] whitespace-pre-wrap leading-relaxed">
                   {queryResult}
                 </div>
               </div>

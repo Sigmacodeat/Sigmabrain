@@ -114,8 +114,8 @@ export default function CostCalculatorPage() {
           <Calculator size={20} className="text-emerald-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">Kostenrechner</h1>
-          <p className="text-sm text-[#8888aa]">Anwaltskosten nach RVG 2025 (DE) oder RATG (AT)</p>
+          <h1 className="text-xl font-bold text-[#15151d]">Kostenrechner</h1>
+          <p className="text-sm text-[#585866]">Anwaltskosten nach RVG 2025 (DE) oder RATG (AT)</p>
         </div>
       </div>
 
@@ -127,7 +127,7 @@ export default function CostCalculatorPage() {
             "flex-1 px-4 py-3 rounded-xl border text-sm font-medium transition-all",
             jurisdiction === "de"
               ? "bg-violet-600/10 border-violet-500/30 text-violet-400"
-              : "bg-[#0a0a18] border-[#1e1e3a] text-[#8888aa] hover:text-[#e8e8f0]"
+              : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
           )}
         >
           🇩🇪 Deutschland (RVG 2025)
@@ -138,7 +138,7 @@ export default function CostCalculatorPage() {
             "flex-1 px-4 py-3 rounded-xl border text-sm font-medium transition-all",
             jurisdiction === "at"
               ? "bg-violet-600/10 border-violet-500/30 text-violet-400"
-              : "bg-[#0a0a18] border-[#1e1e3a] text-[#8888aa] hover:text-[#e8e8f0]"
+              : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
           )}
         >
           🇦🇹 Österreich (RATG 2024)
@@ -146,20 +146,20 @@ export default function CostCalculatorPage() {
       </div>
 
       {/* Input */}
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-4">
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
         <div>
-          <label className="block text-xs text-[#8888aa] mb-1.5">
+          <label className="block text-xs text-[#585866] mb-1.5">
             Streitwert ({jurisdiction === "de" ? "EUR" : "EUR"})
           </label>
           <div className="relative">
-            <Euro size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8aa8]" />
+            <Euro size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
             <Input
               value={streitwert}
               onChange={(e) => setStreitwert(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && calculate()}
               placeholder="z.B. 15000"
               aria-label="z.B. 15000"
-              className="pl-9 bg-[#0a0a18] border-[#1e1e3a] text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:border-violet-500/50"
+              className="pl-9 bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
             />
           </div>
         </div>
@@ -175,42 +175,42 @@ export default function CostCalculatorPage() {
 
       {/* Result */}
       {result && (
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-4">
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
           <div className="flex items-center gap-2">
             <CheckCircle2 size={18} className="text-emerald-400" />
-            <h2 className="text-sm font-semibold text-[#e8e8f0]">Berechnungsergebnis</h2>
+            <h2 className="text-sm font-semibold text-[#15151d]">Berechnungsergebnis</h2>
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center justify-between py-2 border-b border-[#1e1e3a]">
-              <span className="text-sm text-[#8888aa]">Streitwert</span>
-              <span className="text-sm text-[#e8e8f0] font-mono">{result.streitwert.toLocaleString("de-DE")} €</span>
+            <div className="flex items-center justify-between py-2 border-b border-[#e2e4ec]">
+              <span className="text-sm text-[#585866]">Streitwert</span>
+              <span className="text-sm text-[#15151d] font-mono">{result.streitwert.toLocaleString("de-DE")} €</span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-sm text-[#8888aa]">Verfahrensgebühr (1,3)</span>
-              <span className="text-sm text-[#e8e8f0] font-mono">{result.verfahrensgebuehr.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+              <span className="text-sm text-[#585866]">Verfahrensgebühr (1,3)</span>
+              <span className="text-sm text-[#15151d] font-mono">{result.verfahrensgebuehr.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-sm text-[#8888aa]">Terminsgebühr (1,2)</span>
-              <span className="text-sm text-[#e8e8f0] font-mono">{result.terminGebuehr.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+              <span className="text-sm text-[#585866]">Terminsgebühr (1,2)</span>
+              <span className="text-sm text-[#15151d] font-mono">{result.terminGebuehr.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-sm text-[#8888aa]">Einigungsgebühr ({result.jurisdiction === "de" ? "1,0" : "1,2"})</span>
-              <span className="text-sm text-[#e8e8f0] font-mono">{result.einigungsgebuehr.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+              <span className="text-sm text-[#585866]">Einigungsgebühr ({result.jurisdiction === "de" ? "1,0" : "1,2"})</span>
+              <span className="text-sm text-[#15151d] font-mono">{result.einigungsgebuehr.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-sm text-[#8888aa]">Auslagenpauschale</span>
-              <span className="text-sm text-[#e8e8f0] font-mono">{result.auslagen.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+              <span className="text-sm text-[#585866]">Auslagenpauschale</span>
+              <span className="text-sm text-[#15151d] font-mono">{result.auslagen.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
             </div>
-            <div className="flex items-center justify-between py-2 border-t border-[#1e1e3a]">
-              <span className="text-sm text-[#8888aa]">Zwischensumme</span>
-              <span className="text-sm text-[#e8e8f0] font-mono">
+            <div className="flex items-center justify-between py-2 border-t border-[#e2e4ec]">
+              <span className="text-sm text-[#585866]">Zwischensumme</span>
+              <span className="text-sm text-[#15151d] font-mono">
                 {(result.verfahrensgebuehr + result.terminGebuehr + result.einigungsgebuehr + result.auslagen).toLocaleString("de-DE", { minimumFractionDigits: 2 })} €
               </span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-sm text-[#8888aa]">MwSt ({result.jurisdiction === "de" ? "19%" : "20%"})</span>
-              <span className="text-sm text-[#e8e8f0] font-mono">{result.mwst.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+              <span className="text-sm text-[#585866]">MwSt ({result.jurisdiction === "de" ? "19%" : "20%"})</span>
+              <span className="text-sm text-[#15151d] font-mono">{result.mwst.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
             </div>
             <div className="flex items-center justify-between py-3 rounded-lg bg-violet-600/5 border border-violet-500/10 px-3">
               <span className="text-sm font-semibold text-violet-400">Geschätztes Honorar (brutto)</span>
@@ -233,7 +233,7 @@ export default function CostCalculatorPage() {
       )}
 
       {/* Disclaimer */}
-      <div className="flex items-start gap-2 text-xs text-[#8888aa] border-t border-[#1e1e3a] pt-4">
+      <div className="flex items-start gap-2 text-xs text-[#585866] border-t border-[#e2e4ec] pt-4">
         <Info size={14} className="shrink-0 mt-0.5" aria-hidden="true" />
         <p>
           Dieser Rechner dient der Orientierung und ersetzt keine rechtsverbindliche Gebührenberechnung.

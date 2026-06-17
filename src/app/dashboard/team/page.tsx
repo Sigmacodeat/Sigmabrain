@@ -92,7 +92,7 @@ export default function TeamPage() {
 
   if (loading) {
     return (
-      <div className="p-6 flex items-center gap-2 text-[#8888aa] text-sm">
+      <div className="p-6 flex items-center gap-2 text-[#585866] text-sm">
         <Loader2 size={14} className="animate-spin" aria-hidden /> Lade Team…
       </div>
     );
@@ -101,8 +101,8 @@ export default function TeamPage() {
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#e8e8f0]">Team</h1>
-        <p className="text-sm text-[#8888aa] mt-0.5">
+        <h1 className="text-2xl font-bold text-[#15151d]">Team</h1>
+        <p className="text-sm text-[#585866] mt-0.5">
           Ein gemeinsames Brain für euer ganzes Team — Mitglieder sehen und füttern dasselbe Wissen.
         </p>
       </div>
@@ -116,7 +116,7 @@ export default function TeamPage() {
       {notice && (
         <div role="status" className="flex items-start gap-2.5 p-3.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5">
           <CheckCircle size={15} className="text-emerald-400 shrink-0 mt-0.5" aria-hidden />
-          <p className="text-sm text-[#a8a8be]">{notice}</p>
+          <p className="text-sm text-[#454552]">{notice}</p>
         </div>
       )}
       {devJoinUrl && (
@@ -133,9 +133,9 @@ export default function TeamPage() {
           <div className="p-6 space-y-4">
             <div className="flex items-center gap-2.5">
               <Users size={18} className="text-violet-400" aria-hidden />
-              <h2 className="text-base font-semibold text-[#e8e8f0]">Team erstellen</h2>
+              <h2 className="text-base font-semibold text-[#15151d]">Team erstellen</h2>
             </div>
-            <p className="text-sm text-[#8888aa] leading-relaxed">
+            <p className="text-sm text-[#585866] leading-relaxed">
               Erstelle ein Team-Brain und lade Kolleginnen und Kollegen ein. Die Plätze richten
               sich nach deinem Plan (Free/Pro: 1 · Team: 5 · Enterprise: 25). Dein persönliches
               Brain bleibt unangetastet — das Team bekommt ein eigenes.
@@ -171,24 +171,24 @@ export default function TeamPage() {
       ) : (
         <>
           <Card>
-            <div className="p-6 border-b border-[#1e1e3a] flex items-center justify-between gap-4 flex-wrap">
+            <div className="p-6 border-b border-[#e2e4ec] flex items-center justify-between gap-4 flex-wrap">
               <div>
-                <h2 className="text-base font-semibold text-[#e8e8f0]">{state.org.name}</h2>
-                <p className="text-xs text-[#8888aa] mt-0.5">
+                <h2 className="text-base font-semibold text-[#15151d]">{state.org.name}</h2>
+                <p className="text-xs text-[#585866] mt-0.5">
                   {state.members?.length ?? 0} Mitglied{(state.members?.length ?? 0) !== 1 ? "er" : ""} · gemeinsames Brain
                 </p>
               </div>
               {state.isOwner && <Badge>Inhaber</Badge>}
             </div>
-            <ul className="divide-y divide-[#1e1e3a]">
+            <ul className="divide-y divide-[#e2e4ec]">
               {(state.members ?? []).map((m) => (
                 <li key={m.id} className="px-6 py-3.5 flex items-center justify-between gap-4">
                   <div className="min-w-0">
-                    <p className="text-sm text-[#e8e8f0] truncate flex items-center gap-1.5">
+                    <p className="text-sm text-[#15151d] truncate flex items-center gap-1.5">
                       {m.name}
                       {m.isOwner && <Crown size={12} className="text-amber-400 shrink-0" aria-label="Inhaber" />}
                     </p>
-                    <p className="text-xs text-[#8888aa] truncate">{m.email}</p>
+                    <p className="text-xs text-[#585866] truncate">{m.email}</p>
                   </div>
                   {state.isOwner && !m.isOwner && (
                     <Button
@@ -217,7 +217,7 @@ export default function TeamPage() {
               <div className="p-6 space-y-3">
                 <div className="flex items-center gap-2.5">
                   <Mail size={16} className="text-violet-400" aria-hidden />
-                  <h3 className="text-sm font-semibold text-[#e8e8f0]">Mitglied einladen</h3>
+                  <h3 className="text-sm font-semibold text-[#15151d]">Mitglied einladen</h3>
                 </div>
                 <form
                   className="flex flex-col sm:flex-row gap-3"
@@ -256,8 +256,8 @@ export default function TeamPage() {
           <Card>
             <div className="p-6 flex items-center justify-between gap-4 flex-wrap">
               <div>
-                <h3 className="text-sm font-semibold text-[#e8e8f0]">Team verlassen</h3>
-                <p className="text-xs text-[#8888aa] mt-0.5">
+                <h3 className="text-sm font-semibold text-[#15151d]">Team verlassen</h3>
+                <p className="text-xs text-[#585866] mt-0.5">
                   {state.isOwner
                     ? "Als Inhaber: erst alle Mitglieder entfernen, dann löst Verlassen das Team auf."
                     : "Du arbeitest danach wieder in deinem persönlichen Brain."}

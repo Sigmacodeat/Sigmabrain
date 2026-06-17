@@ -200,21 +200,21 @@ function NormsPageInner() {
           <BookOpen size={20} className="text-blue-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">Normen</h1>
-          <p className="text-sm text-[#8888aa]">Gesetze und Rechtsvorschriften durchsuchen</p>
+          <h1 className="text-xl font-bold text-[#15151d]">Normen</h1>
+          <p className="text-sm text-[#585866]">Gesetze und Rechtsvorschriften durchsuchen</p>
         </div>
       </div>
 
       {/* Search */}
       <div className="flex gap-2">
         <div className="relative flex-1 max-w-lg">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8aa8]" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Norm suchen… z.B. § 823 BGB, Art. 5 GG"
             aria-label="Norm suchen… z.B. § 823 BGB, Art. 5 GG"
-            className="pl-9 bg-[#0d0d1a] border-[#1e1e3a] text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:border-violet-500/50"
+            className="pl-9 bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
           />
         </div>
       </div>
@@ -230,12 +230,12 @@ function NormsPageInner() {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
                 jurisdiction === j
                   ? "bg-violet-600/15 border-violet-500/30 text-violet-400"
-                  : "bg-[#0d0d1a] border-[#1e1e3a] text-[#8a8aa8] hover:border-[#3a3a6a] hover:text-[#e8e8f0]"
+                  : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:border-[#b4b9c8] hover:text-[#15151d]"
               }`}
             >
               {j === "all" ? "Alle" : j === "at" ? "🇦🇹 AT" : j === "de" ? "🇩🇪 DE" : "🇨🇭 CH"}
               {j !== "all" && counts > 0 && (
-                <span className="ml-1.5 px-1 py-0.5 rounded bg-[#1e1e3a] text-[10px]">{counts}</span>
+                <span className="ml-1.5 px-1 py-0.5 rounded bg-[#e2e4ec] text-[10px]">{counts}</span>
               )}
             </button>
           );
@@ -251,12 +251,12 @@ function NormsPageInner() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setSelectedNorm(null)}
-                className="text-[#8888aa] hover:text-[#e8e8f0]"
+                className="text-[#585866] hover:text-[#15151d]"
               >
                 <ArrowLeft size={16} />
               </Button>
               <div>
-                <h2 className="text-lg font-bold text-[#e8e8f0]">{selectedNorm.title}</h2>
+                <h2 className="text-lg font-bold text-[#15151d]">{selectedNorm.title}</h2>
                 <div className="flex items-center gap-2 mt-1">
                   <Badge variant="default" className="text-[10px] bg-blue-600/10 border-blue-500/20 text-blue-400">
                     {CODE_LABELS[selectedNorm.code] || selectedNorm.code.toUpperCase()}
@@ -278,18 +278,18 @@ function NormsPageInner() {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#12122a] border border-[#1e1e3a] text-[#8a8aa8] hover:text-violet-400 hover:border-violet-500/30 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#eceef3] border border-[#e2e4ec] text-[#585866] hover:text-violet-400 hover:border-violet-500/30 transition-all"
               title="Text kopieren"
             >
               {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
               {copied ? "Kopiert" : "Kopieren"}
             </button>
           </div>
-          <div className="text-sm text-[#8888aa] whitespace-pre-wrap leading-relaxed max-h-[60vh] overflow-y-auto bg-[#0a0a18] rounded-lg p-4 border border-[#1e1e3a]">
+          <div className="text-sm text-[#585866] whitespace-pre-wrap leading-relaxed max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-lg p-4 border border-[#e2e4ec]">
             {detailLoading ? (
               <div className="flex items-center gap-2 py-4">
                 <Loader2 size={14} className="animate-spin text-violet-400" />
-                <span className="text-xs text-[#8a8aa8]">Gesetzestext wird geladen…</span>
+                <span className="text-xs text-[#585866]">Gesetzestext wird geladen…</span>
               </div>
             ) : (
               fullContent || selectedNorm.content
@@ -306,8 +306,8 @@ function NormsPageInner() {
 
       {/* Stats bar */}
       {!loading && norms.length > 0 && (
-        <div className="flex items-center gap-4 text-xs text-[#8a8aa8]">
-          <span className="flex items-center gap-1"><Scale size={12} /> <strong className="text-[#e8e8f0]">{norms.length}</strong> Gesetze</span>
+        <div className="flex items-center gap-4 text-xs text-[#585866]">
+          <span className="flex items-center gap-1"><Scale size={12} /> <strong className="text-[#15151d]">{norms.length}</strong> Gesetze</span>
           <span className="flex items-center gap-1"><Globe size={12} /> AT: {norms.filter(n => n.jurisdiction === "at").length}</span>
           <span className="flex items-center gap-1"><Globe size={12} /> DE: {norms.filter(n => n.jurisdiction === "de").length}</span>
           <span className="flex items-center gap-1"><Globe size={12} /> CH: {norms.filter(n => n.jurisdiction === "ch").length}</span>
@@ -321,36 +321,36 @@ function NormsPageInner() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 space-y-3">
-          <BookOpen size={40} className="mx-auto text-[#1e1e3a]" />
-          <p className="text-sm text-[#8888aa]">Keine Gesetze gefunden.</p>
-          <p className="text-xs text-[#8a8aa8]">{norms.length > 0 ? "Passe den Filter oder die Suche an." : "Importiere Gesetze über das CLI."}</p>
+          <BookOpen size={40} className="mx-auto text-[#e2e4ec]" />
+          <p className="text-sm text-[#585866]">Keine Gesetze gefunden.</p>
+          <p className="text-xs text-[#585866]">{norms.length > 0 ? "Passe den Filter oder die Suche an." : "Importiere Gesetze über das CLI."}</p>
         </div>
       ) : (
         <div className="space-y-4">
           {Object.entries(byCode).map(([code, items]) => (
             <div key={code} className="space-y-2">
-              <h3 className="text-xs font-semibold text-[#8a8aa8] uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-xs font-semibold text-[#585866] uppercase tracking-wider flex items-center gap-2">
                 <BookOpen size={12} />
                 {CODE_LABELS[code] || code.toUpperCase()}
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1e1e3a] text-[#8a8aa8]">{items.length}</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#e2e4ec] text-[#585866]">{items.length}</span>
               </h3>
               <div className="space-y-1">
                 {items.map((n) => (
                   <button
                     key={n.slug}
                     onClick={() => setSelectedNorm(n)}
-                    className="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#12122a] transition-colors group border border-transparent hover:border-[#1e1e3a]"
+                    className="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#eceef3] transition-colors group border border-transparent hover:border-[#e2e4ec]"
                   >
                     <span className={`w-2 h-2 rounded-full shrink-0 ${
                       n.jurisdiction === "at" ? "bg-red-400" :
                       n.jurisdiction === "ch" ? "bg-emerald-400" :
                       "bg-blue-400"
                     }`} />
-                    <span className="text-sm text-[#8888aa] group-hover:text-[#e8e8f0] flex-1 truncate">{n.title}</span>
+                    <span className="text-sm text-[#585866] group-hover:text-[#15151d] flex-1 truncate">{n.title}</span>
                     {n.jurisdiction && (
-                      <span className="text-[10px] text-[#8a8aa8] bg-[#1e1e3a] px-1.5 py-0.5 rounded uppercase">{n.jurisdiction}</span>
+                      <span className="text-[10px] text-[#585866] bg-[#e2e4ec] px-1.5 py-0.5 rounded uppercase">{n.jurisdiction}</span>
                     )}
-                    <ChevronRight size={12} className="text-[#8a8aa8] group-hover:text-violet-400 shrink-0" />
+                    <ChevronRight size={12} className="text-[#585866] group-hover:text-violet-400 shrink-0" />
                   </button>
                 ))}
               </div>

@@ -62,14 +62,14 @@ export default function KollisionspruefungPage() {
           <ShieldAlert size={20} className="text-red-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">Kollisionsprüfung</h1>
-          <p className="text-sm text-[#8888aa]">Interessenkonflikte nach § 43a BRAO prüfen</p>
+          <h1 className="text-xl font-bold text-[#15151d]">Kollisionsprüfung</h1>
+          <p className="text-sm text-[#585866]">Interessenkonflikte nach § 43a BRAO prüfen</p>
         </div>
       </div>
 
       {/* Search */}
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
-        <p className="text-sm text-[#8888aa] mb-3">
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+        <p className="text-sm text-[#585866] mb-3">
           Gib einen Namen (Mandant, Gegner oder Dritte) ein, um zu prüfen ob ein Interessenkonflikt besteht.
           Die Prüfung läuft über alle Akten dieses Brains, inkl. Teiltreffer bei ähnlichen Namen.
         </p>
@@ -78,14 +78,14 @@ export default function KollisionspruefungPage() {
           onSubmit={(e) => { e.preventDefault(); void performCheck(searchName); }}
         >
           <div className="relative flex-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8888aa]" aria-hidden="true" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" aria-hidden="true" />
             <label htmlFor="conflict-name" className="sr-only">Name für Kollisionsprüfung</label>
             <Input
               id="conflict-name"
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
               placeholder="Name eingeben…"
-              className="pl-9 bg-[#0a0a18] border-[#1e1e3a] text-[#e8e8f0] placeholder:text-[#8888aa] focus:border-violet-500/50"
+              className="pl-9 bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
             />
           </div>
           <Button
@@ -124,7 +124,7 @@ export default function KollisionspruefungPage() {
               <Icon size={20} className={cn("shrink-0", cfg.iconClass)} aria-hidden="true" />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-[#e8e8f0]">{result.name}</span>
+                  <span className="font-medium text-[#15151d]">{result.name}</span>
                   <Badge
                     variant="default"
                     className={cn(
@@ -139,32 +139,32 @@ export default function KollisionspruefungPage() {
                     {cfg.label}
                   </Badge>
                 </div>
-                <p className="text-sm text-[#8888aa] mt-1">{result.explanation}</p>
+                <p className="text-sm text-[#585866] mt-1">{result.explanation}</p>
               </div>
             </div>
 
             {result.matches.length > 0 && (
               <div className="space-y-1.5 mt-3">
-                <p className="text-xs text-[#8888aa] uppercase tracking-wider font-semibold">
+                <p className="text-xs text-[#585866] uppercase tracking-wider font-semibold">
                   Beteiligte Akten ({result.matches.length})
                 </p>
                 {result.matches.map((m) => (
                   <div
                     key={`${m.slug}-${m.role}`}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0a0a18] border border-[#1e1e3a]"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]"
                   >
                     {m.role === "client" ? (
                       <Users size={14} className="text-emerald-400 shrink-0" aria-hidden="true" />
                     ) : (
                       <Building2 size={14} className="text-red-400 shrink-0" aria-hidden="true" />
                     )}
-                    <span className="text-sm text-[#e8e8f0] flex-1">{m.title}</span>
+                    <span className="text-sm text-[#15151d] flex-1">{m.title}</span>
                     {!m.exact && (
                       <Badge variant="default" className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-400">
                         Ähnlicher Name: {m.matched_name}
                       </Badge>
                     )}
-                    <Badge variant="default" className="text-[10px] bg-[#12122a] border border-[#1e1e3a] text-[#8888aa]">
+                    <Badge variant="default" className="text-[10px] bg-[#eceef3] border border-[#e2e4ec] text-[#585866]">
                       {m.role === "client" ? "Mandant" : "Gegner"}
                     </Badge>
                   </div>
@@ -176,7 +176,7 @@ export default function KollisionspruefungPage() {
       </div>
 
       {/* Disclaimer */}
-      <div className="text-xs text-[#8888aa] border-t border-[#1e1e3a] pt-4">
+      <div className="text-xs text-[#585866] border-t border-[#e2e4ec] pt-4">
         <p>
           <strong>Hinweis:</strong> Diese Kollisionsprüfung ist ein Unterstützungstool und ersetzt
           nicht die anwaltliche Pflichtprüfung nach § 43a BRAO. Sie prüft ausschließlich die im

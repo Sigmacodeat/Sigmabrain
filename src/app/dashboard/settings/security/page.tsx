@@ -50,8 +50,8 @@ export default function SecuritySettingsPage() {
           <Shield size={20} className="text-amber-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">Sicherheit</h1>
-          <p className="text-sm text-[#8888aa]">Zwei-Faktor-Authentifizierung</p>
+          <h1 className="text-xl font-bold text-[#15151d]">Sicherheit</h1>
+          <p className="text-sm text-[#585866]">Zwei-Faktor-Authentifizierung</p>
         </div>
       </div>
 
@@ -60,16 +60,16 @@ export default function SecuritySettingsPage() {
           <CheckCircle2 size={18} className="text-emerald-400" />
           <div>
             <p className="text-sm text-emerald-400 font-medium">2FA ist aktiviert</p>
-            <p className="text-xs text-[#8888aa]">Ihr Account ist durch TOTP-geschützt.</p>
+            <p className="text-xs text-[#585866]">Ihr Account ist durch TOTP-geschützt.</p>
           </div>
         </div>
       ) : (
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-4">
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
           <div className="flex items-start gap-3">
             <KeyRound size={16} className="text-amber-400 shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-[#e8e8f0] font-medium">Zwei-Faktor-Authentifizierung (2FA)</p>
-              <p className="text-xs text-[#8888aa] mt-1">
+              <p className="text-sm text-[#15151d] font-medium">Zwei-Faktor-Authentifizierung (2FA)</p>
+              <p className="text-xs text-[#585866] mt-1">
                 Schützen Sie Ihren Account mit einem zeitbasierten Einmalcode (TOTP).
                 Scannen Sie den QR-Code mit einer Authenticator-App (z.B. Google Authenticator, Authy).
               </p>
@@ -89,10 +89,10 @@ export default function SecuritySettingsPage() {
 
           {step === "setup" && (
             <div className="space-y-3">
-              <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] p-4 text-center space-y-2">
-                <p className="text-xs text-[#8888aa]">QR-Code scannen:</p>
+              <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-4 text-center space-y-2">
+                <p className="text-xs text-[#585866]">QR-Code scannen:</p>
                 <QRCodeSVG data={qrUrl} size={180} />
-                <p className="text-[10px] text-[#8a8aa8] font-mono break-all">{secret}</p>
+                <p className="text-[10px] text-[#585866] font-mono break-all">{secret}</p>
               </div>
               <div className="flex gap-2">
                 <input
@@ -101,7 +101,7 @@ export default function SecuritySettingsPage() {
                   onChange={(e) => setToken(e.target.value)}
                   placeholder="6-stelliger Code"
                   maxLength={6}
-                  className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-amber-500/50 text-center tracking-widest"
+                  className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-amber-500/50 text-center tracking-widest"
                 />
                 <Button
                   variant="primary"
@@ -132,7 +132,7 @@ function QRCodeSVG({ data, size }: { data: string; size: number }) {
   // Placeholder: show a grid pattern. In production use qrcode library.
   return (
     <div
-      className="inline-block border border-[#1e1e3a] bg-white rounded"
+      className="inline-block border border-[#e2e4ec] bg-white rounded"
       style={{ width: size, height: size }}
       title={data}
     >

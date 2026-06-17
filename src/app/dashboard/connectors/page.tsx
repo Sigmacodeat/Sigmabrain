@@ -117,8 +117,8 @@ export default function ConnectorsPage() {
             <Plug size={20} className="text-blue-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">Konnektoren</h1>
-            <p className="text-sm text-[#8888aa]">Externe Systeme verbinden und synchronisieren</p>
+            <h1 className="text-xl font-bold text-[#15151d]">Konnektoren</h1>
+            <p className="text-sm text-[#585866]">Externe Systeme verbinden und synchronisieren</p>
           </div>
         </div>
       </div>
@@ -165,35 +165,35 @@ export default function ConnectorsPage() {
                   "flex items-center gap-4 px-4 py-3 rounded-xl border transition-all",
                   isLegal
                     ? "border-violet-500/20 bg-violet-600/5"
-                    : "border-[#1e1e3a] bg-[#0a0a18]"
+                    : "border-[#e2e4ec] bg-[#ffffff]"
                 )}
               >
                 <div className={cn(
                   "w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border",
-                  isLegal ? "bg-violet-600/10 border-violet-500/20" : "bg-[#12122a] border-[#1e1e3a]"
+                  isLegal ? "bg-violet-600/10 border-violet-500/20" : "bg-[#eceef3] border-[#e2e4ec]"
                 )}>
-                  <Icon size={18} className={isLegal ? "text-violet-400" : "text-[#8a8aa8]"} />
+                  <Icon size={18} className={isLegal ? "text-violet-400" : "text-[#585866]"} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-[#e8e8f0]">{label}</span>
+                    <span className="font-medium text-[#15151d]">{label}</span>
                     {isLegal && (
                       <Badge variant="default" className="text-[10px] bg-violet-600/10 border-violet-500/20 text-violet-400">
                         Kanzlei
                       </Badge>
                     )}
                     {!c.configured && (
-                      <Badge variant="default" className="text-[10px] bg-[#12122a] border-[#1e1e3a] text-[#8a8aa8]">
+                      <Badge variant="default" className="text-[10px] bg-[#eceef3] border-[#e2e4ec] text-[#585866]">
                         Nicht eingerichtet
                       </Badge>
                     )}
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-[#8a8aa8] mt-0.5">
-                    <span className={cn("flex items-center gap-1", c.enabled ? "text-emerald-400" : "text-[#8a8aa8]")}>
+                  <div className="flex items-center gap-3 text-xs text-[#585866] mt-0.5">
+                    <span className={cn("flex items-center gap-1", c.enabled ? "text-emerald-400" : "text-[#585866]")}>
                       {c.enabled ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
                       {c.enabled ? "Aktiviert" : "Deaktiviert"}
                     </span>
-                    <span className={cn("flex items-center gap-1", c.connected ? "text-emerald-400" : "text-[#8a8aa8]")}>
+                    <span className={cn("flex items-center gap-1", c.connected ? "text-emerald-400" : "text-[#585866]")}>
                       {c.connected ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
                       {c.connected ? "Verbunden" : "Getrennt"}
                     </span>
@@ -206,7 +206,7 @@ export default function ConnectorsPage() {
                     size="sm"
                     disabled={!c.configured || toggling === c.service}
                     onClick={() => handleToggle(c.service)}
-                    className="text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#12122a] gap-1.5 text-xs"
+                    className="text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3] gap-1.5 text-xs"
                   >
                     {toggling === c.service ? <Loader2 size={12} className="animate-spin" /> : c.enabled ? <XCircle size={12} /> : <CheckCircle2 size={12} />}
                     {c.enabled ? "Deaktivieren" : "Aktivieren"}
@@ -216,7 +216,7 @@ export default function ConnectorsPage() {
                     size="sm"
                     disabled={!c.configured || !c.enabled || syncing === c.service}
                     onClick={() => handleSync(c.service)}
-                    className="text-[#8888aa] hover:text-[#e8e8f0] hover:bg-[#12122a] gap-1.5 text-xs"
+                    className="text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3] gap-1.5 text-xs"
                   >
                     {syncing === c.service ? <Loader2 size={12} className="animate-spin" /> : <RefreshCw size={12} />}
                     Sync
@@ -229,24 +229,24 @@ export default function ConnectorsPage() {
       )}
 
       {/* CLI reference */}
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-        <h2 className="text-sm font-semibold text-[#e8e8f0]">CLI-Kommandos</h2>
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+        <h2 className="text-sm font-semibold text-[#15151d]">CLI-Kommandos</h2>
         <div className="space-y-2 font-mono text-xs">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0a0a18] border border-[#1e1e3a]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
             <span className="text-violet-400">$</span>
-            <span className="text-[#8888aa]">gbrain connector add legal-judgements --query &quot;Haftung&quot; --jurisdiction at</span>
+            <span className="text-[#585866]">gbrain connector add legal-judgements --query &quot;Haftung&quot; --jurisdiction at</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0a0a18] border border-[#1e1e3a]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
             <span className="text-violet-400">$</span>
-            <span className="text-[#8888aa]">gbrain connector add bea-import --watch-dir ~/Downloads/bea</span>
+            <span className="text-[#585866]">gbrain connector add bea-import --watch-dir ~/Downloads/bea</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0a0a18] border border-[#1e1e3a]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
             <span className="text-violet-400">$</span>
-            <span className="text-[#8888aa]">gbrain connector sync legal-judgements</span>
+            <span className="text-[#585866]">gbrain connector sync legal-judgements</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0a0a18] border border-[#1e1e3a]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
             <span className="text-violet-400">$</span>
-            <span className="text-[#8888aa]">gbrain connector list</span>
+            <span className="text-[#585866]">gbrain connector list</span>
           </div>
         </div>
       </div>

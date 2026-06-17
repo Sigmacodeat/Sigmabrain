@@ -161,8 +161,8 @@ export default function ImportKanzleiPage() {
           <FileSpreadsheet size={20} className="text-blue-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">Kanzlei-Import</h1>
-          <p className="text-sm text-[#8888aa]">Aktenliste aus RA-MICRO, Advoware oder DATEV Anwalt (CSV) übernehmen</p>
+          <h1 className="text-xl font-bold text-[#15151d]">Kanzlei-Import</h1>
+          <p className="text-sm text-[#585866]">Aktenliste aus RA-MICRO, Advoware oder DATEV Anwalt (CSV) übernehmen</p>
         </div>
       </div>
 
@@ -180,11 +180,11 @@ export default function ImportKanzleiPage() {
       {/* Upload */}
       <label className={cn(
         "flex flex-col items-center justify-center gap-2 py-10 rounded-xl border border-dashed cursor-pointer transition-all duration-300",
-        headers.length ? "border-[#23233f] bg-[#0a0a18]" : "border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50"
+        headers.length ? "border-[#d6d9e3] bg-[#ffffff]" : "border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50"
       )}>
         <UploadCloud size={28} className="text-blue-400" aria-hidden="true" />
-        <span className="text-sm text-[#e8e8f0]">{fileName || "CSV-Datei wählen oder hierher ziehen"}</span>
-        {headers.length > 0 && <span className="text-xs text-[#8888aa]">{rows.length} Zeilen erkannt · andere Datei wählen</span>}
+        <span className="text-sm text-[#15151d]">{fileName || "CSV-Datei wählen oder hierher ziehen"}</span>
+        {headers.length > 0 && <span className="text-xs text-[#585866]">{rows.length} Zeilen erkannt · andere Datei wählen</span>}
         <input
           type="file"
           accept=".csv,text/csv,text/plain"
@@ -198,19 +198,19 @@ export default function ImportKanzleiPage() {
       {/* Mapping + preview */}
       {headers.length > 0 && (
         <>
-          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-[#e8e8f0]">Spalten zuordnen</h2>
+          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+            <h2 className="text-sm font-semibold text-[#15151d]">Spalten zuordnen</h2>
             <div className="grid sm:grid-cols-2 gap-3">
               {FIELDS.map((f) => (
                 <div key={f.key} className="flex items-center gap-2">
-                  <label htmlFor={`map-${f.key}`} className="text-xs text-[#8888aa] w-36 shrink-0">
+                  <label htmlFor={`map-${f.key}`} className="text-xs text-[#585866] w-36 shrink-0">
                     {f.label}{f.required && <span className="text-red-400"> *</span>}
                   </label>
                   <select
                     id={`map-${f.key}`}
                     value={mapping[f.key] ?? -1}
                     onChange={(e) => setMapping((m) => ({ ...m, [f.key]: Number(e.target.value) }))}
-                    className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-2 py-1.5 text-xs text-[#e8e8f0] focus:outline-none focus:border-blue-500/50"
+                    className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-2 py-1.5 text-xs text-[#15151d] focus:outline-none focus:border-blue-500/50"
                   >
                     <option value={-1}>— nicht importieren —</option>
                     {headers.map((h, i) => (
@@ -228,11 +228,11 @@ export default function ImportKanzleiPage() {
           </div>
 
           {/* Preview (first 5) */}
-          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 overflow-x-auto">
-            <h2 className="text-sm font-semibold text-[#e8e8f0] mb-3">Vorschau (erste 5)</h2>
+          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 overflow-x-auto">
+            <h2 className="text-sm font-semibold text-[#15151d] mb-3">Vorschau (erste 5)</h2>
             <table className="w-full text-xs">
               <thead>
-                <tr className="text-left text-[#8888aa]">
+                <tr className="text-left text-[#585866]">
                   {FIELDS.filter((f) => (mapping[f.key] ?? -1) >= 0).map((f) => (
                     <th key={f.key} scope="col" className="pb-2 pr-3 font-medium">{f.label}</th>
                   ))}
@@ -240,9 +240,9 @@ export default function ImportKanzleiPage() {
               </thead>
               <tbody>
                 {rows.slice(0, 5).map((r, ri) => (
-                  <tr key={ri} className="border-t border-[#1e1e3a]">
+                  <tr key={ri} className="border-t border-[#e2e4ec]">
                     {FIELDS.filter((f) => (mapping[f.key] ?? -1) >= 0).map((f) => (
-                      <td key={f.key} className="py-1.5 pr-3 text-[#e8e8f0] max-w-[180px] truncate">
+                      <td key={f.key} className="py-1.5 pr-3 text-[#15151d] max-w-[180px] truncate">
                         {r[mapping[f.key]] ?? ""}
                       </td>
                     ))}

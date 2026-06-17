@@ -67,8 +67,8 @@ export default function RetentionPage() {
           <CalendarClock size={20} className="text-amber-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">Löschfristen</h1>
-          <p className="text-sm text-[#8888aa]">DSGVO + BRAO — Aufbewahrungsfristen prüfen</p>
+          <h1 className="text-xl font-bold text-[#15151d]">Löschfristen</h1>
+          <p className="text-sm text-[#585866]">DSGVO + BRAO — Aufbewahrungsfristen prüfen</p>
         </div>
       </div>
 
@@ -76,15 +76,15 @@ export default function RetentionPage() {
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-center">
           <div className="text-xl font-bold text-emerald-400">{cases.filter((c) => c.action === "keep").length}</div>
-          <div className="text-xs text-[#8888aa]">Aktiv / Frist nicht erreicht</div>
+          <div className="text-xs text-[#585866]">Aktiv / Frist nicht erreicht</div>
         </div>
         <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-center">
           <div className="text-xl font-bold text-amber-400">{toReview.length}</div>
-          <div className="text-xs text-[#8888aa]">Zur Prüfung (≥{RETENTION_YEARS} J.)</div>
+          <div className="text-xs text-[#585866]">Zur Prüfung (≥{RETENTION_YEARS} J.)</div>
         </div>
         <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-center">
           <div className="text-xl font-bold text-red-400">{toDelete.length}</div>
-          <div className="text-xs text-[#8888aa]">Löschfällig (≥{RETENTION_YEARS + 4} J.)</div>
+          <div className="text-xs text-[#585866]">Löschfällig (≥{RETENTION_YEARS + 4} J.)</div>
         </div>
       </div>
 
@@ -95,7 +95,7 @@ export default function RetentionPage() {
       )}
 
       {loading ? (
-        <div className="text-center py-20 text-[#8888aa]">Lade Akten…</div>
+        <div className="text-center py-20 text-[#585866]">Lade Akten…</div>
       ) : (
         <div className="space-y-2">
           {cases.map((c) => (
@@ -104,7 +104,7 @@ export default function RetentionPage() {
               className={`flex items-center gap-4 px-4 py-3 rounded-xl border ${
                 c.action === "delete" ? "border-red-500/20 bg-red-500/5" :
                 c.action === "review" ? "border-amber-500/20 bg-amber-500/5" :
-                "border-[#1e1e3a] bg-[#0a0a18]"
+                "border-[#e2e4ec] bg-[#ffffff]"
               }`}
             >
               <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0">
@@ -114,10 +114,10 @@ export default function RetentionPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-[#e8e8f0]">{c.caseNumber}</span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-[#1e1e3a] bg-[#12122a] text-[#8a8aa8]">{c.status}</span>
+                  <span className="text-sm font-medium text-[#15151d]">{c.caseNumber}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-[#e2e4ec] bg-[#eceef3] text-[#585866]">{c.status}</span>
                 </div>
-                <div className="text-xs text-[#8888aa]">
+                <div className="text-xs text-[#585866]">
                   {c.title} · {c.yearsSinceClosure} Jahre seit Abschluss
                 </div>
               </div>
@@ -131,12 +131,12 @@ export default function RetentionPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
         <div className="flex items-start gap-3">
           <Shield size={16} className="text-amber-400 shrink-0 mt-0.5" />
           <div>
-            <p className="text-xs text-[#8888aa]">
-              <strong className="text-[#e8e8f0]">Hinweis:</strong> Die angezeigten Fristen dienen als Orientierung.
+            <p className="text-xs text-[#585866]">
+              <strong className="text-[#15151d]">Hinweis:</strong> Die angezeigten Fristen dienen als Orientierung.
               Die tatsächliche Aufbewahrungsfrist hängt von der Rechtsmaterie ab:
               Handakten (§ 147 AO): 6 Jahre, Kanzleiakten (§ 50 BRAO): 10 Jahre.
               Persönliche Daten müssen nach Zweckwegfall gelöscht werden (Art. 5 DSGVO).

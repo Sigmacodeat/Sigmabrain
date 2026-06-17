@@ -74,8 +74,8 @@ export default function WhatsAppDashboardPage() {
           <MessageSquare size={20} className="text-emerald-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">WhatsApp Copilot</h1>
-          <p className="text-sm text-[#8888aa]">Interner Kanzlei-Assistent für Superbrain-Erfassung und Abfragen</p>
+          <h1 className="text-xl font-bold text-[#15151d]">WhatsApp Copilot</h1>
+          <p className="text-sm text-[#585866]">Interner Kanzlei-Assistent für Superbrain-Erfassung und Abfragen</p>
         </div>
       </div>
 
@@ -84,7 +84,7 @@ export default function WhatsAppDashboardPage() {
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center py-20 text-[#8888aa]">
+        <div className="flex items-center justify-center py-20 text-[#585866]">
           <Loader2 size={20} className="animate-spin mr-2" /> Lade WhatsApp Copilot…
         </div>
       ) : (
@@ -96,10 +96,10 @@ export default function WhatsAppDashboardPage() {
             <Metric label="Inbox" value={String(inbox.length)} />
           </div>
 
-          <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-5 space-y-4">
+          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-5 space-y-4">
             <div className="flex items-center gap-2">
               <ShieldCheck size={16} className="text-emerald-400" />
-              <h2 className="text-sm font-semibold text-[#e8e8f0]">Setup</h2>
+              <h2 className="text-sm font-semibold text-[#15151d]">Setup</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
               <SetupFlag label="Verify Token" ok={Boolean(status?.verifyToken)} />
@@ -109,30 +109,30 @@ export default function WhatsAppDashboardPage() {
               <SetupFlag label="Allowlist" ok={(status?.allowedSenders.length || 0) > 0} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
-              <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
-                <span className="text-[#8a8aa8]">Storage Provider</span>
-                <div className="text-[#e8e8f0] mt-1">{status?.mediaStorageProvider || "local"}</div>
+              <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2">
+                <span className="text-[#585866]">Storage Provider</span>
+                <div className="text-[#15151d] mt-1">{status?.mediaStorageProvider || "local"}</div>
               </div>
-              <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
-                <span className="text-[#8a8aa8]">Media Storage</span>
-                <div className="text-[#e8e8f0] font-mono break-all mt-1">
+              <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2">
+                <span className="text-[#585866]">Media Storage</span>
+                <div className="text-[#15151d] font-mono break-all mt-1">
                   {status?.mediaStorageProvider === "vercel-blob" ? (status.blobConfigured ? "Vercel Blob" : "Blob Token fehlt") : (status?.mediaStorageDir || ".data/whatsapp-media")}
                 </div>
               </div>
-              <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
-                <span className="text-[#8a8aa8]">Media Limit</span>
-                <div className="text-[#e8e8f0] mt-1">{Math.round((status?.mediaMaxBytes || 0) / 1024 / 1024)} MB pro Datei</div>
+              <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2">
+                <span className="text-[#585866]">Media Limit</span>
+                <div className="text-[#15151d] mt-1">{Math.round((status?.mediaMaxBytes || 0) / 1024 / 1024)} MB pro Datei</div>
               </div>
             </div>
-            <div className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 text-xs text-[#8888aa] font-mono break-all">
+            <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2 text-xs text-[#585866] font-mono break-all">
               {status?.webhookUrl || "/api/whatsapp/webhook"}
             </div>
             {status?.allowedSenders?.length ? (
               <div className="space-y-2">
                 {status.allowedSenders.map((sender, idx) => (
-                  <div key={`${sender.brainId}-${idx}`} className="flex items-center justify-between rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 text-xs">
-                    <span className="text-[#e8e8f0]">{sender.name || "Erlaubter Sender"} · ****{sender.phoneLast4}</span>
-                    <span className="text-[#8a8aa8]">{sender.brainId}</span>
+                  <div key={`${sender.brainId}-${idx}`} className="flex items-center justify-between rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2 text-xs">
+                    <span className="text-[#15151d]">{sender.name || "Erlaubter Sender"} · ****{sender.phoneLast4}</span>
+                    <span className="text-[#585866]">{sender.brainId}</span>
                   </div>
                 ))}
               </div>
@@ -152,20 +152,20 @@ export default function WhatsAppDashboardPage() {
 }
 
 function Metric({ label, value, ok, warn }: { label: string; value: string; ok?: boolean; warn?: boolean }) {
-  const color = ok ? "text-emerald-400" : warn ? "text-amber-400" : "text-[#e8e8f0]";
+  const color = ok ? "text-emerald-400" : warn ? "text-amber-400" : "text-[#15151d]";
   return (
-    <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4">
+    <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
       <div className={`text-lg font-bold ${color}`}>{value}</div>
-      <div className="text-xs text-[#8a8aa8]">{label}</div>
+      <div className="text-xs text-[#585866]">{label}</div>
     </div>
   );
 }
 
 function SetupFlag({ label, ok }: { label: string; ok: boolean }) {
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2">
+    <div className="flex items-center gap-2 rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2">
       {ok ? <CheckCircle2 size={12} className="text-emerald-400" /> : <XCircle size={12} className="text-red-400" />}
-      <span className="text-[#8888aa]">{label}</span>
+      <span className="text-[#585866]">{label}</span>
     </div>
   );
 }
@@ -173,24 +173,24 @@ function SetupFlag({ label, ok }: { label: string; ok: boolean }) {
 function LogPanel({ title, pages }: { title: string; pages: BrainPage[] }) {
   const sorted = [...pages].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 20);
   return (
-    <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-5 space-y-3">
-      <h2 className="text-sm font-semibold text-[#e8e8f0]">{title}</h2>
+    <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-5 space-y-3">
+      <h2 className="text-sm font-semibold text-[#15151d]">{title}</h2>
       {sorted.length === 0 ? (
-        <p className="text-sm text-[#8888aa] py-6">Noch keine Einträge.</p>
+        <p className="text-sm text-[#585866] py-6">Noch keine Einträge.</p>
       ) : (
         <div className="space-y-2">
           {sorted.map((page) => {
             const fm = front(page);
             const status = text(fm.status) || text(fm.intent) || "received";
             return (
-              <div key={page.slug} className="rounded-lg border border-[#1e1e3a] bg-[#0a0a18] px-3 py-2 space-y-1">
+              <div key={page.slug} className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2 space-y-1">
                 <div className="flex items-center justify-between gap-2">
-                  <div className="text-xs font-medium text-[#e8e8f0] truncate">{page.title}</div>
+                  <div className="text-xs font-medium text-[#15151d] truncate">{page.title}</div>
                   <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">
                     {status}
                   </Badge>
                 </div>
-                <div className="text-[11px] text-[#8a8aa8] flex items-center gap-1">
+                <div className="text-[11px] text-[#585866] flex items-center gap-1">
                   <Clock size={10} /> {new Date(page.created_at).toLocaleString("de-DE")}
                   {text(fm.intent) && <span> · {text(fm.intent)}</span>}
                 </div>
@@ -199,7 +199,7 @@ function LogPanel({ title, pages }: { title: string; pages: BrainPage[] }) {
                     <AlertTriangle size={10} /> {text(fm.error)}
                   </div>
                 )}
-                {page.content && <p className="text-xs text-[#8888aa] line-clamp-2">{page.content}</p>}
+                {page.content && <p className="text-xs text-[#585866] line-clamp-2">{page.content}</p>}
               </div>
             );
           })}

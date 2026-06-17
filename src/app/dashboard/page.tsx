@@ -84,8 +84,8 @@ export default function DashboardPage() {
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#e8e8f0]">Dashboard</h1>
-          <p className="text-sm text-[#8888aa] mt-0.5">
+          <h1 className="text-2xl font-bold text-[#15151d]">Dashboard</h1>
+          <p className="text-sm text-[#585866] mt-0.5">
             {loading ? "Lade Brain-Status…" : engineOnline ? "Verbunden — frag dein Brain oder lade Akten hoch" : "Engine nicht erreichbar — Verbindung prüfen"}
           </p>
         </div>
@@ -116,9 +116,9 @@ export default function DashboardPage() {
             <Card key={stat.label} className="p-5">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs text-[#8a8aa8] uppercase tracking-wider font-medium mb-1">{stat.label}</p>
-                  <p className="text-3xl font-bold text-[#e8e8f0] font-mono">
-                    {loading ? <Loader2 size={20} className="animate-spin text-[#8a8aa8]" /> : stat.value}
+                  <p className="text-xs text-[#585866] uppercase tracking-wider font-medium mb-1">{stat.label}</p>
+                  <p className="text-3xl font-bold text-[#15151d] font-mono">
+                    {loading ? <Loader2 size={20} className="animate-spin text-[#585866]" /> : stat.value}
                   </p>
                 </div>
                 <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${colorMap[stat.color]}`}>
@@ -133,27 +133,27 @@ export default function DashboardPage() {
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <Card>
-            <div className="p-6 pb-4 border-b border-[#1e1e3a]">
+            <div className="p-6 pb-4 border-b border-[#e2e4ec]">
               <div className="flex items-center gap-2">
                 <TrendingUp size={16} className="text-violet-400" />
-                <h2 className="text-sm font-semibold text-[#e8e8f0]">Erste Schritte</h2>
+                <h2 className="text-sm font-semibold text-[#15151d]">Erste Schritte</h2>
               </div>
             </div>
-            <div className="divide-y divide-[#1e1e3a]">
+            <div className="divide-y divide-[#e2e4ec]">
               {gettingStarted.map((item) => (
-                <div key={item.step} className="flex items-center gap-4 p-4 hover:bg-[#12122a] transition-colors">
+                <div key={item.step} className="flex items-center gap-4 p-4 hover:bg-[#eceef3] transition-colors">
                   <div className={`w-7 h-7 rounded-full border flex items-center justify-center shrink-0 text-xs font-mono font-bold ${
                     item.done
                       ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                      : "bg-[#1e1e3a] border-[#3a3a6a] text-[#8a8aa8]"
+                      : "bg-[#e2e4ec] border-[#b4b9c8] text-[#585866]"
                   }`}>
                     {item.step}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-medium ${item.done ? "line-through text-[#8a8aa8]" : "text-[#e8e8f0]"}`}>
+                    <p className={`text-sm font-medium ${item.done ? "line-through text-[#585866]" : "text-[#15151d]"}`}>
                       {item.label}
                     </p>
-                    <p className="text-xs text-[#8a8aa8] font-mono mt-0.5">{item.desc}</p>
+                    <p className="text-xs text-[#585866] font-mono mt-0.5">{item.desc}</p>
                   </div>
                   <Link href={item.href}>
                     <Button variant="ghost" size="sm" className="shrink-0 text-violet-400 hover:text-violet-300">
@@ -168,8 +168,8 @@ export default function DashboardPage() {
 
         <div className="space-y-4">
           <Card>
-            <div className="p-4 pb-3 border-b border-[#1e1e3a]">
-              <h2 className="text-sm font-semibold text-[#e8e8f0]">Schnellzugriff</h2>
+            <div className="p-4 pb-3 border-b border-[#e2e4ec]">
+              <h2 className="text-sm font-semibold text-[#15151d]">Schnellzugriff</h2>
             </div>
             <div className="p-3 space-y-1">
               {QUICK_ACTIONS.map((action) => {
@@ -178,16 +178,16 @@ export default function DashboardPage() {
                   <Link
                     key={action.href}
                     href={action.href}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#12122a] transition-colors group"
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eceef3] transition-colors group"
                   >
                     <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
                       <Icon size={14} className="text-violet-400" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-[#e8e8f0] group-hover:text-violet-300 transition-colors">{action.label}</p>
-                      <p className="text-xs text-[#8a8aa8]">{action.desc}</p>
+                      <p className="text-sm font-medium text-[#15151d] group-hover:text-violet-300 transition-colors">{action.label}</p>
+                      <p className="text-xs text-[#585866]">{action.desc}</p>
                     </div>
-                    <ArrowRight size={12} className="text-[#8a8aa8] group-hover:text-violet-400 transition-colors" />
+                    <ArrowRight size={12} className="text-[#585866] group-hover:text-violet-400 transition-colors" />
                   </Link>
                 );
               })}
@@ -198,10 +198,10 @@ export default function DashboardPage() {
             <div className="p-4">
               <div className="flex items-center gap-2 mb-3">
                 <Zap size={14} className="text-amber-400" />
-                <span className="text-sm font-semibold text-[#e8e8f0]">Dream Cycle</span>
+                <span className="text-sm font-semibold text-[#15151d]">Dream Cycle</span>
                 <Badge variant="warning" className="ml-auto text-xs">Inaktiv</Badge>
               </div>
-              <p className="text-xs text-[#8888aa] leading-relaxed mb-4">
+              <p className="text-xs text-[#585866] leading-relaxed mb-4">
                 Der Dream Cycle läuft nachts und konsolidiert dein Wissen, fixiert Zitate und findet Widersprüche.
               </p>
               <Link href="/dashboard/settings">
@@ -213,28 +213,28 @@ export default function DashboardPage() {
           </Card>
 
           <Card>
-            <div className="p-4 pb-3 border-b border-[#1e1e3a]">
+            <div className="p-4 pb-3 border-b border-[#e2e4ec]">
               <div className="flex items-center gap-2">
-                <Clock size={14} className="text-[#8a8aa8]" />
-                <h2 className="text-sm font-semibold text-[#e8e8f0]">Letzte Aktivität</h2>
+                <Clock size={14} className="text-[#585866]" />
+                <h2 className="text-sm font-semibold text-[#15151d]">Letzte Aktivität</h2>
               </div>
             </div>
             {loading ? (
               <div className="p-8 flex justify-center">
-                <Loader2 size={20} className="animate-spin text-[#8a8aa8]" />
+                <Loader2 size={20} className="animate-spin text-[#585866]" />
               </div>
             ) : recent.length === 0 ? (
               <div className="p-8 text-center">
-                <FileText size={24} className="text-[#1e1e3a] mx-auto mb-2" />
-                <p className="text-sm text-[#8a8aa8]">Noch keine Aktivität</p>
-                <p className="text-xs text-[#8a8aa8] mt-1">Lade ein Dokument hoch um zu starten</p>
+                <FileText size={24} className="text-[#e2e4ec] mx-auto mb-2" />
+                <p className="text-sm text-[#585866]">Noch keine Aktivität</p>
+                <p className="text-xs text-[#585866] mt-1">Lade ein Dokument hoch um zu starten</p>
               </div>
             ) : (
-              <div className="divide-y divide-[#1e1e3a]">
+              <div className="divide-y divide-[#e2e4ec]">
                 {recent.map((q) => (
                   <div key={q.id} className="px-4 py-3">
-                    <p className="text-sm text-[#e8e8f0] truncate">{q.query}</p>
-                    <p className="text-xs text-[#8a8aa8] font-mono mt-0.5">
+                    <p className="text-sm text-[#15151d] truncate">{q.query}</p>
+                    <p className="text-xs text-[#585866] font-mono mt-0.5">
                       {new Date(q.created_at).toLocaleString("de-DE")}
                     </p>
                   </div>

@@ -285,8 +285,8 @@ export default function DraftingPage() {
           <PenTool size={20} className="text-violet-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#e8e8f0]">Schriftsatz-Generator</h1>
-          <p className="text-sm text-[#8888aa]">Schriftsätze und Gutachten mit KI-Unterstützung erstellen</p>
+          <h1 className="text-xl font-bold text-[#15151d]">Schriftsatz-Generator</h1>
+          <p className="text-sm text-[#585866]">Schriftsätze und Gutachten mit KI-Unterstützung erstellen</p>
         </div>
       </div>
 
@@ -302,7 +302,7 @@ export default function DraftingPage() {
                 "flex items-center gap-2 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all",
                 selectedTemplate === t.key
                   ? "bg-violet-600/10 border-violet-500/30 text-violet-400"
-                  : "bg-[#0a0a18] border-[#1e1e3a] text-[#8888aa] hover:text-[#e8e8f0]"
+                  : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
               )}
             >
               <Icon size={14} />
@@ -313,69 +313,69 @@ export default function DraftingPage() {
       </div>
 
       {/* Form */}
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-4">
-        <h2 className="text-sm font-semibold text-[#e8e8f0]">{template.label} — Angaben</h2>
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
+        <h2 className="text-sm font-semibold text-[#15151d]">{template.label} — Angaben</h2>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-[#8888aa] mb-1.5">Titel / Betreff</label>
+            <label className="block text-xs text-[#585866] mb-1.5">Titel / Betreff</label>
             <Input
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="z.B. Vertragsbruch Muster GmbH"
               aria-label="z.B. Vertragsbruch Muster GmbH"
-              className="bg-[#0a0a18] border-[#1e1e3a] text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:border-violet-500/50"
+              className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
             />
           </div>
           <div>
-            <label className="block text-xs text-[#8888aa] mb-1.5">Rechtsgrundlage</label>
+            <label className="block text-xs text-[#585866] mb-1.5">Rechtsgrundlage</label>
             <Input
               value={formData.legalBasis}
               onChange={(e) => setFormData({ ...formData, legalBasis: e.target.value })}
               placeholder="z.B. § 823 BGB"
               aria-label="z.B. § 823 BGB"
-              className="bg-[#0a0a18] border-[#1e1e3a] text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:border-violet-500/50"
+              className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
             />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-[#8888aa] mb-1.5">Kläger / Absender</label>
+            <label className="block text-xs text-[#585866] mb-1.5">Kläger / Absender</label>
             <Input
               value={formData.klaeger}
               onChange={(e) => setFormData({ ...formData, klaeger: e.target.value })}
               placeholder="Name"
               aria-label="Name"
-              className="bg-[#0a0a18] border-[#1e1e3a] text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:border-violet-500/50"
+              className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
             />
           </div>
           <div>
-            <label className="block text-xs text-[#8888aa] mb-1.5">Beklagter / Empfänger</label>
+            <label className="block text-xs text-[#585866] mb-1.5">Beklagter / Empfänger</label>
             <Input
               value={formData.beklagter}
               onChange={(e) => setFormData({ ...formData, beklagter: e.target.value })}
               placeholder="Name"
               aria-label="Name"
-              className="bg-[#0a0a18] border-[#1e1e3a] text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:border-violet-500/50"
+              className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
             />
           </div>
         </div>
         <div>
-          <label className="block text-xs text-[#8888aa] mb-1.5">Sachverhalt</label>
+          <label className="block text-xs text-[#585866] mb-1.5">Sachverhalt</label>
           <textarea
             value={formData.facts}
             onChange={(e) => setFormData({ ...formData, facts: e.target.value })}
             rows={4}
             placeholder="Beschreibe den Sachverhalt…"
             aria-label="Beschreibe den Sachverhalt"
-            className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50 resize-y"
+            className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2.5 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 resize-y"
           />
         </div>
         <div>
-          <label className="block text-xs text-[#8888aa] mb-1.5">Mit Akte verknüpfen</label>
+          <label className="block text-xs text-[#585866] mb-1.5">Mit Akte verknüpfen</label>
           <select
             value={selectedCaseSlug}
             onChange={(e) => setSelectedCaseSlug(e.target.value)}
-            className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2.5 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50"
+            className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2.5 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
           >
             <option value="">Keine Akte</option>
             {cases.map((c) => {
@@ -413,7 +413,7 @@ export default function DraftingPage() {
               <button
                 onClick={() => saveDraftToBrain(result)}
                 disabled={savingDraft || submitting}
-                className="text-[#8a8aa8] hover:text-emerald-400 transition-colors flex items-center gap-1 text-xs disabled:opacity-60"
+                className="text-[#585866] hover:text-emerald-400 transition-colors flex items-center gap-1 text-xs disabled:opacity-60"
                 title="Entwurf im Brain speichern"
               >
                 {savingDraft ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
@@ -422,7 +422,7 @@ export default function DraftingPage() {
               <button
                 onClick={() => submitForApproval(result)}
                 disabled={savingDraft || submitting}
-                className="text-[#8a8aa8] hover:text-violet-400 transition-colors flex items-center gap-1 text-xs disabled:opacity-60"
+                className="text-[#585866] hover:text-violet-400 transition-colors flex items-center gap-1 text-xs disabled:opacity-60"
                 title="Entwurf einem zweiten Bearbeiter zur Freigabe vorlegen (Vier-Augen-Prinzip)"
               >
                 {submitting ? <Loader2 size={14} className="animate-spin" /> : <UserCheck size={14} />}
@@ -430,7 +430,7 @@ export default function DraftingPage() {
               </button>
               <button
                 onClick={() => downloadDocx(result)}
-                className="text-[#8a8aa8] hover:text-blue-400 transition-colors flex items-center gap-1 text-xs"
+                className="text-[#585866] hover:text-blue-400 transition-colors flex items-center gap-1 text-xs"
                 title="Als Word-Dokument herunterladen"
               >
                 {docxReady ? <Check size={14} className="text-emerald-400" /> : <FileText size={14} />}
@@ -438,16 +438,16 @@ export default function DraftingPage() {
               </button>
               <button
                 onClick={() => copyToClipboard(result)}
-                className="text-[#8a8aa8] hover:text-[#8888aa] transition-colors"
+                className="text-[#585866] hover:text-[#585866] transition-colors"
               >
                 {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
               </button>
             </div>
           </div>
-          <div className="text-sm text-[#e8e8f0] whitespace-pre-wrap leading-relaxed max-h-[600px] overflow-y-auto">
+          <div className="text-sm text-[#15151d] whitespace-pre-wrap leading-relaxed max-h-[600px] overflow-y-auto">
             {result}
           </div>
-          <p className="text-[11px] text-amber-300/70 leading-relaxed border-t border-[#1e1e3a] pt-2">
+          <p className="text-[11px] text-amber-300/70 leading-relaxed border-t border-[#e2e4ec] pt-2">
             {AI_NOTICE}
           </p>
           {draftSaved && (

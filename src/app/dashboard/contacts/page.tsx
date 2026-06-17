@@ -254,28 +254,28 @@ export default function ContactsPage() {
             <Users size={20} className="text-violet-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">Kontakte</h1>
-            <p className="text-sm text-[#8888aa]">Mandanten, Gegner, Gerichte und Ansprechpartner</p>
+            <h1 className="text-xl font-bold text-[#15151d]">Kontakte</h1>
+            <p className="text-sm text-[#585866]">Mandanten, Gegner, Gerichte und Ansprechpartner</p>
           </div>
         </div>
       </div>
 
-      <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
-        <h2 className="text-sm font-semibold text-[#e8e8f0]">Kontakt anlegen</h2>
+      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
+        <h2 className="text-sm font-semibold text-[#15151d]">Kontakt anlegen</h2>
         <div className="grid grid-cols-1 md:grid-cols-[1fr_150px] gap-3">
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-          <select value={role} onChange={(e) => setRole(e.target.value as ContactRole)} className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50">
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+          <select value={role} onChange={(e) => setRole(e.target.value as ContactRole)} className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50">
             {Object.entries(ROLE_LABEL).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
           </select>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Firma / Organisation" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-Mail" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Telefon" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+          <input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Firma / Organisation" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-Mail" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Telefon" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
         </div>
-        <textarea value={address} onChange={(e) => setAddress(e.target.value)} rows={2} placeholder="Adresse" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+        <textarea value={address} onChange={(e) => setAddress(e.target.value)} rows={2} placeholder="Adresse" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
         <div className="flex gap-3">
-          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} placeholder="Notizen" className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} placeholder="Notizen" className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
           <Button onClick={createContact} disabled={!name.trim()} className="self-start bg-violet-600 hover:bg-violet-500 text-white gap-2">
             <Plus size={14} />
             Anlegen
@@ -284,8 +284,8 @@ export default function ContactsPage() {
       </div>
 
       <div className="relative">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8aa8]" />
-        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Kontakte suchen…" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
+        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Kontakte suchen…" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg pl-9 pr-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
       </div>
 
       {loadError && (
@@ -295,11 +295,11 @@ export default function ContactsPage() {
       )}
 
       {loading ? (
-        <div className="text-center py-20 text-[#8888aa]">Lade Kontakte…</div>
+        <div className="text-center py-20 text-[#585866]">Lade Kontakte…</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 space-y-3">
-          <UserCircle size={44} className="mx-auto text-[#1e1e3a]" />
-          <p className="text-sm text-[#8888aa]">Noch keine passenden Kontakte.</p>
+          <UserCircle size={44} className="mx-auto text-[#e2e4ec]" />
+          <p className="text-sm text-[#585866]">Noch keine passenden Kontakte.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -308,25 +308,25 @@ export default function ContactsPage() {
             const isEditing = editingSlug === contact.slug;
             if (isEditing) {
               return (
-                <div key={contact.slug} className="rounded-xl border border-violet-500/20 bg-[#0d0d1a] p-4 space-y-3">
+                <div key={contact.slug} className="rounded-xl border border-violet-500/20 bg-[#ffffff] p-4 space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-sm font-semibold text-[#e8e8f0]">Kontakt bearbeiten</h3>
-                    <button onClick={() => setEditingSlug(null)} className="text-[#8a8aa8] hover:text-[#e8e8f0]"><X size={14} /></button>
+                    <h3 className="text-sm font-semibold text-[#15151d]">Kontakt bearbeiten</h3>
+                    <button onClick={() => setEditingSlug(null)} className="text-[#585866] hover:text-[#15151d]"><X size={14} /></button>
                   </div>
                   <div className="space-y-2">
-                    <input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Name" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-                    <select value={editRole} onChange={(e) => setEditRole(e.target.value as ContactRole)} className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50">
+                    <input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Name" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+                    <select value={editRole} onChange={(e) => setEditRole(e.target.value as ContactRole)} className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50">
                       {Object.entries(ROLE_LABEL).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
                     </select>
                     <div className="grid grid-cols-2 gap-2">
-                      <input value={editCompany} onChange={(e) => setEditCompany(e.target.value)} placeholder="Firma" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-                      <input value={editEmail} onChange={(e) => setEditEmail(e.target.value)} placeholder="E-Mail" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+                      <input value={editCompany} onChange={(e) => setEditCompany(e.target.value)} placeholder="Firma" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+                      <input value={editEmail} onChange={(e) => setEditEmail(e.target.value)} placeholder="E-Mail" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <input value={editPhone} onChange={(e) => setEditPhone(e.target.value)} placeholder="Telefon" className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+                      <input value={editPhone} onChange={(e) => setEditPhone(e.target.value)} placeholder="Telefon" className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
                     </div>
-                    <textarea value={editAddress} onChange={(e) => setEditAddress(e.target.value)} rows={2} placeholder="Adresse" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-                    <textarea value={editNotes} onChange={(e) => setEditNotes(e.target.value)} rows={2} placeholder="Notizen" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+                    <textarea value={editAddress} onChange={(e) => setEditAddress(e.target.value)} rows={2} placeholder="Adresse" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+                    <textarea value={editNotes} onChange={(e) => setEditNotes(e.target.value)} rows={2} placeholder="Notizen" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
                   </div>
                   {editError && <p className="text-xs text-red-400">{editError}</p>}
                   <div className="flex justify-end">
@@ -338,26 +338,26 @@ export default function ContactsPage() {
               );
             }
             return (
-              <div key={contact.slug} className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-3">
+              <div key={contact.slug} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <div className="text-sm font-medium text-[#e8e8f0]">{contact.name}</div>
-                    {contact.company && <div className="text-xs text-[#8a8aa8]">{contact.company}</div>}
+                    <div className="text-sm font-medium text-[#15151d]">{contact.name}</div>
+                    {contact.company && <div className="text-xs text-[#585866]">{contact.company}</div>}
                   </div>
                   <div className="flex items-center gap-1">
                     <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{ROLE_LABEL[contact.role]}</Badge>
-                    <button onClick={() => startEdit(contact)} className="p-1.5 rounded-lg text-[#8a8aa8] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="Bearbeiten"><Pencil size={13} /></button>
-                    <button onClick={() => deleteContact(contact.slug)} className="p-1.5 rounded-lg text-[#8a8aa8] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen"><Trash2 size={13} /></button>
+                    <button onClick={() => startEdit(contact)} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="Bearbeiten"><Pencil size={13} /></button>
+                    <button onClick={() => deleteContact(contact.slug)} className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen"><Trash2 size={13} /></button>
                   </div>
                 </div>
-                <div className="space-y-1 text-xs text-[#8888aa]">
+                <div className="space-y-1 text-xs text-[#585866]">
                   {contact.email && <div className="flex items-center gap-2"><Mail size={12} />{contact.email}</div>}
                   {contact.phone && <div className="flex items-center gap-2"><Phone size={12} />{contact.phone}</div>}
                   {contact.address && <div className="whitespace-pre-wrap">{contact.address}</div>}
                 </div>
                 {linked.length > 0 && (
                   <div className="space-y-1">
-                    <div className="text-[10px] uppercase tracking-wider text-[#8a8aa8] font-semibold">Verknüpfte Akten</div>
+                    <div className="text-[10px] uppercase tracking-wider text-[#585866] font-semibold">Verknüpfte Akten</div>
                     {linked.map((c) => (
                       <Link key={c.slug} href={`/dashboard/cases/${encodeURIComponent(c.slug)}`} className="block text-xs text-violet-400 hover:underline truncate">
                         {c.caseNumber} — {c.title}
@@ -365,7 +365,7 @@ export default function ContactsPage() {
                     ))}
                   </div>
                 )}
-                {contact.notes && <p className="text-xs text-[#8a8aa8] line-clamp-3">{contact.notes}</p>}
+                {contact.notes && <p className="text-xs text-[#585866] line-clamp-3">{contact.notes}</p>}
               </div>
             );
           })}

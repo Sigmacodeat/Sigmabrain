@@ -152,8 +152,8 @@ export default function CasesPage() {
             <Briefcase size={20} className="text-violet-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">Akten</h1>
-            <p className="text-sm text-[#8888aa]">{cases.length} Akten im Brain</p>
+            <h1 className="text-xl font-bold text-[#15151d]">Akten</h1>
+            <p className="text-sm text-[#585866]">{cases.length} Akten im Brain</p>
           </div>
         </div>
         <Link href="/dashboard/cases/new">
@@ -177,13 +177,13 @@ export default function CasesPage() {
                 "flex items-center gap-3 px-4 py-3 rounded-xl border transition-all text-left",
                 statusFilter === key
                   ? "bg-violet-600/10 border-violet-500/30"
-                  : "bg-[#0a0a18] border-[#1e1e3a] hover:border-[#2a2a4a]"
+                  : "bg-[#ffffff] border-[#e2e4ec] hover:border-[#2a2a4a]"
               )}
             >
               <Icon size={18} className={cn("shrink-0", STATUS_TEXT[cfg.color])} aria-hidden="true" />
               <div>
-                <div className="text-lg font-bold text-[#e8e8f0]">{count}</div>
-                <div className="text-xs text-[#8888aa]">{cfg.label}</div>
+                <div className="text-lg font-bold text-[#15151d]">{count}</div>
+                <div className="text-xs text-[#585866]">{cfg.label}</div>
               </div>
             </button>
           );
@@ -193,13 +193,13 @@ export default function CasesPage() {
       {/* Filters */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-md">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8aa8]" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Akten suchen…"
             aria-label="Akten suchen"
-            className="pl-9 bg-[#0d0d1a] border-[#1e1e3a] text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:border-violet-500/50"
+            className="pl-9 bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
           />
         </div>
         {statusFilter !== "all" && (
@@ -226,10 +226,10 @@ export default function CasesPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20 space-y-4">
-          <Briefcase size={48} className="mx-auto text-[#1e1e3a]" />
+          <Briefcase size={48} className="mx-auto text-[#e2e4ec]" />
           <div>
-            <p className="text-[#8888aa] text-lg">Keine Akten gefunden</p>
-            <p className="text-[#8a8aa8] text-sm mt-1">
+            <p className="text-[#585866] text-lg">Keine Akten gefunden</p>
+            <p className="text-[#585866] text-sm mt-1">
               {cases.length === 0
                 ? "Erstelle deine erste Akte oder importiere bestehende Fälle."
                 : "Passe deine Filter an."}
@@ -252,20 +252,20 @@ export default function CasesPage() {
             return (
               <div
                 key={c.slug}
-                className="flex items-center gap-4 px-4 py-3 rounded-xl border border-[#1e1e3a] bg-[#0a0a18] hover:border-violet-500/30 hover:bg-violet-600/5 transition-all group"
+                className="flex items-center gap-4 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:border-violet-500/30 hover:bg-violet-600/5 transition-all group"
               >
                 <Link href={`/dashboard/cases/${encodeURIComponent(c.slug)}`} className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className="w-10 h-10 rounded-lg bg-[#12122a] border border-[#1e1e3a] flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-[#eceef3] border border-[#e2e4ec] flex items-center justify-center shrink-0">
                     <StatusIcon size={18} className={STATUS_TEXT[statusCfg.color]} aria-hidden="true" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-[#e8e8f0] truncate">{c.title}</span>
+                      <span className="font-medium text-[#15151d] truncate">{c.title}</span>
                       <Badge variant="default" className={cn("text-[10px] border", PRIORITY_COLORS[c.priority] || PRIORITY_COLORS.medium)}>
                         {c.priority}
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-[#8a8aa8] mt-0.5">
+                    <div className="flex items-center gap-3 text-xs text-[#585866] mt-0.5">
                       <span className="font-mono">{c.caseNumber}</span>
                       {c.legalArea && <span className="flex items-center gap-1"><Scale size={10} />{c.legalArea}</span>}
                       {c.opponentName && <span className="flex items-center gap-1"><Users size={10} />{c.opponentName}</span>}
@@ -273,19 +273,19 @@ export default function CasesPage() {
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="text-xs text-[#8a8aa8]">
+                    <div className="text-xs text-[#585866]">
                       <Calendar size={10} className="inline mr-1" />
                       {new Date(c.updatedAt).toLocaleDateString("de-DE")}
                     </div>
-                    <Badge variant="default" className="text-[10px] mt-1 bg-[#12122a] border border-[#1e1e3a] text-[#8888aa]">
+                    <Badge variant="default" className="text-[10px] mt-1 bg-[#eceef3] border border-[#e2e4ec] text-[#585866]">
                       {statusCfg.label}
                     </Badge>
                   </div>
-                  <ChevronRight size={16} className="text-[#8a8aa8] group-hover:text-violet-400 transition-colors shrink-0" />
+                  <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-400 transition-colors shrink-0" />
                 </Link>
                 <button
                   onClick={(e) => { e.stopPropagation(); deleteCase(c.slug); }}
-                  className="p-1.5 rounded-lg text-[#8a8aa8] hover:text-red-400 hover:bg-red-500/10 transition-all shrink-0"
+                  className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all shrink-0"
                   title="Akte löschen"
                 >
                   <Trash2 size={14} />

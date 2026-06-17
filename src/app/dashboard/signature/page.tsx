@@ -184,8 +184,8 @@ export default function SignaturePage() {
             <FileSignature size={20} className="text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">e-Signatur</h1>
-            <p className="text-sm text-[#8888aa]">Dokumente digital unterschreiben lassen</p>
+            <h1 className="text-xl font-bold text-[#15151d]">e-Signatur</h1>
+            <p className="text-sm text-[#585866]">Dokumente digital unterschreiben lassen</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -213,7 +213,7 @@ export default function SignaturePage() {
           <AlertTriangle size={18} className="text-amber-400 shrink-0 mt-0.5" />
           <div>
             <p className="text-sm text-amber-400 font-medium">Externer Signatur-Provider erforderlich</p>
-            <p className="text-xs text-[#8a8aa8] mt-1">
+            <p className="text-xs text-[#585866] mt-1">
               Sigmabrain speichert Signatur-Anfragen revisionsfähig im Brain und verfolgt Status.
               Der rechtlich wirksame Versand erfolgt über einen Anbieter wie{" "}
               <a href="https://developers.docusign.com/" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Docusign</a>
@@ -235,42 +235,42 @@ export default function SignaturePage() {
           <h2 className="text-sm font-semibold text-indigo-400">Unterschriften-Anfrage erstellen</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-[#8888aa] mb-1">Dokument</label>
+              <label className="block text-xs text-[#585866] mb-1">Dokument</label>
               <input
                 value={form.documentName}
                 onChange={(e) => setForm({ ...form, documentName: e.target.value })}
                 placeholder="z.B. Mandatsvereinbarung Muster GmbH"
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-indigo-500/50"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-indigo-500/50"
               />
             </div>
             <div>
-              <label className="block text-xs text-[#8888aa] mb-1">Empfänger-Name</label>
+              <label className="block text-xs text-[#585866] mb-1">Empfänger-Name</label>
               <input
                 value={form.recipientName}
                 onChange={(e) => setForm({ ...form, recipientName: e.target.value })}
                 placeholder="Max Mustermann"
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-indigo-500/50"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-indigo-500/50"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-[#8888aa] mb-1">E-Mail</label>
+              <label className="block text-xs text-[#585866] mb-1">E-Mail</label>
               <input
                 type="email"
                 value={form.recipientEmail}
                 onChange={(e) => setForm({ ...form, recipientEmail: e.target.value })}
                 placeholder="max@example.com"
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-indigo-500/50"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-indigo-500/50"
               />
             </div>
             <div>
-              <label className="block text-xs text-[#8888aa] mb-1">Gültigkeit (Tage)</label>
+              <label className="block text-xs text-[#585866] mb-1">Gültigkeit (Tage)</label>
               <input
                 type="number"
                 value={form.expiresDays}
                 onChange={(e) => setForm({ ...form, expiresDays: e.target.value })}
-                className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-indigo-500/50"
+                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-indigo-500/50"
               />
             </div>
           </div>
@@ -295,10 +295,10 @@ export default function SignaturePage() {
         </div>
       ) : requests.length === 0 ? (
         <div className="text-center py-20 space-y-4">
-          <FileSignature size={48} className="mx-auto text-[#1e1e3a]" />
+          <FileSignature size={48} className="mx-auto text-[#e2e4ec]" />
           <div>
-            <p className="text-[#8888aa]">Noch keine Unterschriften-Anfragen.</p>
-            <p className="text-[#8a8aa8] text-sm mt-1">
+            <p className="text-[#585866]">Noch keine Unterschriften-Anfragen.</p>
+            <p className="text-[#585866] text-sm mt-1">
               Erstelle eine Anfrage, um Dokumente digital unterschreiben zu lassen.
             </p>
           </div>
@@ -311,19 +311,19 @@ export default function SignaturePage() {
             return (
               <div
                 key={req.id}
-                className="flex items-center gap-4 px-4 py-3 rounded-xl border border-[#1e1e3a] bg-[#0a0a18] hover:border-indigo-500/30 transition-all"
+                className="flex items-center gap-4 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:border-indigo-500/30 transition-all"
               >
                 <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center shrink-0", cfg.tileClass)}>
                   <Icon size={18} className={cfg.iconClass} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-[#e8e8f0]">{req.documentName}</span>
+                    <span className="font-medium text-[#15151d]">{req.documentName}</span>
                     <Badge variant="default" className={cn("text-[10px] border", cfg.badgeClass)}>
                       {cfg.label}
                     </Badge>
                   </div>
-                  <div className="text-xs text-[#8a8aa8] mt-0.5">
+                  <div className="text-xs text-[#585866] mt-0.5">
                     {req.recipientName} · {req.recipientEmail} · Gültig bis {new Date(req.expiresAt).toLocaleDateString("de-DE")}
                   </div>
                 </div>
@@ -331,7 +331,7 @@ export default function SignaturePage() {
 	                  {req.status === "draft" && (
 	                    <button
 	                      onClick={() => markPrepared(req)}
-	                      className="p-2 rounded-lg text-[#8a8aa8] hover:text-indigo-400 hover:bg-indigo-500/10 transition-all"
+	                      className="p-2 rounded-lg text-[#585866] hover:text-indigo-400 hover:bg-indigo-500/10 transition-all"
 	                      title="Als extern versendet markieren"
 	                    >
 	                      <Send size={14} />
@@ -339,7 +339,7 @@ export default function SignaturePage() {
 	                  )}
 	                  <a
 	                    href={`/dashboard/brain/${encodeURIComponent(req.id)}`}
-	                    className="p-2 rounded-lg text-[#8a8aa8] hover:text-[#8888aa] hover:bg-[#12122a] transition-all"
+	                    className="p-2 rounded-lg text-[#585866] hover:text-[#585866] hover:bg-[#eceef3] transition-all"
 	                    title="Brain-Seite öffnen"
 	                  >
                     <ExternalLink size={14} />

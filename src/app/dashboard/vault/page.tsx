@@ -179,13 +179,13 @@ export default function VaultPage() {
             <FolderOpen size={20} className="text-violet-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#e8e8f0]">Dokumenten-Vault</h1>
-            <p className="text-sm text-[#8888aa]">Zentraler Dokumentenspeicher mit Bulk-Analyse und Review Tables</p>
+            <h1 className="text-xl font-bold text-[#15151d]">Dokumenten-Vault</h1>
+            <p className="text-sm text-[#585866]">Zentraler Dokumentenspeicher mit Bulk-Analyse und Review Tables</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {selectedSlugs.size > 0 && (
-            <Button variant="secondary" className="bg-[#12122a] border border-[#1e1e3a] text-[#e8e8f0] hover:bg-[#1a1a3a] gap-2" onClick={() => setShowReview(!showReview)}>
+            <Button variant="secondary" className="bg-[#eceef3] border border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a] gap-2" onClick={() => setShowReview(!showReview)}>
               <Table2 size={14} /> Bulk-Review ({selectedSlugs.size})
             </Button>
           )}
@@ -193,16 +193,16 @@ export default function VaultPage() {
       </div>
 
       {showReview && (
-        <div className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-5 space-y-4">
+        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-[#e8e8f0]">Bulk-Analyse über {selectedSlugs.size} ausgewählte Dokumente</h3>
-            <button onClick={() => setShowReview(false)} className="text-[#8a8aa8] hover:text-[#e8e8f0]"><X size={16} /></button>
+            <h3 className="text-sm font-semibold text-[#15151d]">Bulk-Analyse über {selectedSlugs.size} ausgewählte Dokumente</h3>
+            <button onClick={() => setShowReview(false)} className="text-[#585866] hover:text-[#15151d]"><X size={16} /></button>
           </div>
           <div className="space-y-2">
             {reviewQuestions.map((q, i) => (
               <div key={i} className="flex items-center gap-2">
-                <input value={q} onChange={(e) => setReviewQuestions((qs) => qs.map((qq, idx) => (idx === i ? e.target.value : qq)))} placeholder={`Frage ${i + 1}`} className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
-                <button onClick={() => setReviewQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="text-[#8a8aa8] hover:text-red-400"><X size={14} /></button>
+                <input value={q} onChange={(e) => setReviewQuestions((qs) => qs.map((qq, idx) => (idx === i ? e.target.value : qq)))} placeholder={`Frage ${i + 1}`} className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
+                <button onClick={() => setReviewQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="text-[#585866] hover:text-red-400"><X size={14} /></button>
               </div>
             ))}
             {reviewQuestions.length < 8 && <button onClick={() => setReviewQuestions((qs) => [...qs, ""])} className="text-xs text-violet-400 hover:underline">+ Frage hinzufügen</button>}
@@ -213,7 +213,7 @@ export default function VaultPage() {
               {reviewLoading ? "Wird analysiert…" : "Bulk-Review starten"}
             </Button>
             {reviewResult && reviewResult.rows.length > 0 && (
-              <Button variant="secondary" className="bg-[#12122a] border border-[#1e1e3a] text-[#e8e8f0] hover:bg-[#1a1a3a] gap-2" onClick={() => {
+              <Button variant="secondary" className="bg-[#eceef3] border border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a] gap-2" onClick={() => {
                 const csv = [["Dokument", ...reviewResult.questions].join(";"), ...reviewResult.rows.map((r) => [r.title, ...r.cells.map((cell) => cell.answer.replace(/"/g, '""'))].join(";"))].join("\n");
                 const blob = new Blob([csv], { type: "text/csv" }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = `vault-review-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
               }}><Download size={14} /> CSV Export</Button>
@@ -223,8 +223,8 @@ export default function VaultPage() {
           {reviewResult && reviewResult.rows.length > 0 && (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="border-b border-[#1e1e3a]"><th className="text-left px-3 py-2 text-[#8888aa] font-medium">Dokument</th>{reviewResult.questions.map((q, i) => <th key={i} className="text-left px-3 py-2 text-[#8888aa] font-medium min-w-[200px]">{q}</th>)}</tr></thead>
-                <tbody>{reviewResult.rows.map((row, i) => <tr key={i} className="border-b border-[#1e1e3a]/50 hover:bg-[#12122a]"><td className="px-3 py-2 text-[#e8e8f0] whitespace-nowrap">{row.title}</td>{row.cells.map((cell, j) => <td key={j} className="px-3 py-2 text-[#8a8aa8] max-w-xs truncate" title={cell.answer}>{cell.answer}</td>)}</tr>)}</tbody>
+                <thead><tr className="border-b border-[#e2e4ec]"><th className="text-left px-3 py-2 text-[#585866] font-medium">Dokument</th>{reviewResult.questions.map((q, i) => <th key={i} className="text-left px-3 py-2 text-[#585866] font-medium min-w-[200px]">{q}</th>)}</tr></thead>
+                <tbody>{reviewResult.rows.map((row, i) => <tr key={i} className="border-b border-[#e2e4ec]/50 hover:bg-[#eceef3]"><td className="px-3 py-2 text-[#15151d] whitespace-nowrap">{row.title}</td>{row.cells.map((cell, j) => <td key={j} className="px-3 py-2 text-[#585866] max-w-xs truncate" title={cell.answer}>{cell.answer}</td>)}</tr>)}</tbody>
               </table>
             </div>
           )}
@@ -233,16 +233,16 @@ export default function VaultPage() {
 
       <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
         <div className="relative flex-1">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8aa8]" />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Dokumente durchsuchen…" className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#8a8aa8] focus:outline-none focus:border-violet-500/50" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Dokumente durchsuchen…" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg pl-9 pr-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
         </div>
         <div className="flex items-center gap-2">
-          <Filter size={14} className="text-[#8a8aa8]" />
-          <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50">
+          <Filter size={14} className="text-[#585866]" />
+          <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50">
             <option value="">Alle Typen</option>
             {allTypes.map((t) => <option key={t} value={t}>{TYPE_LABELS[t] || t}</option>)}
           </select>
-          <select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)} className="bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:outline-none focus:border-violet-500/50">
+          <select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)} className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50">
             <option value="">Alle Tags</option>
             {allTags.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
@@ -250,7 +250,7 @@ export default function VaultPage() {
       </div>
 
       {selectedSlugs.size > 0 && (
-        <div className="flex items-center gap-3 text-xs text-[#8a8aa8]">
+        <div className="flex items-center gap-3 text-xs text-[#585866]">
           <span>{selectedSlugs.size} ausgewählt</span>
           <button onClick={selectAll} className="text-violet-400 hover:underline">Alle auswählen</button>
           <button onClick={deselectAll} className="text-violet-400 hover:underline">Alle abwählen</button>
@@ -260,35 +260,35 @@ export default function VaultPage() {
       {loadError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{loadError}</div>}
 
       {loading ? (
-        <div className="text-center py-20 text-[#8888aa]">Lade Dokumente…</div>
+        <div className="text-center py-20 text-[#585866]">Lade Dokumente…</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 space-y-3">
-          <FileText size={44} className="mx-auto text-[#1e1e3a]" />
-          <p className="text-sm text-[#8888aa]">Keine Dokumente gefunden.</p>
+          <FileText size={44} className="mx-auto text-[#e2e4ec]" />
+          <p className="text-sm text-[#585866]">Keine Dokumente gefunden.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {filtered.map((doc) => (
-            <div key={doc.slug} className="rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] p-4 space-y-2 group">
+            <div key={doc.slug} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-2 group">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <input type="checkbox" checked={selectedSlugs.has(doc.slug)} onChange={() => toggleSelect(doc.slug)} className="accent-violet-500" />
-                  <Badge variant="default" className={`text-[10px] border ${TYPE_COLORS[doc.type] || "bg-[#12122a] border-[#1e1e3a] text-[#8888aa]"}`}>
+                  <Badge variant="default" className={`text-[10px] border ${TYPE_COLORS[doc.type] || "bg-[#eceef3] border-[#e2e4ec] text-[#585866]"}`}>
                     {TYPE_LABELS[doc.type] || doc.type}
                   </Badge>
                 </div>
-                <button onClick={() => deleteDoc(doc.slug)} className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-[#8a8aa8] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen">
+                <button onClick={() => deleteDoc(doc.slug)} className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen">
                   <Trash2 size={14} />
                 </button>
               </div>
-              <div className="text-sm font-medium text-[#e8e8f0] truncate" title={doc.title}>{doc.title}</div>
-              <div className="text-xs text-[#8a8aa8] line-clamp-2">{doc.content.slice(0, 120)}…</div>
+              <div className="text-sm font-medium text-[#15151d] truncate" title={doc.title}>{doc.title}</div>
+              <div className="text-xs text-[#585866] line-clamp-2">{doc.content.slice(0, 120)}…</div>
               {doc.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1">
-                  {doc.tags.map((t) => <span key={t} className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-[#12122a] border border-[#1e1e3a] text-[#8a8aa8]"><Tag size={9} />{t}</span>)}
+                  {doc.tags.map((t) => <span key={t} className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-[#eceef3] border border-[#e2e4ec] text-[#585866]"><Tag size={9} />{t}</span>)}
                 </div>
               )}
-              <div className="flex items-center justify-between text-[10px] text-[#8a8aa8]">
+              <div className="flex items-center justify-between text-[10px] text-[#585866]">
                 <span className="flex items-center gap-1"><Clock size={10} />{new Date(doc.createdAt).toLocaleDateString("de-DE")}</span>
                 {doc.size && <span>{(doc.size / 1024).toFixed(0)} KB</span>}
               </div>
