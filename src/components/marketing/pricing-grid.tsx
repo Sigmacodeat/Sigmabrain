@@ -17,13 +17,13 @@ export function PricingGrid({ lang }: { lang: Lang }) {
             key={tier.id}
             className={`relative p-7 rounded-2xl border flex flex-col transition-all duration-200 ${
               tier.highlight
-                ? "border-violet-500/50 bg-gradient-to-b from-violet-500/10 to-[var(--mk-surface)] shadow-xl shadow-violet-900/20"
+                ? "border-[var(--brand-primary)]/50 bg-gradient-to-b from-[var(--brand-primary)]/10 to-[var(--mk-surface)] shadow-xl shadow-[var(--brand-primary)]/20"
                 : "[border-color:var(--mk-border)] [background:var(--mk-surface)] hover:[border-color:var(--mk-border-strong)]"
             }`}
           >
             {tier.highlight && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="bg-violet-600 text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
+                <span className="brand-bg text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
                   {lang === "en" ? "Most popular" : "Beliebteste Wahl"}
                 </span>
               </div>
@@ -39,7 +39,7 @@ export function PricingGrid({ lang }: { lang: Lang }) {
             <ul className="space-y-2.5 flex-1 mb-7">
               {tier.features.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-xs [color:var(--mk-text-muted)]">
-                  <Check size={13} className="text-violet-400 shrink-0 mt-0.5" />
+                  <Check size={13} className="brand-text shrink-0 mt-0.5" />
                   {f}
                 </li>
               ))}

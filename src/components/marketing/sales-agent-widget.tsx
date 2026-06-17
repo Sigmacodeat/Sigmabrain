@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -161,7 +161,66 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
   const [agent, setAgent] = useState<AgentResponse | null>(null);
   const chips = agent?.chips?.length ? agent.chips : t.chips;
   const activeProfile = industry ? profileForIndustry(industry) : routeProfile;
-  const wrapperStyle = useMemo(() => industry ? styleForIndustry(industry) : undefined, [industry]);
+  const wrapperStyle = useMemo(() => (industry ? styleForIndustry(industry) : undefined), [industry]);
+
+  const panelRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
+
+  /* Auto-scroll to newest message */
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages, loading, agent]);
+
+  /* Focus textarea when panel opens; focus trigger when it closes */
+  useEffect(() => {
+    if (open) {
+      lastFocusedRef.current = document.activeElement as HTMLElement;
+      const id = setTimeout(() => textareaRef.current?.focus(), 180);
+      return () => clearTimeout(id);
+    } else {
+      const id = setTimeout(() => {
+        const el = triggerRef.current ?? lastFocusedRef.current;
+        el?.focus();
+      }, 120);
+      return () => clearTimeout(id);
+    }
+  }, [open]);
+
+  /* ESC closes; Tab traps focus inside panel */
+  useEffect(() => {
+    if (!open) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+      }
+      if (e.key === "Tab") {
+        const panel = panelRef.current;
+        if (!panel) return;
+        const focusable = panel.querySelectorAll<HTMLElement>(
+          'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
+        );
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last?.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first?.focus();
+          }
+        }
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   async function send(text = input) {
     const content = text.trim();
@@ -204,6 +263,10 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="advisor-title"
             initial={{ opacity: 0, y: 20, scale: 0.94, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: 16, scale: 0.96, filter: "blur(2px)" }}
@@ -217,17 +280,19 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
           >
             {/* Header */}
             <div className="flex items-center gap-3 border-b [border-color:var(--mk-border)] px-5 py-4">
-              <BrandHeader brand={brandName} label={t.subtitle} />
+              <div id="advisor-title">
+                <BrandHeader brand={brandName} label={t.subtitle} />
+              </div>
               <button
                 onClick={() => setOpen(false)}
-                className="ml-auto shrink-0 flex h-8 w-8 items-center justify-center rounded-full [color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:bg-white/[0.04] transition-colors"
+                className="ml-auto shrink-0 flex h-11 w-11 items-center justify-center rounded-full [color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:bg-white/[0.04] transition-colors"
                 aria-label="Close advisor"
               >
-                <X size={16} strokeWidth={2.5} />
+                <X size={18} strokeWidth={2.5} />
               </button>
             </div>
 
-            <div className="max-h-[420px] overflow-y-auto px-5 py-5 space-y-4">
+            <div className="max-h-[420px] overflow-y-auto px-5 py-5 space-y-4" aria-live="polite" aria-atomic="false">
               {messages.map((msg, i) => (
                 <motion.div
                   key={i}
@@ -268,7 +333,7 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
                   </div>
                   <div className="rounded-[18px] rounded-bl-[6px] border [border-color:var(--mk-border)] [background:var(--mk-surface-2)] px-4 py-3 text-[13px] [color:var(--mk-text-muted)] flex items-center gap-2 shadow-sm">
                     <TypingDots />
-                    <span className="text-[11px] tracking-wide opacity-60">
+                    <span className="text-[11px] tracking-wide opacity-80">
                       {lang === "de" ? "qualifiziert" : "qualifying"}
                     </span>
                   </div>
@@ -343,24 +408,32 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
                   </div>
                 </motion.div>
               )}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* ── Input area ── */}
             <div className="border-t [border-color:var(--mk-border)] [background:var(--mk-bg)] p-4">
-              <div className="mb-3 flex gap-1.5 overflow-x-auto pb-1 ">
-                {chips.map((chip) => (
-                  <button
-                    key={chip}
-                    onClick={() => send(chip)}
-                    disabled={loading}
-                    className="shrink-0 rounded-full border [border-color:var(--mk-border)] [background:var(--mk-surface)] px-3 py-1.5 text-[12px] [color:var(--mk-text-muted)] hover:border-[color:var(--brand-primary)] hover:[color:var(--brand-text)] hover:[background:var(--mk-surface-2)] transition-all disabled:opacity-40"
-                  >
-                    {chip}
-                  </button>
-                ))}
-              </div>
+              {chips.length > 0 && (
+                <div className="mb-2">
+                  <p className="text-[11px] [color:var(--mk-text-subtle)] mb-2">{t.empty}</p>
+                  <div className="flex gap-1.5 overflow-x-auto pb-1">
+                    {chips.map((chip) => (
+                      <button
+                        key={chip}
+                        onClick={() => send(chip)}
+                        disabled={loading}
+                        className="shrink-0 rounded-full border [border-color:var(--mk-border)] [background:var(--mk-surface)] px-3 py-1.5 text-[12px] [color:var(--mk-text-muted)] hover:border-[color:var(--brand-primary)] hover:[color:var(--brand-text)] hover:[background:var(--mk-surface-2)] transition-all disabled:opacity-40 min-h-[32px]"
+                        aria-label={chip}
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="flex items-end gap-2 rounded-[16px] border [border-color:var(--mk-border)] [background:var(--mk-surface)] px-3.5 py-2.5 transition-all focus-within:border-[color:var(--brand-primary)] focus-within:shadow-[0_0_0_3px_var(--brand-glow)]">
                 <textarea
+                  ref={textareaRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -372,11 +445,12 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
                   rows={1}
                   placeholder={t.placeholder}
                   className="min-h-[24px] max-h-24 flex-1 resize-none bg-transparent text-[13px] leading-relaxed [color:var(--mk-text)] placeholder:[color:var(--mk-text-subtle)] focus:outline-none"
+                  aria-describedby="advisor-input-desc"
                 />
                 <button
                   onClick={() => send()}
                   disabled={loading || !input.trim()}
-                  className="rounded-[10px] brand-bg p-2.5 text-white shadow-lg shadow-[var(--brand-glow)] disabled:opacity-40 disabled:shadow-none transition-all hover:brightness-110"
+                  className="rounded-[10px] brand-bg p-3 text-white shadow-lg shadow-[var(--brand-glow)] disabled:opacity-40 disabled:shadow-none transition-all hover:brightness-110 min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="Send"
                 >
                   {loading ? (
@@ -384,24 +458,27 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     >
-                      <Sparkles size={15} />
+                      <Sparkles size={18} />
                     </motion.span>
                   ) : (
-                    <Send size={15} />
+                    <Send size={18} />
                   )}
                 </button>
               </div>
-              <div className="mt-3 flex items-center justify-between">
-                <label className="flex items-center gap-2 text-[11px] [color:var(--mk-text-subtle)] cursor-pointer group">
+              <p id="advisor-input-desc" className="sr-only">
+                {lang === "de" ? "Drücke Enter zum Senden, Shift+Enter für eine neue Zeile." : "Press Enter to send, Shift+Enter for a new line."}
+              </p>
+              <div className="mt-3 flex items-center justify-between gap-4">
+                <label className="flex items-center gap-2.5 text-[11px] [color:var(--mk-text-subtle)] cursor-pointer group min-h-[44px]">
                   <input
                     type="checkbox"
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="accent-[var(--brand-primary)] h-3.5 w-3.5 rounded"
+                    className="accent-[var(--brand-primary)] h-4 w-4 rounded cursor-pointer"
                   />
-                  <span className="group-hover:[color:var(--mk-text-muted)] transition-colors">{t.consent}</span>
+                  <span className="group-hover:[color:var(--mk-text-muted)] transition-colors leading-relaxed">{t.consent}</span>
                 </label>
-                <p className="flex items-center gap-1.5 text-[11px] [color:var(--mk-text-subtle)]">
+                <p className="flex items-center gap-1.5 text-[11px] [color:var(--mk-text-subtle)] min-h-[44px]">
                   <LockKeyhole size={11} /> {t.privacy}
                 </p>
               </div>
@@ -412,12 +489,15 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
 
       {/* ── Trigger button ── */}
       <motion.button
+        ref={triggerRef}
         onClick={() => setOpen((o) => !o)}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="ml-auto flex items-center gap-3 rounded-full border [border-color:var(--mk-border-strong)] px-5 py-3.5 text-[14px] font-semibold [color:var(--mk-text)] shadow-2xl shadow-black/50 backdrop-blur-xl transition-colors"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        className="ml-auto flex items-center gap-3 rounded-full border px-5 py-3.5 text-[14px] font-bold [color:var(--mk-text)] shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-all min-h-[48px] group"
         style={{
-          background: "linear-gradient(135deg, color-mix(in srgb, var(--mk-surface) 90%, transparent) 0%, color-mix(in srgb, var(--mk-surface-2) 88%, transparent) 100%)",
+          background: "linear-gradient(135deg, color-mix(in srgb, var(--mk-surface) 94%, transparent) 0%, color-mix(in srgb, var(--mk-surface-2) 90%, transparent) 100%)",
+          borderColor: "color-mix(in srgb, var(--brand-primary) 30%, var(--mk-border-strong))",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.45), 0 0 60px color-mix(in srgb, var(--brand-primary) 12%, transparent)",
         }}
         aria-expanded={open}
         aria-label={activeProfile ? `${activeProfile.brand} Advisor` : t.open}

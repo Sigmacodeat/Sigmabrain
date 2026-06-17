@@ -26,8 +26,8 @@ export default function PartnersPage({ lang }: { lang: Lang }) {
 
       {/* Hero */}
       <section className="relative z-10 pt-20 pb-20 px-6 max-w-7xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-xs text-violet-400 font-medium mb-8">
-          <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/10 text-xs brand-text font-medium mb-8">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-text)] animate-pulse" />
           {t.badge}
         </div>
         <h1 className="text-4xl md:text-6xl font-black [color:var(--mk-text)] leading-[1.08] tracking-tight mb-6">
@@ -55,7 +55,7 @@ export default function PartnersPage({ lang }: { lang: Lang }) {
                 <div className={`w-11 h-11 rounded-lg border flex items-center justify-center mb-5 ${
                   tier.highlight
                     ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
-                    : "text-violet-400 bg-violet-500/10 border-violet-500/20"
+                    : "brand-text bg-[var(--brand-primary)]/10 border-[var(--brand-primary)]/20"
                 }`}>
                   {Icon && <Icon size={20} />}
                 </div>
@@ -65,7 +65,7 @@ export default function PartnersPage({ lang }: { lang: Lang }) {
                 <ul className="space-y-2.5 flex-1 mb-7">
                   {tier.points.map((point) => (
                     <li key={point} className="flex items-start gap-2 text-xs [color:var(--mk-text-muted)]">
-                      <Check size={13} className={`shrink-0 mt-0.5 ${tier.highlight ? "text-amber-400" : "text-violet-400"}`} />
+                      <Check size={13} className={`shrink-0 mt-0.5 ${tier.highlight ? "text-amber-400" : "brand-text"}`} />
                       {point}
                     </li>
                   ))}

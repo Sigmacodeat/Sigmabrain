@@ -40,11 +40,11 @@ export function SubsumioLogo({
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <SubsumioMark size={size} />
       <span className="flex flex-col leading-none">
-        <span className="font-display text-[22px] font-extrabold tracking-tight text-[#e8e8f0]">
+        <span className="font-display text-[19px] font-extrabold tracking-tight text-[#e8e8f0]">
           Subsum<span className="text-[#3b82f6]">•</span>io
         </span>
         {subtitle && (
-          <span className="text-[9px] font-medium tracking-[0.22em] text-[#3b82f6]/50 mt-1.5">{subtitle}</span>
+          <span className="text-[8px] font-medium tracking-[0.22em] text-[#3b82f6]/50 mt-1">{subtitle}</span>
         )}
       </span>
     </span>

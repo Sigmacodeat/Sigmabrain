@@ -37,6 +37,7 @@ import {
   ShieldCheck,
   FileSignature,
   Lock,
+  ScanSearch,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -80,7 +81,7 @@ export const ICONS: Record<string, LucideIcon> = {
   Brain, Database, GitBranch, Search, Zap, Shield, Layers, Network,
   Megaphone, Gift, Handshake,
   CalendarClock, Mail, ShieldAlert, Calculator, Landmark, FileText, FolderOpen, MessageSquare, Users,
-  EyeOff, ShieldCheck, FileSignature, Lock,
+  EyeOff, ShieldCheck, FileSignature, Lock, ScanSearch,
 };
 
 // Tone-aware accent icon-tiles. On light surfaces the -700/-50/-200 shades
@@ -236,9 +237,9 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
   const [scrolled, setScrolled] = useState(false);
   // Tone-driven: text resolves from --mk-* against the header's data-tone.
   const isActive = (href: string) => pathname === p(lang, href) || pathname === href;
-  const linkBase = "text-sm px-3 py-1.5 rounded-lg transition-colors duration-200";
-  const linkCls = `${linkBase} [color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[background:var(--mk-hover)]`;
-  const linkActive = `${linkBase} [color:var(--mk-text)] [background:var(--mk-surface)] font-medium`;
+  const linkBase = "text-sm px-3 py-1.5 rounded-lg transition-all duration-200";
+  const linkCls = `${linkBase} [color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]`;
+  const linkActive = `${linkBase} [color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]`;
   const linkInactive = linkCls;
 
   useEffect(() => {
@@ -357,7 +358,10 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
             <Button variant="ghost" size="sm" className="[color:var(--mk-text)]">{nav.signIn}</Button>
           </Link>
           <Link href={p(lang, "/signup")}>
-            <Button size="sm" variant="glow">{nav.cta} <ChevronRight size={14} /></Button>
+            <Button size="sm" variant="glow" className="group">
+              {nav.cta}
+              <ChevronRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Button>
           </Link>
           <button
             className={`md:hidden p-2 ${linkCls}`}
@@ -372,9 +376,9 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
       {mobileOpen && (
         <div className="md:hidden mt-3 rounded-2xl p-4 space-y-1 backdrop-blur-xl [background:color-mix(in_srgb,var(--mk-bg)_96%,transparent)] shadow-2xl shadow-black/10">
           {isSubsumio && nav.subsumioItems.map((item) => (
-            <Link key={item.href} href={p(lang, item.href)} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive(item.href) ? "[color:var(--mk-text)] [background:var(--mk-surface)] font-medium" : "[color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>
+            <Link key={item.href} href={p(lang, item.href)} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive(item.href) ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>
           ))}
-          {!isSubsumio && <Link href={p(lang, "/features")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/features") ? "[color:var(--mk-text)] [background:var(--mk-surface)] font-medium" : "[color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.features}</Link>}
+          {!isSubsumio && <Link href={p(lang, "/features")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/features") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.features}</Link>}
           {!isSubsumio && nav.solutionItems.map((item) => {
             const comingSoon = "comingSoon" in item && item.comingSoon;
             if (comingSoon) {
@@ -397,9 +401,9 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
               </Link>
             );
           })}
-          {!isSubsumio && <Link href={p(lang, "/pricing")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/pricing") ? "[color:var(--mk-text)] [background:var(--mk-surface)] font-medium" : "[color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.pricing}</Link>}
-          {!isSubsumio && <Link href={p(lang, "/compare")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/compare") ? "[color:var(--mk-text)] [background:var(--mk-surface)] font-medium" : "[color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.compare}</Link>}
-          <Link href={p(lang, "/docs")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/docs") ? "[color:var(--mk-text)] [background:var(--mk-surface)] font-medium" : "[color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.docs}</Link>
+          {!isSubsumio && <Link href={p(lang, "/pricing")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/pricing") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.pricing}</Link>}
+          {!isSubsumio && <Link href={p(lang, "/compare")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/compare") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.compare}</Link>}
+          <Link href={p(lang, "/docs")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/docs") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.docs}</Link>
           <Link href={altPath(lang, pathname)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors [color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[background:var(--mk-hover)]" onClick={() => setMobileOpen(false)}>
             <Globe size={13} /> {lang === "en" ? "Auf Deutsch lesen" : "Read in English"}
           </Link>
@@ -499,8 +503,8 @@ export function DemoWindow({
       </div>
       <div className="px-6 pt-6 pb-4">
         <div className="flex items-start gap-3">
-          <div className="w-7 h-7 rounded-full bg-violet-600/30 border border-violet-500/30 flex items-center justify-center shrink-0 mt-0.5">
-            <span className="text-[10px] text-violet-400 font-semibold">{you}</span>
+          <div className="w-7 h-7 rounded-full bg-[var(--brand-primary)]/15 border border-[var(--brand-primary)]/20 flex items-center justify-center shrink-0 mt-0.5">
+            <span className="text-[10px] brand-text font-semibold">{you}</span>
           </div>
           <p className="text-sm [color:var(--mk-text)]">{q}</p>
         </div>
@@ -516,7 +520,7 @@ export function DemoWindow({
       <div className="px-6 py-3 border-t [border-color:var(--mk-border)] [background:var(--mk-bg)] flex items-center gap-2 flex-wrap">
         <span className="text-xs [color:var(--mk-text-subtle)]">{sourcesLabel}</span>
         {sources.map((slug) => (
-          <span key={slug} className="text-xs font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded">{slug}</span>
+          <span key={slug} className="text-xs font-mono brand-text brand-soft px-2 py-0.5 rounded">{slug}</span>
         ))}
       </div>
     </div>
@@ -542,7 +546,7 @@ export function TypewriterText({ text, speed = 12 }: { text: string; speed?: num
     <span>
       {displayed}
       {displayed.length < text.length && started && (
-        <span className="inline-block w-0.5 h-4 bg-violet-400 animate-pulse ml-0.5 align-text-bottom" />
+        <span className="inline-block w-0.5 h-4 bg-[var(--brand-text)] animate-pulse ml-0.5 align-text-bottom" />
       )}
     </span>
   );

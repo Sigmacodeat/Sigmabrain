@@ -31,6 +31,8 @@ const DE: DocsContent = {
       { icon: "Mail", title: "Email-Import", desc: "Emails direkt ins Brain importieren — mit Anhängen, Metadaten und Aktenzuordnung. Resend-Integration." },
       { icon: "MessageSquare", title: "Dokumenten-Analyse", desc: "KI-Analyse von Verträgen, Gutachten und Schriftsätzen. Risk-Highlighting, Redlining, Zusammenfassungen." },
       { icon: "Layers", title: "Tabellarische Übersicht", desc: "Übersichtliche Tabellenansicht aller Akten, Dokumente und Fristen. Sortierbar, filterbar, direkt aus dem Brain." },
+      { icon: "FileText", title: "Vertragsmanagement", desc: "Vertragslebenszyklus-Management. Entwurf, Review, Versionierung, Ablaufdatum-Tracking, Erinnerungen." },
+      { icon: "Users", title: "Gegenstellen-Verwaltung", desc: "Erfassung aller Gegenanwälte, Versicherungen und Gegenstellen. Interessenkonflikt-Prüfung integriert." },
     ]},
     { id: "deadlines", title: "Fristen & Zeit", sub: "Automatische Fristenerkennung, Kalender-Export, Zeiterfassung.", features: [
       { icon: "CalendarClock", title: "Fristen-Management", desc: "Zentrale Fristenübersicht mit Ampel-System. Automatische Email-Erinnerungen vor Ablauf." },
@@ -44,6 +46,7 @@ const DE: DocsContent = {
       { icon: "Calculator", title: "RVG-Berechnung", desc: "Automatische Berechnung nach Rechtsanwaltsvergütungsgesetz. VV, Geschäfts- und Verfahrensgebühr." },
       { icon: "Megaphone", title: "Mahnwesen", desc: "Automatische Mahnungen für überfällige Rechnungen. Eskalationsstufen, Zinsberechnung, Email-Versand." },
       { icon: "Calculator", title: "Kostenrechner", desc: "Interaktiver Rechner für Mandanten: Prozesskosten, RVG-Vorschau, Kostenvoranschlag." },
+      { icon: "Database", title: "Controlling & Kennzahlen", desc: "Kanzlei-Controlling: Umsatz, Deckungsbeitrag, Auslastung pro Anwalt, Mandantenprofitabilität. Export für Steuerberater." },
     ]},
     { id: "security", title: "Sicherheit & Compliance", sub: "DSGVO, GoBD, AI Act, Audit Trail, Verschlüsselung.", features: [
       { icon: "Shield", title: "DSGVO / GDPR", desc: "AVV-Vorlage Art. 28, EU-Standardvertragsklauseln, Recht auf Datenübertragbarkeit, Löschung und Auskunft." },
@@ -54,12 +57,15 @@ const DE: DocsContent = {
       { icon: "ShieldCheck", title: "2FA / TOTP", desc: "Zwei-Faktor-Authentifizierung nach industriellem Standard. Authy, Google Authenticator, Hardware-Keys." },
       { icon: "Network", title: "Mandanten-Isolation", desc: "Strikte Zugriffstrennung pro Akte und Nutzer. Jeder Lesepfad auf Leaks zwischen Mandaten geprüft." },
       { icon: "ShieldAlert", title: "System-Monitoring", desc: "Echtzeit-Health-Check aller Komponenten. API-Status, Datenbank, Background-Jobs, Embedding-Queues — alles im Blick." },
+      { icon: "Database", title: "Daten-Export", desc: "Vollständiger Daten-Export für Backup, Migration oder Portabilitätsanfragen. JSON, CSV, PDF — DSGVO-konform." },
     ]},
     { id: "communication", title: "Kommunikation", sub: "Email, WhatsApp Copilot, Mandantenportal, Kommentare.", features: [
       { icon: "Mail", title: "Email-Management", desc: "Vollständiger Email-Client im Dashboard. Senden, Empfangen, Kategorisieren, Archivieren — alles an einem Ort." },
       { icon: "MessageSquare", title: "WhatsApp Copilot", desc: "Zeit buchen, Belege ablegen, Akten befragen — alles per WhatsApp. Keine neue App, keine Schulung. Bestätigungspflichtig." },
       { icon: "Users", title: "Mandantenportal", desc: "Sichere Client-Portale für Dokumentenaustausch. Zeitlich begrenzte Links, Zugriffsprotokollierung." },
       { icon: "MessageSquare", title: "Kommentare & Notizen", desc: "Akteninterne Kommentare, Notizen und Diskussionen. Threading, Erwähnungen, Benachrichtigungen." },
+      { icon: "Users", title: "Kontakteverwaltung", desc: "Zentrale Kontakte für Mandanten, Gegenanwälte, Gutachter, Gerichte und Behörden. Verknüpfung mit Akten und Fristen." },
+      { icon: "Users", title: "Team & Organisation", desc: "Team-Workspace-Verwaltung: Organisation erstellen, Mitglieder einladen, Rollen und Zugriffsrechte verteilen. Ein Brain für das ganze Team." },
     ]},
     { id: "integrations", title: "Integrationen", sub: "DocuSign, Connectors, API, SSO, Webhooks.", features: [
       { icon: "FileSignature", title: "DocuSign", desc: "Elektronische Signatur direkt aus der Software. Verträge senden, Status tracken, archivieren." },
@@ -67,6 +73,9 @@ const DE: DocsContent = {
       { icon: "Database", title: "API Keys", desc: "Programmatischer REST-API-Zugriff. Rate-Limits, Scopes, Audit-Logging. Perfekt für Kanzlei-Integrationen." },
       { icon: "Shield", title: "SSO / WorkOS", desc: "Single Sign-On über SAML, OIDC und WorkOS. Active Directory, Google Workspace, Microsoft 365." },
       { icon: "Database", title: "Kanzlei-Import", desc: "Migration bestehender Kanzlei-Daten aus anderen Systemen. Kontakte, Akten, Dokumente, Zeiterfassung — alles übernommen." },
+      { icon: "Shield", title: "Kanzlei-Einstellungen", desc: "Zentrale Verwaltung der Kanzlei-Daten, Bankverbindungen, Logo, Signaturen, Benutzerrollen und Berechtigungen." },
+      { icon: "FileText", title: "Microsoft Word Add-in", desc: "Schriftsatz-Entwürfe und Vertragsvergleiche direkt in Microsoft Word. Mit Brain-Anbindung, Fundstellen-Einfügung und KI-Vorschlägen — ohne den Editor zu verlassen." },
+      { icon: "Network", title: "Plugin-System", desc: "Erweiterbarkeit durch eigene Plugins und Skills. gbrain.plugin.json Format, Subagenten, Skillpacks — die Plattform wächst mit euren Workflows." },
     ]},
     { id: "automation", title: "Automatisierung", sub: "Cron Jobs, Rechtsprechung, Fristen-Scanner, Agents.", features: [
       { icon: "Zap", title: "Rechtsprechungs-Scanner", desc: "Automatischer Scan neuer Gerichtsentscheidungen. Klassifizierung, Zusammenfassung, Einordnung ins Brain." },
@@ -82,6 +91,11 @@ const DE: DocsContent = {
       { icon: "Landmark", title: "Immobilienrecht", desc: "Kaufverträge, Grundbuchabfragen, Bebauungspläne, Maklervereinbarungen für Immobilienrechtler." },
       { icon: "Shield", title: "Versicherungsrecht", desc: "Deckungsschutzanfragen, Schadensregulierung, Regress, Rechtsschutz für Versicherungsrechtler." },
       { icon: "Users", title: "Recruiting", desc: "Bewerbungsmanagement, Talent-Pool, Onboarding-Checklisten, Arbeitsvertragsentwürfe für Kanzleien." },
+      { icon: "Search", title: "Rechtsrecherche", desc: "KI-gestützte Rechtsrecherche über alle gespeicherten Quellen. Fundstellen, Argumentationsketten, Gegenargumente — alles mit Quellen." },
+      { icon: "MessageSquare", title: "Beratung & Consulting", desc: "Modul für Rechtsberatung und Consulting. Projektstruktur, Stundenbudgets, Meilensteine, Abrechnung nach Pauschalhonorar oder Stundensatz." },
+      { icon: "Shield", title: "Compliance & GRC", desc: "Compliance- und Governance-Modul für DSGVO, GwG, EU AI Act. Pflichten, Kontrollen und der Nachweis — alles dokumentiert." },
+      { icon: "Calculator", title: "Steuerberater-Arbeitsplatz (Taxumio)", desc: "Branchenspezifischer Arbeitsplatz für Steuerkanzleien. Mandanten-Gedächtnis, Bescheide, DATEV-Kontext, E-Rechnungs-Pflicht-Tracking." },
+      { icon: "Network", title: "VC & Private Equity (Investumio)", desc: "Fonds-Gedächtnis für Venture Capital und Private Equity. Deals, Founder-Tracking, Beziehungsgraph, IC-Memos, LP-Updates." },
     ]},
     { id: "mobile", title: "Mobile & Offline", sub: "App, Offline-Sync, mobile Brücke.", features: [
       { icon: "Zap", title: "Mobile App", desc: "Native iOS und Android App. Zeitbuchung, Upload, Aktenzugriff, Chat — unterwegs genauso mächtig." },
@@ -93,6 +107,7 @@ const DE: DocsContent = {
       { icon: "Layers", title: "Redlining & Vertragsvergleich", desc: "Automatischer Vergleich von Vertragsversionen. Änderungen markieren, Risiken hervorheben." },
       { icon: "ShieldAlert", title: "Konfliktprüfung", desc: "KI-gestützte Interessenkonfliktprüfung. Durchsucht alle Akten, Kontakte und Gegenstellen." },
       { icon: "EyeOff", title: "Anonymisierung", desc: "Automatische Anonymisierung für Drittanbieter, Gutachter oder Publikationen. Namen, Adressen, Geburtsdaten." },
+      { icon: "FileText", title: "Schriftsatz-Entwürfe", desc: "KI-gestützte Entwürfe für Klageschriften, Verteidigungsschriften, Bescheidsprüfungen und Rechtsmittel. Mit Fundstellen und Zitaten." },
     ]},
   ],
   arch: {
@@ -131,6 +146,8 @@ const EN: DocsContent = {
       { icon: "Mail", title: "Email Import", desc: "Import emails into the brain — with attachments, metadata and case assignment. Resend integration." },
       { icon: "MessageSquare", title: "Document Analysis", desc: "AI analysis of contracts, opinions and pleadings. Risk highlighting, redlining, summaries." },
       { icon: "Layers", title: "Tabular Review", desc: "Clean table view of all cases, documents and deadlines. Sortable, filterable, directly from the brain." },
+      { icon: "FileText", title: "Contract Management", desc: "Contract lifecycle management. Draft, review, versioning, expiry tracking, reminders." },
+      { icon: "Users", title: "Opponent Management", desc: "Capture all opposing counsel, insurers and opponents. Integrated conflict-of-interest check." },
     ]},
     { id: "deadlines", title: "Deadlines & Time", sub: "Automatic deadline detection, calendar export, time tracking.", features: [
       { icon: "CalendarClock", title: "Deadline Management", desc: "Central deadline overview with traffic-light system. Automatic email reminders before expiration." },
@@ -144,6 +161,7 @@ const EN: DocsContent = {
       { icon: "Calculator", title: "Fee Calculation (RVG)", desc: "Automatic calculation per German Lawyers' Remuneration Act. VV, business and procedural fees." },
       { icon: "Megaphone", title: "Dunning", desc: "Automatic reminders for overdue invoices. Escalation levels, interest calculation, email dispatch." },
       { icon: "Calculator", title: "Cost Calculator", desc: "Interactive calculator for clients: process costs, fee preview, quote at the push of a button." },
+      { icon: "Database", title: "Controlling & KPIs", desc: "Firm controlling: revenue, contribution margin, per-lawyer utilization, client profitability. Export for tax advisors." },
     ]},
     { id: "security", title: "Security & Compliance", sub: "GDPR, GoBD, AI Act, audit trail, encryption.", features: [
       { icon: "Shield", title: "GDPR / DSGVO", desc: "DPA template Art. 28, EU standard contractual clauses, right to data portability, erasure and access." },
@@ -154,12 +172,15 @@ const EN: DocsContent = {
       { icon: "ShieldCheck", title: "2FA / TOTP", desc: "Two-factor authentication per industry standard. Authy, Google Authenticator, hardware keys." },
       { icon: "Network", title: "Client Isolation", desc: "Strict access separation per case and user. Every read path checked for leaks between mandates." },
       { icon: "ShieldAlert", title: "System Monitoring", desc: "Real-time health check of all components. API status, database, background jobs, embedding queues — all in view." },
+      { icon: "Database", title: "Data Export", desc: "Complete data export for backup, migration or portability requests. JSON, CSV, PDF — GDPR-compliant." },
     ]},
     { id: "communication", title: "Communication", sub: "Email, WhatsApp Copilot, client portal, comments.", features: [
       { icon: "Mail", title: "Email Management", desc: "Full email client in the dashboard. Send, receive, categorize, archive — all in one place." },
       { icon: "MessageSquare", title: "WhatsApp Copilot", desc: "Book time, file documents, query cases — all via WhatsApp. No new app, no training. Confirmation-gated." },
       { icon: "Users", title: "Client Portal", desc: "Secure client portals for document exchange. Time-limited links, access logging." },
       { icon: "MessageSquare", title: "Comments & Notes", desc: "Case-internal comments, notes and discussions. Threading, mentions, notifications." },
+      { icon: "Users", title: "Contact Management", desc: "Central contacts for clients, opposing counsel, experts, courts and authorities. Linked to cases and deadlines." },
+      { icon: "Users", title: "Team & Organization", desc: "Team workspace management: create organization, invite members, assign roles and access rights. One brain for the whole team." },
     ]},
     { id: "integrations", title: "Integrations", sub: "DocuSign, connectors, API, SSO, webhooks.", features: [
       { icon: "FileSignature", title: "DocuSign", desc: "Electronic signature directly from the software. Send contracts, track status, archive." },
@@ -167,6 +188,9 @@ const EN: DocsContent = {
       { icon: "Database", title: "API Keys", desc: "Programmatic REST API access. Rate limits, scopes, audit logging. Perfect for practice software integrations." },
       { icon: "Shield", title: "SSO / WorkOS", desc: "Single sign-on via SAML, OIDC and WorkOS. Active Directory, Google Workspace, Microsoft 365." },
       { icon: "Database", title: "Firm Import", desc: "Migrate existing firm data from other systems. Contacts, cases, documents, time tracking — all transferred." },
+      { icon: "Shield", title: "Firm Settings", desc: "Central management of firm data, bank details, logo, signatures, user roles and permissions." },
+      { icon: "FileText", title: "Microsoft Word Add-in", desc: "Draft pleadings and compare contracts directly in Microsoft Word. With brain connection, source insertion and AI suggestions — without leaving the editor." },
+      { icon: "Network", title: "Plugin System", desc: "Extensibility through custom plugins and skills. gbrain.plugin.json format, subagents, skillpacks — the platform grows with your workflows." },
     ]},
     { id: "automation", title: "Automation", sub: "Cron jobs, case law, deadline scanner, agents.", features: [
       { icon: "Zap", title: "Case Law Scanner", desc: "Automatic scan of new court decisions. Classification, summary, integration into the brain." },
@@ -182,6 +206,11 @@ const EN: DocsContent = {
       { icon: "Landmark", title: "Real Estate Law", desc: "Purchase contracts, land register queries, development plans, broker agreements for real estate lawyers." },
       { icon: "Shield", title: "Insurance Law", desc: "Coverage inquiries, loss adjustment, recourse, legal protection for insurance lawyers." },
       { icon: "Users", title: "Recruiting", desc: "Application management, talent pool, onboarding checklists, employment contract drafts for law firms." },
+      { icon: "Search", title: "Legal Research", desc: "AI-powered legal research across all stored sources. Findings, argument chains, counter-arguments — all with sources." },
+      { icon: "MessageSquare", title: "Consulting", desc: "Module for legal advice and consulting mandates. Project structure, hour budgets, milestones, billing by flat fee or hourly rate." },
+      { icon: "Shield", title: "Compliance & GRC", desc: "Compliance and governance module for GDPR, AML, EU AI Act. Obligations, controls and evidence — all documented." },
+      { icon: "Calculator", title: "Tax Advisor Workspace (Taxumio)", desc: "Industry-specific workspace for tax firms. Client memory, notices, DATEV context, e-invoicing obligation tracking." },
+      { icon: "Network", title: "VC & Private Equity (Investumio)", desc: "Fund memory for venture capital and private equity. Deals, founder tracking, relationship graph, IC memos, LP updates." },
     ]},
     { id: "mobile", title: "Mobile & Offline", sub: "App, offline sync, mobile bridge.", features: [
       { icon: "Zap", title: "Mobile App", desc: "Native iOS and Android app. Time tracking, upload, case access, chat — equally powerful on the go." },
@@ -193,6 +222,7 @@ const EN: DocsContent = {
       { icon: "Layers", title: "Redlining & Comparison", desc: "Automatic comparison of contract versions. Mark changes, highlight risks." },
       { icon: "ShieldAlert", title: "Conflict Check", desc: "AI-powered interest conflict check. Searches all cases, contacts and opponents." },
       { icon: "EyeOff", title: "Anonymization", desc: "Automatic anonymization for third parties, experts or publications. Names, addresses, birth dates." },
+      { icon: "FileText", title: "Pleadings Drafts", desc: "AI-assisted drafts for complaints, defense briefs, review petitions and legal remedies. With sources and citations." },
     ]},
   ],
   arch: {

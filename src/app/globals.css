@@ -389,6 +389,14 @@ body {
   background-color: color-mix(in srgb, var(--brand-primary) 12%, transparent);
 }
 
+.hover\:brand-soft-strong:hover {
+  background-color: color-mix(in srgb, var(--brand-primary) 16%, transparent);
+}
+
+.hover\:brand-text:hover {
+  color: var(--brand-text);
+}
+
 .focus-within\:brand-border-strong:focus-within {
   border-color: color-mix(in srgb, var(--brand-primary) 42%, transparent);
 }

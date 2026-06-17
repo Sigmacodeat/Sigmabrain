@@ -20,7 +20,7 @@ const buttonVariants = cva(
         success:
           "bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-900/30",
         glow:
-          "brand-bg text-white shadow-lg shadow-[var(--brand-glow)]",
+          "brand-bg text-white shadow-[0_0_16px_-4px_var(--brand-glow)] hover:shadow-[0_0_28px_-2px_var(--brand-glow)] hover:-translate-y-px active:translate-y-0 active:shadow-[0_0_12px_-4px_var(--brand-glow)] transition-all duration-300",
         outline:
           "border brand-border brand-text hover:brand-border-strong hover:brand-soft",
       },

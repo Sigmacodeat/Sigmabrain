@@ -28,13 +28,13 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
       {/* Hero */}
       <section className="relative z-10 pt-20 pb-16 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-xs font-medium mb-6">
+          <span className="inline-block px-3 py-1 rounded-full border border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/10 brand-text text-xs font-medium mb-6">
             {t.badge}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold [color:var(--mk-text)] leading-tight mb-6">
             {t.h1a}
             <br />
-            <span className="text-violet-400">{t.h1b}</span>
+            <span className="brand-text">{t.h1b}</span>
           </h1>
           <p className="text-lg [color:var(--mk-text-muted)] leading-relaxed max-w-3xl mx-auto">{t.sub}</p>
         </div>
@@ -47,7 +47,7 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
             const Icon = PILLAR_ICONS[pillar.icon] ?? Shield;
             return (
               <div key={pillar.title} className="p-7 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]">
-                <Icon size={22} className="text-violet-400 mb-4" />
+                <Icon size={22} className="brand-text mb-4" />
                 <h3 className="text-base font-bold [color:var(--mk-text)] mb-2">{pillar.title}</h3>
                 <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{pillar.desc}</p>
               </div>
@@ -95,13 +95,13 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
 
       {/* EU AI Act */}
       <section className="relative z-10 py-12 px-6">
-        <div className="max-w-4xl mx-auto p-7 rounded-2xl border border-violet-500/20 bg-violet-500/[0.04]">
-          <h2 className="text-lg font-bold text-violet-300 mb-2">{t.aiActTitle}</h2>
+        <div className="max-w-4xl mx-auto p-7 rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--brand-primary)]/[0.04]">
+          <h2 className="text-lg font-bold brand-text mb-2">{t.aiActTitle}</h2>
           <p className="text-sm text-[#a8a8be] leading-relaxed mb-4">{t.aiActText}</p>
           <div className="space-y-4">
             {t.aiActItems.map((item) => (
               <div key={item.title} className="flex gap-2.5">
-                <Check size={14} className="text-violet-400 shrink-0 mt-1" />
+                <Check size={14} className="brand-text shrink-0 mt-1" />
                 <div>
                   <h3 className="text-sm font-bold [color:var(--mk-text)] mb-1">{item.title}</h3>
                   <p className="text-sm text-[#a8a8be] leading-relaxed">{item.desc}</p>
@@ -151,7 +151,7 @@ export default function SecurityPage({ lang }: { lang: Lang }) {
           <p className="[color:var(--mk-text-muted)] mb-8">{t.ctaSub}</p>
           <Link
             href={p(lang, "/signup")}
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold transition-colors"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl brand-bg text-white font-semibold transition-colors hover:brightness-110"
           >
             {t.ctaButton} <ArrowRight size={16} />
           </Link>

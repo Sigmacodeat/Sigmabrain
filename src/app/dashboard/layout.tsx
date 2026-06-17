@@ -314,8 +314,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           const b = brains.find((brain) => brain.slug === e.target.value);
           if (b) selectBrain(b);
         }}
-        className="bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-2 py-1 text-xs text-[color:var(--ds-text-muted)] focus:outline-none focus:border-[var(--brand-primary)]"
-        title="Aktiven Brain wechseln"
+        className="bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-2 py-1 text-xs text-[color:var(--ds-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-1 focus:ring-offset-[var(--ds-surface)] transition-all"
+        aria-label="Aktiven Brain wechseln"
       >
         {brains.map((b) => (
           <option key={b.slug} value={b.slug}>{b.name}</option>
@@ -425,13 +425,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       <div
                         key={item.href}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 text-[color:var(--ds-text-subtle)] cursor-default select-none",
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--ds-surface)] text-[color:var(--ds-text-subtle)] cursor-default select-none",
                           collapsed && "justify-center px-0"
                         )}
                         title={collapsed ? `${item.label} — bald` : undefined}
                         aria-disabled="true"
                       >
-                        <Icon size={16} className="shrink-0 opacity-60" />
+                        <Icon size={16} className="shrink-0 opacity-50" />
                         {!collapsed && (
                           <span className="flex items-center justify-between flex-1">
                             {item.label}
@@ -446,12 +446,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Link
                       key={item.href}
                       href={item.href}
+                      aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 transition-all duration-150",
+                        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--ds-surface)] transition-all duration-150",
                         collapsed && "justify-center px-0",
                         active
-                          ? "brand-soft brand-text border brand-border"
-                          : "text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)]"
+                          ? "brand-soft brand-text border brand-border hover:brand-soft-strong"
+                          : "text-[color:var(--ds-text-muted)] hover:brand-text hover:bg-[color:var(--ds-hover)]"
                       )}
                       title={collapsed ? item.label : undefined}
                     >
@@ -472,8 +473,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             dreamCycle ? "border-emerald-500/20 bg-emerald-500/[0.06]" : "border-amber-500/20 bg-amber-500/[0.06]"
           )}>
             <div className="flex items-center gap-2">
-              <Zap size={12} className={cn("shrink-0", dreamCycle ? "text-emerald-600" : "text-amber-600")} />
-              <span className={cn("text-xs font-semibold", dreamCycle ? "text-emerald-600" : "text-amber-600")}>Dream Cycle</span>
+              <Zap size={12} className={cn("shrink-0", dreamCycle ? "text-emerald-700" : "text-amber-700")} />
+              <span className={cn("text-xs font-semibold", dreamCycle ? "text-emerald-700" : "text-amber-700")}>Dream Cycle</span>
             </div>
             <p className="text-[11px] text-[color:var(--ds-text-muted)] mt-1 leading-snug">
               {dreamCycle
@@ -497,12 +498,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 transition-all duration-150",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--ds-surface)] transition-all duration-150",
                   collapsed && "justify-center px-0",
                 active
-                    ? "brand-soft brand-text border brand-border"
-                    : "text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)]"
+                    ? "brand-soft brand-text border brand-border hover:brand-soft-strong"
+                    : "text-[color:var(--ds-text-muted)] hover:brand-text hover:bg-[color:var(--ds-hover)]"
                 )}
                 title={collapsed ? item.label : undefined}
               >
@@ -514,8 +516,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <button
             onClick={() => setCollapsed(!collapsed)}
+            aria-label={collapsed ? "Sidebar ausklappen" : "Sidebar einklappen"}
+            aria-expanded={!collapsed}
             className={cn(
-              "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] hover:bg-[color:var(--ds-hover)] transition-all duration-150",
+              "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] transition-all duration-150",
               collapsed && "justify-center px-0"
             )}
           >
@@ -549,7 +553,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   }
                 }}
                 placeholder="Brain durchsuchen…"
-                className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg pl-9 pr-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-[var(--brand-primary)] transition-colors"
+                aria-label="Brain durchsuchen"
+                className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg pl-9 pr-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-1 focus:ring-offset-[var(--ds-surface)] transition-all"
               />
             </div>
           </div>
@@ -565,11 +570,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="relative">
               <button
                 onClick={() => setNotifOpen(!notifOpen)}
-                className="w-8 h-8 rounded-lg flex items-center justify-center text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] hover:bg-[color:var(--ds-hover)] transition-all relative"
+                aria-label="Benachrichtigungen"
+                aria-expanded={notifOpen}
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] transition-all relative"
               >
                 <Bell size={15} />
                 {notifications.filter((n) => !n.read).length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)]" />
+                  <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-red-500 ring-2 ring-[var(--ds-surface)]" />
                 )}
               </button>
               {notifOpen && (
@@ -593,7 +600,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
             <BrainSelector />
             <NetworkStatusBadge />
-            <div className="w-8 h-8 rounded-lg brand-soft border brand-border flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg brand-soft border brand-border flex items-center justify-center" aria-label="Benutzerprofil" role="img">
               <User size={14} className="brand-text" />
             </div>
             <button

@@ -135,7 +135,7 @@ export default function DashboardPage() {
           <Card>
             <div className="p-6 pb-4 border-b border-[color:var(--ds-border)]">
               <div className="flex items-center gap-2">
-                <TrendingUp size={16} className="text-violet-600" />
+                <TrendingUp size={16} className="brand-text" />
                 <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Erste Schritte</h2>
               </div>
             </div>
@@ -156,7 +156,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-[color:var(--ds-text-muted)] font-mono mt-0.5">{item.desc}</p>
                   </div>
                   <Link href={item.href}>
-                    <Button variant="ghost" size="sm" className="shrink-0 text-violet-600 hover:text-violet-700">
+                    <Button variant="ghost" size="sm" className="shrink-0 brand-text hover:brand-text">
                       {item.action} <ArrowRight size={12} />
                     </Button>
                   </Link>
@@ -180,14 +180,14 @@ export default function DashboardPage() {
                     href={action.href}
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-[color:var(--ds-hover)] transition-colors group"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
-                      <Icon size={14} className="text-violet-600" />
+                    <div className="w-8 h-8 rounded-lg brand-soft border brand-border flex items-center justify-center shrink-0">
+                      <Icon size={14} className="brand-text" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-[color:var(--ds-text)] group-hover:text-violet-700 transition-colors">{action.label}</p>
+                      <p className="text-sm font-medium text-[color:var(--ds-text)] group-hover:brand-text transition-colors">{action.label}</p>
                       <p className="text-xs text-[color:var(--ds-text-muted)]">{action.desc}</p>
                     </div>
-                    <ArrowRight size={12} className="text-[color:var(--ds-text-muted)] group-hover:text-violet-600 transition-colors" />
+                    <ArrowRight size={12} className="text-[color:var(--ds-text-muted)] group-hover:brand-text transition-colors" />
                   </Link>
                 );
               })}
@@ -205,7 +205,7 @@ export default function DashboardPage() {
                 Der Dream Cycle läuft nachts und konsolidiert dein Wissen, fixiert Zitate und findet Widersprüche.
               </p>
               <Link href="/dashboard/settings">
-                <Button variant="outline" size="sm" className="w-full text-amber-600 border-amber-500/30 hover:bg-amber-500/10">
+                <Button variant="outline" size="sm" className="w-full brand-text border-[color:var(--ds-border-strong)] hover:brand-soft">
                   Dream Cycle einrichten
                 </Button>
               </Link>

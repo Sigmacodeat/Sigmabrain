@@ -69,7 +69,7 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
     h1b: "Taxumio runs the firm's day.",
     sub: "Deadlines, client context, advisory rationale, invoicing and DATEV export — one brain that answers “what did we tell this client, and why?” and keeps the daily firm work moving. Self-hosted or EU cloud, confidentiality-first.",
     ctaPrimary: "Start your practice brain",
-    ctaSecondary: "Compare honestly",
+    ctaSecondary: "See how we compare",
     cockpit: {
       title: "taxumio — firm cockpit",
       digestLabel: "Today's deadlines",
@@ -81,7 +81,7 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
       invoiceLabel: "Invoice #2026-0412 · GoBD stamped",
       invoiceValue: "€1,904.00",
       datevLabel: "DATEV booking batch exported",
-      aiBadge: "AI-generated · review required",
+      aiBadge: "AI-generated · accountant review required",
     },
     demo: {
       windowTitle: "taxumio — practice brain",
@@ -107,7 +107,7 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
       { time: "16:30", icon: "Database", title: "Export to DATEV, file the Verfahrensdokumentation", desc: "A DATEV booking batch (Format 700) leaves cleanly; the Verfahrensdoku generator turns firm settings into a GoBD process document — as a reviewable draft." },
     ],
     toolsTitle: "The daily-work tools that ship today",
-    toolsSub: "Every tile below is a live page in the Taxumio dashboard — not a roadmap.",
+    toolsSub: "Live pages in the Taxumio dashboard — no slides, no promises.",
     tools: [
       { icon: "CalendarClock", title: "Deadlines + email digest", desc: "Per-client filing & objection deadlines, weekend roll-forward, daily digest mail.", href: "/dashboard/deadlines" },
       { icon: "Brain", title: "Client Q&A from your files", desc: "Synthesized answers with citations and a hallucination-caution badge.", href: "/dashboard/query" },
@@ -116,16 +116,16 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
       { icon: "FileText", title: "Verfahrensdoku generator", desc: "GoBD process documentation from firm settings — print/Word, reviewable draft.", href: "/dashboard/verfahrensdoku" },
       { icon: "Layers", title: "Firm import (RA-MICRO / Advoware / DATEV)", desc: "CSV master-data import with auto column mapping and preview.", href: "/dashboard/import-kanzlei" },
     ],
-    trustTitle: "Built for professional secrecy",
+    trustTitle: "Built for the duty of professional secrecy",
     trust: [
-      { icon: "Shield", title: "Confidentiality by architecture", desc: "Self-host on firm hardware — client data never reaches a third party. Or EU cloud with a DPA." },
+      { icon: "Shield", title: "Silence by design", desc: "Self-host on firm hardware — client data never reaches a third party. Or EU cloud with a DPA." },
       { icon: "ShieldAlert", title: "EU AI Act Art. 50", desc: "Every AI output is labeled as AI-generated, machine-readable and visible — the first question your data-protection officer asks." },
       { icon: "Calculator", title: "GoBD building blocks", desc: "Retention stamps, tamper-evidence and a Verfahrensdoku generator. Honest: building blocks, not a certified “audit-proof” claim." },
-      { icon: "Database", title: "Your data, your export", desc: "GDPR Art. 20 one-click export of account and brain. No lock-in, ever." },
+      { icon: "Database", title: "Full export, any time", desc: "GDPR Art. 20 one-click export of account and brain. No lock-in, ever." },
     ],
     honesty:
       "Honest scope: Taxumio holds the unstructured layer next to your practice software — client context, advisory rationale, emails, deadlines, invoicing and DATEV export. It is not a tax-research database (no UStG commentary or BMF-circular corpus yet) and never replaces your professional judgment. The roadmap adds a tax-law connector and a tax-subsumption skill.",
-    faqTitle: "Fair questions",
+    faqTitle: "Questions from the practice",
     faq: [
       { q: "Does it replace DATEV / our practice software?", a: "No. Your practice management keeps the structured world — filings, bookkeeping, deadlines. Taxumio holds the unstructured layer next to it and answers across both. DATEV export bridges the booking flow." },
       { q: "Is this GoBD-compliant / audit-proof?", a: "We ship the building blocks — 10-year retention stamps, SHA-256 tamper-evidence and a Verfahrensdokumentation generator. Full GoBD conformance still needs your process documentation and an auditor's sign-off; we don't claim a finished “audit-proof” seal." },
@@ -140,12 +140,12 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
     metaTitle: "Taxumio — das Gehirn für den Kanzleialltag von Steuerberatern & Buchhaltern",
     metaDesc:
       "Fristen mit E-Mail-Digest, Mandanten-Q&A aus den eigenen Akten, GoBD-gestempelte Rechnungen, DATEV-Export und ein Verfahrensdoku-Generator — Taxumio ist Sigmabrain für Steuerkanzleien. Verschwiegenheit zuerst.",
-    badge: "Taxumio — powered by Sigmabrain",
+    badge: "Taxumio — das Kanzleigedächtnis für Steuerberater & WP",
     h1a: "Eure Kanzleisoftware kennt die Zahlen.",
     h1b: "Taxumio führt durch den Kanzleialltag.",
-    sub: "Fristen, Mandantenkontext, Gestaltungs-Begründung, Rechnungsstellung und DATEV-Export — ein Gehirn, das beantwortet „was haben wir diesem Mandanten gesagt, und warum?“ und den Kanzleialltag am Laufen hält. Self-hosted oder EU-Cloud, Verschwiegenheit zuerst.",
+    sub: "Fristen, Mandantenkontext, Gestaltungs-Begründung, Rechnungsstellung und DATEV-Export — ein Gehirn, das beantwortet „was haben wir diesem Mandanten gesagt, und warum?“ und den Kanzleialltag am Laufen hält. GoBD-gestempelte Rechnungen und DATEV-Export — ein Gehirn, das beantwortet „was haben wir diesem Mandanten gesagt, und warum?" und den Kanzleialltag am Laufen hält.",
     ctaPrimary: "Kanzlei-Gehirn starten",
-    ctaSecondary: "Ehrlich vergleichen",
+    ctaSecondary: "Vergleich ansehen",
     cockpit: {
       title: "taxumio — kanzlei-cockpit",
       digestLabel: "Fristen heute",
@@ -157,7 +157,7 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
       invoiceLabel: "Rechnung #2026-0412 · GoBD-gestempelt",
       invoiceValue: "1.904,00 €",
       datevLabel: "DATEV-Buchungsstapel exportiert",
-      aiBadge: "KI-generiert · zu prüfen",
+      aiBadge: "KI-generiert · Steuerberater prüft"
     },
     demo: {
       windowTitle: "taxumio — kanzlei-gehirn",
@@ -183,7 +183,7 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
       { time: "16:30", icon: "Database", title: "Nach DATEV exportieren, Verfahrensdoku ablegen", desc: "Ein DATEV-Buchungsstapel (Format 700) geht sauber raus; der Verfahrensdoku-Generator macht aus Kanzlei-Settings ein GoBD-Dokument — als prüfbaren Entwurf." },
     ],
     toolsTitle: "Die Kanzleialltag-Tools, die heute da sind",
-    toolsSub: "Jede Kachel unten ist eine live Seite im Taxumio-Dashboard — keine Roadmap.",
+    toolsSub: "Live-Seiten im Taxumio-Dashboard — keine Folien, keine Versprechungen.",
     tools: [
       { icon: "CalendarClock", title: "Fristen + E-Mail-Digest", desc: "Erklärungs-/Einspruchsfristen pro Mandant, Wochenend-Vorverlegung, täglicher Digest.", href: "/dashboard/deadlines" },
       { icon: "Brain", title: "Mandanten-Q&A aus euren Akten", desc: "Synthetisierte Antworten mit Zitaten und Halluzinations-Vorsicht-Badge.", href: "/dashboard/query" },
@@ -192,16 +192,16 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
       { icon: "FileText", title: "Verfahrensdoku-Generator", desc: "GoBD-Verfahrensdoku aus Kanzlei-Settings — Druck/Word, prüfbarer Entwurf.", href: "/dashboard/verfahrensdoku" },
       { icon: "Layers", title: "Kanzlei-Import (RA-MICRO / Advoware / DATEV)", desc: "CSV-Stammdaten-Import mit Auto-Spalten-Mapping und Vorschau.", href: "/dashboard/import-kanzlei" },
     ],
-    trustTitle: "Gebaut für die Verschwiegenheit",
+    trustTitle: "Gebaut für die Stillschweigenpflicht",
     trust: [
       { icon: "Shield", title: "Verschwiegenheit per Architektur", desc: "Self-hosted auf Kanzlei-Hardware — Mandantendaten erreichen keinen Dritten. Oder EU-Cloud mit AVV." },
       { icon: "ShieldAlert", title: "EU AI Act Art. 50", desc: "Jeder KI-Output ist als KI-generiert gekennzeichnet, maschinenlesbar und sichtbar — die erste Frage jedes Datenschutzbeauftragten." },
       { icon: "Calculator", title: "GoBD-Bausteine", desc: "Aufbewahrungsstempel, Manipulations-Evidenz und Verfahrensdoku-Generator. Ehrlich: Bausteine, kein zertifizierter „revisionssicher“-Claim." },
-      { icon: "Database", title: "Eure Daten, euer Export", desc: "DSGVO Art. 20 Ein-Klick-Export von Konto und Brain. Kein Lock-in, nie." },
+      { icon: "Database", title: "Vollständiger Export, jederzeit", desc: "DSGVO Art. 20 Ein-Klick-Export von Konto und Brain. Kein Lock-in, nie." },
     ],
     honesty:
       "Ehrlicher Rahmen: Taxumio hält die unstrukturierte Schicht neben eurer Kanzleisoftware — Mandantenkontext, Gestaltungs-Begründung, Mails, Fristen, Rechnungen und DATEV-Export. Es ist KEINE Steuerrecht-Datenbank (noch kein UStG-Kommentar / BMF-Schreiben-Korpus) und ersetzt nie eure fachliche Beurteilung. Auf der Roadmap: ein Steuerrecht-Connector und ein Steuer-Subsumtions-Skill.",
-    faqTitle: "Faire Fragen",
+    faqTitle: "Fragen aus der Kanzlei",
     faq: [
       { q: "Ersetzt es DATEV / unsere Kanzleisoftware?", a: "Nein. Eure Kanzleisoftware behält die strukturierte Welt — Erklärungen, Buchhaltung, Fristen. Taxumio hält die unstrukturierte Schicht daneben und beantwortet über beide hinweg. Der DATEV-Export überbrückt den Buchungs-Flow." },
       { q: "Ist das GoBD-konform / revisionssicher?", a: "Wir liefern die Bausteine — 10-Jahre-Aufbewahrungsstempel, SHA-256-Manipulations-Evidenz und einen Verfahrensdoku-Generator. Volle GoBD-Konformität braucht weiterhin eure Verfahrensdoku + Prüfer-Abnahme; wir behaupten kein fertiges „revisionssicher“-Siegel." },
