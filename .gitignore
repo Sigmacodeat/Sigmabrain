@@ -55,3 +55,4 @@ bulk-import-cursor.json
 # keep env templates tracked
 !.env.example
 !**/.env.example
+law-corpus-split/

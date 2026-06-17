@@ -65,6 +65,26 @@ export async function POST(req: NextRequest) {
     const text = await upstream.text();
     if (upstream.ok) {
       void recordQuota(ctx, "uploads");
+      // ── Auto-analysis: fire-and-forget ────────────────────────────────
+      try {
+        const uploadResult = JSON.parse(text) as { slug?: string; title?: string };
+        if (uploadResult.slug) {
+          void fetch(`${req.nextUrl.origin}/api/legal/analyze`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              document_slug: uploadResult.slug,
+              source: "auto_upload",
+              brain_id: ctx.brainId,
+              // Pass through the engine auth context
+              _engine_headers: ctx.headers,
+            }),
+          }).catch(() => {/* silent: analysis is best-effort */});
+        }
+      } catch {
+        // JSON parse failed — skip auto-analysis
+      }
+      // ──────────────────────────────────────────────────────────────────
     }
     return new Response(text, {
       status: upstream.status,

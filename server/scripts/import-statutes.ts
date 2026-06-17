@@ -1,124 +1,179 @@
-#!/usr/bin/env bun
 /**
- * Importiert AT und DE Gesetze aus law-corpus/ in die Brain-DB.
+ * Bulk import split statute pages into the Brain engine.
  *
- * Usage:
- *   bun run server/scripts/import-statutes.ts [--no-embed]
+ * Reads law-corpus-split/{de,at,ch}/ and POSTs each .md as a page.
+ * Requires a running engine and either:
+ *   - SIGMABRAIN_WEB_API_KEY env var (service-to-service)
+ *   - A valid user session (interactive, slower)
+ *
+ * Usage on the engine host (e.g. Hetzner prod):
+ *   bun server/scripts/import-statutes.ts [--engine http://localhost:3001] [--key KEY] [--brain law] [--source law-de|law-at|law-all]
+ *
+ * The script is idempotent: re-running updates existing pages by slug.
  */
 
-import { PGLiteEngine } from '../src/core/pglite-engine.ts';
-import { importFromContent } from '../src/core/import-file.ts';
-import { loadConfig } from '../src/core/config.ts';
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 
-const NO_EMBED = Bun.argv.includes('--no-embed');
+const ENGINE = process.argv.includes("--engine")
+  ? process.argv[process.argv.indexOf("--engine") + 1]
+  : (process.env.SIGMABRAIN_API_URL || process.env.GBRAIN_API_URL || "http://localhost:3001");
 
-interface StatuteFile {
-  path: string;
-  slug: string;
-  jurisdiction: 'at' | 'de' | 'ch';
+const API_KEY = process.argv.includes("--key")
+  ? process.argv[process.argv.indexOf("--key") + 1]
+  : (process.env.SIGMABRAIN_WEB_API_KEY || process.env.GBRAIN_WEB_API_KEY || "");
+
+const BRAIN = process.argv.includes("--brain")
+  ? process.argv[process.argv.indexOf("--brain") + 1]
+  : (process.env.IMPORT_BRAIN_ID || "law");
+
+const SOURCE_ARG = process.argv.includes("--source")
+  ? process.argv[process.argv.indexOf("--source") + 1]
+  : "law-all";
+
+interface ImportResult { ok: boolean; slug: string; error?: string }
+
+function parseFrontmatter(text: string): Record<string, string> {
+  if (!text.startsWith("---")) return {};
+  const end = text.indexOf("---", 3);
+  if (end === -1) return {};
+  const raw = text.slice(3, end).trim();
+  const fm: Record<string, string> = {};
+  for (const line of raw.split("\n")) {
+    const m = line.match(/^([a-z_]+):\s*(.*)$/);
+    if (m) fm[m[1]] = m[2].replace(/^"|"$/g, "");
+  }
+  return fm;
 }
 
-const AT_FILES: StatuteFile[] = [
-  { path: 'law-corpus/at/abgb.md', slug: 'legal/statutes/at/abgb', jurisdiction: 'at' },
-  { path: 'law-corpus/at/ahg.md', slug: 'legal/statutes/at/ahg', jurisdiction: 'at' },
-  { path: 'law-corpus/at/bao.md', slug: 'legal/statutes/at/bao', jurisdiction: 'at' },
-  { path: 'law-corpus/at/eo.md', slug: 'legal/statutes/at/eo', jurisdiction: 'at' },
-  { path: 'law-corpus/at/stgb-at.md', slug: 'legal/statutes/at/stgb', jurisdiction: 'at' },
-  { path: 'law-corpus/at/stpo-at.md', slug: 'legal/statutes/at/stpo', jurisdiction: 'at' },
-  { path: 'law-corpus/at/ugb.md', slug: 'legal/statutes/at/ugb', jurisdiction: 'at' },
-  { path: 'law-corpus/at/zpo-at.md', slug: 'legal/statutes/at/zpo', jurisdiction: 'at' },
-];
+async function importPage(path: string): Promise<ImportResult> {
+  const text = readFileSync(path, "utf8");
+  const fm = parseFrontmatter(text);
+  const slug = fm.slug || join("law", fm.jurisdiction || "unknown", fm.abbreviation?.toLowerCase() || "unknown", (fm.paragraph || "").replace(/\s+/g, ""));
+  const title = fm.title || slug;
+  const body = text.slice(text.indexOf("---", 3) + 3).trimStart();
 
-const DE_FILES: StatuteFile[] = [
-  { path: 'law-corpus/de/ao.md', slug: 'legal/statutes/de/ao', jurisdiction: 'de' },
-  { path: 'law-corpus/de/bgb.md', slug: 'legal/statutes/de/bgb', jurisdiction: 'de' },
-  { path: 'law-corpus/de/estg.md', slug: 'legal/statutes/de/estg', jurisdiction: 'de' },
-  { path: 'law-corpus/de/famfg.md', slug: 'legal/statutes/de/famfg', jurisdiction: 'de' },
-  { path: 'law-corpus/de/gg.md', slug: 'legal/statutes/de/gg', jurisdiction: 'de' },
-  { path: 'law-corpus/de/gmbhg.md', slug: 'legal/statutes/de/gmbhg', jurisdiction: 'de' },
-  { path: 'law-corpus/de/hgb.md', slug: 'legal/statutes/de/hgb', jurisdiction: 'de' },
-  { path: 'law-corpus/de/inso.md', slug: 'legal/statutes/de/inso', jurisdiction: 'de' },
-  { path: 'law-corpus/de/stgb.md', slug: 'legal/statutes/de/stgb', jurisdiction: 'de' },
-  { path: 'law-corpus/de/stpo.md', slug: 'legal/statutes/de/stpo', jurisdiction: 'de' },
-  { path: 'law-corpus/de/ustg.md', slug: 'legal/statutes/de/ustg', jurisdiction: 'de' },
-  { path: 'law-corpus/de/uwg.md', slug: 'legal/statutes/de/uwg', jurisdiction: 'de' },
-  { path: 'law-corpus/de/zpo.md', slug: 'legal/statutes/de/zpo', jurisdiction: 'de' },
-];
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "x-sigmabrain-source": BRAIN,
+  };
+  if (API_KEY) headers["x-sigmabrain-api-key"] = API_KEY;
 
-const CH_FILES: StatuteFile[] = [
-  { path: 'law-corpus/ch/or.md', slug: 'legal/statutes/ch/or', jurisdiction: 'ch' },
-  { path: 'law-corpus/ch/zgb.md', slug: 'legal/statutes/ch/zgb', jurisdiction: 'ch' },
-  { path: 'law-corpus/ch/stgb.md', slug: 'legal/statutes/ch/stgb', jurisdiction: 'ch' },
-];
+  const payload = {
+    slug,
+    title,
+    content: body,
+    type: fm.type || "law",
+    jurisdiction: fm.jurisdiction,
+    abbreviation: fm.abbreviation,
+    paragraph: fm.paragraph,
+    parent_law: fm.parent_law,
+    version_date: fm.version_date,
+    source_url: fm.source_url,
+    license: fm.license,
+    tags: ["statute", fm.jurisdiction, fm.abbreviation?.toLowerCase()].filter(Boolean),
+    source: SOURCE_ARG,
+  };
 
-async function importStatutes(files: StatuteFile[], engine: any) {
-  let imported = 0;
-  let errors = 0;
+  try {
+    const res = await fetch(`${ENGINE}/api/pages`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(payload),
+    });
+    if (res.ok || res.status === 409) {
+      // 409 = page already exists (idempotent)
+      return { ok: true, slug };
+    }
+    const err = await res.text().catch(() => `HTTP ${res.status}`);
+    return { ok: false, slug, error: err };
+  } catch (e) {
+    return { ok: false, slug, error: e instanceof Error ? e.message : String(e) };
+  }
+}
 
-  for (const file of files) {
+async function ensureSource(): Promise<boolean> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "x-sigmabrain-source": BRAIN,
+  };
+  if (API_KEY) headers["x-sigmabrain-api-key"] = API_KEY;
+
+  try {
+    const res = await fetch(`${ENGINE}/api/sources`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ id: SOURCE_ARG, name: SOURCE_ARG, public: true }),
+    });
+    return res.ok || res.status === 409;
+  } catch {
+    return false;
+  }
+}
+
+// ── Main ──────────────────────────────────────────────────────────────
+
+async function main() {
+  if (!API_KEY) {
+    console.error("ERROR: No API key. Set SIGMABRAIN_WEB_API_KEY or pass --key");
+    process.exit(1);
+  }
+
+  console.log(`Engine: ${ENGINE}`);
+  console.log(`Brain:  ${BRAIN}`);
+  console.log(`Source: ${SOURCE_ARG}`);
+  console.log("");
+
+  // Verify engine reachable
+  try {
+    const health = await fetch(`${ENGINE}/api/health`, { method: "GET" });
+    if (!health.ok) throw new Error(`HTTP ${health.status}`);
+    console.log("Engine: OK");
+  } catch {
+    console.error("ERROR: Engine not reachable. Start it first: gbrain serve");
+    process.exit(1);
+  }
+
+  // Ensure source exists
+  console.log("Ensuring source...");
+  const sourceOk = await ensureSource();
+  if (!sourceOk) console.warn("Warning: could not create source (may already exist)");
+
+  // Collect files
+  const dirs = ["de", "at", "ch"];
+  const files: string[] = [];
+  for (const d of dirs) {
+    const dir = join("law-corpus-split", d);
     try {
-      const content = await Bun.file(file.path).text();
-      await importFromContent(engine, file.slug, content, { noEmbed: NO_EMBED });
-      console.log(`  ✅ ${file.slug} (${(content.length / 1024).toFixed(0)} KB)`);
-      imported++;
-    } catch (e) {
-      errors++;
-      console.error(`  ❌ ${file.path}: ${e instanceof Error ? e.message : String(e)}`);
+      for (const f of readdirSync(dir)) {
+        if (f.endsWith(".md")) files.push(join(dir, f));
+      }
+    } catch { /* skip missing */ }
+  }
+
+  console.log(`Importing ${files.length} pages...\n`);
+
+  let ok = 0;
+  let fail = 0;
+  const batch = 10;
+
+  for (let i = 0; i < files.length; i += batch) {
+    const chunk = files.slice(i, i + batch);
+    const results = await Promise.all(chunk.map(importPage));
+    for (const r of results) {
+      if (r.ok) ok++;
+      else {
+        fail++;
+        if (fail <= 5) console.error(`  FAIL ${r.slug}: ${r.error}`);
+      }
+    }
+    if ((i + batch) % 100 === 0 || i + batch >= files.length) {
+      console.log(`  ${Math.min(i + batch, files.length)}/${files.length} done (ok=${ok}, fail=${fail})`);
     }
   }
 
-  return { imported, errors };
+  console.log(`\nDone: ${ok} ok, ${fail} failed`);
+  if (fail > 0) process.exit(1);
 }
 
-async function main() {
-  console.log('═══════════════════════════════════════════════════════════');
-  console.log('  SigmaBrain — Gesetze-Import (AT + DE + CH)');
-  console.log('═══════════════════════════════════════════════════════════');
-  console.log(`Embedding: ${NO_EMBED ? 'übersprungen' : 'aktiv'}`);
-  console.log('');
-
-  const gbrainConfig = loadConfig();
-  const engine = new PGLiteEngine();
-  await engine.connect({ database_path: gbrainConfig?.database_path });
-  await engine.initSchema();
-
-  console.log('[AT] Importiere österreichische Gesetze...');
-  const atResult = await importStatutes(AT_FILES, engine);
-  console.log(`     ${atResult.imported} importiert, ${atResult.errors} Fehler`);
-  console.log('');
-
-  console.log('[DE] Importiere deutsche Gesetze...');
-  const deResult = await importStatutes(DE_FILES, engine);
-  console.log(`     ${deResult.imported} importiert, ${deResult.errors} Fehler`);
-  console.log('');
-
-  console.log('[CH] Importiere schweizerische Gesetze...');
-  const chResult = await importStatutes(CH_FILES, engine);
-  console.log(`     ${chResult.imported} importiert, ${chResult.errors} Fehler`);
-  console.log('');
-
-  const total = atResult.imported + deResult.imported + chResult.imported;
-  const totalErr = atResult.errors + deResult.errors + chResult.errors;
-
-  console.log('═══════════════════════════════════════════════════════════');
-  console.log('  ZUSAMMENFASSUNG');
-  console.log('═══════════════════════════════════════════════════════════');
-  console.log(`AT: ${atResult.imported} Gesetze`);
-  console.log(`DE: ${deResult.imported} Gesetze`);
-  console.log(`CH: ${chResult.imported} Gesetze`);
-  console.log(`───────────────────────────────────────────────────────────`);
-  console.log(`GESAMT: ${total} Gesetze importiert, ${totalErr} Fehler`);
-  console.log('');
-
-  if (!NO_EMBED) {
-    console.log('✅ Alle Gesetze wurden importiert + embedded.');
-  } else {
-    console.log('⚠️  Embedding übersprungen. Nachholen mit:');
-    console.log('   bun run server/scripts/auto-embed-pending.ts');
-  }
-}
-
-main().catch((err) => {
-  console.error('FATAL:', err);
-  process.exit(1);
-});
+main();
