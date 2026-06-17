@@ -82,7 +82,7 @@ export function PhoneCopilot({ lang }: { lang: Lang }) {
             </div>
             <div className="leading-tight">
               <p className="text-xs font-semibold [color:var(--mk-text)]">{c.phoneHeader}</p>
-              <p className="text-[10px] text-emerald-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />{c.phoneStatus}</p>
+              <p className="text-[10px] text-[var(--brand-secondary)] flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-secondary)]" />{c.phoneStatus}</p>
             </div>
           </div>
           {/* messages */}
@@ -104,7 +104,7 @@ export function PhoneCopilot({ lang }: { lang: Lang }) {
                   {"chips" in m && m.chips && (
                     <span className="mt-2 flex gap-1.5">
                       {m.chips.map((ch) => (
-                        <span key={ch} className={`text-[10px] px-2 py-0.5 rounded-full border ${ch === m.chips![0] ? "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" : "[border-color:var(--mk-border-strong)] text-[#8fa6c5]"}`}>{ch}</span>
+                        <span key={ch} className={`text-[10px] px-2 py-0.5 rounded-full border ${ch === m.chips![0] ? "border-[var(--brand-secondary)]/40 text-[var(--brand-secondary)] bg-[var(--brand-secondary)]/10" : "[border-color:var(--mk-border-strong)] text-[#8fa6c5]"}`}>{ch}</span>
                       ))}
                     </span>
                   )}

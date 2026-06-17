@@ -11,11 +11,11 @@ export const COMPLIANCE: Record<Lang, BrandedVerticalContent> = {
   en: {
     metaTitle: "Compliumio — the compliance officer's brain (GRC, GDPR, AML, EU AI Act)",
     metaDesc:
-      "Regulatory obligations with deadline digest, policy Q&A from your own controls, AML/KYC screening, EU AI Act inventory and an exportable audit trail — Compliumio is Sigmabrain tuned for compliance & GRC teams. Confidentiality-first, self-hosted or EU cloud.",
-    badge: "Compliumio — powered by Sigmabrain",
+      "Regulatory obligations with deadline digest, policy Q&A from your own controls, AML/KYC screening, EU AI Act inventory and an exportable audit trail — Compliumio is Sigmabrain tuned for compliance & GRC teams.",
+    badge: "Compliumio — compliance memory, queryable",
     h1a: "Regulators now test effectiveness, not checklists.",
     h1b: "Compliumio is the proof.",
-    sub: "Obligations, controls, policies, AML screening and the EU AI Act inventory — one brain that answers “are we compliant, where is the gap, and can we prove it?” and keeps the evidence trail. Self-hosted or EU cloud, confidentiality-first.",
+    sub: "Obligations, controls, policies, AML screening and the EU AI Act inventory — one brain that answers “are we compliant, where is the gap, and can we prove it?” and keeps the evidence trail.",
     ctaPrimary: "Start your compliance brain",
     ctaSecondary: "Compare honestly",
     cockpit: {
@@ -87,11 +87,11 @@ export const COMPLIANCE: Record<Lang, BrandedVerticalContent> = {
   de: {
     metaTitle: "Compliumio — das Gehirn für Compliance-Officer (GRC, DSGVO, GwG, EU AI Act)",
     metaDesc:
-      "Pflichten mit Fristen-Digest, Richtlinien-Q&A aus den eigenen Kontrollen, AML/KYC-Screening, EU-AI-Act-Inventar und exportierbarer Audit-Trail — Compliumio ist Sigmabrain für Compliance- & GRC-Teams. Vertraulichkeit zuerst, self-hosted oder EU-Cloud.",
-    badge: "Compliumio — powered by Sigmabrain",
+      "Pflichten mit Fristen-Digest, Richtlinien-Q&A aus den eigenen Kontrollen, AML/KYC-Screening, EU-AI-Act-Inventar und exportierbarer Audit-Trail — Compliumio ist Sigmabrain für Compliance- & GRC-Teams.",
+    badge: "Compliumio — das Compliance-Gedächtnis, abfragbar",
     h1a: "Aufsichten prüfen jetzt Wirksamkeit, keine Häkchen.",
     h1b: "Compliumio ist der Nachweis.",
-    sub: "Pflichten, Kontrollen, Richtlinien, AML-Screening und das EU-AI-Act-Inventar — ein Gehirn, das beantwortet „sind wir konform, wo ist die Lücke, und können wir es beweisen?“ und die Nachweis-Spur führt. Self-hosted oder EU-Cloud, Vertraulichkeit zuerst.",
+    sub: "Pflichten, Kontrollen, Richtlinien, AML-Screening und das EU-AI-Act-Inventar — ein Gehirn, das beantwortet „sind wir konform, wo ist die Lücke, und können wir es beweisen?“ und die Nachweis-Spur führt.",
     ctaPrimary: "Compliance-Gehirn starten",
     ctaSecondary: "Ehrlich vergleichen",
     cockpit: {

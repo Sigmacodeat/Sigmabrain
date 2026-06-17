@@ -31,12 +31,12 @@ import {
   ICONS,
 } from "./chrome";
 
-// Detect the Subsumio brand from the host (post-mount → keeps the page static).
+// Detect the active brand from the host (post-mount → keeps the page static).
 function useSiteBrand(): SiteBrand {
   const [brand, setBrand] = useState<SiteBrand>("sigmabrain");
   useEffect(() => {
     const override = new URLSearchParams(window.location.search).get("brand");
-    if (override === "subsumio" || override === "sigmabrain") {
+    if (override === "subsumio" || override === "sigmabrain" || override === "taxumio") {
       setBrand(override);
       return;
     }

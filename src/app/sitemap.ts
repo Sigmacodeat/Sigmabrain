@@ -12,6 +12,7 @@ const PAGES = [
   "/security",
   "/partners",
   "/download",
+  "/docs",
   ...VERTICAL_SLUGS.map((s) => `/solutions/${s}`),
   "/subsumio",
   "/taxumio",

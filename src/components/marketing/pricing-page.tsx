@@ -11,6 +11,7 @@ import {
   FaqList,
 } from "./chrome";
 import { PricingGrid } from "./pricing-grid";
+import { Reveal } from "./motion-system";
 
 export default function PricingPage({ lang }: { lang: Lang }) {
   const pricing = PRICING[lang];
@@ -24,14 +25,18 @@ export default function PricingPage({ lang }: { lang: Lang }) {
 
       <section className="relative z-10 pt-20 pb-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <SectionHeading badge="Pricing" title={pricing.title} sub={pricing.sub} />
+          <Reveal variant="up">
+            <SectionHeading badge="Pricing" title={pricing.title} sub={pricing.sub} />
+          </Reveal>
           <PricingGrid lang={lang} />
         </div>
       </section>
 
       <section className="relative z-10 py-24 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
         <div className="max-w-5xl mx-auto">
-          <SectionHeading title={LANDING[lang].faqTitle} />
+          <Reveal variant="up">
+            <SectionHeading title={LANDING[lang].faqTitle} />
+          </Reveal>
           <FaqList items={faq} />
         </div>
       </section>

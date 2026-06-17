@@ -6,14 +6,15 @@ import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PRICING, p, type Lang } from "@/content/site";
+import { StaggerContainer, StaggerItem } from "./motion-system";
 
 export function PricingGrid({ lang }: { lang: Lang }) {
   const pricing = PRICING[lang];
   return (
     <>
-      <div className={`grid md:grid-cols-2 gap-5 ${pricing.tiers.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3 max-w-5xl mx-auto"}`}>
+      <StaggerContainer className={`grid md:grid-cols-2 gap-5 ${pricing.tiers.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3 max-w-5xl mx-auto"}`} stagger={0.1}>
         {pricing.tiers.map((tier) => (
-          <div
+          <StaggerItem
             key={tier.id}
             className={`relative p-7 rounded-2xl border flex flex-col transition-all duration-200 ${
               tier.highlight
@@ -57,9 +58,9 @@ export function PricingGrid({ lang }: { lang: Lang }) {
                 </Button>
               </Link>
             )}
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
       <p className="text-center text-xs [color:var(--mk-text-subtle)] mt-8 max-w-2xl mx-auto">{pricing.footnote}</p>
     </>
   );

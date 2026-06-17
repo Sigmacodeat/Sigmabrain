@@ -43,6 +43,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SigmaLogo, SigmaMark } from "@/components/brand/logo";
 import { SubsumioLogo } from "@/components/brand/subsumio-logo";
+import { TaxumioLogo } from "@/components/brand/taxumio-logo";
 import { NAV, FOOTER, p, altPath, type Lang } from "@/content/site";
 import { brandForHost, SUBSUMIO_SITE_URL, isExternalUrl, type SiteBrand } from "@/lib/brand";
 import SalesAgentWidget from "./sales-agent-widget";
@@ -55,7 +56,7 @@ export function useSiteBrand(): SiteBrand {
   const [brand, setBrand] = useState<SiteBrand>("sigmabrain");
   useEffect(() => {
     const override = new URLSearchParams(window.location.search).get("brand");
-    if (override === "subsumio" || override === "sigmabrain") {
+    if (override === "subsumio" || override === "sigmabrain" || override === "taxumio") {
       setBrand(override);
       return;
     }
@@ -68,6 +69,7 @@ export function useSiteBrand(): SiteBrand {
 // it keeps the Sigma mark and adds the attribution line.
 function BrandLogo({ brand }: { brand: SiteBrand }) {
   if (brand === "subsumio") return <SubsumioLogo size={34} />;
+  if (brand === "taxumio") return <TaxumioLogo size={34} />;
   return (
     <SigmaLogo
       size={32}
@@ -231,6 +233,8 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
   const nav = NAV[lang];
   const brand = useSiteBrand();
   const isSubsumio = brand === "subsumio";
+  const isTaxumio = brand === "taxumio";
+  const isStandalone = isSubsumio || isTaxumio;
   const pathname = usePathname() || "/";
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -266,7 +270,7 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
     >
     <nav className="max-w-7xl mx-auto px-6 py-4">
       <div className="flex items-center justify-between">
-        <Link href={p(lang, "")} aria-label={isSubsumio ? "Subsumio home" : "Sigmabrain home"}>
+        <Link href={p(lang, "")} aria-label={isSubsumio ? "Subsumio home" : isTaxumio ? "Taxumio home" : "Sigmabrain home"}>
           <BrandLogo brand={brand} />
         </Link>
 
@@ -275,10 +279,14 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
             nav.subsumioItems.map((item) => (
               <Link key={item.href} href={p(lang, item.href)} className={isActive(item.href) ? linkActive : linkInactive}>{item.label}</Link>
             ))
+          ) : isTaxumio ? (
+            nav.taxumioItems.map((item) => (
+              <Link key={item.href} href={p(lang, item.href)} className={isActive(item.href) ? linkActive : linkInactive}>{item.label}</Link>
+            ))
           ) : (
             <Link href={p(lang, "/features")} className={isActive("/features") ? linkActive : linkInactive}>{nav.features}</Link>
           )}
-          {!isSubsumio && (
+          {!isStandalone && (
           <div
             className="relative"
             onMouseEnter={() => setSolutionsOpen(true)}
@@ -341,8 +349,8 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
             )}
           </div>
           )}
-          {!isSubsumio && <Link href={p(lang, "/pricing")} className={isActive("/pricing") ? linkActive : linkInactive}>{nav.pricing}</Link>}
-          {!isSubsumio && <Link href={p(lang, "/compare")} className={isActive("/compare") ? linkActive : linkInactive}>{nav.compare}</Link>}
+          {!isStandalone && <Link href={p(lang, "/pricing")} className={isActive("/pricing") ? linkActive : linkInactive}>{nav.pricing}</Link>}
+          {!isStandalone && <Link href={p(lang, "/compare")} className={isActive("/compare") ? linkActive : linkInactive}>{nav.compare}</Link>}
           <Link href={p(lang, "/docs")} className={isActive("/docs") ? linkActive : linkInactive}>{nav.docs}</Link>
         </div>
 
@@ -378,8 +386,11 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
           {isSubsumio && nav.subsumioItems.map((item) => (
             <Link key={item.href} href={p(lang, item.href)} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive(item.href) ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>
           ))}
-          {!isSubsumio && <Link href={p(lang, "/features")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/features") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.features}</Link>}
-          {!isSubsumio && nav.solutionItems.map((item) => {
+          {isTaxumio && nav.taxumioItems.map((item) => (
+            <Link key={item.href} href={p(lang, item.href)} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive(item.href) ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>
+          ))}
+          {!isStandalone && <Link href={p(lang, "/features")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/features") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.features}</Link>}
+          {!isStandalone && nav.solutionItems.map((item) => {
             const comingSoon = "comingSoon" in item && item.comingSoon;
             if (comingSoon) {
               return (
@@ -401,8 +412,8 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
               </Link>
             );
           })}
-          {!isSubsumio && <Link href={p(lang, "/pricing")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/pricing") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.pricing}</Link>}
-          {!isSubsumio && <Link href={p(lang, "/compare")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/compare") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.compare}</Link>}
+          {!isStandalone && <Link href={p(lang, "/pricing")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/pricing") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.pricing}</Link>}
+          {!isStandalone && <Link href={p(lang, "/compare")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/compare") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.compare}</Link>}
           <Link href={p(lang, "/docs")} className={`block px-3 py-2 rounded-lg text-sm transition-colors ${isActive("/docs") ? "[color:var(--brand-primary)] [background:color-mix(in_srgb,var(--brand-primary)_10%,var(--mk-hover))] font-medium [border:1px_solid_color-mix(in_srgb,var(--brand-primary)_20%,var(--mk-border))]" : "[color:var(--mk-text-muted)] hover:[color:var(--brand-primary)] hover:[background:var(--mk-hover)]"}`} onClick={() => setMobileOpen(false)}>{nav.docs}</Link>
           <Link href={altPath(lang, pathname)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors [color:var(--mk-text-muted)] hover:[color:var(--mk-text)] hover:[background:var(--mk-hover)]" onClick={() => setMobileOpen(false)}>
             <Globe size={13} /> {lang === "en" ? "Auf Deutsch lesen" : "Read in English"}
@@ -420,6 +431,7 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
   const footer = FOOTER[lang];
   const brand = useSiteBrand();
   const isSubsumio = brand === "subsumio";
+  const isTaxumio = brand === "taxumio";
   return (
     <footer className="relative z-10 border-t [border-color:var(--mk-border)] py-14 px-6">
       <div className="max-w-7xl mx-auto">
@@ -428,6 +440,8 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
             <div className="mb-3">
               {isSubsumio ? (
                 <SubsumioLogo size={28} />
+              ) : isTaxumio ? (
+                <TaxumioLogo size={28} />
               ) : (
                 <SigmaLogo size={24} wordmarkClassName="text-sm font-semibold [color:var(--mk-text)]" />
               )}
@@ -435,6 +449,8 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
             <p className="text-sm [color:var(--mk-text-muted)] mb-4">
               {isSubsumio
                 ? (lang === "de" ? "Das Kanzlei-Gehirn — angetrieben von Sigmabrain." : "The law firm's brain — powered by Sigmabrain.")
+                : isTaxumio
+                ? (lang === "de" ? "Das Kanzleigedächtnis — angetrieben von Sigmabrain." : "The tax firm's memory — powered by Sigmabrain.")
                 : footer.tagline}
             </p>
             <p className="text-xs [color:var(--mk-text-subtle)] leading-relaxed max-w-xs">{footer.note}</p>

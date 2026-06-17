@@ -9,8 +9,8 @@ export const CONSULTING: Record<Lang, BrandedVerticalContent> = {
   en: {
     metaTitle: "Consultumio — institutional memory that compounds",
     metaDesc:
-      "Pitch history, project learnings and client context in one brain that answers 'have we done this before?' New hires productive in days. Consultumio is Sigmabrain for consultancies and agencies. Confidentiality-first.",
-    badge: "Consultumio — powered by Sigmabrain",
+      "Pitch history, project learnings and client context in one brain that answers 'have we done this before?' New hires productive in days. Consultumio is Sigmabrain for consultancies and agencies.",
+    badge: "Consultumio — the firm's institutional memory",
     h1a: "You solved this in 2023.",
     h1b: "Consultumio remembers where.",
     sub: "Five years of decks, project docs and client notes become one brain that answers “have we done this before, and what did we learn?” — so you stop reinventing and start reusing. Self-hosted or EU cloud; client work stays confidential.",
@@ -86,8 +86,8 @@ Reusable assets: interview guide (2023), pricing model deck v3.
   de: {
     metaTitle: "Consultumio — Institutional Memory, das sich verzinst",
     metaDesc:
-      "Pitch-Historie, Projekt-Learnings und Mandantenkontext in einem Gehirn, das beantwortet „haben wir das schon gemacht?“ Neue Mitarbeiter in Tagen produktiv. Consultumio ist Sigmabrain für Beratungen und Agenturen. Vertraulichkeit zuerst.",
-    badge: "Consultumio — powered by Sigmabrain",
+      "Pitch-Historie, Projekt-Learnings und Mandantenkontext in einem Gehirn, das beantwortet „haben wir das schon gemacht?“ Neue Mitarbeiter in Tagen produktiv. Consultumio ist Sigmabrain für Beratungen und Agenturen.",
+    badge: "Consultumio — das Institutional Memory der Beratung",
     h1a: "Ihr habt das 2023 gelöst.",
     h1b: "Consultumio weiß, wo.",
     sub: "Fünf Jahre Decks, Projektdokumente und Mandantennotizen werden ein Gehirn, das beantwortet „haben wir das schon gemacht, und was haben wir gelernt?“ — damit ihr nicht neu erfindet, sondern wiederverwendet. Self-hosted oder EU-Cloud; Mandantenarbeit bleibt vertraulich.",

@@ -11,11 +11,11 @@ export const INSURANCE: Record<Lang, BrandedVerticalContent> = {
   en: {
     metaTitle: "Versumio — the insurance broker's memory (policies, claims, renewals)",
     metaDesc:
-      "Policy details, claims history, coverage context and renewal prep — one brain that answers “what is this client actually covered for, and what's open?” Versumio is Sigmabrain tuned for insurance brokers & agencies. Confidentiality-first, self-hosted or EU cloud.",
-    badge: "Versumio — powered by Sigmabrain",
+      "Policy details, claims history, coverage context and renewal prep — one brain that answers “what is this client actually covered for, and what's open?” Versumio is Sigmabrain tuned for insurance brokers & agencies. Self-hosted or EU cloud.",
+    badge: "Versumio — the broker's client memory",
     h1a: "Your management system stores the policies.",
     h1b: "Versumio knows the client.",
-    sub: "Coverage, claims history, advice given, renewal dates and the promises in old emails — one brain that answers “what is this client covered for, and what's still open?” before the renewal call. Self-hosted or EU cloud, confidentiality-first.",
+    sub: "Coverage, claims history, advice given, renewal dates and the promises in old emails — one brain that answers “what is this client covered for, and what's still open?” before the renewal call.",
     ctaPrimary: "Start your agency brain",
     ctaSecondary: "Compare honestly",
     cockpit: {
@@ -89,11 +89,11 @@ We promised a flood-cover quote in the Apr email — never sent.
   de: {
     metaTitle: "Versumio — das Gedächtnis für Versicherungsmakler (Policen, Schäden, Verlängerungen)",
     metaDesc:
-      "Deckungsdetails, Schadenhistorie, Beratungskontext und Verlängerungs-Vorbereitung — ein Gehirn, das beantwortet „wofür ist dieser Kunde gedeckt, und was ist offen?“ Versumio ist Sigmabrain für Versicherungsmakler & -agenturen. Vertraulichkeit zuerst.",
-    badge: "Versumio — powered by Sigmabrain",
+      "Deckungsdetails, Schadenhistorie, Beratungskontext und Verlängerungs-Vorbereitung — ein Gehirn, das beantwortet „wofür ist dieser Kunde gedeckt, und was ist offen?“ Versumio ist Sigmabrain für Versicherungsmakler & -agenturen.",
+    badge: "Versumio — das Kunden-Gedächtnis des Maklers",
     h1a: "Euer Maklerverwaltungsprogramm speichert die Policen.",
     h1b: "Versumio kennt den Kunden.",
-    sub: "Deckung, Schadenhistorie, erteilte Beratung, Verlängerungstermine und die Zusagen in alten Mails — ein Gehirn, das beantwortet „wofür ist dieser Kunde gedeckt, und was ist noch offen?“ vor dem Verlängerungsgespräch. Self-hosted oder EU-Cloud, Vertraulichkeit zuerst.",
+    sub: "Deckung, Schadenhistorie, erteilte Beratung, Verlängerungstermine und die Zusagen in alten Mails — ein Gehirn, das beantwortet „wofür ist dieser Kunde gedeckt, und was ist noch offen?“ vor dem Verlängerungsgespräch. ",
     ctaPrimary: "Makler-Gehirn starten",
     ctaSecondary: "Ehrlich vergleichen",
     cockpit: {

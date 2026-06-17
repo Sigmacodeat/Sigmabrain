@@ -9,8 +9,8 @@ export const VC: Record<Lang, BrandedVerticalContent> = {
   en: {
     metaTitle: "Investumio — your fund's deal memory, always in the room",
     metaDesc:
-      "Founder calls, deal memos, LP updates and intros — one brain that answers 'what's open with this founder?' and 'who invested in X?' before you walk in. Investumio is Sigmabrain for VC, PE and angels. Confidentiality-first.",
-    badge: "Investumio — powered by Sigmabrain",
+      "Founder calls, deal memos, LP updates and intros — one brain that answers 'what's open with this founder?' and 'who invested in X?' before you walk in. Investumio is Sigmabrain for VC, PE and angels.",
+    badge: "Investumio — the fund's deal memory",
     h1a: "Your fund's memory,",
     h1b: "always in the room.",
     sub: "Every founder call, deal memo, LP update and intro — one brain that answers “what's still open with this founder?” and “who do we know at X?” before the meeting. Self-hosted or EU cloud; your dealflow never trains anyone's model.",
@@ -87,8 +87,8 @@ Path to widget-co: alice-example —worked_at→ acme-example ←advises— your
   de: {
     metaTitle: "Investumio — das Deal-Gedächtnis eures Fonds, immer im Raum",
     metaDesc:
-      "Founder-Calls, Deal-Memos, LP-Updates und Intros — ein Gehirn, das beantwortet „was ist mit diesem Founder offen?“ und „wer kennt X?“ bevor ihr reingeht. Investumio ist Sigmabrain für VC, PE und Angels. Vertraulichkeit zuerst.",
-    badge: "Investumio — powered by Sigmabrain",
+      "Founder-Calls, Deal-Memos, LP-Updates und Intros — ein Gehirn, das beantwortet „was ist mit diesem Founder offen?“ und „wer kennt X?“ bevor ihr reingeht. Investumio ist Sigmabrain für VC, PE und Angels.",
+    badge: "Investumio — das Deal-Gedächtnis des Fonds",
     h1a: "Das Gedächtnis eures Fonds,",
     h1b: "immer im Raum.",
     sub: "Jeder Founder-Call, jedes Deal-Memo, LP-Update und Intro — ein Gehirn, das beantwortet „was ist mit diesem Founder noch offen?“ und „wen kennen wir bei X?“ vor dem Meeting. Self-hosted oder EU-Cloud; euer Dealflow trainiert nie fremde Modelle.",

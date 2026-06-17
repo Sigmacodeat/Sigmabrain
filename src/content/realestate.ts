@@ -10,11 +10,11 @@ export const REALESTATE: Record<Lang, BrandedVerticalContent> = {
   en: {
     metaTitle: "Immumio — the property firm's memory (leases, tenants, renewals)",
     metaDesc:
-      "Leases, tenant history, obligations, renewal and notice dates, transactions — one brain that answers “what does this lease say, and what's due?” Immumio is Sigmabrain tuned for property managers and real-estate firms. Confidentiality-first.",
-    badge: "Immumio — powered by Sigmabrain",
+      "Leases, tenant history, obligations, renewal and notice dates, transactions — one brain that answers “what does this lease say, and what's due?” Immumio is Sigmabrain tuned for property managers and real-estate firms.",
+    badge: "Immumio — the property lease memory",
     h1a: "Your management system holds the units.",
     h1b: "Immumio knows the leases.",
-    sub: "Lease terms, tenant history, repair obligations, renewal and notice dates, transaction files — one brain that answers “what does this lease actually say, and what's due next?” before the renewal or the deal. Self-hosted or EU cloud, confidentiality-first.",
+    sub: "Lease terms, tenant history, repair obligations, renewal and notice dates, transaction files — one brain that answers “what does this lease actually say, and what's due next?” before the renewal or the deal.",
     ctaPrimary: "Start your property brain",
     ctaSecondary: "Compare honestly",
     cockpit: {
@@ -88,11 +88,11 @@ We promised a fit-out contribution in the Feb email — not documented in the le
   de: {
     metaTitle: "Immumio — das Gedächtnis der Immobilienfirma (Mietverträge, Mieter, Verlängerungen)",
     metaDesc:
-      "Mietverträge, Mieterhistorie, Pflichten, Verlängerungs- und Kündigungsfristen, Transaktionen — ein Gehirn, das beantwortet „was steht im Mietvertrag, und was ist fällig?“ Immumio ist Sigmabrain für Hausverwaltungen und Immobilienfirmen. Vertraulichkeit zuerst.",
-    badge: "Immumio — powered by Sigmabrain",
+      "Mietverträge, Mieterhistorie, Pflichten, Verlängerungs- und Kündigungsfristen, Transaktionen — ein Gehirn, das beantwortet „was steht im Mietvertrag, und was ist fällig?“ Immumio ist Sigmabrain für Hausverwaltungen und Immobilienfirmen.",
+    badge: "Immumio — das Mietvertrags-Gedächtnis der Immobilie",
     h1a: "Euer Verwaltungsprogramm hält die Einheiten.",
     h1b: "Immumio kennt die Mietverträge.",
-    sub: "Mietkonditionen, Mieterhistorie, Instandhaltungspflichten, Verlängerungs- und Kündigungsfristen, Transaktionsakten — ein Gehirn, das beantwortet „was steht wirklich im Mietvertrag, und was ist als Nächstes fällig?“ vor der Verlängerung oder dem Deal. Self-hosted oder EU-Cloud, Vertraulichkeit zuerst.",
+    sub: "Mietkonditionen, Mieterhistorie, Instandhaltungspflichten, Verlängerungs- und Kündigungsfristen, Transaktionsakten — ein Gehirn, das beantwortet „was steht wirklich im Mietvertrag, und was ist als Nächstes fällig?“ vor der Verlängerung oder dem Deal.",
     ctaPrimary: "Immobilien-Gehirn starten",
     ctaSecondary: "Ehrlich vergleichen",
     cockpit: {

@@ -63,11 +63,11 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
   en: {
     metaTitle: "Taxumio — the brain for your tax & accounting firm's daily work",
     metaDesc:
-      "Deadlines with email digest, client Q&A from your own files, GoBD-stamped invoicing, DATEV export and a Verfahrensdokumentation generator — Taxumio is Sigmabrain tuned for tax advisors and accountants. Confidentiality-first.",
-    badge: "Taxumio — powered by Sigmabrain",
+      "Deadlines with email digest, client Q&A from your own files, GoBD-stamped invoicing, DATEV export and a Verfahrensdokumentation generator — Taxumio is Sigmabrain tuned for tax advisors and accountants.",
+    badge: "Taxumio — the practice memory for tax & accounting",
     h1a: "Your practice software knows the numbers.",
     h1b: "Taxumio runs the firm's day.",
-    sub: "Deadlines, client context, advisory rationale, invoicing and DATEV export — one brain that answers “what did we tell this client, and why?” and keeps the daily firm work moving. Self-hosted or EU cloud, confidentiality-first.",
+    sub: "Deadlines, client context, advisory rationale, GoBD-stamped invoicing and DATEV export — one brain that answers “what did we tell this client, and why?” and keeps the daily firm work moving.",
     ctaPrimary: "Start your practice brain",
     ctaSecondary: "See how we compare",
     cockpit: {
@@ -139,11 +139,11 @@ export const TAXUMIO: Record<Lang, TaxumioContent> = {
   de: {
     metaTitle: "Taxumio — das Gehirn für den Kanzleialltag von Steuerberatern & Buchhaltern",
     metaDesc:
-      "Fristen mit E-Mail-Digest, Mandanten-Q&A aus den eigenen Akten, GoBD-gestempelte Rechnungen, DATEV-Export und ein Verfahrensdoku-Generator — Taxumio ist Sigmabrain für Steuerkanzleien. Verschwiegenheit zuerst.",
+      "Fristen mit E-Mail-Digest, Mandanten-Q&A aus den eigenen Akten, GoBD-gestempelte Rechnungen, DATEV-Export und ein Verfahrensdoku-Generator — Taxumio ist Sigmabrain für Steuerkanzleien.",
     badge: "Taxumio — das Kanzleigedächtnis für Steuerberater & WP",
     h1a: "Eure Kanzleisoftware kennt die Zahlen.",
     h1b: "Taxumio führt durch den Kanzleialltag.",
-    sub: "Fristen, Mandantenkontext, Gestaltungs-Begründung, Rechnungsstellung und DATEV-Export — ein Gehirn, das beantwortet „was haben wir diesem Mandanten gesagt, und warum?“ und den Kanzleialltag am Laufen hält. GoBD-gestempelte Rechnungen und DATEV-Export — ein Gehirn, das beantwortet „was haben wir diesem Mandanten gesagt, und warum?" und den Kanzleialltag am Laufen hält.",
+    sub: "Fristen, Mandantenkontext, Gestaltungs-Begründung, GoBD-gestempelte Rechnungen und DATEV-Export — ein Gehirn, das beantwortet \"was haben wir diesem Mandanten gesagt, und warum?\" und den Kanzleialltag am Laufen hält.",
     ctaPrimary: "Kanzlei-Gehirn starten",
     ctaSecondary: "Vergleich ansehen",
     cockpit: {

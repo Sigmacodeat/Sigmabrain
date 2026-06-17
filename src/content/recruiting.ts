@@ -9,8 +9,8 @@ export const RECRUITING: Record<Lang, BrandedVerticalContent> = {
   en: {
     metaTitle: "Talentumio — your proprietary talent graph, queryable",
     metaDesc:
-      "Candidates, who-knows-whom, every interaction in one brain that answers 'who fits this role?' and keeps the knowledge when a consultant leaves. Talentumio is Sigmabrain for executive search & recruiting. Confidentiality-first.",
-    badge: "Talentumio — powered by Sigmabrain",
+      "Candidates, who-knows-whom, every interaction in one brain that answers 'who fits this role?' and keeps the knowledge when a consultant leaves. Talentumio is Sigmabrain for executive search & recruiting.",
+    badge: "Talentumio — your proprietary talent graph",
     h1a: "Your talent graph is your edge.",
     h1b: "Talentumio makes it queryable.",
     sub: "Every candidate, interaction and intro becomes one brain that answers “who fits this role, and who can warm-intro them?” — and the knowledge stays when a consultant leaves. Self-hosted or EU cloud; candidate data stays confidential and consent-aware.",
@@ -85,8 +85,8 @@ export const RECRUITING: Record<Lang, BrandedVerticalContent> = {
   de: {
     metaTitle: "Talentumio — euer proprietärer Talent-Graph, abfragbar",
     metaDesc:
-      "Kandidaten, wer-kennt-wen, jede Interaktion in einem Gehirn, das beantwortet „wer passt auf diese Rolle?“ und das Wissen behält, wenn ein Berater geht. Talentumio ist Sigmabrain für Executive Search & Recruiting. Vertraulichkeit zuerst.",
-    badge: "Talentumio — powered by Sigmabrain",
+      "Kandidaten, wer-kennt-wen, jede Interaktion in einem Gehirn, das beantwortet „wer passt auf diese Rolle?“ und das Wissen behält, wenn ein Berater geht. Talentumio ist Sigmabrain für Executive Search & Recruiting.",
+    badge: "Talentumio — euer proprietärer Talent-Graph",
     h1a: "Euer Talent-Graph ist euer Vorsprung.",
     h1b: "Talentumio macht ihn abfragbar.",
     sub: "Jeder Kandidat, jede Interaktion und jedes Intro wird ein Gehirn, das beantwortet „wer passt auf diese Rolle, und wer kann warm vorstellen?“ — und das Wissen bleibt, wenn ein Berater geht. Self-hosted oder EU-Cloud; Kandidatendaten bleiben vertraulich und einwilligungs-bewusst.",

@@ -11,6 +11,7 @@ import { Mail, Lock, User as UserIcon, ArrowRight, AlertCircle, Building2 } from
 import { Button } from "@/components/ui/button";
 import { SigmaLogo } from "@/components/brand/logo";
 import { SubsumioLogo } from "@/components/brand/subsumio-logo";
+import { TaxumioLogo } from "@/components/brand/taxumio-logo";
 import { brandForHost } from "@/lib/brand";
 import { MarketingBackground } from "@/components/marketing/chrome";
 import { p, type Lang } from "@/content/site";
@@ -113,9 +114,11 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
   const [ssoLoading, setSsoLoading] = useState(false);
   const [ssoConfigured, setSsoConfigured] = useState(false);
   const [isSubsumio, setIsSubsumio] = useState(false);
+  const [isTaxumio, setIsTaxumio] = useState(false);
   useEffect(() => {
     const o = new URLSearchParams(window.location.search).get("brand");
-    setIsSubsumio(o === "subsumio" || (o !== "sigmabrain" && brandForHost(window.location.host) === "subsumio"));
+    setIsSubsumio(o === "subsumio" || (o !== "sigmabrain" && o !== "taxumio" && brandForHost(window.location.host) === "subsumio"));
+    setIsTaxumio(o === "taxumio" || (o !== "sigmabrain" && o !== "subsumio" && brandForHost(window.location.host) === "taxumio"));
   }, []);
 
   useEffect(() => {
@@ -175,9 +178,11 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
     <div className="min-h-screen bg-[#06060f] flex items-center justify-center px-6 py-12" lang={lang} style={styleForIndustry(industry)}>
       <MarketingBackground />
       <div className="relative z-10 w-full max-w-md">
-        <Link href={p(lang, "")} className="flex justify-center mb-8" aria-label={isSubsumio ? "Subsumio home" : "Sigmabrain home"}>
+        <Link href={p(lang, "")} className="flex justify-center mb-8" aria-label={isSubsumio ? "Subsumio home" : isTaxumio ? "Taxumio home" : "Sigmabrain home"}>
           {isSubsumio
             ? <SubsumioLogo size={40} />
+            : isTaxumio
+            ? <TaxumioLogo size={40} />
             : <SigmaLogo size={38} wordmarkClassName="text-xl font-bold text-[#e8e8f0] tracking-tight" />}
         </Link>
 

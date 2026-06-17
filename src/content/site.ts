@@ -48,6 +48,11 @@ export const NAV = {
       { label: "Security", href: "/subsumio/sicherheit" },
       { label: "Pricing", href: "/pricing" },
     ],
+    // Taxumio-host nav (brand === "taxumio").
+    taxumioItems: [
+      { label: "Pricing", href: "/pricing" },
+      { label: "All solutions", href: "/" },
+    ],
     solutionItems: [
       { label: "Law Firms — Subsumio", href: "/subsumio", desc: "Matters, deadlines, WhatsApp intake, time, expenses and invoicing" },
       { label: "Tax & Accounting — Taxumio", href: "/taxumio", desc: "The practice memory next to DATEV", comingSoon: true },
@@ -75,6 +80,10 @@ export const NAV = {
       { label: "Sicherheit", href: "/subsumio/sicherheit" },
       { label: "Preise", href: "/pricing" },
     ],
+    taxumioItems: [
+      { label: "Preise", href: "/pricing" },
+      { label: "Alle Lösungen", href: "/" },
+    ],
     solutionItems: [
       { label: "Kanzleien — Subsumio", href: "/subsumio", desc: "Akten, Fristen, WhatsApp-Eingang, Zeiten, Auslagen und Rechnungen" },
       { label: "Steuerberater & WP — Taxumio", href: "/taxumio", desc: "Das Kanzleigedächtnis neben DATEV", comingSoon: true },
@@ -100,6 +109,7 @@ export const FOOTER = {
           { label: "Compare us honestly", href: "/compare" },
           { label: "Dashboard", href: "/dashboard", external: false },
           { label: "Download the app", href: "/download" },
+          { label: "Docs", href: "/docs" },
         ],
       },
       {
@@ -141,6 +151,7 @@ export const FOOTER = {
           { label: "Ehrlicher Vergleich", href: "/compare" },
           { label: "Dashboard", href: "/dashboard", external: false },
           { label: "App herunterladen", href: "/download" },
+          { label: "Docs", href: "/docs" },
         ],
       },
       {

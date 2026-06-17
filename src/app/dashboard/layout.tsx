@@ -60,6 +60,7 @@ import { useMutationQueue } from "@/lib/use-mutation";
 import { useBrainSelector } from "@/lib/use-brain-selector";
 import { SigmaMark } from "@/components/brand/logo";
 import { SubsumioMark } from "@/components/brand/subsumio-logo";
+import { TaxumioMark } from "@/components/brand/taxumio-logo";
 import { brandForHost } from "@/lib/brand";
 import { useNetworkStatus } from "@/lib/use-offline-sync";
 import { ensureRealtime } from "@/lib/realtime";
@@ -215,11 +216,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState<Array<{ id: string; title: string; message: string; type: "deadline" | "dream" | "system"; read: boolean }>>([]);
 
-  // Brand: show the Subsumio wordmark when on a Subsumio host (subsum.io).
+  // Brand: show the product wordmark when on a product host (subsum.io / taxum.io).
   const [isSubsumio, setIsSubsumio] = useState(false);
+  const [isTaxumio, setIsTaxumio] = useState(false);
   useEffect(() => {
     const o = new URLSearchParams(window.location.search).get("brand");
-    setIsSubsumio(o === "subsumio" || (o !== "sigmabrain" && brandForHost(window.location.host) === "subsumio"));
+    setIsSubsumio(o === "subsumio" || (o !== "sigmabrain" && o !== "taxumio" && brandForHost(window.location.host) === "subsumio"));
+    setIsTaxumio(o === "taxumio" || (o !== "sigmabrain" && o !== "subsumio" && brandForHost(window.location.host) === "taxumio"));
   }, []);
 
   // Poll for notifications (deadlines + dream cycle)
@@ -380,13 +383,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           >
             <X size={18} />
           </button>
-          {isSubsumio ? <SubsumioMark size={28} /> : <SigmaMark size={28} className="shrink-0" />}
+          {isSubsumio ? <SubsumioMark size={28} /> : isTaxumio ? <TaxumioMark size={28} /> : <SigmaMark size={28} className="shrink-0" />}
           <span className="font-display text-sm font-bold text-[color:var(--ds-text)] tracking-tight md:hidden">
-            {isSubsumio ? <>Subsum<span className="brand-text">•io</span></> : <>Sigma<span className="brand-text">brain</span></>}
+            {isSubsumio ? <>Subsum<span className="brand-text">•io</span></> : isTaxumio ? <>Taxum<span className="brand-text">•io</span></> : <>Sigma<span className="brand-text">brain</span></>}
           </span>
           {!collapsed && (
             <span className="hidden md:inline font-display text-sm font-bold text-[color:var(--ds-text)] tracking-tight">
-              {isSubsumio ? <>Subsum<span className="brand-text">•io</span></> : <>Sigma<span className="brand-text">brain</span></>}
+              {isSubsumio ? <>Subsum<span className="brand-text">•io</span></> : isTaxumio ? <>Taxum<span className="brand-text">•io</span></> : <>Sigma<span className="brand-text">brain</span></>}
             </span>
           )}
         </div>

@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Send, Loader2, Sparkles } from "lucide-react";
 import { SigmaMark } from "@/components/brand/logo";
 import { SubsumioMark } from "@/components/brand/subsumio-logo";
+import { TaxumioMark } from "@/components/brand/taxumio-logo";
 import { useSiteBrand } from "./chrome";
 import type { Lang } from "@/content/site";
 
@@ -54,6 +55,7 @@ export default function LiveDemo({
 }) {
   const brand = useSiteBrand();
   const isSubsumio = brand === "subsumio";
+  const isTaxumio = brand === "taxumio";
   const [input, setInput] = useState(q);
   const [loading, setLoading] = useState(false);
   const [live, setLive] = useState<DemoResult[] | null>(null);
@@ -134,7 +136,7 @@ export default function LiveDemo({
       {/* answer */}
       <div className="px-5 pb-4 pt-4">
         <div className="flex items-start gap-3">
-          {isSubsumio ? <SubsumioMark size={28} className="shrink-0 mt-0.5" /> : <SigmaMark size={28} className="shrink-0 mt-0.5" />}
+          {isSubsumio ? <SubsumioMark size={28} className="shrink-0 mt-0.5" /> : isTaxumio ? <TaxumioMark size={28} className="shrink-0 mt-0.5" /> : <SigmaMark size={28} className="shrink-0 mt-0.5" />}
           <div className="flex-1 min-w-0">
             {live ? (
               <div>

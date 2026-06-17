@@ -26,11 +26,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  const brand = brandForHost(req.headers.get("host"));
+
   // --- Subsumio domain: present Subsumio standalone ---
   // On subsum.io / subsumio.com the Subsumio page IS the homepage, and the
   // other verticals fold into it (this domain never shows the whole platform).
   // The URL stays clean; only the rendered route is rewritten.
-  if (brandForHost(req.headers.get("host")) === "subsumio") {
+  if (brand === "subsumio") {
     // 1. Known locale variants → canonical path
     if (pathname === "/" || pathname === "/en") {
       const url = req.nextUrl.clone();
@@ -59,6 +61,40 @@ export async function middleware(req: NextRequest) {
     if (!pathname.startsWith("/subsumio") && !pathname.startsWith("/de/subsumio")) {
       const url = req.nextUrl.clone();
       url.pathname = pathname.startsWith("/de") ? "/de/subsumio" : "/subsumio";
+      return NextResponse.rewrite(url);
+    }
+  }
+
+  // --- Taxumio domain: present Taxumio standalone ---
+  // On taxum.io / taxumio.com the Taxumio page IS the homepage.
+  if (brand === "taxumio") {
+    // 1. Known locale variants → canonical path
+    if (pathname === "/" || pathname === "/en") {
+      const url = req.nextUrl.clone();
+      url.pathname = "/taxumio";
+      return NextResponse.rewrite(url);
+    }
+    if (pathname === "/de" || pathname.startsWith("/de-AT") || pathname.startsWith("/de-")) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/de/taxumio";
+      return NextResponse.rewrite(url);
+    }
+
+    // 2. Other verticals fold into Taxumio
+    let target: string | null = null;
+    if (OTHER_VERTICAL_PATHS.some((v) => pathname === v || pathname.startsWith(`${v}/`))) target = "/taxumio";
+    else if (OTHER_VERTICAL_PATHS.some((v) => pathname === `/de${v}` || pathname.startsWith(`/de${v}/`))) target = "/de/taxumio";
+
+    if (target && target !== pathname) {
+      const url = req.nextUrl.clone();
+      url.pathname = target;
+      return NextResponse.rewrite(url);
+    }
+
+    // 3. Unknown paths on Taxumio domain → fall back to homepage
+    if (!pathname.startsWith("/taxumio") && !pathname.startsWith("/de/taxumio")) {
+      const url = req.nextUrl.clone();
+      url.pathname = pathname.startsWith("/de") ? "/de/taxumio" : "/taxumio";
       return NextResponse.rewrite(url);
     }
   }

@@ -11,7 +11,7 @@ import { ChevronRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SigmaMark } from "@/components/brand/logo";
 import { LANDING, PRICING, p, type Lang } from "@/content/site";
-import { SUBSUMIO_SITE_URL, isExternalUrl } from "@/lib/brand";
+import { SUBSUMIO_SITE_URL, TAXUMIO_SITE_URL, isExternalUrl } from "@/lib/brand";
 import { PricingGrid } from "./pricing-grid";
 import LiveDemo from "./live-demo";
 import DashboardReel from "./dashboard-reel";
@@ -197,8 +197,8 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                   >
                     <div className="flex items-center gap-3 mb-4">
                       <span className="text-xs font-mono [color:var(--mk-text-subtle)]">{item.step}</span>
-                      <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-                        {Icon && <Icon size={15} className="text-violet-400" />}
+                      <div className="w-8 h-8 rounded-lg bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 flex items-center justify-center">
+                        {Icon && <Icon size={15} className="text-[var(--brand-primary)]" />}
                       </div>
                     </div>
                     <h3 className="text-base font-semibold [color:var(--mk-text)] mb-2">{item.title}</h3>
@@ -229,7 +229,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                 >
                   {comingSoon ? (
                     <div className="relative h-full p-7 rounded-2xl border [border-color:var(--mk-border)] [background:color-mix(in_srgb,var(--mk-surface)_60%,transparent)] flex flex-col cursor-default">
-                      <span className="absolute top-5 right-5 text-[10px] font-semibold uppercase tracking-wide text-violet-300 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full">
+                      <span className="absolute top-5 right-5 text-[10px] font-semibold uppercase tracking-wide text-[var(--brand-primary)] bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 px-2 py-0.5 rounded-full">
                         {soonLabel}
                       </span>
                       <h3 className="text-lg font-bold [color:var(--mk-text-muted)] mb-2 pr-24">{v.title}</h3>
@@ -239,13 +239,13 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                       </span>
                     </div>
                   ) : (() => {
-                    const resolvedHref = v.href === "/subsumio" ? SUBSUMIO_SITE_URL : v.href;
-                    const cardCls = "group h-full p-7 rounded-2xl border border-violet-500/30 [background:var(--mk-surface-2)] hover:border-violet-500/60 hover:bg-[#16163a] transition-colors duration-200 flex flex-col shadow-lg shadow-violet-500/5";
+                    const resolvedHref = v.href === "/subsumio" ? SUBSUMIO_SITE_URL : v.href === "/taxumio" ? TAXUMIO_SITE_URL : v.href;
+                    const cardCls = "group h-full p-7 rounded-2xl border border-[var(--brand-primary)]/30 [background:var(--mk-surface-2)] hover:border-[var(--brand-primary)]/60 hover:bg-[#16163a] transition-colors duration-200 flex flex-col shadow-lg shadow-[var(--brand-primary)]/5";
                     const cardInner = (
                       <>
-                        <h3 className="text-lg font-bold [color:var(--mk-text)] mb-2 group-hover:text-violet-300">{v.title}</h3>
+                        <h3 className="text-lg font-bold [color:var(--mk-text)] mb-2 group-hover:text-[var(--brand-primary)]">{v.title}</h3>
                         <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed flex-1 mb-5">{v.desc}</p>
-                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-violet-400">
+                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--brand-primary)]">
                           {v.cta} <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                         </span>
                       </>
@@ -276,7 +276,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                   transition={{ duration: 0.4, delay: i * 0.08 }}
                   className="p-6 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
                 >
-                  <p className="text-xs font-semibold text-violet-400 uppercase tracking-wider mb-3">{s.role}</p>
+                  <p className="text-xs font-semibold text-[var(--brand-primary)] uppercase tracking-wider mb-3">{s.role}</p>
                   <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{s.text}</p>
                 </motion.div>
               ))}

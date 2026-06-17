@@ -68,17 +68,19 @@ export const INDUSTRY_PROFILES = {
         { en: "Cited drafting context", de: "Zitierter Schriftsatzkontext" },
       ],
     },
-    // Serious legal palette: royal blue + navy, no violet. Matches the Subsumio
-    // scales-of-justice mark and reads as trust/authority for a law-firm audience.
+    // Premium legal palette: royal blue (trust) + teal (success/clarity).
+    // Teal (#14b8a6) sits between blue and green — it brings growth/success
+    // energy without kitsch, and pairs elegantly with navy on dark surfaces.
+    // Used by Stripe, Wise, and modern fintech for exactly this reason.
     theme: {
       primary: "#1d4ed8",
       primaryHover: "#2563eb",
-      secondary: "#38bdf8",
-      tertiary: "#60a5fa",
-      glow: "rgba(29, 78, 216, 0.26)",
-      gradientFrom: "#38bdf8",
-      gradientVia: "#2563eb",
-      gradientTo: "#1e3a8a",
+      secondary: "#14b8a6",
+      tertiary: "#0ea5e9",
+      glow: "rgba(20, 184, 166, 0.24)",
+      gradientFrom: "#14b8a6",
+      gradientVia: "#1d4ed8",
+      gradientTo: "#0f172a",
     },
   },
   tax: {

@@ -26,7 +26,7 @@ import {
 function CellValue({ value }: { value: string }) {
   if (value.startsWith("✓")) {
     return (
-      <span className="inline-flex items-start gap-1.5 text-emerald-400">
+      <span className="inline-flex items-start gap-1.5 text-[var(--brand-secondary)]">
         <Check size={14} className="shrink-0 mt-0.5" />
         <span className="[color:var(--mk-text-muted)]">{value.slice(1).trim() || "Ja"}</span>
       </span>
@@ -44,7 +44,7 @@ function CellValue({ value }: { value: string }) {
     return (
       <span className="inline-flex items-start gap-1.5 text-amber-400">
         <Minus size={14} className="shrink-0 mt-0.5" />
-        <span className="text-[#a8a8be]">{value.slice(1).trim()}</span>
+        <span className="[color:var(--mk-text-muted)]">{value.slice(1).trim()}</span>
       </span>
     );
   }
@@ -56,7 +56,7 @@ function CellValue({ value }: { value: string }) {
       </span>
     );
   }
-  return <span className="text-[#a8a8be]">{value}</span>;
+  return <span className="[color:var(--mk-text-muted)]">{value}</span>;
 }
 
 const viewport = { once: true, margin: "-60px" } as const;
@@ -89,7 +89,7 @@ function CompareMatrix({ table }: { table: CompareTable }) {
                   scope="col"
                   className={`sticky top-0 z-10 text-left p-4 font-semibold ${
                     i === 0
-                      ? "text-violet-300 bg-[#13102a]"
+                      ? "text-[var(--brand-primary)] [background:var(--mk-surface-2)]"
                       : "[color:var(--mk-text)] [background:var(--mk-surface)]"
                   }`}
                 >
@@ -112,7 +112,7 @@ function CompareMatrix({ table }: { table: CompareTable }) {
                   {row.label}
                 </th>
                 {row.cells.map((cell, i) => (
-                  <td key={i} className={`p-4 ${i === 0 ? "bg-violet-500/[0.04]" : ""}`}>
+                  <td key={i} className={`p-4 ${i === 0 ? "bg-[var(--brand-primary)]/[0.04]" : ""}`}>
                     <CellValue value={cell} />
                   </td>
                 ))}
@@ -141,12 +141,12 @@ function CompareMatrix({ table }: { table: CompareTable }) {
                 <div
                   key={i}
                   className={`flex items-start justify-between gap-3 px-4 py-2.5 ${
-                    i === 0 ? "bg-violet-500/[0.05]" : ""
+                    i === 0 ? "bg-[var(--brand-primary)]/[0.05]" : ""
                   }`}
                 >
                   <dt
                     className={`text-xs shrink-0 ${
-                      i === 0 ? "text-violet-300 font-semibold" : "[color:var(--mk-text-muted)]"
+                      i === 0 ? "text-[var(--brand-primary)] font-semibold" : "[color:var(--mk-text-muted)]"
                     }`}
                   >
                     {table.cols[i]}
@@ -189,13 +189,13 @@ export default function ComparePage({ lang }: { lang: Lang }) {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="max-w-4xl mx-auto text-center"
           >
-            <span className="inline-block px-3 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-xs font-medium mb-6">
+            <span className="inline-block px-3 py-1 rounded-full border border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] text-xs font-medium mb-6">
               {t.badge}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold [color:var(--mk-text)] leading-tight mb-6">
               {t.h1a}
               <br />
-              <span className="text-violet-400">{t.h1b}</span>
+              <span className="text-[var(--brand-primary)]">{t.h1b}</span>
             </h1>
             <p className="text-lg [color:var(--mk-text-muted)] leading-relaxed max-w-3xl mx-auto">{t.sub}</p>
             <p className="text-xs [color:var(--mk-text-subtle)] mt-6">{t.snapshot}</p>
@@ -212,7 +212,7 @@ export default function ComparePage({ lang }: { lang: Lang }) {
             className="max-w-4xl mx-auto p-7 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04]"
           >
             <h2 className="text-lg font-bold text-amber-300 mb-3">{t.honestyTitle}</h2>
-            <p className="text-sm text-[#a8a8be] leading-relaxed">{t.honestyText}</p>
+            <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{t.honestyText}</p>
           </motion.div>
         </section>
 
@@ -262,13 +262,13 @@ export default function ComparePage({ lang }: { lang: Lang }) {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={viewport}
               transition={{ duration: 0.4, delay: 0.08 }}
-              className="p-7 rounded-2xl border border-violet-500/30 bg-violet-500/[0.05]"
+              className="p-7 rounded-2xl border border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/[0.05]"
             >
-              <h3 className="text-base font-bold text-violet-300 mb-4">{t.whenUs.title}</h3>
+              <h3 className="text-base font-bold text-[var(--brand-primary)] mb-4">{t.whenUs.title}</h3>
               <ul className="space-y-3">
                 {t.whenUs.items.map((item, i) => (
-                  <li key={i} className="text-sm text-[#a8a8be] leading-relaxed flex gap-2.5">
-                    <Check size={14} className="text-violet-400 shrink-0 mt-1" />
+                  <li key={i} className="text-sm [color:var(--mk-text-muted)] leading-relaxed flex gap-2.5">
+                    <Check size={14} className="text-[var(--brand-primary)] shrink-0 mt-1" />
                     {item}
                   </li>
                 ))}
@@ -296,7 +296,7 @@ export default function ComparePage({ lang }: { lang: Lang }) {
                     href={s.href}
                     target="_blank"
                     rel="noreferrer nofollow"
-                    className="text-xs text-violet-400/80 hover:text-violet-300 hover:underline"
+                    className="text-xs text-[var(--brand-primary)]/80 hover:text-[var(--brand-primary)] hover:underline"
                   >
                     {s.label}
                   </a>
@@ -314,7 +314,7 @@ export default function ComparePage({ lang }: { lang: Lang }) {
             <p className="[color:var(--mk-text-muted)] mb-8">{t.ctaSub}</p>
             <Link
               href={p(lang, "/signup")}
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl brand-bg text-white font-semibold transition-colors hover:brightness-110"
             >
               {t.ctaButton} <ArrowRight size={16} />
             </Link>

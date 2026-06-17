@@ -33,6 +33,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SigmaMark } from "@/components/brand/logo";
 import { SubsumioMark } from "@/components/brand/subsumio-logo";
+import { TaxumioMark } from "@/components/brand/taxumio-logo";
 import { p, type Lang } from "@/content/site";
 import { profileForIndustry } from "@/lib/industry-pack";
 import { styleForIndustry } from "@/lib/industry-theme";
@@ -50,6 +51,7 @@ import BranchPricing from "./branch-pricing";
 import IndustryHeroMotif from "./industry-hero-motif";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 import DashboardReel from "./dashboard-reel";
+import { StaggerContainer, StaggerItem, Reveal } from "./motion-system";
 
 const viewport = { once: true, margin: "-60px" } as const;
 
@@ -261,7 +263,7 @@ export default function BrandedVerticalPage({
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
                 <Link href={signupHref}>
                   <Button size="xl" variant="glow">
-                    {signupIndustry === "legal" ? <SubsumioMark size={18} /> : <SigmaMark size={18} tile={false} />} {t.ctaPrimary}
+                    {signupIndustry === "legal" ? <SubsumioMark size={18} /> : signupIndustry === "tax" ? <TaxumioMark size={18} /> : <SigmaMark size={18} tile={false} />} {t.ctaPrimary}
                   </Button>
                 </Link>
                 <Link href={p(lang, "/compare")}>
@@ -280,18 +282,22 @@ export default function BrandedVerticalPage({
 
         {/* Product reel — Sigmabrain in action for this vertical */}
         <section className="relative z-10 py-28 px-6 max-w-5xl mx-auto">
-          <SectionHeading
-            title={lang === "de" ? "Sigmabrain in Aktion" : "Sigmabrain in action"}
-            sub={lang === "de"
-              ? "Datei anhängen, fragen, belegte Antwort erhalten — mit Fundstellen aus deinem eigenen Wissen."
-              : "Attach a file, ask, get a cited answer — backed by your own knowledge."}
-          />
+          <Reveal variant="up">
+            <SectionHeading
+              title={lang === "de" ? "Sigmabrain in Aktion" : "Sigmabrain in action"}
+              sub={lang === "de"
+                ? "Datei anhängen, fragen, belegte Antwort erhalten — mit Fundstellen aus deinem eigenen Wissen."
+                : "Attach a file, ask, get a cited answer — backed by your own knowledge."}
+            />
+          </Reveal>
           <DashboardReel lang={lang} industry={signupIndustry} className="mt-8" />
         </section>
 
         {/* Brain demo */}
         <section className="relative z-10 py-28 px-6 max-w-3xl mx-auto">
-          <LiveDemo lang={lang} {...t.demo} />
+          <Reveal variant="up">
+            <LiveDemo lang={lang} {...t.demo} />
+          </Reveal>
         </section>
 
         {/* A day in the workflow — timeline */}
@@ -333,18 +339,14 @@ export default function BrandedVerticalPage({
 
         {/* Tools that ship today */}
         <section className="relative z-10 py-28 px-6 max-w-6xl mx-auto">
-          <SectionHeading title={t.toolsTitle} sub={t.toolsSub} />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {t.tools.map((tool, i) => {
+          <Reveal variant="up">
+            <SectionHeading title={t.toolsTitle} sub={t.toolsSub} />
+          </Reveal>
+          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8" stagger={0.07}>
+            {t.tools.map((tool) => {
               const Icon = ICONS[tool.icon];
               return (
-                <motion.div
-                  key={tool.title}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewport}
-                  transition={{ duration: 0.35, delay: (i % 3) * 0.07 }}
-                >
+                <StaggerItem key={tool.title} className="h-full">
                   <Link
                     href={tool.href}
                     className="group block h-full p-6 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] hover:brand-border-strong hover:bg-[#0f0f20] hover:-translate-y-1 transition-all"
@@ -358,37 +360,32 @@ export default function BrandedVerticalPage({
                       {lang === "en" ? "Open" : "Öffnen"} <ArrowRight size={12} />
                     </span>
                   </Link>
-                </motion.div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
         </section>
 
         {/* Trust band */}
         <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-6xl mx-auto">
-            <SectionHeading title={t.trustTitle} />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {t.trust.map((tr, i) => {
+            <Reveal variant="up">
+              <SectionHeading title={t.trustTitle} />
+            </Reveal>
+            <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8" stagger={0.06}>
+              {t.trust.map((tr) => {
                 const Icon = ICONS[tr.icon];
                 return (
-                  <motion.div
-                    key={tr.title}
-                    initial={{ opacity: 0, y: 14 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={viewport}
-                    transition={{ duration: 0.35, delay: i * 0.06 }}
-                    className="p-5 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
-                  >
+                  <StaggerItem key={tr.title} className="p-5 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]">
                     <div className="w-10 h-10 rounded-lg brand-soft border brand-border flex items-center justify-center mb-4">
                       {Icon && <Icon size={18} className="brand-text" />}
                     </div>
                     <h3 className="text-sm font-semibold [color:var(--mk-text)] mb-1.5">{tr.title}</h3>
                     <p className="text-xs [color:var(--mk-text-muted)] leading-relaxed">{tr.desc}</p>
-                  </motion.div>
+                  </StaggerItem>
                 );
               })}
-            </div>
+            </StaggerContainer>
             <p className="text-xs [color:var(--mk-text-subtle)] leading-relaxed max-w-3xl mx-auto text-center mt-8">{t.honesty}</p>
           </div>
         </section>
@@ -401,21 +398,25 @@ export default function BrandedVerticalPage({
         {/* FAQ */}
         <section className="relative z-10 py-28 px-6">
           <div className="max-w-5xl mx-auto">
-            <SectionHeading title={t.faqTitle} />
+            <Reveal variant="up">
+              <SectionHeading title={t.faqTitle} />
+            </Reveal>
             <FaqList items={t.faq} />
           </div>
         </section>
 
         {/* CTA */}
         <section className="relative z-10 py-28 px-6 text-center max-w-3xl mx-auto border-t [border-color:var(--mk-border)]">
-          {signupIndustry === "legal" ? <SubsumioMark size={56} className="mx-auto mb-7" /> : <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />}
-          <h2 className="text-3xl md:text-4xl font-black [color:var(--mk-text)] mb-4">{t.ctaTitle}</h2>
-          <p className="text-lg [color:var(--mk-text-muted)] mb-10">{t.ctaSub}</p>
-          <Link href={signupHref}>
-            <Button size="xl" variant="glow">
-              {t.ctaButton} <ArrowRight size={18} />
-            </Button>
-          </Link>
+          <Reveal variant="upLg">
+            {signupIndustry === "legal" ? <SubsumioMark size={56} className="mx-auto mb-7" /> : signupIndustry === "tax" ? <TaxumioMark size={56} className="mx-auto mb-7" /> : <SigmaMark size={64} className="mx-auto mb-8 rounded-[15px] glow-purple" />}
+            <h2 className="text-3xl md:text-4xl font-black [color:var(--mk-text)] mb-4">{t.ctaTitle}</h2>
+            <p className="text-lg [color:var(--mk-text-muted)] mb-10">{t.ctaSub}</p>
+            <Link href={signupHref}>
+              <Button size="xl" variant="glow">
+                {t.ctaButton} <ArrowRight size={18} />
+              </Button>
+            </Link>
+          </Reveal>
         </section>
 
         <MarketingFooter lang={lang} />

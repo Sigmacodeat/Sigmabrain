@@ -4,6 +4,11 @@
 // reuses its vertical's funnel body and deep-links signup with the industry
 // for dashboard personalization.
 //
+// The codebase serves THREE host-routed brands:
+//   sigmabrain.com  → platform site (all verticals)
+//   subsum.io       → Subsumio standalone (legal)
+//   taxum.io        → Taxumio standalone (tax)
+//
 // BEFORE public use: trademark search (Nizza 9/42) for each product name.
 
 import type { Lang } from "./site";

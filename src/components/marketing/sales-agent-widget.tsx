@@ -354,9 +354,9 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
                       <p className="text-[13px] font-semibold tracking-tight [color:var(--mk-text)]">
                         {agent.recommendation.product} · <span className="brand-text">{agent.recommendation.label}</span>
                       </p>
-                      <p className="text-[11px] [color:var(--mk-text-muted)] mt-0.5">{t.score}: <span className="text-emerald-400 font-medium">{agent.leadScore}</span></p>
+                      <p className="text-[11px] [color:var(--mk-text-muted)] mt-0.5">{t.score}: <span className="text-[var(--brand-secondary)] font-medium">{agent.leadScore}</span></p>
                     </div>
-                    <CheckCircle2 size={18} className="text-emerald-400 shrink-0" />
+                    <CheckCircle2 size={18} className="text-[var(--brand-secondary)] shrink-0" />
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Link href={agent.recommendation.href}>
@@ -375,15 +375,15 @@ export default function SalesAgentWidget({ lang }: { lang: Lang }) {
                   animate={{ opacity: 1, y: 0 }}
                   className={`rounded-2xl border p-4 ${
                     agent.capture.saved
-                      ? "border-emerald-500/20 bg-emerald-500/[0.06]"
+                      ? "border-[var(--brand-secondary)]/20 bg-[var(--brand-secondary)]/[0.06]"
                       : "[border-color:var(--mk-border)] [background:var(--mk-surface-2)]"
                   }`}
                 >
-                  <p className={agent.capture.saved ? "text-[12px] text-emerald-300 leading-relaxed" : "text-[12px] [color:var(--mk-text-muted)] leading-relaxed"}>
+                  <p className={agent.capture.saved ? "text-[12px] text-[var(--brand-secondary)] leading-relaxed" : "text-[12px] [color:var(--mk-text-muted)] leading-relaxed"}>
                     {agent.capture.message}
                   </p>
                   {agent.capture.saved && agent.capture.leadId && (
-                    <p className="mt-2 text-[10px] font-mono text-emerald-400/60 tracking-wide">lead/{agent.capture.leadId.slice(0, 8)}</p>
+                    <p className="mt-2 text-[10px] font-mono text-[var(--brand-secondary)]/60 tracking-wide">lead/{agent.capture.leadId.slice(0, 8)}</p>
                   )}
                 </motion.div>
               )}

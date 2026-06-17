@@ -5,7 +5,7 @@
 // State-of-the-art: staggerChildren, spring physics, reduced-motion fallback,
 // GPU-optimized transforms, shared layout animations.
 
-import { motion, useReducedMotion, Variants } from "framer-motion";
+import { motion, useInView, useReducedMotion, Variants } from "framer-motion";
 import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 // ---------------------------------------------------------------------------
@@ -226,8 +226,6 @@ export function HeroReveal({ children, delay = 0, className = "" }: HeroRevealPr
 // ---------------------------------------------------------------------------
 // Animated counter (GPU-optimized, reduced-motion aware)
 // ---------------------------------------------------------------------------
-
-import { useInView } from "framer-motion";
 
 export function AnimatedCounter({
   to,
