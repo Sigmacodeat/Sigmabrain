@@ -75,10 +75,9 @@ export default function DashboardPage() {
   ];
 
   const gettingStarted = [
-    { step: 1, done: engineOnline, label: "Sigmabrain Engine starten", desc: "gbrain init --pglite && gbrain serve", action: "Setup öffnen", href: "/dashboard/settings" },
-    { step: 2, done: (stats?.total_pages ?? 0) > 0, label: "Erstes Dokument hochladen", desc: "Dokument indexieren und embedden", action: "Hochladen", href: "/dashboard/upload" },
-    { step: 3, done: (stats?.total_queries ?? 0) > 0, label: "Erste Query stellen", desc: "KI-Antwort mit Quellen erhalten", action: "Query stellen", href: "/dashboard/query" },
-    { step: 4, done: (stats?.total_edges ?? 0) > 0, label: "Wissensgraph erkunden", desc: "Verbindungen zwischen Entitäten", action: "Graph öffnen", href: "/dashboard/graph" },
+    { step: 1, done: (stats?.total_pages ?? 0) > 0, label: "Erste Akte hochladen", desc: "PDF/Dokument wird geparst, indexiert und embedded", action: "Hochladen", href: "/dashboard/upload" },
+    { step: 2, done: (stats?.total_queries ?? 0) > 0, label: "Erste Frage stellen", desc: "Belegte KI-Antwort mit Fundstellen", action: "Fragen", href: "/dashboard/query" },
+    { step: 3, done: (stats?.total_edges ?? 0) > 0, label: "Wissensgraph erkunden", desc: "Verbindungen zwischen Akten, Personen, Fristen", action: "Graph öffnen", href: "/dashboard/graph" },
   ];
 
   return (
@@ -87,13 +86,13 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold text-[#e8e8f0]">Dashboard</h1>
           <p className="text-sm text-[#8888aa] mt-0.5">
-            {loading ? "Lade Brain-Status…" : engineOnline ? "Dein Sigmabrain — verbunden" : "Dein Sigmabrain — Engine offline oder leer"}
+            {loading ? "Lade Brain-Status…" : engineOnline ? "Verbunden — frag dein Brain oder lade Akten hoch" : "Engine nicht erreichbar — Verbindung prüfen"}
           </p>
         </div>
         <div className="flex items-center gap-2">
           {!loading && (
             <Badge variant={engineOnline ? "success" : "warning"} className="text-xs">
-              {engineOnline ? "Verbunden" : "Setup erforderlich"}
+              {engineOnline ? "Verbunden" : "Offline"}
             </Badge>
           )}
           <Link href="/dashboard/upload">
