@@ -587,7 +587,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
             <div className="text-center py-6">
               <Bot size={24} className="mx-auto text-[#1e1e3a] mb-2" />
               <p className="text-xs text-[#8a8aa8]">Noch keine Nachrichten.</p>
-              <p className="text-[10px] text-[#4a4a6a] mt-1">
+              <p className="text-[10px] text-[#7878a0] mt-1">
                 {job.status === "active" || job.status === "waiting"
                   ? "Schreibe dem Agenten eine Steuerungsnachricht."
                   : "Inbox ist nur für aktive Jobs verfügbar."}
@@ -622,7 +622,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
                     : "bg-[#12122a] text-[#8888aa] border border-[#1e1e3a]"
                 )}>
                   <p className="leading-relaxed whitespace-pre-wrap break-words">{text}</p>
-                  <span className="text-[10px] text-[#4a4a6a] mt-1 block">
+                  <span className="text-[10px] text-[#7878a0] mt-1 block">
                     {new Date(msg.sent_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                     {msg.read_at && <span className="ml-1">· gelesen</span>}
                   </span>
@@ -654,7 +654,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
                 placeholder="Nachricht an Agenten…"
                 aria-label="Nachricht an Agenten"
                 disabled={inboxSending}
-                className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-violet-500/50 transition-colors disabled:opacity-50"
+                className="flex-1 bg-[#0a0a18] border border-[#1e1e3a] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] placeholder:text-[#7878a0] focus:outline-none focus:border-violet-500/50 transition-colors disabled:opacity-50"
               />
               <button
                 onClick={handleSendMessage}

@@ -325,7 +325,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
               <div className="absolute inset-0 brand-soft blur-3xl rounded-full" />
               <div className="relative glass rounded-3xl p-6 shadow-2xl shadow-black/40">
                 <GraphHero />
-                <p className="text-center text-xs text-[#4a4a6a] font-mono mt-2">
+                <p className="text-center text-xs text-[#7878a0] font-mono mt-2">
                   {lang === "en"
                     ? "typed edges, extracted on every write"
                     : "typisierte Kanten, bei jedem Write extrahiert"}
@@ -447,7 +447,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                       <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
                       <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                      <div className="flex-1 ml-4 text-xs text-[#4a4a6a] font-mono">{cat.demo.windowTitle}</div>
+                      <div className="flex-1 ml-4 text-xs text-[#7878a0] font-mono">{cat.demo.windowTitle}</div>
                     </div>
                     <div className="p-5 font-mono text-xs leading-relaxed space-y-1.5">
                       {cat.demo.lines.map((line, i) => (
@@ -476,7 +476,7 @@ export default function FeaturesPage({ lang }: { lang: Lang }) {
                 <div className="hidden lg:flex items-center justify-center h-full min-h-[300px] rounded-2xl border border-dashed border-[#1e1e3a]">
                   <div className="text-center px-8">
                     {CatIcon && <CatIcon size={32} className="brand-text mx-auto mb-4" />}
-                    <p className="text-sm text-[#4a4a6a] max-w-xs">
+                    <p className="text-sm text-[#7878a0] max-w-xs">
                       {lang === "en"
                         ? "Enforced by tests, not policy docs — deterministic, verifiable behavior."
                         : "Durch Tests erzwungen, nicht durch Policy-Dokumente — deterministisches, prüfbares Verhalten."}

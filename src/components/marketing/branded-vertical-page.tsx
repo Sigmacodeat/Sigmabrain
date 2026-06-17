@@ -156,7 +156,7 @@ function Cockpit({ c }: { c: BrandedVerticalContent["cockpit"] }) {
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-          <div className="flex-1 ml-3 text-xs text-[#4a4a6a] font-mono">{c.title}</div>
+          <div className="flex-1 ml-3 text-xs text-[#7878a0] font-mono">{c.title}</div>
         </div>
 
         <div className="p-4 space-y-3">
@@ -388,7 +388,7 @@ export default function BrandedVerticalPage({
                 );
               })}
             </div>
-            <p className="text-xs text-[#4a4a6a] leading-relaxed max-w-3xl mx-auto text-center mt-8">{t.honesty}</p>
+            <p className="text-xs text-[#7878a0] leading-relaxed max-w-3xl mx-auto text-center mt-8">{t.honesty}</p>
           </div>
         </section>
 

@@ -35,7 +35,7 @@ export default function VerticalWorkspace({ v }: { v: DashboardVertical }) {
             >
               <MessageSquare size={15} className="brand-text shrink-0 mt-0.5" />
               <span className="text-sm text-[#c8c8d8] leading-snug">{p}</span>
-              <ArrowRight size={14} className="text-[#4a4a6a] shrink-0 ml-auto mt-0.5 group-hover:brand-text transition-colors" />
+              <ArrowRight size={14} className="text-[#7878a0] shrink-0 ml-auto mt-0.5 group-hover:brand-text transition-colors" />
             </Link>
           ))}
         </div>
@@ -53,7 +53,7 @@ export default function VerticalWorkspace({ v }: { v: DashboardVertical }) {
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-[#e8e8f0]">{t.label}</h3>
-                <ArrowRight size={13} className="text-[#4a4a6a] group-hover:brand-text transition-colors" />
+                <ArrowRight size={13} className="text-[#7878a0] group-hover:brand-text transition-colors" />
               </div>
               <p className="text-xs text-[#8888aa] mt-1 leading-relaxed">{t.desc}</p>
             </Link>
@@ -73,7 +73,7 @@ export default function VerticalWorkspace({ v }: { v: DashboardVertical }) {
             </span>
           ))}
         </div>
-        <p className="text-xs text-[#4a4a6a] mt-3 leading-relaxed">
+        <p className="text-xs text-[#7878a0] mt-3 leading-relaxed">
           Diese Skills bedient der <Link href="/dashboard/assistant" className="brand-text hover:underline">Assistant</Link> bzw. die <Link href="/dashboard/agents" className="brand-text hover:underline">Agenten</Link> automatisch, wenn die Anfrage dazu passt.
         </p>
       </section>

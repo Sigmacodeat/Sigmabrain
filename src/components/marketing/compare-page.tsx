@@ -50,7 +50,7 @@ function CellValue({ value }: { value: string }) {
   }
   if (value === "k. A." || value === "n/a") {
     return (
-      <span className="inline-flex items-center gap-1.5 text-[#4a4a6a]">
+      <span className="inline-flex items-center gap-1.5 text-[#7878a0]">
         <CircleHelp size={13} className="shrink-0" />
         {value}
       </span>
@@ -163,7 +163,7 @@ function CompareMatrix({ table }: { table: CompareTable }) {
 
       <ul className="mt-4 space-y-1.5">
         {table.footnotes.map((note, i) => (
-          <li key={i} className="text-xs text-[#4a4a6a] leading-relaxed">
+          <li key={i} className="text-xs text-[#7878a0] leading-relaxed">
             {note}
           </li>
         ))}
@@ -198,7 +198,7 @@ export default function ComparePage({ lang }: { lang: Lang }) {
               <span className="text-violet-400">{t.h1b}</span>
             </h1>
             <p className="text-lg text-[#8888aa] leading-relaxed max-w-3xl mx-auto">{t.sub}</p>
-            <p className="text-xs text-[#4a4a6a] mt-6">{t.snapshot}</p>
+            <p className="text-xs text-[#7878a0] mt-6">{t.snapshot}</p>
           </motion.div>
         </section>
 
@@ -251,7 +251,7 @@ export default function ComparePage({ lang }: { lang: Lang }) {
               <ul className="space-y-3">
                 {t.whenThem.items.map((item, i) => (
                   <li key={i} className="text-sm text-[#8888aa] leading-relaxed flex gap-2.5">
-                    <ArrowRight size={14} className="text-[#4a4a6a] shrink-0 mt-1" />
+                    <ArrowRight size={14} className="text-[#7878a0] shrink-0 mt-1" />
                     {item}
                   </li>
                 ))}
@@ -303,7 +303,7 @@ export default function ComparePage({ lang }: { lang: Lang }) {
                 </li>
               ))}
             </ul>
-            <p className="text-xs text-[#4a4a6a] leading-relaxed">{t.disclaimer}</p>
+            <p className="text-xs text-[#7878a0] leading-relaxed">{t.disclaimer}</p>
           </div>
         </section>
 

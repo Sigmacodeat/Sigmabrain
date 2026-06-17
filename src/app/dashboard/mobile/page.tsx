@@ -98,9 +98,9 @@ export default function MobilePage() {
               f.available ? "border-emerald-500/20 bg-emerald-500/5" : "border-[#1e1e3a] bg-[#0a0a18]"
             )}
           >
-            <f.icon size={18} className={cn("mx-auto mb-2", f.available ? "text-emerald-400" : "text-[#4a4a6a]")} />
+            <f.icon size={18} className={cn("mx-auto mb-2", f.available ? "text-emerald-400" : "text-[#7878a0]")} />
             <div className="text-xs text-[#8888aa]">{f.label}</div>
-            <div className={cn("text-xs font-medium", f.available ? "text-emerald-400" : "text-[#4a4a6a]")}>
+            <div className={cn("text-xs font-medium", f.available ? "text-emerald-400" : "text-[#7878a0]")}>
               {f.available ? "Verfügbar" : "Nicht verfügbar"}
             </div>
           </div>

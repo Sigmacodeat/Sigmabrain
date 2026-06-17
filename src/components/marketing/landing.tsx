@@ -119,7 +119,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                 </motion.div>
               ))}
             </div>
-            <p className="text-center text-xs text-[#4a4a6a]">{t.statsNote}</p>
+            <p className="text-center text-xs text-[#7878a0]">{t.statsNote}</p>
           </div>
         </motion.section>
 
@@ -196,7 +196,7 @@ export default function LandingPage({ lang }: { lang: Lang }) {
                     className="p-6 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]"
                   >
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="text-xs font-mono text-[#4a4a6a]">{item.step}</span>
+                      <span className="text-xs font-mono text-[#7878a0]">{item.step}</span>
                       <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
                         {Icon && <Icon size={15} className="text-violet-400" />}
                       </div>

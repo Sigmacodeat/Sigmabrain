@@ -95,7 +95,7 @@ export default function PartnersPage({ lang }: { lang: Lang }) {
           <TrendingUp size={28} className="text-amber-400 mx-auto mb-6" />
           <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] mb-5">{t.calcTitle}</h2>
           <p className="text-lg text-[#e8e8f0] leading-relaxed mb-6">{t.calcSub}</p>
-          <p className="text-xs text-[#4a4a6a] max-w-xl mx-auto leading-relaxed">{t.calcNote}</p>
+          <p className="text-xs text-[#7878a0] max-w-xl mx-auto leading-relaxed">{t.calcNote}</p>
         </div>
       </section>
 
@@ -105,7 +105,7 @@ export default function PartnersPage({ lang }: { lang: Lang }) {
         <div className="grid md:grid-cols-3 gap-6">
           {t.how.map((item) => (
             <div key={item.step} className="p-6 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]">
-              <span className="text-xs font-mono text-[#4a4a6a] block mb-4">{item.step}</span>
+              <span className="text-xs font-mono text-[#7878a0] block mb-4">{item.step}</span>
               <h3 className="text-base font-semibold text-[#e8e8f0] mb-2">{item.title}</h3>
               <p className="text-sm text-[#8888aa] leading-relaxed">{item.desc}</p>
             </div>

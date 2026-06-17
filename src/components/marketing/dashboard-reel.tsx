@@ -271,7 +271,7 @@ export default function DashboardReel({
         <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-        <div className="flex-1 ml-3 text-xs text-[#4a4a6a] font-mono">sigmabrain — dashboard</div>
+        <div className="flex-1 ml-3 text-xs text-[#7878a0] font-mono">sigmabrain — dashboard</div>
         <span className="text-[10px] brand-text font-medium">live</span>
       </div>
 
@@ -323,7 +323,7 @@ export default function DashboardReel({
           {/* input bar */}
           <div className="mt-3 flex items-center gap-2 rounded-xl border border-[#1e1e3a] bg-[#0b0b16] px-2 py-2">
             <div className={`flex items-center gap-1 rounded-lg px-1.5 py-1 ${fileAttached ? "brand-soft" : ""}`}>
-              <Paperclip size={14} className={fileAttached ? "brand-text" : "text-[#4a4a6a]"} />
+              <Paperclip size={14} className={fileAttached ? "brand-text" : "text-[#7878a0]"} />
             </div>
             <div className="flex-1 text-xs text-[#e8e8f0] min-h-[16px]">
               {fileAttached && !userSent && (

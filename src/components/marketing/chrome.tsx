@@ -282,7 +282,7 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
                 ? (lang === "de" ? "Das Kanzlei-Gehirn — angetrieben von Sigmabrain." : "The law firm's brain — powered by Sigmabrain.")
                 : footer.tagline}
             </p>
-            <p className="text-xs text-[#4a4a6a] leading-relaxed max-w-xs">{footer.note}</p>
+            <p className="text-xs text-[#7878a0] leading-relaxed max-w-xs">{footer.note}</p>
           </div>
           {footer.columns.map((col) => (
             <div key={col.title}>
@@ -291,11 +291,11 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
                 {col.links.map((link) => (
                   <li key={link.label}>
                     {"external" in link && link.external ? (
-                      <a href={link.href} target="_blank" rel="noreferrer" className="text-xs text-[#4a4a6a] hover:text-[#8888aa]">{link.label}</a>
+                      <a href={link.href} target="_blank" rel="noreferrer" className="text-xs text-[#7878a0] hover:text-[#8888aa]">{link.label}</a>
                     ) : (
                       // App-Routen (/dashboard…) sind nicht lokalisiert —
                       // niemals den Sprachpräfix anhängen (/de/dashboard = 404).
-                      <Link href={link.href.startsWith("/dashboard") ? link.href : p(lang, link.href)} className="text-xs text-[#4a4a6a] hover:text-[#8888aa]">{link.label}</Link>
+                      <Link href={link.href.startsWith("/dashboard") ? link.href : p(lang, link.href)} className="text-xs text-[#7878a0] hover:text-[#8888aa]">{link.label}</Link>
                     )}
                   </li>
                 ))}
@@ -304,8 +304,8 @@ export function MarketingFooter({ lang }: { lang: Lang }) {
           ))}
         </div>
         <div className="pt-6 border-t border-[#1e1e3a] flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-xs text-[#4a4a6a]">© 2026 Sigmabrain</p>
-          <p className="text-xs text-[#4a4a6a]">
+          <p className="text-xs text-[#7878a0]">© 2026 Sigmabrain</p>
+          <p className="text-xs text-[#7878a0]">
             {lang === "en" ? "EU-hosted or self-hosted · GDPR-ready · confidentiality-first" : "EU-gehostet oder self-hosted · DSGVO-konform · vertraulichkeitskritisch"}
           </p>
         </div>
@@ -343,7 +343,7 @@ export function DemoWindow({
         <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-        <div className="flex-1 ml-4 text-xs text-[#4a4a6a] font-mono">{windowTitle}</div>
+        <div className="flex-1 ml-4 text-xs text-[#7878a0] font-mono">{windowTitle}</div>
       </div>
       <div className="px-6 pt-6 pb-4">
         <div className="flex items-start gap-3">
@@ -362,7 +362,7 @@ export function DemoWindow({
         </div>
       </div>
       <div className="px-6 py-3 border-t border-[#1e1e3a] bg-[#0a0a18] flex items-center gap-2 flex-wrap">
-        <span className="text-xs text-[#4a4a6a]">{sourcesLabel}</span>
+        <span className="text-xs text-[#7878a0]">{sourcesLabel}</span>
         {sources.map((slug) => (
           <span key={slug} className="text-xs font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded">{slug}</span>
         ))}
@@ -404,7 +404,7 @@ export function FaqList({ items }: { items: readonly { q: string; a: string }[] 
         <details key={item.q} className="group rounded-xl border border-[#1e1e3a] bg-[#0d0d1a] open:border-[#3a3a6a]">
           <summary className="flex items-center justify-between cursor-pointer list-none px-5 py-4 text-sm font-medium text-[#e8e8f0]">
             {item.q}
-            <ChevronDown size={15} className="text-[#4a4a6a] shrink-0 ml-4 group-open:rotate-180 transition-transform" />
+            <ChevronDown size={15} className="text-[#7878a0] shrink-0 ml-4 group-open:rotate-180 transition-transform" />
           </summary>
           <p className="px-5 pb-4 text-sm text-[#8888aa] leading-relaxed">{item.a}</p>
         </details>

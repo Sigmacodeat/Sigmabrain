@@ -190,14 +190,14 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
               <label className="block">
                 <span className="text-xs font-medium text-[#8888aa] mb-1.5 block">{t.name}</span>
                 <div className="relative">
-                  <UserIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4a4a6a]" aria-hidden />
+                  <UserIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7878a0]" aria-hidden />
                   <input
                     type="text"
                     autoComplete="name"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-violet-500/60"
+                    className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#7878a0] focus:outline-none focus:border-violet-500/60"
                   />
                 </div>
               </label>
@@ -205,21 +205,21 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
             <label className="block">
               <span className="text-xs font-medium text-[#8888aa] mb-1.5 block">{t.email}</span>
               <div className="relative">
-                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4a4a6a]" aria-hidden />
+                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7878a0]" aria-hidden />
                 <input
                   type="email"
                   autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-[var(--brand-primary)]"
+                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#7878a0] focus:outline-none focus:border-[var(--brand-primary)]"
                 />
               </div>
             </label>
             <label className="block">
               <span className="text-xs font-medium text-[#8888aa] mb-1.5 block">{t.password}</span>
               <div className="relative">
-                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4a4a6a]" aria-hidden />
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7878a0]" aria-hidden />
                 <input
                   type="password"
                   autoComplete={mode === "signup" ? "new-password" : "current-password"}
@@ -227,10 +227,10 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
                   minLength={8}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] focus:outline-none focus:border-[var(--brand-primary)]"
+                  className="w-full bg-[#0a0a18] border border-[#1e1e3a] rounded-lg pl-9 pr-3 py-2.5 text-sm text-[#e8e8f0] placeholder:text-[#7878a0] focus:outline-none focus:border-[var(--brand-primary)]"
                 />
               </div>
-              {mode === "signup" && <span className="text-xs text-[#4a4a6a] mt-1 block">{t.passwordHint}</span>}
+              {mode === "signup" && <span className="text-xs text-[#7878a0] mt-1 block">{t.passwordHint}</span>}
               {mode === "login" && (
                 <Link href={p(lang, "/forgot")} className="text-xs text-violet-400 hover:underline mt-1.5 inline-block">
                   {lang === "de" ? "Passwort vergessen?" : "Forgot password?"}
@@ -252,7 +252,7 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
                   ))}
                   <option value="other">{t.otherIndustry}</option>
                 </select>
-                <span className="text-xs text-[#4a4a6a] mt-1 block">{t.industryHint}</span>
+                <span className="text-xs text-[#7878a0] mt-1 block">{t.industryHint}</span>
               </label>
             )}
 
@@ -275,7 +275,7 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
                   <div className="w-full border-t border-[#1e1e3a]" />
                 </div>
                 <div className="relative flex justify-center text-xs">
-                  <span className="bg-[#0a0a18] px-2 text-[#4a4a6a]">
+                  <span className="bg-[#0a0a18] px-2 text-[#7878a0]">
                     {lang === "de" ? "oder" : "or"}
                   </span>
                 </div>
@@ -306,7 +306,7 @@ function AuthFormInner({ mode, lang }: { mode: "login" | "signup"; lang: Lang })
                 </button>
               </div>
               {ssoLoading && (
-                <p className="text-xs text-[#4a4a6a] text-center mt-2">
+                <p className="text-xs text-[#7878a0] text-center mt-2">
                   {lang === "de" ? "Weiterleitung zum Anbieter..." : "Redirecting to provider..."}
                 </p>
               )}

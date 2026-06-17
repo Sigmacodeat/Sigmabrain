@@ -10,7 +10,7 @@ function Shell({ home, title, subtitle, children }: { home: string; title: strin
       <div className="max-w-2xl mx-auto">
         <Link href={home} className="text-sm text-violet-400 hover:underline">← Sigmabrain</Link>
         <h1 className="text-3xl font-black text-[#e8e8f0] mt-8 mb-2">{title}</h1>
-        <p className="text-xs text-[#4a4a6a] mb-6">{subtitle}</p>
+        <p className="text-xs text-[#7878a0] mb-6">{subtitle}</p>
         <div className="space-y-3 text-sm text-[#8888aa] leading-relaxed">{children}</div>
       </div>
     </div>
@@ -34,7 +34,7 @@ function LegalLinks({ home, exclude }: { home: string; exclude: "privacy" | "ter
     { key: "imprint", href: `${home === "/" ? "" : home}/imprint`, label: "Impressum" },
   ].filter((l) => l.key !== exclude);
   return (
-    <p className="pt-6 text-xs text-[#4a4a6a]">
+    <p className="pt-6 text-xs text-[#7878a0]">
       Siehe auch:{" "}
       {links.map((l, i) => (
         <span key={l.key}>

@@ -17,7 +17,7 @@ export default function NotFound() {
           The page you&apos;re looking for doesn&apos;t exist — and unlike your knowledge,
           we can&apos;t synthesize it from sources.
         </p>
-        <p className="text-xs text-[#4a4a6a] mb-10">
+        <p className="text-xs text-[#7878a0] mb-10">
           Diese Seite existiert nicht. Zurück zur Startseite?
         </p>
         <div className="flex items-center justify-center gap-3">

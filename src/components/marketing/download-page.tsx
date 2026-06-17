@@ -245,7 +245,7 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                     ))}
                   </ol>
                   {platform.note && (
-                    <p className="text-xs text-[#4a4a6a] leading-relaxed mt-5 pt-4 border-t border-[#1e1e3a]">
+                    <p className="text-xs text-[#7878a0] leading-relaxed mt-5 pt-4 border-t border-[#1e1e3a]">
                       {platform.note}
                     </p>
                   )}
@@ -284,9 +284,9 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                   aria-disabled="true"
                   className="flex items-center gap-3 px-6 py-3 rounded-xl border border-dashed border-[#3a3a6a] bg-[#0a0a18] opacity-70 select-none"
                 >
-                  <DownloadIcon size={16} className="text-[#4a4a6a]" />
+                  <DownloadIcon size={16} className="text-[#7878a0]" />
                   <div className="text-left">
-                    <p className="text-[10px] text-[#4a4a6a] uppercase tracking-wide">
+                    <p className="text-[10px] text-[#7878a0] uppercase tracking-wide">
                       {lang === "en" ? "Coming soon to" : "Bald im"}
                     </p>
                     <p className="text-sm font-semibold text-[#8888aa]">{store}</p>
@@ -294,7 +294,7 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-[#4a4a6a] max-w-xl mx-auto leading-relaxed">{t.storesNote}</p>
+            <p className="text-xs text-[#7878a0] max-w-xl mx-auto leading-relaxed">{t.storesNote}</p>
           </div>
         </section>
 

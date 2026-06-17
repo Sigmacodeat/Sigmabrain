@@ -160,7 +160,7 @@ export default function RecoveryForm({ mode, lang }: { mode: "forgot" | "reset";
                 <label className="block">
                   <span className="text-xs font-medium text-[#8888aa] mb-1.5 block">{t.email}</span>
                   <div className="relative">
-                    <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4a4a6a]" aria-hidden />
+                    <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7878a0]" aria-hidden />
                     <input
                       type="email"
                       autoComplete="email"
@@ -176,7 +176,7 @@ export default function RecoveryForm({ mode, lang }: { mode: "forgot" | "reset";
                   <label className="block">
                     <span className="text-xs font-medium text-[#8888aa] mb-1.5 block">{t.password}</span>
                     <div className="relative">
-                      <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4a4a6a]" aria-hidden />
+                      <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7878a0]" aria-hidden />
                       <input
                         type="password"
                         autoComplete="new-password"
@@ -187,12 +187,12 @@ export default function RecoveryForm({ mode, lang }: { mode: "forgot" | "reset";
                         className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#0a0a18] border border-[#1e1e3a] focus:border-violet-500/50 focus:outline-none focus:ring-2 focus:ring-violet-500/20 text-sm text-[#e8e8f0]"
                       />
                     </div>
-                    <span className="text-xs text-[#4a4a6a] mt-1 block">{t.passwordHint}</span>
+                    <span className="text-xs text-[#7878a0] mt-1 block">{t.passwordHint}</span>
                   </label>
                   <label className="block">
                     <span className="text-xs font-medium text-[#8888aa] mb-1.5 block">{t.passwordConfirm}</span>
                     <div className="relative">
-                      <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#4a4a6a]" aria-hidden />
+                      <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7878a0]" aria-hidden />
                       <input
                         type="password"
                         autoComplete="new-password"

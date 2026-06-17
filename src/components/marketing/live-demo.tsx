@@ -97,7 +97,7 @@ export default function LiveDemo({
         <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-        <div className="flex-1 ml-4 text-xs text-[#4a4a6a] font-mono">{windowTitle}</div>
+        <div className="flex-1 ml-4 text-xs text-[#7878a0] font-mono">{windowTitle}</div>
       </div>
 
       {/* editable question */}
@@ -113,7 +113,7 @@ export default function LiveDemo({
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(); } }}
               rows={2}
               placeholder={t.placeholder}
-              className="flex-1 bg-transparent text-sm text-[#e8e8f0] placeholder:text-[#4a4a6a] resize-none focus:outline-none leading-relaxed"
+              className="flex-1 bg-transparent text-sm text-[#e8e8f0] placeholder:text-[#7878a0] resize-none focus:outline-none leading-relaxed"
             />
             <button
               onClick={ask}
@@ -159,13 +159,13 @@ export default function LiveDemo({
           <span className="text-xs text-amber-400/80">{note}</span>
         ) : !live ? (
           <>
-            <span className="text-xs text-[#4a4a6a]">{sourcesLabel}</span>
+            <span className="text-xs text-[#7878a0]">{sourcesLabel}</span>
             {sources.map((slug) => (
               <span key={slug} className="text-xs font-mono brand-text brand-soft px-2 py-0.5 rounded">{slug}</span>
             ))}
           </>
         ) : (
-          <span className="text-xs text-[#4a4a6a]">{lang === "en" ? "Read-only demo brain · your data stays yours" : "Read-only Demo-Brain · deine Daten bleiben deine"}</span>
+          <span className="text-xs text-[#7878a0]">{lang === "en" ? "Read-only demo brain · your data stays yours" : "Read-only Demo-Brain · deine Daten bleiben deine"}</span>
         )}
       </div>
     </div>

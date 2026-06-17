@@ -60,7 +60,7 @@ export function PricingGrid({ lang }: { lang: Lang }) {
           </div>
         ))}
       </div>
-      <p className="text-center text-xs text-[#4a4a6a] mt-8 max-w-2xl mx-auto">{pricing.footnote}</p>
+      <p className="text-center text-xs text-[#7878a0] mt-8 max-w-2xl mx-auto">{pricing.footnote}</p>
     </>
   );
 }

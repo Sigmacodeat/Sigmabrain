@@ -90,7 +90,7 @@ export default function BranchPricing({ lang, industry }: { lang: Lang; industry
         })}
       </div>
 
-      <p className="text-center text-xs text-[#4a4a6a] mt-6">
+      <p className="text-center text-xs text-[#7878a0] mt-6">
         {PRICING[lang].footnote}{" "}
         <Link href={p(lang, "/pricing")} className="brand-text hover:underline">
           {lang === "en" ? "Full pricing & FAQ" : "Alle Preise & FAQ"}

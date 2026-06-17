@@ -199,7 +199,7 @@ export default function AuditTrail() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-xs text-[#4a4a6a] uppercase tracking-wider border-b border-[#1e1e3a]">
+                <tr className="text-left text-xs text-[#7878a0] uppercase tracking-wider border-b border-[#1e1e3a]">
                   <th className="px-4 py-3 font-medium">Zeitpunkt</th>
                   <th className="px-4 py-3 font-medium">Aktion</th>
                   <th className="px-4 py-3 font-medium">Typ</th>
@@ -243,7 +243,7 @@ export default function AuditTrail() {
               </tbody>
             </table>
           </div>
-          <div className="px-4 py-3 border-t border-[#1e1e3a] text-xs text-[#4a4a6a]">
+          <div className="px-4 py-3 border-t border-[#1e1e3a] text-xs text-[#7878a0]">
             {filtered.length} von {entries.length} Einträgen
           </div>
         </div>

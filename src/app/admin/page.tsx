@@ -4,7 +4,7 @@
 
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Users, CreditCard, Gift, Shield, ArrowLeft, ClipboardList, MessageSquare } from "lucide-react";
+import { Users, CreditCard, Gift, Shield, ArrowLeft, ClipboardList, MessageSquare, Mail } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getSessionUser } from "@/lib/auth/server";
 import { getStore } from "@/lib/auth/store";
@@ -110,6 +110,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
           <TabLink href="/admin" icon={Users} label="Kunden" active={tab === "customers"} />
           <TabLink href="/admin?tab=leads" icon={MessageSquare} label="Sales-Leads" active={tab === "leads"} />
           <TabLink href="/admin?tab=audit" icon={ClipboardList} label="Audit-Trail" active={tab === "audit"} />
+          <TabLink href="/admin/mailbox" icon={Mail} label="Mailbox" />
         </div>
 
         {tab === "audit" ? (
@@ -124,7 +125,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
             </div>
             <div className="divide-y divide-[#1e1e3a]">
               {leads.length === 0 && (
-                <div className="px-5 py-10 text-center text-sm text-[#4a4a6a]">
+                <div className="px-5 py-10 text-center text-sm text-[#7878a0]">
                   Noch keine gespeicherten Advisor-Leads.
                 </div>
               )}
@@ -147,7 +148,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
                           {lead.leadScore}
                         </span>
                       </div>
-                      <p className="text-xs text-[#4a4a6a] mt-1">
+                      <p className="text-xs text-[#7878a0] mt-1">
                         {lead.createdAt.slice(0, 16).replace("T", " ")} · {lead.path}
                       </p>
                     </div>
@@ -187,7 +188,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-xs text-[#4a4a6a] uppercase tracking-wider border-b border-[#1e1e3a]">
+                    <tr className="text-left text-xs text-[#7878a0] uppercase tracking-wider border-b border-[#1e1e3a]">
                       <th className="px-5 py-3 font-medium">Name</th>
                       <th className="px-5 py-3 font-medium">E-Mail</th>
                       <th className="px-5 py-3 font-medium">Plan</th>
@@ -201,7 +202,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
                   <tbody>
                     {users.length === 0 && (
                       <tr>
-                        <td colSpan={8} className="px-5 py-10 text-center text-[#4a4a6a]">
+                        <td colSpan={8} className="px-5 py-10 text-center text-[#7878a0]">
                           Noch keine Kunden. Der erste Signup wird automatisch Admin.
                         </td>
                       </tr>
@@ -223,7 +224,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
                         <td className="px-5 py-3 font-mono text-xs text-[#8888aa]">{u.referredBy ?? "—"}</td>
                         <td className="px-5 py-3 text-[#8888aa]">{referralCounts.get(u.referralCode) ?? 0}</td>
                         <td className="px-5 py-3 text-[#8888aa]">{indirectCounts.get(u.referralCode) ?? 0}</td>
-                        <td className="px-5 py-3 text-[#4a4a6a] text-xs">{u.createdAt.slice(0, 10)}</td>
+                        <td className="px-5 py-3 text-[#7878a0] text-xs">{u.createdAt.slice(0, 10)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -231,7 +232,7 @@ export default async function AdminPage({ searchParams }: { searchParams?: Promi
               </div>
             </div>
 
-            <p className="text-xs text-[#4a4a6a]">
+            <p className="text-xs text-[#7878a0]">
               Provisions-Auszahlungen an Affiliates laufen über das Affiliate-Tool (siehe Partnerprogramm;
               für die Zwei-Ebenen-Struktur braucht es FirstPromoter o. ä. — Rewardful kann kein natives 2-Tier) —
               diese Tabelle zeigt die produktinterne Attribution: direkte Referrals (Ebene 1) und
