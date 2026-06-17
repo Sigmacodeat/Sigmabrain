@@ -4,7 +4,11 @@
 
 import { Calculator } from "lucide-react";
 
-export function TaxumioMark({ size = 36, className = "" }: { size?: number; className?: string }) {
+export function TaxumioMark({ size = 36, tile = true, className = "" }: { size?: number; tile?: boolean; className?: string }) {
+  if (!tile) {
+    return <Calculator size={size} className={`text-[#10b981] ${className}`} strokeWidth={2} aria-hidden />;
+  }
+
   return (
     <span className={`relative inline-flex shrink-0 ${className}`} style={{ width: size, height: size }}>
       {/* soft outer halo */}

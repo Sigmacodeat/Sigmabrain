@@ -52,7 +52,7 @@ function PhoneMockup({ lang }: { lang: Lang }) {
       className="relative mx-auto w-[260px]"
     >
       {/* glow */}
-      <div className="absolute -inset-6 bg-violet-600/20 blur-3xl rounded-full" />
+      <div className="absolute -inset-6 bg-[var(--brand-primary)]/20 blur-3xl rounded-full" />
 
       {/* gentle float */}
       <motion.div
@@ -68,7 +68,7 @@ function PhoneMockup({ lang }: { lang: Lang }) {
           <div className="flex items-center justify-between px-5 pt-3 text-[9px] [color:var(--mk-text-muted)] font-mono">
             <span>9:41</span>
             <span className="flex items-center gap-1">
-              <span className="w-1 h-1 rounded-full bg-violet-400" /> Σ
+              <span className="w-1 h-1 rounded-full bg-[var(--brand-primary)]" /> Σ
             </span>
           </div>
 
@@ -85,7 +85,7 @@ function PhoneMockup({ lang }: { lang: Lang }) {
             transition={{ delay: 0.6, duration: 0.4 }}
             className="mx-4 flex items-center gap-2 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-bg)] px-3 py-2"
           >
-            <Search size={12} className="text-violet-400" />
+            <Search size={12} className="text-[var(--brand-primary)]" />
             <span className="text-[10px] [color:var(--mk-text-muted)]">
               {lang === "en" ? "Ask your brain…" : "Frag dein Brain…"}
             </span>
@@ -96,7 +96,7 @@ function PhoneMockup({ lang }: { lang: Lang }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.95, duration: 0.45 }}
-            className="mx-4 mt-3 rounded-xl border border-violet-500/20 bg-violet-500/[0.05] p-3"
+            className="mx-4 mt-3 rounded-xl border border-[var(--brand-primary)]/20 bg-[var(--brand-primary)]/[0.05] p-3"
           >
             <p className="text-[10px] [color:var(--mk-text-muted)] leading-relaxed mb-2">
               {lang === "en"
@@ -111,7 +111,7 @@ function PhoneMockup({ lang }: { lang: Lang }) {
                 transition={{ delay: 1.2 + i * 0.18, duration: 0.3 }}
                 className="flex items-center gap-1.5 mb-1"
               >
-                <span className="w-1 h-1 rounded-full bg-violet-400 shrink-0" />
+                <span className="w-1 h-1 rounded-full bg-[var(--brand-primary)] shrink-0" />
                 <span className="h-1.5 rounded-full bg-[#2a2a52]" style={{ width: `${70 - i * 12}%` }} />
               </motion.div>
             ))}
@@ -132,7 +132,7 @@ function PhoneMockup({ lang }: { lang: Lang }) {
             transition={{ delay: 2.2, duration: 0.4 }}
             className="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full border [border-color:var(--mk-border)] [background:var(--mk-surface)] px-3 py-1.5"
           >
-            <WifiOff size={10} className="text-emerald-400" />
+            <WifiOff size={10} className="text-[var(--brand-secondary)]" />
             <span className="text-[9px] [color:var(--mk-text-muted)]">
               {lang === "en" ? "Works offline" : "Funktioniert offline"}
             </span>
@@ -172,8 +172,8 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="text-center lg:text-left"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-xs text-violet-400 font-medium mb-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/10 text-xs text-[var(--brand-primary)] font-medium mb-8">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-primary)] animate-pulse" />
                 {t.badge}
               </div>
               <h1 className="text-4xl md:text-6xl font-black [color:var(--mk-text)] leading-[1.08] tracking-tight mb-6">
@@ -227,17 +227,17 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewport}
                   transition={{ delay: idx * 0.08, duration: 0.3 }}
-                  className="p-7 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] hover:border-violet-500/40 hover:bg-[#0f0f20] hover:-translate-y-1 transition-all flex flex-col"
+                  className="p-7 rounded-2xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] hover:border-[var(--brand-primary)]/40 hover:bg-[#0f0f20] hover:-translate-y-1 transition-all flex flex-col"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-5">
-                    <Icon size={22} className="text-violet-400" />
+                  <div className="w-12 h-12 rounded-xl bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 flex items-center justify-center mb-5">
+                    <Icon size={22} className="text-[var(--brand-primary)]" />
                   </div>
                   <h2 className="text-lg font-bold [color:var(--mk-text)] mb-1">{platform.name}</h2>
-                  <p className="text-sm text-violet-400 font-medium mb-5">{platform.tagline}</p>
+                  <p className="text-sm text-[var(--brand-primary)] font-medium mb-5">{platform.tagline}</p>
                   <ol className="space-y-3 flex-1">
                     {platform.steps.map((step, i) => (
                       <li key={step} className="flex gap-3 text-sm [color:var(--mk-text-muted)] leading-relaxed">
-                        <span className="w-5 h-5 rounded-full bg-violet-600/20 border border-violet-500/30 text-violet-400 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="w-5 h-5 rounded-full bg-[var(--brand-primary)]/20 border border-[var(--brand-primary)]/30 text-[var(--brand-primary)] text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                           {i + 1}
                         </span>
                         {step}
@@ -270,7 +270,7 @@ export default function DownloadPage({ lang }: { lang: Lang }) {
                 const Icon = f.icon;
                 return (
                   <span key={f.label} className="inline-flex items-center gap-2 px-4 py-2 rounded-full border [border-color:var(--mk-border)] [background:var(--mk-surface)] text-xs [color:var(--mk-text-muted)]">
-                    <Icon size={13} className="text-violet-400" /> {f.label}
+                    <Icon size={13} className="text-[var(--brand-primary)]" /> {f.label}
                   </span>
                 );
               })}

@@ -4,7 +4,11 @@
 
 import { Scale } from "lucide-react";
 
-export function SubsumioMark({ size = 36, className = "" }: { size?: number; className?: string }) {
+export function SubsumioMark({ size = 36, tile = true, className = "" }: { size?: number; tile?: boolean; className?: string }) {
+  if (!tile) {
+    return <Scale size={size} className={`text-[#3b82f6] ${className}`} strokeWidth={2} aria-hidden />;
+  }
+
   return (
     <span className={`relative inline-flex shrink-0 ${className}`} style={{ width: size, height: size }}>
       {/* soft outer halo */}

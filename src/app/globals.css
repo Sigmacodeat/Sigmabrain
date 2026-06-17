@@ -95,9 +95,9 @@
   --mk-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* Marketing tone scopes. Both verified WCAG-AA for body + muted text.
-   LIGHT (on #ffffff): text #1a1a24 16.1:1, muted #5b5b6b 6.6:1,
-   subtle #6c6c7e 4.7:1. DARK (on #0d0d1a): text 15.6:1, muted 6.0:1. */
+/* Marketing tone scopes. All verified WCAG-AA (≥ 4.5:1) for body + muted + subtle.
+   LIGHT (on #f7f8fa surface): text #0f0f1a 17.5:1, muted #555668 6.6:1, subtle #6c6e7a 4.8:1.
+   DARK (on #0d0d1a surface): text #e8e8f0 15.6:1, muted #8888aa 5.6:1, subtle #8282a6 4.6:1. */
 [data-tone="light"] {
   --mk-bg: #f0f1f5;
   --mk-surface: #f7f8fa;
@@ -108,7 +108,8 @@
   --mk-text: #0f0f1a;
   --mk-text-muted: #555668;
   --mk-text-subtle: #6c6e7a;
-  --mk-card-shadow: 0 1px 2px rgba(15, 15, 30, 0.04), 0 8px 24px rgba(15, 15, 30, 0.05);
+  --mk-card-shadow: 0 1px 2px rgba(15, 15, 30, 0.04), 0 8px 24px rgba(15, 15, 30, 0.06),
+                    0 1px 0 rgba(255, 255, 255, 0.8) inset;
   --brand-text: var(--brand-primary);
   color-scheme: light;
 }
@@ -135,8 +136,8 @@
   --mk-border-strong: #3a3a6a;
   --mk-text: #e8e8f0;
   --mk-text-muted: #8888aa;
-  --mk-text-subtle: #7878a0;
-  --mk-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --mk-text-subtle: #8282a6;  /* bumped from #7878a0 → 4.6:1 on #0d0d1a (AA ✓) */
+  --mk-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255,255,255,0.04) inset;
   --brand-text: var(--brand-secondary);
   color-scheme: dark;
 }
@@ -502,6 +503,80 @@ code, pre {
 .orb-slow {
   animation: orb-float 12s ease-in-out infinite reverse;
   filter: blur(80px);
+}
+
+/* Gradient border animation — premium badge/card outline */
+@keyframes gradient-border-spin {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-border {
+  background: linear-gradient(135deg, var(--brand-gradient-from), var(--brand-gradient-via), var(--brand-gradient-to), var(--brand-gradient-from));
+  background-size: 300% 300%;
+  animation: gradient-border-spin 4s ease infinite;
+}
+
+/* Animated gradient text — for hero taglines */
+.gradient-text-animated {
+  background: linear-gradient(135deg, var(--brand-gradient-from) 0%, var(--brand-gradient-via) 50%, var(--brand-gradient-to) 100%);
+  background-size: 200% 200%;
+  animation: gradient-border-spin 5s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Clip-path reveal — baseline for CSS-only usage (framer handles the motion) */
+.clip-reveal {
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+/* Line reveal — horizontal wipe from left */
+@keyframes line-reveal {
+  from { transform: scaleX(0); transform-origin: left; }
+  to { transform: scaleX(1); transform-origin: left; }
+}
+
+.line-reveal {
+  animation: line-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Float subtle — for icons/marks in hero */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.float-gentle {
+  animation: float-gentle 3.5s ease-in-out infinite;
+}
+
+/* Card surface glint — ultra-premium inset highlight on hover */
+@keyframes surface-glint {
+  0% { opacity: 0; transform: translateX(-100%) rotate(-15deg); }
+  50% { opacity: 0.06; }
+  100% { opacity: 0; transform: translateX(200%) rotate(-15deg); }
+}
+
+.surface-glint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+  animation: surface-glint 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Scroll-snap for section pagination on mobile */
+@media (max-width: 768px) {
+  .snap-section {
+    scroll-snap-align: start;
+  }
+  .snap-container {
+    scroll-snap-type: y proximity;
+  }
 }
 
 /* Accessibility: respect users who prefer reduced motion.

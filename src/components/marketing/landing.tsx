@@ -26,6 +26,7 @@ import {
   FaqList,
   ICONS,
 } from "./chrome";
+import { GlowCard, ClipReveal, StaggerContainer, StaggerItem, ScrollProgress } from "./motion-system";
 
 const viewport = { once: true, margin: "0px 0px 80px 0px", amount: 0.12 } as const;
 
@@ -54,9 +55,10 @@ export default function LandingPage({ lang }: { lang: Lang }) {
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen [background:var(--mk-bg)] overflow-x-hidden" lang={lang}>
+        <ScrollProgress />
         <MarketingBackground />
         {/* Light hero band — nav + hero on a cool premium gray surface */}
-        <div data-tone="light" className="relative">
+        <div data-tone="light" className="relative" style={{ background: "var(--mk-bg)" }}>
         <MarketingNav lang={lang} theme="light" />
 
         {/* Hero */}
@@ -109,20 +111,14 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         {/* Stats */}
         <motion.section {...reveal} className="relative z-10 py-28 px-6 border-y [border-color:var(--mk-border)] [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)]">
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center mb-6">
-              {t.stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewport}
-                  transition={{ duration: 0.4, delay: i * 0.08 }}
-                >
-                  <p className="text-3xl font-black gradient-text mb-1">{stat.value}</p>
+            <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center mb-6" stagger={0.09}>
+              {t.stats.map((stat) => (
+                <StaggerItem key={stat.label}>
+                  <p className="text-3xl font-black gradient-text-animated mb-1">{stat.value}</p>
                   <p className="text-sm [color:var(--mk-text-muted)]">{stat.label}</p>
-                </motion.div>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
             <p className="text-center text-xs [color:var(--mk-text-subtle)]">{t.statsNote}</p>
           </div>
         </motion.section>
@@ -148,34 +144,30 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         </section>
 
         {/* Features — light band (cool premium gray, never warm beige) */}
-        <section id="features" data-tone="light" className="relative z-10 py-28 px-6">
+        <section id="features" data-tone="light" className="relative z-10 py-28 px-6" style={{ background: "var(--mk-bg)" }}>
           <div className="max-w-7xl mx-auto">
             <motion.div {...reveal}>
               <SectionHeading badge="Features" title={t.featuresTitle} sub={t.featuresSub} />
             </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {t.features.map((f, i) => {
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" stagger={0.07} y={16}>
+              {t.features.map((f) => {
                 const Icon = ICONS[f.icon];
                 return (
-                  <motion.div
-                    key={f.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={viewport}
-                    transition={{ duration: 0.4, delay: (i % 3) * 0.08 }}
-                    whileHover={{ y: -4 }}
-                    className="p-6 rounded-2xl [background:var(--mk-surface)] border [border-color:var(--mk-border)]"
-                    style={{ boxShadow: "var(--mk-card-shadow)" }}
-                  >
-                    <div className={`w-10 h-10 rounded-lg border flex items-center justify-center mb-4 ${LIGHT_COLOR_MAP[f.color] ?? LIGHT_COLOR_MAP.blue}`}>
-                      {Icon && <Icon size={18} />}
-                    </div>
-                    <h3 className="text-base font-semibold mb-2 [color:var(--mk-text)]">{f.title}</h3>
-                    <p className="text-sm leading-relaxed [color:var(--mk-text-muted)]">{f.desc}</p>
-                  </motion.div>
+                  <StaggerItem key={f.title}>
+                    <GlowCard
+                      className="h-full p-6 rounded-2xl [background:var(--mk-surface)] border [border-color:var(--mk-border)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:[border-color:var(--mk-border-strong)]"
+                      style={{ boxShadow: "var(--mk-card-shadow)" } as React.CSSProperties}
+                    >
+                      <div className={`w-10 h-10 rounded-lg border flex items-center justify-center mb-4 ${LIGHT_COLOR_MAP[f.color] ?? LIGHT_COLOR_MAP.blue}`}>
+                        {Icon && <Icon size={18} />}
+                      </div>
+                      <h3 className="text-base font-semibold mb-2 [color:var(--mk-text)]">{f.title}</h3>
+                      <p className="text-sm leading-relaxed [color:var(--mk-text-muted)]">{f.desc}</p>
+                    </GlowCard>
+                  </StaggerItem>
                 );
               })}
-            </div>
+            </StaggerContainer>
           </div>
         </section>
 
@@ -183,30 +175,27 @@ export default function LandingPage({ lang }: { lang: Lang }) {
         <section className="relative z-10 py-28 px-6 [background:color-mix(in_srgb,var(--mk-surface)_50%,transparent)] border-y [border-color:var(--mk-border)]">
           <div className="max-w-5xl mx-auto">
             <motion.div {...reveal}><SectionHeading title={t.howTitle} /></motion.div>
-            <div className="grid md:grid-cols-3 gap-6">
-              {t.how.map((item, i) => {
+            <StaggerContainer className="grid md:grid-cols-3 gap-6" stagger={0.1} y={18}>
+              {t.how.map((item) => {
                 const Icon = ICONS[item.icon];
                 return (
-                  <motion.div
-                    key={item.step}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={viewport}
-                    transition={{ duration: 0.4, delay: i * 0.1 }}
-                    className="p-6 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)]"
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="text-xs font-mono [color:var(--mk-text-subtle)]">{item.step}</span>
-                      <div className="w-8 h-8 rounded-lg bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 flex items-center justify-center">
-                        {Icon && <Icon size={15} className="text-[var(--brand-primary)]" />}
+                  <StaggerItem key={item.step}>
+                    <GlowCard
+                      className="h-full p-6 rounded-xl border [border-color:var(--mk-border)] [background:var(--mk-surface)] transition-all duration-300 hover:-translate-y-1 hover:[border-color:var(--mk-border-strong)]"
+                    >
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="text-xs font-mono [color:var(--mk-text-subtle)]">{item.step}</span>
+                        <div className="w-8 h-8 rounded-lg bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 flex items-center justify-center">
+                          {Icon && <Icon size={15} className="text-[var(--brand-primary)]" />}
+                        </div>
                       </div>
-                    </div>
-                    <h3 className="text-base font-semibold [color:var(--mk-text)] mb-2">{item.title}</h3>
-                    <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{item.desc}</p>
-                  </motion.div>
+                      <h3 className="text-base font-semibold [color:var(--mk-text)] mb-2">{item.title}</h3>
+                      <p className="text-sm [color:var(--mk-text-muted)] leading-relaxed">{item.desc}</p>
+                    </GlowCard>
+                  </StaggerItem>
                 );
               })}
-            </div>
+            </StaggerContainer>
           </div>
         </section>
 

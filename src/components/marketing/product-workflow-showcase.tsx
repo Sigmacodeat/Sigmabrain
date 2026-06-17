@@ -21,7 +21,7 @@ const copy = {
   en: {
     eyebrow: "Workflow view",
     title: "From scattered work to one cited answer.",
-    sub: "Meetings, emails, PDFs and tasks flow into a permission-aware brain. Sigmabrain links the context, keeps the source trail visible, and routes the next action to the right workspace.",
+    sub: "Meetings, emails, PDFs and tasks flow into a permission-aware brain. {brand} links the context, keeps the source trail visible, and routes the next action to the right workspace.",
     query: "What changed since the last meeting?",
     answer: "3 material changes found. Two are low risk, one needs review before the next deadline.",
     sourceA: "Board notes",
@@ -35,7 +35,7 @@ const copy = {
   de: {
     eyebrow: "Workflow-Ansicht",
     title: "Aus verstreuter Arbeit wird eine belegte Antwort.",
-    sub: "Meetings, E-Mails, PDFs und Aufgaben laufen in ein rechtebewusstes Brain. Sigmabrain verbindet den Kontext, hält die Quellen sichtbar und routet den nächsten Schritt in den richtigen Workspace.",
+    sub: "Meetings, E-Mails, PDFs und Aufgaben laufen in ein rechtebewusstes Brain. {brand} verbindet den Kontext, hält die Quellen sichtbar und routet den nächsten Schritt in den richtigen Workspace.",
     query: "Was hat sich seit dem letzten Termin geändert?",
     answer: "3 relevante Änderungen gefunden. Zwei sind unkritisch, eine sollte vor der nächsten Frist geprüft werden.",
     sourceA: "Meeting-Notiz",
@@ -90,7 +90,7 @@ export default function ProductWorkflowShowcase({
             {brand}<br />
             <span className="gradient-text glow-text">{signature}</span>
           </h2>
-          <p className="text-base md:text-lg [color:var(--mk-text-muted)] leading-relaxed mb-8">{c.sub}</p>
+          <p className="text-base md:text-lg [color:var(--mk-text-muted)] leading-relaxed mb-8">{c.sub.replace("{brand}", brand)}</p>
           <div className="grid gap-3">
             {c.steps.map((step, i) => (
               <motion.div
@@ -148,7 +148,7 @@ export default function ProductWorkflowShowcase({
                     {[
                       { icon: FileText, label: c.sourceA, tone: "brand-soft" },
                       { icon: MessageSquare, label: c.sourceB, tone: "bg-cyan-500/10 border-cyan-500/20" },
-                      { icon: ShieldCheck, label: c.sourceC, tone: "bg-emerald-500/10 border-emerald-500/20" },
+                      { icon: ShieldCheck, label: c.sourceC, tone: "bg-[var(--brand-secondary)]/10 border-[var(--brand-secondary)]/20" },
                     ].map((source, i) => {
                       const Icon = source.icon;
                       return (
@@ -163,7 +163,7 @@ export default function ProductWorkflowShowcase({
                           <div className="flex items-center gap-3">
                             <Icon size={17} className="brand-text" />
                             <span className="text-sm font-medium [color:var(--mk-text)]">{source.label}</span>
-                            <CheckCircle2 size={16} className="ml-auto text-emerald-400" />
+                            <CheckCircle2 size={16} className="ml-auto text-[var(--brand-secondary)]" />
                           </div>
                           <div className="mt-3 h-1.5 rounded-full [background:var(--mk-border)] overflow-hidden">
                             <motion.div

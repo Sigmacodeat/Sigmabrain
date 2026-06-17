@@ -66,7 +66,7 @@ function Hero({
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href={primaryHref}>
               <Button size="xl" variant="glow" className="min-w-[220px]">
-                <SubsumioMark size={18} /> {primaryLabel}
+                <SubsumioMark size={18} tile={false} /> {primaryLabel}
               </Button>
             </Link>
             <Link href={p(lang, "/subsumio")}>

@@ -257,15 +257,40 @@ function requestSourceId(req: Request): string {
   return v && SOURCE_RE.test(v) ? v : 'default';
 }
 
+/**
+ * Shared, public, READ-ONLY reference sources every tenant may query alongside
+ * their own (e.g. the statute corpus imported into `law-at`/`law-de`). Set via
+ * `GBRAIN_SHARED_READ_SOURCES=law-at,law-de`. Empty by default → behaviour is
+ * unchanged unless a deployment opts in. Statute text is public, so federating
+ * it into reads is not a data-isolation concern; writes are unaffected.
+ */
+const SHARED_READ_SOURCES: string[] = (process.env.GBRAIN_SHARED_READ_SOURCES ?? '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter((s) => s && SOURCE_RE.test(s));
+
+/**
+ * The federated READ scope for a request: the tenant's own source plus the
+ * shared statute sources. Returns undefined when no shared sources are
+ * configured (preserves the scalar-sourceId path). Never used for writes.
+ */
+function readSourcesFor(req: Request): string[] | undefined {
+  if (SHARED_READ_SOURCES.length === 0) return undefined;
+  const own = requestSourceId(req);
+  return [...new Set([own, ...SHARED_READ_SOURCES])];
+}
+
 async function invokeOp(
   engine: BrainEngine,
   name: string,
   params: Record<string, unknown>,
   sourceId: string = 'default',
+  allowedSources?: string[],
 ): Promise<unknown> {
   const result = await dispatchToolCall(engine, name, params, {
     remote: false,
     sourceId,
+    ...(allowedSources ? { allowedSources } : {}),
   });
   if (result.isError) {
     let msg = 'operation_failed';
@@ -290,14 +315,18 @@ async function enrichCitations(
   engine: BrainEngine,
   citations: Array<{ page_slug: string }>,
   sourceId: string,
+  allowedSources?: string[],
 ): Promise<Array<{ slug: string; title: string; quote: string; confidence: number }>> {
   if (citations.length === 0) return [];
   const slugs = [...new Set(citations.map((c) => c.page_slug))];
+  // Match the federated read scope used for retrieval, so a cited statute page
+  // in a shared source (law-at) resolves its title too — not just tenant pages.
+  const scopes = allowedSources && allowedSources.length > 0 ? allowedSources : [sourceId];
   const rows = await engine.executeRaw<{ slug: string; title: string }>(
     `SELECT slug, title FROM pages WHERE slug = ANY($1::text[])
        AND deleted_at IS NULL
-       AND ($2 = 'default' OR source_id = $2)`,
-    [slugs, sourceId],
+       AND ($2::text[] @> ARRAY['default'] OR source_id = ANY($2::text[]))`,
+    [slugs, scopes],
   ).catch(() => [] as Array<{ slug: string; title: string }>);
   const titleMap = new Map(rows.map((r) => [r.slug, r.title]));
   return citations.map((c) => ({
@@ -404,7 +433,7 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
         res.json([]);
         return;
       }
-      const raw = await invokeOp(engine, 'search', { query: q, limit }, requestSourceId(req));
+      const raw = await invokeOp(engine, 'search', { query: q, limit }, requestSourceId(req), readSourcesFor(req));
       res.json(mapSearchResults(Array.isArray(raw) ? raw as Array<Record<string, unknown>> : []));
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'unknown';
@@ -444,6 +473,9 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
         question: query,
         remote: false,
         sourceId,
+        // Federate reads across the tenant's source + shared statute corpus so
+        // the answer can retrieve and cite the actual law, not just the firm's docs.
+        ...(readSourcesFor(req) ? { allowedSources: readSourcesFor(req) } : {}),
         searchMode,
         // Real-time token streaming: each text delta fires an SSE chunk event.
         onStreamChunk: (text) => {
@@ -451,7 +483,7 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
         },
       });
 
-      const citations = await enrichCitations(engine, result.citations ?? [], sourceId);
+      const citations = await enrichCitations(engine, result.citations ?? [], sourceId, readSourcesFor(req));
       res.write(`data: ${JSON.stringify({ citations, gaps: result.gaps ?? [] })}\n\n`);
       res.write('data: [DONE]\n\n');
       res.end();
@@ -465,6 +497,32 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
       } else {
         res.status(500).json({ error: 'think_failed', message: msg });
       }
+    }
+  });
+
+  // Proactive issue-spotting over one uploaded document. The brain reads the
+  // document and returns a structured brief (type, parties, dates, issues with
+  // severity, relevant §§, next steps) — every issue grounded in a verbatim
+  // quote, ungrounded ones dropped. Federates reads over the shared statute
+  // corpus so the analysis can cite the actual law.
+  app.post('/api/legal/analyze', express.json({ limit: '256kb' }), async (req: Request, res: Response) => {
+    try {
+      const slug = String((req.body as Record<string, unknown>)?.slug ?? '');
+      if (!slug) {
+        res.status(400).json({ error: 'missing_slug' });
+        return;
+      }
+      const { analyzeDocument } = await import('../core/legal/analyze-document.ts');
+      const federated = readSourcesFor(req);
+      const analysis = await analyzeDocument(engine, {
+        slug,
+        sourceId: requestSourceId(req),
+        ...(federated ? { sourceIds: federated } : {}),
+      });
+      res.json(analysis);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'unknown';
+      res.status(/not found/i.test(msg) ? 404 : 500).json({ error: 'analyze_failed', message: msg });
     }
   });
 
@@ -509,7 +567,7 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
     try {
       const slugParam = req.params.slug;
       const slug = Array.isArray(slugParam) ? slugParam.join('/') : String(slugParam ?? '');
-      const pageRaw = await invokeOp(engine, 'get_page', { slug }, requestSourceId(req));
+      const pageRaw = await invokeOp(engine, 'get_page', { slug }, requestSourceId(req), readSourcesFor(req));
       const page = pageRaw as Record<string, unknown>;
       const tags = Array.isArray(page.tags) ? (page.tags as string[]) : [];
       res.json(mapPage(page, tags));

@@ -114,7 +114,7 @@ export default function VerticalPage({
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <Link href={signupHref}>
             <Button size="xl" variant="glow" className="min-w-[220px]">
-              {isSubsumio ? <SubsumioMark size={18} /> : <SigmaMark size={18} tile={false} />} {t.ctaButton}
+              {isSubsumio ? <SubsumioMark size={18} tile={false} /> : <SigmaMark size={18} tile={false} />} {t.ctaButton}
             </Button>
           </Link>
           <a href="#demo">
@@ -260,7 +260,7 @@ export default function VerticalPage({
 
       {/* TrustBand — LIGHT section: credibility, security, GDPR */}
       <div data-tone="light" style={{ background: "var(--mk-bg)" }}>
-        <TrustBand lang={lang} />
+        <TrustBand lang={lang} industry={industry} />
         {isSubsumio && (
           <div className="text-center -mt-6 pb-16">
             <Link href={sub("/sicherheit")} className="inline-flex items-center gap-1.5 text-sm font-semibold brand-text transition-all hover:gap-2.5">

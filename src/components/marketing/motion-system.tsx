@@ -3,10 +3,10 @@
 // Central motion system for all marketing pages.
 // Eliminates copy-paste animation patterns across every page component.
 // State-of-the-art: staggerChildren, spring physics, reduced-motion fallback,
-// GPU-optimized transforms, shared layout animations.
+// GPU-optimized transforms, clip-path reveals, glow cards, magnetic hover.
 
-import { motion, useInView, useReducedMotion, Variants } from "framer-motion";
-import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion, useMotionValue, useSpring, useScroll, Variants } from "framer-motion";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 // ---------------------------------------------------------------------------
 // Viewport presets
@@ -269,5 +269,265 @@ export function AnimatedCounter({
     <span ref={ref} className={className}>
       {prefix}{val.toFixed(decimals)}{suffix}
     </span>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// ClipReveal — premium clip-path wipe from bottom (agency-standard 2025)
+// ---------------------------------------------------------------------------
+
+interface ClipRevealProps {
+  children: ReactNode;
+  delay?: number;
+  duration?: number;
+  className?: string;
+  /** "up" (default) reveals upward; "right" reveals from left */
+  direction?: "up" | "right";
+}
+
+export function ClipReveal({
+  children,
+  delay = 0,
+  duration = 0.7,
+  className = "",
+  direction = "up",
+}: ClipRevealProps) {
+  const reduce = useReducedMotion();
+
+  const initial = direction === "up"
+    ? { clipPath: "inset(100% 0% 0% 0%)", y: 8, opacity: 0 }
+    : { clipPath: "inset(0% 100% 0% 0%)", x: 8, opacity: 0 };
+
+  const animate = direction === "up"
+    ? { clipPath: "inset(0% 0% 0% 0%)", y: 0, opacity: 1 }
+    : { clipPath: "inset(0% 0% 0% 0%)", x: 0, opacity: 1 };
+
+  if (reduce) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return (
+    <motion.div
+      initial={initial}
+      whileInView={animate}
+      viewport={VIEWPORT.gentle}
+      transition={{
+        duration,
+        delay,
+        ease: EASE.dramatic,
+        opacity: { duration: duration * 0.5 },
+      }}
+      style={{ willChange: "clip-path, transform, opacity" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// GlowCard — card with mouse-tracking gradient glow (premium interactivity)
+// ---------------------------------------------------------------------------
+
+interface GlowCardProps {
+  children: ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+  /** CSS color for the glow. Defaults to brand primary. */
+  glowColor?: string;
+  /** Intensity 0-1, default 0.18 */
+  intensity?: number;
+}
+
+export function GlowCard({
+  children,
+  className = "",
+  style,
+  glowColor = "var(--brand-primary)",
+  intensity = 0.18,
+}: GlowCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (reduce || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    ref.current.style.setProperty("--glow-x", `${x}%`);
+    ref.current.style.setProperty("--glow-y", `${y}%`);
+    ref.current.style.setProperty("--glow-opacity", `${intensity}`);
+  }, [reduce, intensity]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!ref.current) return;
+    ref.current.style.setProperty("--glow-opacity", "0");
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`relative overflow-hidden ${className}`}
+      style={{
+        "--glow-x": "50%",
+        "--glow-y": "50%",
+        "--glow-opacity": "0",
+        ...style,
+      } as React.CSSProperties}
+    >
+      {/* Radial glow that follows the cursor */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+        style={{
+          background: `radial-gradient(400px circle at var(--glow-x) var(--glow-y), ${glowColor}, transparent 70%)`,
+          opacity: "var(--glow-opacity)" as unknown as number,
+        }}
+      />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// MagneticCard — card with spring-based hover lift + tilt
+// ---------------------------------------------------------------------------
+
+interface MagneticCardProps {
+  children: ReactNode;
+  className?: string;
+  lift?: number;   // px to lift on hover (default 6)
+  tilt?: number;   // max deg tilt (default 3)
+}
+
+export function MagneticCard({
+  children,
+  className = "",
+  lift = 6,
+  tilt = 3,
+}: MagneticCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useMotionValue(0), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useMotionValue(0), { stiffness: 300, damping: 30 });
+  const translateY = useSpring(useMotionValue(0), { stiffness: 250, damping: 20 });
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (reduce || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    rotateY.set(dx * tilt);
+    rotateX.set(-dy * tilt);
+    translateY.set(-lift);
+    x.set(dx);
+    y.set(dy);
+  }, [reduce, tilt, lift, rotateX, rotateY, translateY, x, y]);
+
+  const handleMouseLeave = useCallback(() => {
+    rotateX.set(0);
+    rotateY.set(0);
+    translateY.set(0);
+    x.set(0);
+    y.set(0);
+  }, [rotateX, rotateY, translateY, x, y]);
+
+  if (reduce) return <div className={className}>{children}</div>;
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, y: translateY, transformStyle: "preserve-3d" }}
+      transition={{ type: "spring", stiffness: 250, damping: 20 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// TextReveal — word-by-word stagger (cinematic headline entrance)
+// ---------------------------------------------------------------------------
+
+interface TextRevealProps {
+  text: string;
+  className?: string;
+  wordClassName?: string;
+  delay?: number;
+  stagger?: number;
+  as?: "h1" | "h2" | "h3" | "p" | "span";
+}
+
+export function TextReveal({
+  text,
+  className = "",
+  wordClassName = "",
+  delay = 0,
+  stagger = 0.05,
+  as: Tag = "span",
+}: TextRevealProps) {
+  const reduce = useReducedMotion();
+  const words = text.split(" ");
+
+  const container: Variants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: reduce ? 0 : stagger, delayChildren: delay },
+    },
+  };
+
+  const word: Variants = {
+    hidden: { opacity: 0, y: reduce ? 0 : 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.45, ease: EASE.out },
+    },
+  };
+
+  const MotionTag = motion[Tag as keyof typeof motion] as typeof motion.span;
+
+  return (
+    <MotionTag
+      initial="hidden"
+      whileInView="visible"
+      viewport={VIEWPORT.hero}
+      variants={container}
+      className={className}
+    >
+      {words.map((w, i) => (
+        <motion.span key={i} variants={word} className={`inline-block ${wordClassName}`}>
+          {w}{i < words.length - 1 ? " " : ""}
+        </motion.span>
+      ))}
+    </MotionTag>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// ScrollProgress — thin branded bar at top of page (state-of-the-art UX)
+// ---------------------------------------------------------------------------
+
+export function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 z-[9999] h-[2px] origin-left pointer-events-none"
+      style={{
+        scaleX,
+        background: "linear-gradient(90deg, var(--brand-gradient-from), var(--brand-gradient-via), var(--brand-gradient-to))",
+      }}
+    />
   );
 }

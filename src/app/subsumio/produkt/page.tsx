@@ -5,7 +5,7 @@ import { JsonLd, organizationLd, breadcrumbLd } from "@/components/seo/jsonld";
 export const metadata: Metadata = {
   title: "Subsumio Produkt — das Kanzlei-Gehirn in einem System",
   description:
-    "Akten, Fristen, Zeiten, Auslagen, Rechnungen und der WhatsApp-Copilot — alles auf eurer Infrastruktur, jede Antwort mit Fundstelle. Subsumio ist Sigmabrain für Kanzleien.",
+    "Akten, Fristen, Zeiten, Auslagen, Rechnungen und der WhatsApp-Copilot — alles auf eurer Infrastruktur, jede Antwort mit Fundstelle. Für Kanzleien gebaut.",
   alternates: { canonical: "/subsumio/produkt", languages: { en: "/subsumio/produkt", de: "/de/subsumio/produkt" } },
 };
 

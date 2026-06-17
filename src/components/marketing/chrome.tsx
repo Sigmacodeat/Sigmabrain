@@ -4,7 +4,7 @@
 // Footer, and small shared primitives used across all marketing pages.
 
 import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -46,7 +46,6 @@ import { SubsumioLogo } from "@/components/brand/subsumio-logo";
 import { TaxumioLogo } from "@/components/brand/taxumio-logo";
 import { NAV, FOOTER, p, altPath, type Lang } from "@/content/site";
 import { brandForHost, SUBSUMIO_SITE_URL, isExternalUrl, type SiteBrand } from "@/lib/brand";
-import SalesAgentWidget from "./sales-agent-widget";
 
 // Resolve the active brand from the request host on the client. On a Subsumio
 // domain (subsum.io / subsumio.com) the chrome renders Subsumio-scoped: a
@@ -257,14 +256,14 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
     <>
     <header
       data-tone={theme}
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.08),0_8px_24px_rgba(0,0,0,0.04)]"
-          : ""
+          ? "backdrop-blur-2xl shadow-[0_1px_0_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.06)] border-b [border-color:var(--mk-border)]"
+          : "border-b border-transparent"
       }`}
       style={
         scrolled
-          ? { background: "color-mix(in srgb, var(--mk-bg) 92%, transparent)" }
+          ? { background: "color-mix(in srgb, var(--mk-bg) 88%, transparent)" }
           : undefined
       }
     >
@@ -422,7 +421,6 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
       )}
     </nav>
     </header>
-    <SalesAgentWidget lang={lang} />
     </>
   );
 }
@@ -491,15 +489,33 @@ export function SectionHeading({ badge, title, sub, tone }: { badge?: string; ti
   // `tone` is optional: when set it makes the heading self-contained (resolves
   // its own --mk-* tokens), otherwise it inherits the surrounding section tone.
   return (
-    <div data-tone={tone} className="text-center mb-14">
+    <motion.div
+      data-tone={tone}
+      className="text-center mb-14"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px 80px 0px", amount: 0.15 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+    >
       {badge && (
-        <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium brand-soft brand-text border brand-border mb-4">
+        <motion.span
+          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold brand-soft brand-text border brand-border mb-5"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "0px 0px 80px 0px" }}
+          transition={{ duration: 0.4, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="w-1.5 h-1.5 rounded-full brand-bg animate-pulse" />
           {badge}
-        </span>
+        </motion.span>
       )}
-      <h2 className="text-3xl md:text-4xl font-black mb-4 [color:var(--mk-text)]">{title}</h2>
-      {sub && <p className="text-lg max-w-2xl mx-auto [color:var(--mk-text-muted)]">{sub}</p>}
-    </div>
+      <h2 className="text-3xl md:text-4xl font-black mb-4 [color:var(--mk-text)] tracking-tight">{title}</h2>
+      {sub && (
+        <p className="text-lg max-w-2xl mx-auto [color:var(--mk-text-muted)] leading-relaxed">
+          {sub}
+        </p>
+      )}
+    </motion.div>
   );
 }
 

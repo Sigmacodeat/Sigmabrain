@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Paperclip, Send, FileText, Sparkles, MousePointer2 } from "lucide-react";
 import type { Lang } from "@/content/site";
+import { profileForIndustry } from "@/lib/industry-pack";
 
 interface Reel {
   question: string;
@@ -234,6 +235,7 @@ export default function DashboardReel({
   const branch = BRANCHES[industry] ?? BRANCHES.legal;
   const r = branch.reel[lang];
   const sidebar = branch.sidebar[lang];
+  const brand = (profileForIndustry(industry)?.brand ?? "Sigmabrain").toLowerCase();
   const [phase, setPhase] = useState(reduce ? 7 : 0);
   const [typed, setTyped] = useState(reduce ? r.question : "");
 
@@ -271,7 +273,7 @@ export default function DashboardReel({
         <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
         <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-        <div className="flex-1 ml-3 text-xs [color:var(--mk-text-subtle)] font-mono">sigmabrain — dashboard</div>
+        <div className="flex-1 ml-3 text-xs [color:var(--mk-text-subtle)] font-mono">{brand} — dashboard</div>
         <span className="text-[10px] brand-text font-medium">live</span>
       </div>
 

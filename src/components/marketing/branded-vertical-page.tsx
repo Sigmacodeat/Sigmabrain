@@ -263,7 +263,7 @@ export default function BrandedVerticalPage({
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
                 <Link href={signupHref}>
                   <Button size="xl" variant="glow">
-                    {signupIndustry === "legal" ? <SubsumioMark size={18} /> : signupIndustry === "tax" ? <TaxumioMark size={18} /> : <SigmaMark size={18} tile={false} />} {t.ctaPrimary}
+                    {signupIndustry === "legal" ? <SubsumioMark size={18} tile={false} /> : signupIndustry === "tax" ? <TaxumioMark size={18} tile={false} /> : <SigmaMark size={18} tile={false} />} {t.ctaPrimary}
                   </Button>
                 </Link>
                 <Link href={p(lang, "/compare")}>

@@ -79,7 +79,7 @@ export const VERTICALS: Record<Lang, Record<VerticalSlug, VerticalContent>> = {
     legal: {
       slug: "legal",
       navLabel: "Law Firms",
-      metaTitle: "Sigmabrain for Law Firms — case synthesis on your own infrastructure",
+      metaTitle: "Subsumio — case synthesis on your own infrastructure",
       metaDesc: "Synthesize case files, track deadlines, book time and expenses, invoice matters and run WhatsApp intake — self-hosted, offline-capable or EU cloud with durable file storage.",
       badge: "For law firms & legal teams",
       h1a: "500 pages of case file.",
@@ -92,7 +92,7 @@ export const VERTICALS: Record<Lang, Record<VerticalSlug, VerticalContent>> = {
         { title: "Knowledge walks out with people", desc: "When a senior associate leaves, years of matter context leave too — unless the firm's knowledge lives somewhere durable and answerable." },
       ],
       demo: {
-        windowTitle: "sigmabrain — case brain",
+        windowTitle: "subsumio — case brain",
         you: "You",
         q: "Where do the opposing party's submissions contradict their witness statements?",
         a: `3 contradictions found:
@@ -121,9 +121,9 @@ export const VERTICALS: Record<Lang, Record<VerticalSlug, VerticalContent>> = {
         { icon: "Layers", title: "Matter-level isolation", desc: "Scoped access per matter and per user — fuzz-tested, zero leaks between cases or teams." },
       ],
       proofTitle: "Engine-grade retrieval, not a chat wrapper",
-      proof: "Sigmabrain's retrieval core benchmarks at 97.9% Recall@5 with hybrid search and a knowledge graph — and because it runs on infrastructure you control, your IT governs every system that touches client data.",
+      proof: "The retrieval core benchmarks at 97.9% Recall@5 with hybrid search and a knowledge graph — and because it runs on infrastructure you control, your IT governs every system that touches client data.",
       faq: [
-        { q: "Is this legal advice software?", a: "No. Sigmabrain organizes and synthesizes your documents and notes. Legal judgment stays with the lawyers — the brain just makes sure nothing in the file escapes them." },
+        { q: "Is this legal advice software?", a: "No. Subsumio organizes and synthesizes your documents and notes. Legal judgment stays with the lawyers — the brain just makes sure nothing in the file escapes them." },
         { q: "Can we run it fully offline?", a: "The engine self-hosts on your hardware and the dashboard keeps local caches with a mutation queue for core legal workflows. Synthesis uses LLM APIs of your choosing; enterprise setups can route through EU endpoints or your own gateway." },
         { q: "How much data can we store?", a: "Self-hosted uses your own disk or S3-compatible storage. Hosted plans include cloud file storage by package and can scale to custom retention and storage volumes for enterprise firms." },
         { q: "What about GDPR and our bar obligations?", a: "Self-hosted means data never leaves your infrastructure. Hosted plans come with EU hosting and a DPA. Have your data protection officer talk to us — we speak their language." },
@@ -328,7 +328,7 @@ Reusable assets: interview guide (2023), pricing model deck v3.
     legal: {
       slug: "legal",
       navLabel: "Kanzleien",
-      metaTitle: "Sigmabrain für Kanzleien — Akten-Synthese auf eigener Infrastruktur",
+      metaTitle: "Subsumio — Akten-Synthese auf eigener Infrastruktur",
       metaDesc: "Akten synthetisieren, Fristen, Zeiten, Auslagen, Rechnungen und WhatsApp-Eingang steuern — self-hosted, offlinefähig oder EU-Cloud mit dauerhaftem Dateispeicher.",
       badge: "Für Kanzleien & Rechtsabteilungen",
       h1a: "500 Seiten Akte.",
@@ -341,7 +341,7 @@ Reusable assets: interview guide (2023), pricing model deck v3.
         { title: "Wissen geht mit den Köpfen", desc: "Wenn ein erfahrener Anwalt geht, gehen Jahre an Aktenkontext mit — außer das Kanzleiwissen liegt dauerhaft und abfragbar an einem Ort." },
       ],
       demo: {
-        windowTitle: "sigmabrain — case brain",
+        windowTitle: "subsumio — case brain",
         you: "Du",
         q: "Wo widersprechen die Schriftsätze der Gegenseite ihren Zeugenaussagen?",
         a: `3 Widersprüche gefunden:
@@ -370,9 +370,9 @@ Reusable assets: interview guide (2023), pricing model deck v3.
         { icon: "Layers", title: "Trennung pro Mandat", desc: "Zugriff pro Mandat und Nutzer gescoped — fuzz-getestet, null Leaks zwischen Akten oder Teams." },
       ],
       proofTitle: "Engine-Klasse Retrieval, kein Chat-Wrapper",
-      proof: "Der Retrieval-Kern von Sigmabrain erreicht 97,9 % Recall@5 mit Hybrid-Suche und Wissensgraph — und weil er auf Infrastruktur läuft, die ihr kontrolliert, steuert eure IT jedes System, das Mandantendaten berührt.",
+      proof: "Der Retrieval-Kern erreicht 97,9 % Recall@5 mit Hybrid-Suche und Wissensgraph — und weil er auf Infrastruktur läuft, die ihr kontrolliert, steuert eure IT jedes System, das Mandantendaten berührt.",
       faq: [
-        { q: "Ist das Rechtsberatungs-Software?", a: "Nein. Sigmabrain organisiert und synthetisiert eure Dokumente und Notizen. Die juristische Bewertung bleibt bei den Anwälten — das Brain stellt sicher, dass ihnen nichts aus der Akte entgeht." },
+        { q: "Ist das Rechtsberatungs-Software?", a: "Nein. Subsumio organisiert und synthetisiert eure Dokumente und Notizen. Die juristische Bewertung bleibt bei den Anwälten — das Brain stellt sicher, dass ihnen nichts aus der Akte entgeht." },
         { q: "Können wir komplett offline arbeiten?", a: "Die Engine läuft self-hosted auf eurer Hardware und das Dashboard hält lokale Caches plus Änderungs-Warteschlange für die wichtigsten Kanzlei-Workflows. Die Synthese nutzt LLM-APIs eurer Wahl; Enterprise-Setups können über EU-Endpunkte oder ein eigenes Gateway routen." },
         { q: "Wie viel Daten können wir speichern?", a: "Self-hosted nutzt euren eigenen Speicher oder S3-kompatiblen Objektspeicher. Hosted-Pakete enthalten Cloud-Dateispeicher je Paket; Enterprise bekommt individuelle Speichermengen und Aufbewahrungsregeln." },
         { q: "Was ist mit DSGVO und Berufsrecht?", a: "Self-hosted heißt: Daten verlassen eure Infrastruktur nicht. Gehostete Pläne kommen mit EU-Hosting und AVV. Lasst euren Datenschutzbeauftragten mit uns sprechen — wir sprechen seine Sprache." },

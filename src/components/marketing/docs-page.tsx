@@ -9,7 +9,7 @@ import { getDocs, type Lang } from "@/content/docs";
 import { getCompetitors } from "@/content/competitors";
 import { p } from "@/content/site";
 import { ICONS } from "./chrome";
-import { MarketingBackground, MarketingNav, MarketingFooter } from "./chrome";
+import { MarketingBackground, MarketingNav, MarketingFooter, useSiteBrand } from "./chrome";
 
 const viewport = { once: true, margin: "0px 0px 80px 0px", amount: 0.12 } as const;
 const reveal = {
@@ -47,7 +47,7 @@ function FeatureCard({ icon, title, desc, index }: { icon: string; title: string
 }
 
 function StatusBadge({ status, labels }: { status: boolean | "partial"; labels: { yes: string; no: string; partial: string } }) {
-  if (status === true) return <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-400"><Check size={13} /> {labels.yes}</span>;
+  if (status === true) return <span className="inline-flex items-center gap-1 text-xs font-medium text-[var(--brand-secondary)]"><Check size={13} /> {labels.yes}</span>;
   if (status === false) return <span className="inline-flex items-center gap-1 text-xs font-medium text-rose-400"><X size={13} /> {labels.no}</span>;
   return <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-400"><Minus size={13} /> {labels.partial}</span>;
 }
@@ -71,7 +71,7 @@ function ComparisonSection({ lang }: { lang: Lang }) {
             <thead>
               <tr className="border-b [border-color:var(--mk-border)]">
                 <th className="py-3 pr-4 text-xs font-semibold [color:var(--mk-text-muted)] uppercase tracking-wider whitespace-nowrap">{c.tableTitle}</th>
-                <th className="py-3 px-3 text-xs font-semibold text-emerald-400 uppercase tracking-wider text-center whitespace-nowrap">{c.sigmabrainLabel}</th>
+                <th className="py-3 px-3 text-xs font-semibold text-[var(--brand-primary)] uppercase tracking-wider text-center whitespace-nowrap">{c.sigmabrainLabel}</th>
                 <th className="py-3 px-3 text-xs font-semibold [color:var(--mk-text-subtle)] uppercase tracking-wider text-center whitespace-nowrap">{c.harveyLabel}</th>
                 <th className="py-3 px-3 text-xs font-semibold [color:var(--mk-text-subtle)] uppercase tracking-wider text-center whitespace-nowrap">{c.leyaLabel}</th>
                 <th className="py-3 px-3 text-xs font-semibold [color:var(--mk-text-subtle)] uppercase tracking-wider text-center whitespace-nowrap">{c.josefLabel}</th>
@@ -105,7 +105,8 @@ function ComparisonSection({ lang }: { lang: Lang }) {
 }
 
 export default function DocsPage({ lang }: { lang: Lang }) {
-  const d = getDocs(lang);
+  const brand = useSiteBrand();
+  const d = getDocs(lang, brand);
 
   return (
     <MotionConfig reducedMotion="user">

@@ -8,12 +8,14 @@
 import { motion } from "framer-motion";
 import { ShieldCheck, Lock, Quote, ScrollText } from "lucide-react";
 import type { Lang } from "@/content/site";
+import { profileForIndustry } from "@/lib/industry-pack";
+import { GlowCard } from "./motion-system";
 
 const COPY = {
   de: {
     eyebrow: "Gebaut für vertrauliche Arbeit",
     title: "Seriös, sicher, nachvollziehbar",
-    sub: "Sigmabrain ist für Berufe gebaut, in denen Verschwiegenheit Gesetz ist — nicht Präferenz.",
+    sub: "{brand} ist für Berufe gebaut, in denen Verschwiegenheit Gesetz ist — nicht Präferenz.",
     pillars: [
       { icon: ShieldCheck, signal: "blue", t: "Self-hosted oder EU-Cloud", d: "Eure Hardware oder EU-Hosting mit AVV. Mandantendaten verlassen die EU nicht." },
       { icon: Lock, signal: "green", t: "Kein Training auf euren Daten", d: "Euer Wissen trainiert nie geteilte Modelle. Niemals." },
@@ -24,7 +26,7 @@ const COPY = {
   en: {
     eyebrow: "Built for confidential work",
     title: "Serious, secure, verifiable",
-    sub: "Sigmabrain is built for professions where confidentiality is law, not preference.",
+    sub: "{brand} is built for professions where confidentiality is law, not preference.",
     pillars: [
       { icon: ShieldCheck, signal: "blue", t: "Self-hosted or EU cloud", d: "Your hardware or EU hosting with a DPA. Client data never leaves the EU." },
       { icon: Lock, signal: "green", t: "No training on your data", d: "Your knowledge never trains shared models. Ever." },
@@ -40,10 +42,12 @@ const SIGNAL: Record<string, { text: string; bg: string; ring: string }> = {
   amber: { text: "var(--signal-amber)", bg: "rgba(180,83,9,0.08)", ring: "rgba(180,83,9,0.18)" },
 };
 
-export default function TrustBand({ lang }: { lang: Lang }) {
+export default function TrustBand({ lang, industry }: { lang: Lang; industry?: string }) {
   const c = COPY[lang];
+  const brand = profileForIndustry(industry)?.brand ?? "Sigmabrain";
+  const sub = c.sub.replace("{brand}", brand);
   return (
-    <section data-tone="light" className="relative z-10 py-28 px-6">
+    <section data-tone="light" className="relative z-10 py-28 px-6" style={{ background: "var(--mk-bg)" }}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
@@ -63,7 +67,7 @@ export default function TrustBand({ lang }: { lang: Lang }) {
             {c.title}
           </h2>
           <p className="text-lg max-w-2xl mx-auto [color:var(--mk-text-muted)]">
-            {c.sub}
+            {sub}
           </p>
         </motion.div>
 
@@ -74,26 +78,32 @@ export default function TrustBand({ lang }: { lang: Lang }) {
             return (
               <motion.div
                 key={pillar.t}
-                initial={{ opacity: 0, y: 22 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.45, delay: i * 0.1, ease: [0.21, 0.5, 0.27, 1] }}
-                whileHover={{ y: -4 }}
-                className="rounded-2xl p-6 [background:var(--mk-surface)] border [border-color:var(--mk-border)]"
-                style={{ boxShadow: "var(--mk-card-shadow)" }}
+                transition={{ duration: 0.5, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: sig.bg, boxShadow: `inset 0 0 0 1px ${sig.ring}` }}
+                <GlowCard
+                  glowColor={sig.text}
+                  intensity={0.12}
+                  className="h-full rounded-2xl [background:var(--mk-surface)] border [border-color:var(--mk-border)] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  style={{ boxShadow: "var(--mk-card-shadow)" } as React.CSSProperties}
                 >
-                  <Icon size={19} style={{ color: sig.text }} />
-                </div>
-                <h3 className="text-base font-bold mb-2 [color:var(--mk-text)]">
-                  {pillar.t}
-                </h3>
-                <p className="text-sm leading-relaxed [color:var(--mk-text-muted)]">
-                  {pillar.d}
-                </p>
+                  <div className="p-6">
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+                      style={{ background: sig.bg, boxShadow: `inset 0 0 0 1px ${sig.ring}` }}
+                    >
+                      <Icon size={19} style={{ color: sig.text }} />
+                    </div>
+                    <h3 className="text-base font-bold mb-2 [color:var(--mk-text)]">
+                      {pillar.t}
+                    </h3>
+                    <p className="text-sm leading-relaxed [color:var(--mk-text-muted)]">
+                      {pillar.d}
+                    </p>
+                  </div>
+                </GlowCard>
               </motion.div>
             );
           })}

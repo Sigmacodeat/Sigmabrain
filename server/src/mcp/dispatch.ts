@@ -70,6 +70,15 @@ export interface DispatchOpts {
    * was replaced by dispatchToolCall.
    */
   auth?: AuthInfo;
+  /**
+   * Federated READ scope for a trusted (remote:false) local caller that has no
+   * OAuth `auth` object — e.g. the web-api threading a tenant's own source PLUS
+   * shared public reference sources (`law-at`/`law-de`). Surfaces on
+   * `ctx.auth.allowedSources`, which `sourceScopeOpts` already honours for reads.
+   * Write authority stays scalar (`sourceId`) — this NEVER widens write target.
+   * Ignored when `auth` is provided (OAuth clients carry their own grant).
+   */
+  allowedSources?: string[];
 }
 
 /**
@@ -209,7 +218,14 @@ export function buildOperationContext(
     // CLI / HTTP / stdio transports SHOULD pass an explicit sourceId via opts;
     // this fallback covers code paths that historically passed undefined.
     sourceId: opts.sourceId ?? 'default',
-    auth: opts.auth,
+    // Prefer a real OAuth grant. Otherwise, if a trusted caller supplied a
+    // federated read scope (web-api: tenant + shared law sources), synthesize a
+    // minimal local auth carrying ONLY allowedSources — sourceScopeOpts reads it
+    // for reads; clientId 'local' is accurate for the trusted server-to-server path.
+    auth: opts.auth
+      ?? (opts.allowedSources && opts.allowedSources.length > 0
+        ? { token: '', clientId: 'local', scopes: [], allowedSources: opts.allowedSources }
+        : undefined),
   };
 }
 

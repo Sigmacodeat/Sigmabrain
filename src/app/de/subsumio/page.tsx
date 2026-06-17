@@ -22,7 +22,7 @@ export default function Page() {
     <>
       <JsonLd data={organizationLd()} />
       <JsonLd data={verticalSoftwareApplicationLd({ name: product.name, description: product.metaDesc, url: canonical, price: "299" })} />
-      <JsonLd data={breadcrumbLd([{ name: "Sigmabrain", url: "/de" }, { name: product.name, url: canonical }])} />
+      <JsonLd data={breadcrumbLd([{ name: "Subsumio", url: "/de" }, { name: product.name, url: canonical }])} />
       <JsonLd data={faqPageLd(VERTICALS.de[product.vertical].faq)} />
       <VerticalPage lang="de" slug={product.vertical} product={product} />
     </>
