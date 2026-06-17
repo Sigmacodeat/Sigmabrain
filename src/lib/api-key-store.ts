@@ -111,6 +111,7 @@ class PgApiKeyStore implements ApiKeyStore {
 
   private pool(): import("pg").Pool {
     if (!globalThis.__sigmabrainApiKeyPool) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { Pool } = require("pg") as typeof import("pg");
       globalThis.__sigmabrainApiKeyPool = new Pool({
         connectionString: AUTH_DB_URL,

@@ -94,7 +94,7 @@ export function engineHeadersForBrain(brainId: string): Record<string, string> {
 
 // ── Hardened wrappers (RBAC + Rate Limit + Quota) ─────────────────────────
 
-export interface GuardedContext extends EngineContext {}
+export type GuardedContext = EngineContext;
 
 /**
  * Full context mit RBAC, Rate-Limit und optionaler Quota-Prüfung.
