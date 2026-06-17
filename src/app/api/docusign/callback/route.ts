@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { getStore } from "@/lib/auth/store";
 
 export const dynamic = "force-dynamic";
@@ -10,8 +10,8 @@ export const dynamic = "force-dynamic";
  * Speichert das Token server-seitig im User-Store (encrypted-at-rest in production).
  */
 export async function GET(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) return Response.json({ error: "unauthorized" }, { status: 401 });
+  const ctx = await requireAuthAction("settings.write");
+  if (ctx instanceof Response) return ctx;
 
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
 
   // Persist token server-side (in production: encrypt at rest)
   const store = getStore();
-  await store.update(me.id, {
+  await store.update(ctx.user.id, {
     docusignAccessToken: data.access_token,
     docusignRefreshToken: data.refresh_token ?? null,
     docusignTokenExpiresAt: new Date(Date.now() + data.expires_in * 1000).toISOString(),

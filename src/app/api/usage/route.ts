@@ -1,10 +1,11 @@
-import { engineContext, unauthorized } from "@/lib/engine";
+import { NextRequest } from "next/server";
+import { requireAuthAction } from "@/lib/engine";
 import { usageFor } from "@/lib/usage";
 import { limitsFor } from "@/lib/plans";
 
-export async function GET() {
-  const ctx = await engineContext();
-  if (!ctx) return unauthorized();
+export async function GET(req: NextRequest) {
+  const ctx = await requireAuthAction("brain.read");
+  if (ctx instanceof Response) return ctx;
   const usage = await usageFor(ctx.brainId);
   return Response.json({
     month: usage.month,

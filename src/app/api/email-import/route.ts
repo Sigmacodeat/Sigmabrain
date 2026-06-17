@@ -1,16 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { api } from "@/lib/api";
 import { caseFrontmatter } from "@/lib/legal-types";
 
 export const dynamic = "force-dynamic";
-
-interface EmailImportRequest {
-  subject: string;
-  from: string;
-  body: string;
-  date?: string;
-}
 
 /**
  * POST /api/email-import
@@ -19,11 +12,20 @@ interface EmailImportRequest {
  * Zuordnungs-Logik: Betreff enthält Aktenzeichen OR Absender ist bekannter Mandant.
  */
 export async function POST(req: NextRequest) {
-  const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const ctx = await requireAuthAction("brain.write");
+  if (ctx instanceof Response) return ctx;
 
-  const { subject, from, body, date } = (await req.json()) as EmailImportRequest;
-  if (!subject || !from || !body) {
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+  }
+  const subject = typeof body.subject === "string" ? body.subject : "";
+  const from = typeof body.from === "string" ? body.from : "";
+  const bodyText = typeof body.body === "string" ? body.body : "";
+  const date = typeof body.date === "string" ? body.date : undefined;
+  if (!subject || !from || !bodyText) {
     return NextResponse.json({ error: "subject_from_and_body_required" }, { status: 400 });
   }
 
@@ -75,7 +77,7 @@ export async function POST(req: NextRequest) {
       type: "email",
       url: "#email",
       uploadedAt: date || new Date().toISOString(),
-      notes: `Von: ${from}\n\n${body.substring(0, 2000)}`,
+      notes: `Von: ${from}\n\n${bodyText.substring(0, 2000)}`,
     };
 
     const existingDocs = matchedCase.documents || [];

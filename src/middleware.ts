@@ -31,15 +31,34 @@ export async function middleware(req: NextRequest) {
   // other verticals fold into it (this domain never shows the whole platform).
   // The URL stays clean; only the rendered route is rewritten.
   if (brandForHost(req.headers.get("host")) === "subsumio") {
+    // 1. Known locale variants → canonical path
+    if (pathname === "/" || pathname === "/en") {
+      const url = req.nextUrl.clone();
+      url.pathname = "/subsumio";
+      return NextResponse.rewrite(url);
+    }
+    if (pathname === "/de" || pathname.startsWith("/de-AT") || pathname.startsWith("/de-")) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/de/subsumio";
+      return NextResponse.rewrite(url);
+    }
+
+    // 2. Other verticals fold into Subsumio
     let target: string | null = null;
-    if (pathname === "/") target = "/subsumio";
-    else if (pathname === "/de") target = "/de/subsumio";
-    else if (OTHER_VERTICAL_PATHS.some((v) => pathname === v || pathname.startsWith(`${v}/`))) target = "/subsumio";
+    if (OTHER_VERTICAL_PATHS.some((v) => pathname === v || pathname.startsWith(`${v}/`))) target = "/subsumio";
     else if (OTHER_VERTICAL_PATHS.some((v) => pathname === `/de${v}` || pathname.startsWith(`/de${v}/`))) target = "/de/subsumio";
 
     if (target && target !== pathname) {
       const url = req.nextUrl.clone();
       url.pathname = target;
+      return NextResponse.rewrite(url);
+    }
+
+    // 3. Unknown paths on Subsumio domain → fall back to homepage (never 404 to
+    //    an old/deleted deployment that might still be attached at Vercel edge).
+    if (!pathname.startsWith("/subsumio") && !pathname.startsWith("/de/subsumio")) {
+      const url = req.nextUrl.clone();
+      url.pathname = pathname.startsWith("/de") ? "/de/subsumio" : "/subsumio";
       return NextResponse.rewrite(url);
     }
   }

@@ -6,14 +6,14 @@
 // and verification fails. The session email must match the invited address.
 
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { getStore, getOrgStore } from "@/lib/auth/store";
 import { verifyActionToken, bindFragment } from "@/lib/auth/tokens";
 import { limitsFor } from "@/lib/plans";
 
 export async function POST(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const me = await requireAuthAction("brain.read");
+  if (me instanceof Response) return me;
 
   let body: { token?: string; org?: string; email?: string };
   try {
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   if (!orgId || !email) {
     return NextResponse.json({ error: "invalid_invite" }, { status: 400 });
   }
-  if (me.email !== email) {
+  if (me.user.email !== email) {
     // The invite was addressed to someone else — say so plainly.
     return NextResponse.json({ error: "wrong_account" }, { status: 403 });
   }
@@ -40,10 +40,10 @@ export async function POST(req: NextRequest) {
   const org = await getOrgStore().getById(orgId);
   if (!org) return NextResponse.json({ error: "invalid_or_expired_invite" }, { status: 400 });
 
-  if (me.orgId === org.id) {
+  if (me.user.orgId === org.id) {
     return NextResponse.json({ ok: true, org: { name: org.name } }); // idempotent re-click
   }
-  if (me.orgId) {
+  if (me.user.orgId) {
     return NextResponse.json({ error: "leave_current_org_first" }, { status: 409 });
   }
 
@@ -56,6 +56,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "no_seats_left" }, { status: 409 });
   }
 
-  await store.update(me.id, { orgId: org.id });
+  await store.update(me.user.id, { orgId: org.id });
   return NextResponse.json({ ok: true, org: { name: org.name } });
 }

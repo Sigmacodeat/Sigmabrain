@@ -179,50 +179,50 @@ export const PRICING: Record<Lang, { title: string; sub: string; tiers: PricingT
     sub: "Per seat, billed annually. Your company's brain on infrastructure you control — EU-hosted or on-premise.",
     tiers: [
       {
-        id: "pro", name: "Pro", price: "€190", period: "/seat/mo",
+        id: "pro", name: "Pro", price: "€290", period: "/seat/mo",
         blurb: "For the professional who lives on their knowledge.",
-        features: ["Fully managed — no API keys needed", "25,000 pages", "50 GB cloud file storage included", "Fair-use queries with live usage meter", "24/7 Dream Cycle (dedupe, citations, contradictions)", "Email, document & WhatsApp media import", "Priority support"],
+        features: ["Fully managed — no API keys needed", "25,000 pages · 50 GB cloud storage", "2,000 AI queries/seat/mo included", "Fair-use WhatsApp & document import", "24/7 Dream Cycle (dedupe, citations, contradictions)", "Live usage meter — transparent overages", "Priority support"],
         cta: "Start Pro", href: "/signup", highlight: true,
       },
       {
-        id: "team", name: "Team", price: "€390", period: "/seat/mo",
+        id: "team", name: "Team", price: "€490", period: "/seat/mo",
         blurb: "One shared brain, scoped per user. From 5 seats.",
-        features: ["Everything in Pro", "Shared institutional memory", "250 GB cloud file storage included", "Per-user scoped access — fuzz-tested, zero leaks", "Admin & usage analytics", "Onboarding session included"],
+        features: ["Everything in Pro", "Shared institutional memory", "10,000 AI queries/seat/mo included", "250 GB cloud storage per seat", "Per-user scoped access — fuzz-tested, zero leaks", "Admin & usage analytics", "Onboarding session included"],
         cta: "Start Team", href: "/signup",
       },
       {
         id: "ent", name: "Enterprise", price: "Custom", period: "annual",
         blurb: "Compliance-grade. From 20 seats, your infrastructure or EU cloud.",
-        features: ["EU cloud, Vercel Blob/S3 or on-prem storage", "Custom storage volumes and retention policy", "DPA, SLA, SSO", "Maximum-recall search mode", "Dedicated support & integration help"],
+        features: ["Unlimited AI queries & storage (Fair Use)", "EU cloud, Vercel Blob/S3 or on-prem", "Custom retention policy", "DPA, SLA, SSO/SAML", "Maximum-recall search mode", "Dedicated CSM & integration help"],
         cta: "Talk to us", href: "mailto:hello@sigmabrain.com",
       },
     ],
-    footnote: "Annual billing −20%. Fair use means generous limits shown transparently in your dashboard — no surprise bills, no silent throttling.",
+    footnote: "Annual billing −20 %. Included AI query and storage quotas shown per plan. Overages billed at transparent per-unit rates at month end — no surprise bills, no silent throttling.",
   },
   de: {
     title: "Premium-Gedächtnis für Teams, die von Wissen leben.",
     sub: "Pro Seat, jährliche Abrechnung. Das Gehirn eurer Firma auf Infrastruktur, die ihr kontrolliert — EU-gehostet oder On-Premise.",
     tiers: [
       {
-        id: "pro", name: "Pro", price: "190 €", period: "/Seat/Mon.",
+        id: "pro", name: "Pro", price: "290 €", period: "/Seat/Mon.",
         blurb: "Für Professionals, die von ihrem Wissen leben.",
-        features: ["Voll verwaltet — keine API-Keys nötig", "25.000 Seiten", "50 GB Cloud-Dateispeicher inklusive", "Fair-Use-Queries mit Live-Verbrauchsanzeige", "24/7 Dream Cycle (Dedupe, Zitate, Widersprüche)", "E-Mail-, Dokumenten- & WhatsApp-Medien-Import", "Priorisierter Support"],
+        features: ["Voll verwaltet — keine API-Keys nötig", "25.000 Seiten · 50 GB Cloud-Speicher", "2.000 KI-Anfragen/Seat/Mon. inklusive", "Fair-Use WhatsApp- & Dokumenten-Import", "24/7 Dream Cycle (Dedupe, Zitate, Widersprüche)", "Live-Verbrauchsanzeige — transparente Mehrkosten", "Priorisierter Support"],
         cta: "Pro starten", href: "/signup", highlight: true,
       },
       {
-        id: "team", name: "Team", price: "390 €", period: "/Seat/Mon.",
+        id: "team", name: "Team", price: "490 €", period: "/Seat/Mon.",
         blurb: "Ein gemeinsames Brain, pro Nutzer gescoped. Ab 5 Seats.",
-        features: ["Alles aus Pro", "Geteiltes Firmen-Gedächtnis", "250 GB Cloud-Dateispeicher inklusive", "Zugriff pro Nutzer gescoped — fuzz-getestet, null Leaks", "Admin & Nutzungs-Analytics", "Onboarding-Session inklusive"],
+        features: ["Alles aus Pro", "Geteiltes Firmen-Gedächtnis", "10.000 KI-Anfragen/Seat/Mon. inklusive", "250 GB Cloud-Speicher pro Seat", "Zugriff pro Nutzer gescoped — fuzz-getestet, null Leaks", "Admin & Nutzungs-Analytics", "Onboarding-Session inklusive"],
         cta: "Team starten", href: "/signup",
       },
       {
         id: "ent", name: "Enterprise", price: "Individuell", period: "jährlich",
         blurb: "Compliance-tauglich. Ab 20 Seats, eure Infrastruktur oder EU-Cloud.",
-        features: ["EU-Cloud, Vercel Blob/S3 oder On-Prem-Speicher", "Individuelle Speichermengen und Aufbewahrung", "AVV, SLA, SSO", "Maximum-Recall-Suchmodus", "Dedizierter Support & Integrationshilfe"],
+        features: ["Unbegrenzte KI-Anfragen & Speicher (Fair Use)", "EU-Cloud, Vercel Blob/S3 oder On-Prem", "Individuelle Aufbewahrungsrichtlinie", "AVV, SLA, SSO/SAML", "Maximum-Recall-Suchmodus", "Dedizierter CSM & Integrationshilfe"],
         cta: "Sprich mit uns", href: "mailto:hello@sigmabrain.com",
       },
     ],
-    footnote: "Jahreszahlung −20 %. Fair Use heißt: großzügige Limits, transparent im Dashboard — keine Überraschungsrechnung, kein stilles Drosseln.",
+    footnote: "Jahreszahlung −20 %. KI-Anfragen und Speicher-Kontingente je Plan inklusive. Mehrverbrauch wird zu transparenten Einheitspreisen am Monatsende abgerechnet — keine Überraschungsrechnung, kein stilles Drosseln.",
   },
 };
 

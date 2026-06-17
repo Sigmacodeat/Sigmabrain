@@ -142,6 +142,11 @@ describe('extractDocumentText', () => {
     expect(out.frontmatter.source_format).toBe('pdf');
     expect(out.frontmatter.pages).toBe(1);
     expect(out.warnings).toHaveLength(0);
+    // A digital text layer is read verbatim — tagged trusted, never carries
+    // the unverified banner or flag (those are reserved for OCR/transcription).
+    expect(out.frontmatter.extraction_method).toBe('text_layer');
+    expect(out.frontmatter.extraction_unverified).toBeUndefined();
+    expect(out.text).not.toContain('Unverifizierte Extraktion');
   });
 
   test('pdf: flags sparse text layer (scanned-PDF shape)', async () => {

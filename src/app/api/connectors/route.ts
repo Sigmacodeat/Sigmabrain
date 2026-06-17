@@ -1,17 +1,12 @@
-import { ENGINE_URL, engineConfigurationResponse, engineContext, unauthorized } from "@/lib/engine";
+import { NextRequest } from "next/server";
+import { ENGINE_URL, engineConfigurationResponse, requireAuthAction } from "@/lib/engine";
 
 /** Proxy: list configured and supported ingestion connectors.
  *  Connector status is install-global (not per-tenant) — admin-only,
  *  matching the sync/toggle actions. */
-export async function GET() {
-  const ctx = await engineContext();
-  if (!ctx) return unauthorized();
-  if (ctx.user.role !== "admin") {
-    return Response.json(
-      { error: "forbidden", message: "Nur Administratoren können Konnektoren einsehen." },
-      { status: 403 },
-    );
-  }
+export async function GET(req: NextRequest) {
+  const ctx = await requireAuthAction("connector.read");
+  if (ctx instanceof Response) return ctx;
   const configError = engineConfigurationResponse();
   if (configError) return configError;
 

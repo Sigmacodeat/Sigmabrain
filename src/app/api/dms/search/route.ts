@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { getConnector } from "@/lib/dms";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 
 export const dynamic = "force-dynamic";
 
@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic";
  * Sucht im konfigurierten DMS.
  */
 export async function GET(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) return Response.json({ error: "unauthorized" }, { status: 401 });
+  const ctx = await requireAuthAction("brain.read");
+  if (ctx instanceof Response) return ctx;
 
   const connector = await getConnector();
   if (!connector || !connector.isConfigured()) {

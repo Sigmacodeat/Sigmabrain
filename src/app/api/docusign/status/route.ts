@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { getStore } from "@/lib/auth/store";
 import { isConfigured } from "@/lib/docusign";
 
@@ -9,16 +9,16 @@ export const dynamic = "force-dynamic";
  * GET /api/docusign/status
  * Prüft, ob der aktuelle User eine Docusign-Verbindung hat.
  */
-export async function GET() {
-  const me = await getSessionUser();
-  if (!me) return Response.json({ error: "unauthorized" }, { status: 401 });
+export async function GET(req: NextRequest) {
+  const ctx = await requireAuthAction("settings.read");
+  if (ctx instanceof Response) return ctx;
 
   const configured = isConfigured();
   if (!configured) {
     return Response.json({ configured: false, connected: false, reason: "not_configured" });
   }
 
-  const user = await getStore().getById(me.id);
+  const user = await getStore().getById(ctx.user.id);
   const connected = Boolean(user?.docusignAccessToken && user?.docusignTokenExpiresAt);
   const expired = connected && user?.docusignTokenExpiresAt
     ? new Date(user.docusignTokenExpiresAt) < new Date()

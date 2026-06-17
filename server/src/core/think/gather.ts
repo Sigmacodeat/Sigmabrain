@@ -34,6 +34,10 @@ export interface ThinkGatherOpts {
   questionEmbedding?: Float32Array;
   /** When set, MCP-bound calls forward this allow-list to takes_search. Local CLI leaves unset. */
   takesHoldersAllowList?: string[];
+  /** Source scope inherited from the caller. Scalar source for SaaS tenants. */
+  sourceId?: string;
+  /** Federated source scope; wins over sourceId when present. */
+  sourceIds?: string[];
 }
 
 export interface ThinkGatherResult {
@@ -110,6 +114,8 @@ export async function runGather(
   const pagesPromise = hybridSearch(engine, opts.question, {
     limit: gatherLimit,
     expansion: false,  // think provides its own anchor + graph context; no need for re-expansion
+    sourceId: opts.sourceId,
+    sourceIds: opts.sourceIds,
   }).catch((e) => {
     process.stderr.write(`[think.gather] hybrid stream failed: ${(e as Error).message}\n`);
     return [] as SearchResult[];
@@ -119,6 +125,8 @@ export async function runGather(
   const takesKwPromise = engine.searchTakes(opts.question, {
     limit: takesLimit,
     takesHoldersAllowList: opts.takesHoldersAllowList,
+    sourceId: opts.sourceId,
+    sourceIds: opts.sourceIds,
   }).catch((e) => {
     process.stderr.write(`[think.gather] takes-keyword stream failed: ${(e as Error).message}\n`);
     return [] as TakeHit[];
@@ -129,6 +137,8 @@ export async function runGather(
     ? engine.searchTakesVector(opts.questionEmbedding, {
         limit: takesLimit,
         takesHoldersAllowList: opts.takesHoldersAllowList,
+        sourceId: opts.sourceId,
+        sourceIds: opts.sourceIds,
       }).catch((e) => {
         process.stderr.write(`[think.gather] takes-vector stream failed: ${(e as Error).message}\n`);
         return [] as TakeHit[];
@@ -137,7 +147,12 @@ export async function runGather(
 
   // Stream 4: graph walk (anchor only).
   const graphPromise: Promise<string[]> = opts.anchor
-    ? engine.traversePaths(opts.anchor, { depth: graphDepth, direction: 'both' })
+    ? engine.traversePaths(opts.anchor, {
+        depth: graphDepth,
+        direction: 'both',
+        sourceId: opts.sourceId,
+        sourceIds: opts.sourceIds,
+      })
         .then(paths => {
           const slugs = new Set<string>([opts.anchor!]);
           for (const p of paths) {

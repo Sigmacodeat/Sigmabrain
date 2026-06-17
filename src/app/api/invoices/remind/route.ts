@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { loadKanzleiSettings } from "@/lib/kanzlei-settings";
 import { api } from "@/lib/api";
 import nodemailer from "nodemailer";
@@ -15,22 +15,17 @@ function calculateReminderFee(count: number, baseAmount: number): number {
 }
 
 export async function POST(req: NextRequest) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-  if (user.role !== "admin" && user.role !== "lawyer") {
-    return NextResponse.json({ error: "forbidden" }, { status: 403 });
-  }
+  const ctx = await requireAuthAction("invoice.write");
+  if (ctx instanceof Response) return ctx;
 
-  let body: { invoiceSlug: string };
+  let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const { invoiceSlug } = body;
+  const invoiceSlug = typeof body.invoiceSlug === "string" ? body.invoiceSlug : "";
   if (!invoiceSlug) {
     return NextResponse.json({ error: "invoiceSlug_required" }, { status: 400 });
   }

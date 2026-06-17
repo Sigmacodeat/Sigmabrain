@@ -132,10 +132,18 @@ function refToId(ref: string, kind: "§" | "Art."): string {
  * the frontmatter is returned as `meta`. Sections with an empty body (pure
  * "(weggefallen)" repealed markers still carry their heading line as body)
  * are kept — a repealed § is a legitimate retrieval answer.
+ *
+ * Fallback: when the markdown carries NO `## §`/`## Art.` headings at all (the
+ * Austrian RIS PDF-text dumps are one unstructured blob with the § markers
+ * inline in the running text — see law-corpus/at/*.md), we switch to
+ * `splitStatuteInline`, which recovers per-§ sections from inline `§ N.`
+ * markers. Without this, an AT code lands as one 191-page monolith that is too
+ * large to embed and answers every subsumption query with the entire law.
  */
 export function splitStatute(markdown: string): SplitStatuteResult {
   const { meta, bodyStart } = parseFrontmatter(markdown);
-  const lines = markdown.slice(bodyStart).split("\n");
+  const body = markdown.slice(bodyStart);
+  const lines = body.split("\n");
 
   const sections: StatuteSection[] = [];
   let current: StatuteSection | null = null;
@@ -168,5 +176,135 @@ export function splitStatute(markdown: string): SplitStatuteResult {
   }
   flush();
 
+  // No structured headings → try the inline-§ recovery path (AT PDF dumps).
+  if (sections.length === 0) {
+    const inline = splitStatuteInline(body);
+    if (inline.length > 0) return { meta, sections: inline };
+  }
+
   return { meta, sections };
+}
+
+/** An inline paragraph marker `§ 17a.` in a flowing-text dump. */
+const INLINE_PARAGRAPH = /§\s*(\d+)([a-z]*)\s*\./g;
+
+/** Minimum inline markers before we trust the dump enough to split on them.
+ *  Below this it's more likely a prose doc that merely cites a few §§. */
+const INLINE_MIN_MARKERS = 10;
+
+/** Largest § gap we treat as a normal next-paragraph step. A forward jump
+ *  beyond this is a cross-reference UNLESS the very next marker continues the
+ *  jumped-to run (a genuine large gap of repealed §§). */
+const INLINE_MAX_STEP = 50;
+
+/**
+ * Recover per-§ sections from an unstructured statute dump (no `## §` headings)
+ * by treating inline `§ N.` markers as paragraph starts.
+ *
+ * The hard problem is telling a paragraph-DEFINING marker ("§ 5. Wer …") from a
+ * cross-REFERENCE ("… gemäß § 323a …"). We exploit that an Austrian code's
+ * defining paragraphs run in increasing order with small steps (ABGB §§ 1‥1503,
+ * StGB §§ 1‥321, …), while cross-references jump far backward or far forward and
+ * don't form a continuing run. Three rules, applied to the markers in document
+ * order:
+ *
+ *   1. ANCHOR at the natural start. Skip any leading markers until the first
+ *      § ≤ 2, so a stray "§ 47a" printed in a header can't poison the baseline.
+ *      (Falls back to the first marker if the code genuinely starts higher.)
+ *   2. ADVANCE on a small forward step (num within `last+INLINE_MAX_STEP`) or a
+ *      suffix bump at the same number (17 → 17a → 18).
+ *   3. RECOVER across a genuine large gap: accept a far-forward marker only when
+ *      the immediately-following marker continues from it (so §200 → §260 → §261
+ *      is a real gap, but a lone §323a between §3 and §3a is a cross-reference).
+ *
+ * Imperfect by construction, but per-§ retrieval beats an unembeddable monolith
+ * decisively, and the `§ N.` marker stays in the body so keyword search finds it
+ * either way.
+ */
+export function splitStatuteInline(body: string): StatuteSection[] {
+  const matches: Array<{ index: number; num: number; suffix: string }> = [];
+  for (const m of body.matchAll(INLINE_PARAGRAPH)) {
+    matches.push({ index: m.index ?? 0, num: parseInt(m[1], 10), suffix: m[2] });
+  }
+  if (matches.length < INLINE_MIN_MARKERS) return [];
+
+  // Rule 1 — anchor: drop leading markers until the natural statute start (§ ≤ 2).
+  let startIdx = matches.findIndex((m) => m.num <= 2);
+  if (startIdx === -1) startIdx = 0;
+
+  const boundaries: Array<{ index: number; ref: string }> = [];
+  let lastNum = -1;
+  let lastSuffix = "";
+  for (let i = startIdx; i < matches.length; i++) {
+    const mt = matches[i];
+    let advances = false;
+    if (mt.num === lastNum && mt.suffix > lastSuffix) {
+      advances = true; // Rule 2 — suffix bump
+    } else if (mt.num > lastNum) {
+      if (mt.num <= lastNum + INLINE_MAX_STEP) {
+        advances = true; // Rule 2 — small forward step
+      } else {
+        // Rule 3 — far-forward: accept only if the next marker continues this run.
+        const next = matches[i + 1];
+        if (next && next.num > mt.num && next.num <= mt.num + INLINE_MAX_STEP) {
+          advances = true;
+        }
+      }
+    }
+    if (!advances) continue;
+    lastNum = mt.num;
+    lastSuffix = mt.suffix;
+    boundaries.push({ index: mt.index, ref: `${mt.num}${mt.suffix}` });
+  }
+  if (boundaries.length < INLINE_MIN_MARKERS) return [];
+
+  const sections: StatuteSection[] = [];
+  const seenIds = new Map<string, number>();
+  const pushSection = (ref: string, text: string) => {
+    let id = refToId(ref, "§");
+    const n = seenIds.get(id) ?? 0;
+    seenIds.set(id, n + 1);
+    if (n > 0) id = `${id}-${n + 1}`;
+    sections.push({ marker: "§", ref, id, title: "", body: text.trim() });
+  };
+  for (let i = 0; i < boundaries.length; i++) {
+    const start = boundaries[i].index;
+    const isLast = i + 1 >= boundaries.length;
+    const end = isLast ? body.length : boundaries[i + 1].index;
+    const ref = boundaries[i].ref;
+    const text = body.slice(start, end);
+    // The LAST § marker has no following marker to bound it, so it absorbs all
+    // trailing non-statute material (Anlagen, Inkrafttretens-/Übergangs-
+    // bestimmungen, Novellen-Historie). Left intact, that one page balloons
+    // (ABGB §1503 ≈ 685 KB → too large to embed). Spill the overflow into a
+    // separate `<ref>-anhang` section so the § itself stays embeddable and the
+    // appendix is still imported (keyword-findable) rather than glued on or lost.
+    if (isLast && text.length > INLINE_LAST_SECTION_MAX) {
+      const cut = sentenceBoundaryBefore(text, INLINE_LAST_SECTION_MAX);
+      pushSection(ref, text.slice(0, cut));
+      const rest = text.slice(cut).trim();
+      if (rest.length > 0) pushSection(`${ref}-anhang`, rest);
+    } else {
+      pushSection(ref, text);
+    }
+  }
+  return sections;
+}
+
+/** Soft cap for the trailing (last) inline section before its appendix is
+ *  spilled into a separate page. A real § virtually never exceeds this. */
+const INLINE_LAST_SECTION_MAX = 24000;
+
+/** Find a clean cut point at or before `max`: prefer a paragraph break, then a
+ *  sentence end, then a space; fall back to a hard cut. Keeps the § body from
+ *  ending mid-word. */
+function sentenceBoundaryBefore(text: string, max: number): number {
+  if (text.length <= max) return text.length;
+  const window = text.slice(0, max);
+  const para = window.lastIndexOf("\n\n");
+  if (para > max * 0.5) return para;
+  const sentence = Math.max(window.lastIndexOf(". "), window.lastIndexOf(".\n"));
+  if (sentence > max * 0.5) return sentence + 1;
+  const space = window.lastIndexOf(" ");
+  return space > max * 0.5 ? space : max;
 }

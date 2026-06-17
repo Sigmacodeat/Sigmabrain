@@ -3,21 +3,21 @@
 // the UI shows a "billing not configured yet" state instead of pretending.
 
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { isBillingConfigured, stripePriceId, BILLABLE_PLANS } from "@/lib/billing/plans";
 
 export async function POST(req: NextRequest) {
-  const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const ctx = await requireAuthAction("billing.write");
+  if (ctx instanceof Response) return ctx;
 
-  let body: { plan?: string };
+  let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "invalid_body" }, { status: 400 });
   }
 
-  const plan = body.plan === "pro" || body.plan === "team" ? body.plan : null;
+  const plan = body.plan === "pro" || body.plan === "team" ? (body.plan as string) : null;
   if (!plan) return NextResponse.json({ error: "invalid_plan" }, { status: 400 });
 
   if (!isBillingConfigured()) {
@@ -31,10 +31,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const priceId = stripePriceId(plan);
+  const priceId = stripePriceId(plan as "pro" | "team");
   if (!priceId) {
     return NextResponse.json(
-      { error: "price_not_configured", message: `Missing env ${BILLABLE_PLANS[plan].stripePriceEnv}.` },
+      { error: "price_not_configured", message: `Missing env ${BILLABLE_PLANS[plan as "pro" | "team"].stripePriceEnv}.` },
       { status: 501 },
     );
   }
@@ -44,15 +44,15 @@ export async function POST(req: NextRequest) {
     mode: "subscription",
     "line_items[0][price]": priceId,
     "line_items[0][quantity]": "1",
-    client_reference_id: user.id,
-    customer_email: user.email,
+    client_reference_id: ctx.user.id,
+    customer_email: ctx.user.email,
     "metadata[plan]": plan,
-    "metadata[user_id]": user.id,
+    "metadata[user_id]": ctx.user.id,
     success_url: `${origin}/dashboard/billing?status=success`,
     cancel_url: `${origin}/dashboard/billing?status=cancelled`,
     // Referral attribution flows into Stripe metadata so payout tooling
     // (e.g. Rewardful) or manual reconciliation can see it.
-    ...(user.referredBy ? { "metadata[referred_by]": user.referredBy } : {}),
+    ...(ctx.user.referredBy ? { "metadata[referred_by]": ctx.user.referredBy } : {}),
   });
 
   const resp = await fetch("https://api.stripe.com/v1/checkout/sessions", {

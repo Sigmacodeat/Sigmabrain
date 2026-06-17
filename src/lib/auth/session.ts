@@ -7,6 +7,8 @@ export interface SessionPayload {
   email: string;
   role: import("./store").KanzleiRole;
   exp: number; // unix seconds
+  /** Session version for revocation. Incremented on password change / logout-all. */
+  v?: number;
 }
 
 export const SESSION_COOKIE = "sb_session";
@@ -43,7 +45,9 @@ const encoder = new TextEncoder();
 export function getAuthSecret(): string {
   const secret = process.env.AUTH_SECRET;
   if (secret) return secret;
-  if (process.env.NODE_ENV === "production") {
+  // Hardened: always throw in production, and also when VERCEL_ENV is production
+  // to catch misconfigured preview deployments.
+  if (process.env.NODE_ENV === "production" || process.env.VERCEL_ENV === "production") {
     throw new Error("AUTH_SECRET must be set in production.");
   }
   return "sigmabrain-dev-secret-change-me";
@@ -73,15 +77,34 @@ export async function hmacKey(secret: string): Promise<CryptoKey> {
 }
 
 export async function signSession(
-  payload: Omit<SessionPayload, "exp">,
+  payload: Omit<SessionPayload, "exp" | "v">,
   secret: string = getAuthSecret(),
   ttlSeconds: number = SESSION_TTL_SECONDS,
+  version: number = 1,
 ): Promise<string> {
-  const full: SessionPayload = { ...payload, exp: Math.floor(Date.now() / 1000) + ttlSeconds };
+  const full: SessionPayload = { ...payload, v: version, exp: Math.floor(Date.now() / 1000) + ttlSeconds };
   const body = b64url(JSON.stringify(full));
   const key = await hmacKey(secret);
   const sig = await crypto.subtle.sign("HMAC", key, encoder.encode(body));
   return `${body}.${b64url(sig)}`;
+}
+
+/** Session-Revocation: a map of userId → minimum accepted version.
+ *  In production this should be backed by Redis/Postgres. In-memory is
+ *  a pragmatic start for single-node / dev. */
+const revokedVersions = new Map<string, number>();
+
+/** Invalidate all sessions for a user (e.g. after password change). */
+export function revokeAllSessions(userId: string): void {
+  const current = revokedVersions.get(userId) ?? 0;
+  revokedVersions.set(userId, current + 1);
+}
+
+/** Check if a session version is still valid. */
+export function isSessionVersionValid(userId: string, version?: number): boolean {
+  const minVersion = revokedVersions.get(userId);
+  if (!minVersion) return true;
+  return (version ?? 0) >= minVersion;
 }
 
 export async function verifySession(
@@ -104,6 +127,7 @@ export async function verifySession(
     const payload = JSON.parse(b64urlDecode(body)) as SessionPayload;
     if (!payload.uid || !payload.exp) return null;
     if (payload.exp < Math.floor(Date.now() / 1000)) return null;
+    if (!isSessionVersionValid(payload.uid, payload.v)) return null;
     return payload;
   } catch {
     return null;

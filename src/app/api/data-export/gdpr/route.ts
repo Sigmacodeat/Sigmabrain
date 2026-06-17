@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
-import { ENGINE_URL, engineContext, engineConfigurationResponse } from "@/lib/engine";
+import { ENGINE_URL, requireAuthAction, engineConfigurationResponse } from "@/lib/engine";
 
 export const dynamic = "force-dynamic";
 
@@ -12,15 +11,8 @@ export const dynamic = "force-dynamic";
  * Format: structured, commonly used, machine-readable (JSON).
  */
 export async function GET(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) {
-    return Response.json({ error: "unauthorized" }, { status: 401 });
-  }
-
-  const ctx = await engineContext();
-  if (!ctx) {
-    return Response.json({ error: "engine_unavailable" }, { status: 503 });
-  }
+  const ctx = await requireAuthAction("brain.read");
+  if (ctx instanceof Response) return ctx;
   const configErr = engineConfigurationResponse();
   if (configErr) return configErr;
 
@@ -46,8 +38,8 @@ export async function GET(req: NextRequest) {
     const exportData = {
       export_metadata: {
         generated_at: new Date().toISOString(),
-        user_id: me.id,
-        user_email: me.email,
+        user_id: ctx.user.id,
+        user_email: ctx.user.email,
         format: "JSON",
         legal_basis: "GDPR Art. 20",
         description: "Structured, commonly used, machine-readable format per GDPR Art. 20",

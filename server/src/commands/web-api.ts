@@ -10,13 +10,14 @@ import express from 'express';
 import type { Application, Request, Response, NextFunction } from 'express';
 import type { BrainEngine } from '../core/engine.ts';
 import { dispatchToolCall, buildOperationContext } from '../mcp/dispatch.ts';
-import { importFromContent } from '../core/import-file.ts';
+import { importFromContent, ocrImageBuffer } from '../core/import-file.ts';
 import {
   extractDocumentText,
   synthesizeDocumentMarkdown,
   isDocumentFilePath,
+  withUnverifiedBanner,
 } from '../core/extract-document.ts';
-import { slugifySegment } from '../core/sync.ts';
+import { slugifySegment, isImageFilePath } from '../core/sync.ts';
 import { loadConfig } from '../core/config.ts';
 import { OperationError } from '../core/operations.ts';
 import type { ThinkResult } from '../core/think/index.ts';
@@ -109,13 +110,39 @@ function slugFromUpload(source: string, filename: string, title?: string): strin
   return `${src}/${base || 'untitled'}`;
 }
 
+/**
+ * Office/binary formats a law firm sends that we do NOT yet extract. Reading
+ * them as UTF-8 stored mojibake garbage as a "document" (silent corruption).
+ * Reject cleanly with an actionable message instead. Native extraction for
+ * these (Outlook .msg, multi-page .tiff scans, legacy .doc) is a tracked
+ * follow-up — it needs decoder deps verified against `bun build --compile`.
+ */
+const UNSUPPORTED_UPLOAD_EXTS = new Set([
+  '.msg', '.tiff', '.tif', '.doc', '.ppt', '.pptx', '.odt', '.ods', '.odp',
+  '.rtf', '.pages', '.key', '.numbers', '.zip', '.rar', '.7z',
+]);
+
+/** Thrown for a file we recognize but can't ingest yet; the route maps it to a
+ *  400 with the actionable message rather than a generic 500. */
+class UnsupportedUploadError extends Error {}
+
+/** Heuristic binary sniff: a NUL byte in the first 8 KB means it isn't text.
+ *  Guards the UTF-8 fallback from storing garbage for unknown binary types. */
+function looksBinary(data: Buffer): boolean {
+  const n = Math.min(data.length, 8192);
+  for (let i = 0; i < n; i++) if (data[i] === 0) return true;
+  return false;
+}
+
 async function buildMarkdownFromUpload(
+  engine: BrainEngine,
   filename: string,
   data: Buffer,
   title?: string,
 ): Promise<string> {
   const lower = filename.toLowerCase();
   const ext = lower.includes('.') ? lower.slice(lower.lastIndexOf('.')) : '';
+  const t = title ?? filename.replace(/\.[^.]+$/, '');
 
   if (isDocumentFilePath(filename)) {
     const extracted = await extractDocumentText(data, ext, { filename });
@@ -123,16 +150,42 @@ async function buildMarkdownFromUpload(
     return synthesizeDocumentMarkdown(filename, extracted);
   }
 
+  // Images (photo/scan of a Schriftsatz): OCR to chattable text. Without this
+  // the upload path read image bytes as UTF-8 → garbage. OCR output is tagged
+  // unverified (recognized, not read verbatim).
+  if (isImageFilePath(filename)) {
+    const { text } = await ocrImageBuffer(engine, data, ext);
+    if (text.trim()) {
+      const body = withUnverifiedBanner(text, 'ocr_vision');
+      return `---\ntitle: ${JSON.stringify(t)}\ntype: image\nextraction_method: "ocr_vision"\nextraction_unverified: "true"\n---\n\n${body}\n`;
+    }
+    // OCR off/unavailable/empty: store an honest placeholder, never garbage.
+    return `---\ntitle: ${JSON.stringify(t)}\ntype: image\n---\n\n> ⚠️ Bild gespeichert, aber kein Text erkannt (OCR deaktiviert oder kein lesbarer Text). Inhalt ist nicht durchsuchbar — ggf. als PDF mit Textebene erneut hochladen.\n`;
+  }
+
   if (ext === '.json') {
     const parsed = JSON.parse(data.toString('utf8'));
     const body = '```json\n' + JSON.stringify(parsed, null, 2) + '\n```';
-    const t = title ?? filename.replace(/\.[^.]+$/, '');
     return `---\ntitle: ${JSON.stringify(t)}\ntype: document\n---\n\n${body}\n`;
+  }
+
+  if (UNSUPPORTED_UPLOAD_EXTS.has(ext)) {
+    throw new UnsupportedUploadError(
+      `Das Format ${ext} wird noch nicht direkt unterstützt. Bitte als PDF oder DOCX hochladen ` +
+        `(ein Foto/Scan als JPG/PNG/HEIC geht ebenfalls — es wird per OCR ausgelesen).`,
+    );
   }
 
   const text = data.toString('utf8');
   if (text.startsWith('---')) return text;
-  const t = title ?? filename.replace(/\.[^.]+$/, '');
+  // Backstop: an unrecognized binary (no extension match, but NUL bytes) would
+  // otherwise be stored as mojibake. Reject with the same actionable message.
+  if (looksBinary(data)) {
+    throw new UnsupportedUploadError(
+      `Diese Datei ist kein Text und wird nicht unterstützt. Bitte als PDF oder DOCX hochladen ` +
+        `(Foto/Scan als JPG/PNG/HEIC wird per OCR ausgelesen).`,
+    );
+  }
   return `---\ntitle: ${JSON.stringify(t)}\ntype: document\n---\n\n${text}\n`;
 }
 
@@ -780,7 +833,7 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
         }
 
         const slug = slugFromUpload(source, file.filename, title);
-        const markdown = await buildMarkdownFromUpload(file.filename, file.data, title);
+        const markdown = await buildMarkdownFromUpload(engine, file.filename, file.data, title);
 
         await importFromContent(engine, slug, markdown, {
           noEmbed,
@@ -805,6 +858,12 @@ export function mountWebApi(app: Application, engine: BrainEngine, options: WebA
         });
       } catch (e) {
         const msg = e instanceof Error ? e.message : 'unknown';
+        // A recognized-but-unsupported format is a client problem, not a server
+        // error — return 415 with the actionable guidance so the UI can show it.
+        if (e instanceof UnsupportedUploadError) {
+          res.status(415).json({ error: 'unsupported_format', message: msg });
+          return;
+        }
         res.status(500).json({ error: 'upload_failed', message: msg });
       }
     },

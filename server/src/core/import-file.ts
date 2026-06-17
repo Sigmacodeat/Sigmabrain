@@ -14,6 +14,7 @@ import {
   isDocumentFilePath,
   extractDocumentText,
   synthesizeDocumentMarkdown,
+  withUnverifiedBanner,
   MAX_DOCUMENT_FILE_SIZE,
 } from './extract-document.ts';
 import type { ChunkInput, PageInput, PageType } from './types.ts';
@@ -1537,6 +1538,29 @@ async function maybeOcr(
   }
 }
 
+/**
+ * OCR an in-memory image buffer (e.g. a dashboard upload, which never touches
+ * disk). Decodes HEIC/AVIF to PNG first so the vision model accepts it, then
+ * runs the same `maybeOcr` pass as the file-based image importer — so a
+ * photographed/scanned document uploaded via the web app becomes chattable
+ * text, gated by the same `GBRAIN_EMBEDDING_IMAGE_OCR` flag. Returns '' when
+ * OCR is off, unavailable, or finds no text. Never throws on OCR failure.
+ */
+export async function ocrImageBuffer(
+  engine: BrainEngine,
+  buf: Buffer,
+  ext: string,
+): Promise<{ text: string; mime: string }> {
+  let decoded: { buf: Buffer; mime: string };
+  try {
+    decoded = await decodeIfNeeded(ext.toLowerCase(), buf);
+  } catch {
+    return { text: '', mime: 'application/octet-stream' };
+  }
+  const text = await maybeOcr(engine, decoded.buf, decoded.mime);
+  return { text, mime: decoded.mime };
+}
+
 export interface ImportImageOptions {
   /** Override default OCR concurrency for tests. */
   ocrConcurrency?: number;
@@ -1635,11 +1659,17 @@ export async function importImageFile(
   }
 
   const filename = basename(relativePath);
+  const hasOcr = ocrText.trim().length > 0;
   const frontmatter: Record<string, unknown> = {
     type: 'image',
     title: filename,
     mime_type: decoded.mime,
     bytes: stat.size,
+    // OCR text is model-recognized, not read verbatim — tag it unverified so
+    // an agent (or lawyer) never treats a scanned-image extraction as ground
+    // truth without checking the original. Mirrors the PDF-OCR/audio tagging
+    // in extract-document.ts.
+    ...(hasOcr ? { extraction_method: 'ocr_vision', extraction_unverified: 'true' } : {}),
     ...exif,
   };
 
@@ -1648,7 +1678,7 @@ export async function importImageFile(
   // chunk_source='image_asset' joins the v0.20 chunk_source allowlist.
   const chunk: ChunkInput & { modality?: string; embedding_image?: Float32Array } = {
     chunk_index: 0,
-    chunk_text: ocrText || filename,
+    chunk_text: hasOcr ? withUnverifiedBanner(ocrText, 'ocr_vision') : filename,
     chunk_source: 'image_asset',
     modality: 'image',
     ...(embedding ? { embedding_image: embedding } : {}),

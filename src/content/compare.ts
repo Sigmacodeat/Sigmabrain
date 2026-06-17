@@ -73,8 +73,8 @@ export const COMPARE: Record<Lang, CompareContent> = {
         { label: "Compounding firm brain (learns from every matter)", cells: ["✓ your brain knows every case you've run", "k. A.", "k. A.", "k. A.", "k. A.", "k. A."] },
         { label: "Self-hosting / on-premise option", cells: ["✓ full engine on your hardware", "✗ cloud", "✗ cloud", "✗ cloud", "✗ sovereign EU cloud, no self-host", "✓ on-premise offered"] },
         { label: "No training on your data", cells: ["✓ never trains shared models", "k. A.", "k. A.", "k. A.", "k. A.", "k. A."] },
-        { label: "Published entry price", cells: ["€590/seat/mo (annual)", "individual (reports: ~$1,200/seat/mo, 20+ seats)", "individual", "from ~$639/user/mo incl. Westlaw (public configurator)", "individual (min. 3 licenses)", "individual (reports: $50k+/yr small teams)"] },
-        { label: "Seat minimum", cells: ["✓ from 1 (Professional)", "✗ 20–50 (reports)", "k. A.", "✓ solo plans exist", "✗ 3 licenses", "k. A."] },
+        { label: "Published entry price", cells: ["€299/seat/mo (Starter, monthly) · €690/seat/mo (Professional, annual)", "individual (reports: ~$1,200/seat/mo, 20+ seats)", "individual", "from ~$639/user/mo incl. Westlaw (public configurator)", "individual (min. 3 licenses)", "individual (reports: $50k+/yr small teams)"] },
+        { label: "Seat minimum", cells: ["✓ from 1 (Starter)", "✗ 20–50 (reports)", "k. A.", "✓ solo plans exist", "✗ 3 licenses", "k. A."] },
       ],
       footnotes: [
         "“k. A.” = no public information found; we do not guess competitors' gaps.",
@@ -115,7 +115,7 @@ export const COMPARE: Record<Lang, CompareContent> = {
         { label: "Document ingestion (PDF, DOCX, EML, XLSX, audio)", cells: ["✓ native, incl. scanned-PDF OCR fallback", "✓ via connectors", "~ imports"] },
         { label: "Self-hosting / on-premise", cells: ["✓ full engine on your hardware", "✗ SaaS-only", "✗ SaaS-only"] },
         { label: "No training on your data", cells: ["✓ never trains shared models", "k. A.", "k. A."] },
-        { label: "Entry price & minimum", cells: ["€590/seat/mo, from 1 seat", "~$50/user/mo, ~100-seat minimum (reports: ~$60k/yr entry)", "~$10/user/mo add-on"] },
+        { label: "Entry price & minimum", cells: ["€299/seat/mo Starter · €690 Professional, from 1 seat", "~$50/user/mo, ~100-seat minimum (reports: ~$60k/yr entry)", "~$10/user/mo add-on"] },
       ],
       footnotes: [
         "Glean's connector catalog and enterprise rollout tooling are ahead of ours — for a 5,000-person company wiring 30 SaaS tools, Glean is the safer pick today.",
@@ -191,8 +191,8 @@ export const COMPARE: Record<Lang, CompareContent> = {
         { label: "Compounding-Brain (lernt aus jedem Mandat)", cells: ["✓ euer Brain kennt jeden Fall, den ihr je geführt habt", "k. A.", "k. A.", "k. A.", "k. A.", "k. A."] },
         { label: "Self-Hosting / On-Premise", cells: ["✓ volle Engine auf eurer Hardware", "✗ Cloud", "✗ Cloud", "✗ Cloud", "✗ souveräne EU-Cloud, kein Self-Host", "✓ On-Premise verfügbar"] },
         { label: "Kein Training mit euren Daten", cells: ["✓ trainiert nie geteilte Modelle", "k. A.", "k. A.", "k. A.", "k. A.", "k. A."] },
-        { label: "Veröffentlichter Einstiegspreis", cells: ["590 €/Seat/Monat (jährlich)", "individuell (Berichte: ~1.200 $/Seat/Monat, 20+ Seats)", "individuell", "ab ~639 $/User/Monat inkl. Westlaw (öffentl. Konfigurator)", "individuell (min. 3 Lizenzen)", "individuell (Berichte: 50k $+/Jahr für kleine Teams)"] },
-        { label: "Seat-Minimum", cells: ["✓ ab 1 (Professional)", "✗ 20–50 (Berichte)", "k. A.", "✓ Solo-Pläne existieren", "✗ 3 Lizenzen", "k. A."] },
+        { label: "Veröffentlichter Einstiegspreis", cells: ["299 €/Seat/Monat (Starter, monatlich) · 690 €/Seat/Monat (Professional, jährlich)", "individuell (Berichte: ~1.200 $/Seat/Monat, 20+ Seats)", "individuell", "ab ~639 $/User/Monat inkl. Westlaw (öffentl. Konfigurator)", "individuell (min. 3 Lizenzen)", "individuell (Berichte: 50k $+/Jahr für kleine Teams)"] },
+        { label: "Seat-Minimum", cells: ["✓ ab 1 (Starter)", "✗ 20–50 (Berichte)", "k. A.", "✓ Solo-Pläne existieren", "✗ 3 Lizenzen", "k. A."] },
       ],
       footnotes: [
         "„k. A.“ = keine öffentliche Angabe gefunden; wir raten Lücken der Konkurrenz nicht.",
@@ -233,7 +233,7 @@ export const COMPARE: Record<Lang, CompareContent> = {
         { label: "Dokument-Ingestion (PDF, DOCX, EML, XLSX, Audio)", cells: ["✓ nativ, inkl. Scanned-PDF-OCR-Fallback", "✓ via Konnektoren", "~ Importe"] },
         { label: "Self-Hosting / On-Premise", cells: ["✓ volle Engine auf eurer Hardware", "✗ nur SaaS", "✗ nur SaaS"] },
         { label: "Kein Training mit euren Daten", cells: ["✓ trainiert nie geteilte Modelle", "k. A.", "k. A."] },
-        { label: "Einstiegspreis & Minimum", cells: ["590 €/Seat/Monat, ab 1 Seat", "~50 $/User/Monat, ~100-Seat-Minimum (Berichte: ~60k $/Jahr Einstieg)", "~10 $/User/Monat Add-on"] },
+        { label: "Einstiegspreis & Minimum", cells: ["299 €/Seat/Monat Starter · 690 € Professional, ab 1 Seat", "~50 $/User/Monat, ~100-Seat-Minimum (Berichte: ~60k $/Jahr Einstieg)", "~10 $/User/Monat Add-on"] },
       ],
       footnotes: [
         "Gleans Konnektoren-Katalog und Enterprise-Rollout-Tooling sind unserem voraus — für 5.000 Mitarbeiter mit 30 SaaS-Tools ist Glean heute die sicherere Wahl.",

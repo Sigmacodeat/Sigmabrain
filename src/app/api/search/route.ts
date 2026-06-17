@@ -1,16 +1,20 @@
 import { NextRequest } from "next/server";
-import { ENGINE_URL, engineConfigurationResponse, engineContext, unauthorized } from "@/lib/engine";
+import { ENGINE_URL, engineConfigurationResponse, requireEngineContext, recordQuota } from "@/lib/engine";
 import { recordQuery } from "@/lib/usage";
 
 export async function GET(req: NextRequest) {
-  const ctx = await engineContext();
-  if (!ctx) return unauthorized();
+  const ctx = await requireEngineContext(req, "query.submit", "search", "queries");
+  if (ctx instanceof Response) return ctx;
   const configError = engineConfigurationResponse();
   if (configError) return configError;
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
   const limit = searchParams.get("limit") || "10";
-  if (q.trim()) void recordQuery(ctx.brainId);
+
+  if (q.trim()) {
+    void recordQuery(ctx.brainId);
+    void recordQuota(ctx, "queries");
+  }
 
   try {
     const res = await fetch(

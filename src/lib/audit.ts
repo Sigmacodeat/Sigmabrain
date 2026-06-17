@@ -21,14 +21,16 @@ export interface AuditEntry {
 export type AuditAction =
   | "user.login" | "user.logout" | "user.signup"
   | "case.create" | "case.update" | "case.delete" | "case.view"
-  | "invoice.create" | "invoice.update" | "invoice.delete"
+  | "invoice.create" | "invoice.update" | "invoice.delete" | "invoice.send" | "invoice.remind"
   | "document.upload" | "document.delete"
   | "deadline.create" | "deadline.update" | "deadline.delete"
   | "evidence.create" | "evidence.update" | "evidence.delete"
   | "drafting.generate" | "drafting.export"
   | "conflict.check" | "judgements.search"
+  | "legal.contract_draft" | "legal.document_review" | "legal.due_diligence"
+  | "legal.risk_analysis" | "legal.memo" | "legal.redline" | "legal.anonymize"
   | "settings.update" | "billing.upgrade"
-  | "team.invite" | "team.remove"
+  | "team.invite" | "team.remove" | "team.role_change"
   | "connector.add" | "connector.remove" | "connector.sync"
   | "query.submit";
 

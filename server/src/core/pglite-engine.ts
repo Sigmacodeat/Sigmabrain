@@ -4252,7 +4252,7 @@ export class PGLiteEngine implements BrainEngine {
 
   async searchTakes(
     query: string,
-    opts: { limit?: number; takesHoldersAllowList?: string[] } = {},
+    opts: { limit?: number; takesHoldersAllowList?: string[]; sourceId?: string; sourceIds?: string[] } = {},
   ): Promise<TakeHit[]> {
     const limit = clampSearchLimit(opts.limit, 30, 100);
     const { rows } = await this.db.query(
@@ -4263,17 +4263,19 @@ export class PGLiteEngine implements BrainEngine {
        JOIN pages p ON p.id = t.page_id
        WHERE t.active
          AND t.claim % $1
-         AND ($2::text[] IS NULL OR t.holder = ANY($2::text[]))
+         AND ($2::text[] IS NULL OR p.source_id = ANY($2::text[]))
+         AND ($2::text[] IS NOT NULL OR $3::text IS NULL OR p.source_id = $3)
+         AND ($4::text[] IS NULL OR t.holder = ANY($4::text[]))
        ORDER BY score DESC, t.weight DESC
-       LIMIT $3`,
-      [query, opts.takesHoldersAllowList ?? null, limit]
+       LIMIT $5`,
+      [query, opts.sourceIds ?? null, opts.sourceId ?? null, opts.takesHoldersAllowList ?? null, limit]
     );
     return rows as unknown as TakeHit[];
   }
 
   async searchTakesVector(
     embedding: Float32Array,
-    opts: { limit?: number; takesHoldersAllowList?: string[] } = {},
+    opts: { limit?: number; takesHoldersAllowList?: string[]; sourceId?: string; sourceIds?: string[] } = {},
   ): Promise<TakeHit[]> {
     const limit = clampSearchLimit(opts.limit, 30, 100);
     const vec = `[${Array.from(embedding).join(',')}]`;
@@ -4285,10 +4287,12 @@ export class PGLiteEngine implements BrainEngine {
        JOIN pages p ON p.id = t.page_id
        WHERE t.active
          AND t.embedding IS NOT NULL
-         AND ($2::text[] IS NULL OR t.holder = ANY($2::text[]))
+         AND ($2::text[] IS NULL OR p.source_id = ANY($2::text[]))
+         AND ($2::text[] IS NOT NULL OR $3::text IS NULL OR p.source_id = $3)
+         AND ($4::text[] IS NULL OR t.holder = ANY($4::text[]))
        ORDER BY t.embedding <=> $1::vector
-       LIMIT $3`,
-      [vec, opts.takesHoldersAllowList ?? null, limit]
+       LIMIT $5`,
+      [vec, opts.sourceIds ?? null, opts.sourceId ?? null, opts.takesHoldersAllowList ?? null, limit]
     );
     return rows as unknown as TakeHit[];
   }

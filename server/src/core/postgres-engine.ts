@@ -4360,6 +4360,8 @@ export class PostgresEngine implements BrainEngine {
       JOIN pages p ON p.id = t.page_id
       WHERE t.active
         AND t.claim % ${query}
+        AND (${opts.sourceIds ?? null}::text[] IS NULL OR p.source_id = ANY(${opts.sourceIds ?? null}::text[]))
+        AND (${opts.sourceIds ?? null}::text[] IS NOT NULL OR ${opts.sourceId ?? null}::text IS NULL OR p.source_id = ${opts.sourceId ?? null})
         AND (
           ${opts.takesHoldersAllowList ?? null}::text[] IS NULL
           OR t.holder = ANY(${opts.takesHoldersAllowList ?? null}::text[])
@@ -4385,6 +4387,8 @@ export class PostgresEngine implements BrainEngine {
       JOIN pages p ON p.id = t.page_id
       WHERE t.active
         AND t.embedding IS NOT NULL
+        AND (${opts.sourceIds ?? null}::text[] IS NULL OR p.source_id = ANY(${opts.sourceIds ?? null}::text[]))
+        AND (${opts.sourceIds ?? null}::text[] IS NOT NULL OR ${opts.sourceId ?? null}::text IS NULL OR p.source_id = ${opts.sourceId ?? null})
         AND (
           ${opts.takesHoldersAllowList ?? null}::text[] IS NULL
           OR t.holder = ANY(${opts.takesHoldersAllowList ?? null}::text[])

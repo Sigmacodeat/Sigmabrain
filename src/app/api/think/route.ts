@@ -1,14 +1,30 @@
 import { NextRequest } from "next/server";
-import { ENGINE_URL, engineConfigurationResponse, engineContext, unauthorized } from "@/lib/engine";
+import { ENGINE_URL, engineConfigurationResponse, requireEngineContext, recordQuota } from "@/lib/engine";
 import { recordQuery } from "@/lib/usage";
 
 export async function POST(req: NextRequest) {
-  const ctx = await engineContext();
-  if (!ctx) return unauthorized();
+  const ctx = await requireEngineContext(req, "query.submit", "heavy", "queries");
+  if (ctx instanceof Response) return ctx;
   const configError = engineConfigurationResponse();
   if (configError) return configError;
-  const body = await req.json();
+
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return Response.json({ error: "invalid_json" }, { status: 400 });
+  }
+  // Validate required field
+  if (typeof body.query !== "string" || !body.query.trim()) {
+    return Response.json({ error: "query_required" }, { status: 400 });
+  }
+  // Clamp mode to allowed values
+  if (body.mode && !["conservative", "balanced", "tokenmax"].includes(String(body.mode))) {
+    return Response.json({ error: "invalid_mode" }, { status: 400 });
+  }
+
   void recordQuery(ctx.brainId);
+  void recordQuota(ctx, "queries");
 
   try {
     const upstream = await fetch(`${ENGINE_URL}/api/think`, {

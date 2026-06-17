@@ -3,6 +3,7 @@ import { verifyPassword } from "@/lib/auth/password";
 import { getStore, toPublic } from "@/lib/auth/store";
 import { signSession, SESSION_COOKIE, SESSION_TTL_SECONDS } from "@/lib/auth/session";
 import { hit, clientIp } from "@/lib/auth/rate-limit";
+import { logAudit } from "@/lib/audit";
 
 export async function POST(req: NextRequest) {
   // Brute-force protection: per-IP and (below, post-parse) per-email windows.
@@ -53,6 +54,7 @@ export async function POST(req: NextRequest) {
   }
 
   const token = await signSession({ uid: user.id, email: user.email, role: user.role });
+  void logAudit("user.login", "user", { entityId: user.id, details: { ip } });
   const res = NextResponse.json({ user: toPublic(user) });
   res.cookies.set(SESSION_COOKIE, token, {
     httpOnly: true,

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { listEnvelopes } from "@/lib/docusign";
 
 export const dynamic = "force-dynamic";
@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic";
  * Listet Envelopes des verbundenen Docusign-Accounts.
  */
 export async function GET(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) return Response.json({ error: "unauthorized" }, { status: 401 });
+  const ctx = await requireAuthAction("settings.read");
+  if (ctx instanceof Response) return ctx;
 
   const { searchParams } = new URL(req.url);
   const fromDate = searchParams.get("fromDate") ?? undefined;
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")!, 10) : 50;
 
   try {
-    const envelopes = await listEnvelopes(me.id, { fromDate, status, limit });
+    const envelopes = await listEnvelopes(ctx.user.id, { fromDate, status, limit });
     return Response.json({ envelopes });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

@@ -50,6 +50,31 @@ export interface ExtractedDocument {
 /** Average chars-per-page below which a PDF is considered scan-only. */
 const PDF_SPARSE_TEXT_CHARS_PER_PAGE = 32;
 
+/**
+ * Extraction whose text was produced by a model (OCR / speech-to-text), not
+ * read verbatim from a digital text layer. Such text CAN contain recognition
+ * errors — a misread clause number or a mistranscribed amount is a real legal
+ * risk. We tag the page (machine-readable frontmatter) AND prepend a visible
+ * banner so neither an agent nor a human treats it as ground truth without
+ * checking the original. Deterministic parses (PDF text layer, docx, eml,
+ * xlsx) are NOT tagged.
+ */
+export const UNVERIFIED_BANNERS = {
+  ocr_vision:
+    '> ⚠️ **Unverifizierte Extraktion (OCR).** Dieser Text wurde per Bilderkennung ' +
+    'aus einem gescannten Dokument gewonnen und kann Erkennungsfehler enthalten ' +
+    '(z. B. falsche Paragraphen-, Zahlen- oder Datumswerte). Vor rechtlicher ' +
+    'Verwendung gegen das Originaldokument prüfen.',
+  audio_transcription:
+    '> ⚠️ **Unverifizierte Extraktion (Audio-Transkription).** Dieser Text wurde ' +
+    'automatisch aus einer Audioaufnahme transkribiert und kann Hör-/Erkennungsfehler ' +
+    'enthalten. Vor rechtlicher Verwendung gegen die Originalaufnahme prüfen.',
+} as const;
+
+export function withUnverifiedBanner(text: string, method: keyof typeof UNVERIFIED_BANNERS): string {
+  return `${UNVERIFIED_BANNERS[method]}\n\n${text}`;
+}
+
 export async function extractDocumentText(
   buf: Buffer,
   ext: string,
@@ -99,8 +124,14 @@ async function extractPdf(buf: Buffer): Promise<ExtractedDocument> {
     if (ocrText) {
       warnings.push(`pdf_ocr_fallback: OCR extracted ${ocrText.length} chars from ${totalPages} page(s).`);
       return {
-        text: ocrText,
-        frontmatter: { type: 'document', source_format: 'pdf', pages: totalPages },
+        text: withUnverifiedBanner(ocrText, 'ocr_vision'),
+        frontmatter: {
+          type: 'document',
+          source_format: 'pdf',
+          pages: totalPages,
+          extraction_method: 'ocr_vision',
+          extraction_unverified: 'true',
+        },
         warnings,
       };
     }
@@ -108,7 +139,12 @@ async function extractPdf(buf: Buffer): Promise<ExtractedDocument> {
 
   return {
     text: cleaned,
-    frontmatter: { type: 'document', source_format: 'pdf', pages: totalPages },
+    frontmatter: {
+      type: 'document',
+      source_format: 'pdf',
+      pages: totalPages,
+      extraction_method: 'text_layer',
+    },
     warnings,
   };
 }
@@ -278,13 +314,15 @@ async function extractAudio(buf: Buffer, filename: string): Promise<ExtractedDoc
     lines.push(result.text);
   }
   return {
-    text: lines.join('\n\n'),
+    text: withUnverifiedBanner(lines.join('\n\n'), 'audio_transcription'),
     frontmatter: {
       type: 'transcription',
       source_format: 'audio',
       language: result.language,
       duration: result.duration,
       provider: result.provider,
+      extraction_method: 'audio_transcription',
+      extraction_unverified: 'true',
     },
     warnings: [],
   };

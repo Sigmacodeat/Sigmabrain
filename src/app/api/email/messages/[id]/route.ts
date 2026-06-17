@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { getMailMessage } from "@/lib/email/mailbox";
 
 export const dynamic = "force-dynamic";
@@ -9,12 +9,12 @@ interface RouteContext {
 }
 
 export async function GET(_req: NextRequest, context: RouteContext) {
-  const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const ctx = await requireAuthAction("brain.read");
+  if (ctx instanceof Response) return ctx;
 
   try {
     const { id } = await context.params;
-    const message = await getMailMessage(user, id);
+    const message = await getMailMessage(ctx.user, id);
     if (!message) return NextResponse.json({ error: "not_found" }, { status: 404 });
     return NextResponse.json({ message });
   } catch (err) {

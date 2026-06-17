@@ -3,7 +3,7 @@
 // only the invited address can redeem it, and it expires after 7 days.
 
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { getStore, getOrgStore } from "@/lib/auth/store";
 import { signActionToken, bindFragment, INVITE_TOKEN_TTL_SECONDS } from "@/lib/auth/tokens";
 import { limitsFor } from "@/lib/plans";
@@ -21,12 +21,12 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const me = await getSessionUser();
-  if (!me) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  if (!me.orgId) return NextResponse.json({ error: "not_in_org" }, { status: 400 });
+  const ctx = await requireAuthAction("brain.write");
+  if (ctx instanceof Response) return ctx;
+  if (!ctx.user.orgId) return NextResponse.json({ error: "not_in_org" }, { status: 400 });
 
-  const org = await getOrgStore().getById(me.orgId);
-  if (!org || org.ownerId !== me.id) {
+  const org = await getOrgStore().getById(ctx.user.orgId);
+  if (!org || org.ownerId !== ctx.user.id) {
     return NextResponse.json({ error: "owner_only" }, { status: 403 });
   }
 
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   if (!EMAIL_RE.test(email)) {
     return NextResponse.json({ error: "invalid_email" }, { status: 400 });
   }
-  if (email === me.email) {
+  if (email === ctx.user.email) {
     return NextResponse.json({ error: "self_invite" }, { status: 400 });
   }
 
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
   // join time, so a full org can never be over-joined.
   const store = getStore();
   const members = (await store.list()).filter((u) => u.orgId === org.id);
-  const seats = limitsFor(me.plan).seats;
+  const seats = limitsFor(ctx.user.plan).seats;
   if (members.length >= seats) {
     return NextResponse.json({ error: "no_seats_left", seats }, { status: 409 });
   }
@@ -60,20 +60,20 @@ export async function POST(req: NextRequest) {
   }
 
   const token = await signActionToken(
-    { uid: me.id, purpose: "invite", bind: await bindFragment(`${org.id}:${email}`) },
+    { uid: ctx.user.id, purpose: "invite", bind: await bindFragment(`${org.id}:${email}`) },
     INVITE_TOKEN_TTL_SECONDS,
   );
   const joinUrl = `${siteUrl()}/join?token=${encodeURIComponent(token)}&org=${encodeURIComponent(org.id)}&email=${encodeURIComponent(email)}`;
 
-  const de = me.locale === "de";
+  const de = ctx.user.locale === "de";
   const result = await sendMail({
     to: email,
     subject: de
-      ? `${me.name} lädt dich zu „${org.name}“ auf Sigmabrain ein`
-      : `${me.name} invited you to “${org.name}” on Sigmabrain`,
+      ? `${ctx.user.name} lädt dich zu „${org.name}“ auf Sigmabrain ein`
+      : `${ctx.user.name} invited you to “${org.name}” on Sigmabrain`,
     text: de
-      ? `Hallo,\n\n${me.name} (${me.email}) lädt dich ein, dem Team „${org.name}“ auf Sigmabrain beizutreten — ein gemeinsames Brain für euer Wissen.\n\nBeitreten (Link 7 Tage gültig):\n${joinUrl}\n\nNoch kein Konto? Der Link führt dich zuerst durch die Registrierung.\n\n— Sigmabrain`
-      : `Hi,\n\n${me.name} (${me.email}) invited you to join the team “${org.name}” on Sigmabrain — one shared brain for your knowledge.\n\nJoin (link valid for 7 days):\n${joinUrl}\n\nNo account yet? The link walks you through signup first.\n\n— Sigmabrain`,
+      ? `Hallo,\n\n${ctx.user.name} (${ctx.user.email}) lädt dich ein, dem Team „${org.name}“ auf Sigmabrain beizutreten — ein gemeinsames Brain für euer Wissen.\n\nBeitreten (Link 7 Tage gültig):\n${joinUrl}\n\nNoch kein Konto? Der Link führt dich zuerst durch die Registrierung.\n\n— Sigmabrain`
+      : `Hi,\n\n${ctx.user.name} (${ctx.user.email}) invited you to join the team “${org.name}” on Sigmabrain — one shared brain for your knowledge.\n\nJoin (link valid for 7 days):\n${joinUrl}\n\nNo account yet? The link walks you through signup first.\n\n— Sigmabrain`,
   });
 
   if (!result.sent && process.env.NODE_ENV !== "production") {

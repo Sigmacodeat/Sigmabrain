@@ -24,8 +24,13 @@ ENV NODE_ENV=production \
     PORT=3131
 
 # /data persists the embedded PGLite store + config when no external
-# DATABASE_URL is provided. Mount a volume here in production.
-RUN mkdir -p /data && chmod +x docker-entrypoint.sh
+# DATABASE_URL is provided. Mount a volume here in production. Some migration
+# smoke checks invoke `gbrain` directly, so expose the same CLI path used by the
+# entrypoint.
+RUN mkdir -p /data \
+  && chmod +x docker-entrypoint.sh \
+  && printf '%s\n' '#!/usr/bin/env sh' 'exec bun run /app/src/cli.ts "$@"' > /usr/local/bin/gbrain \
+  && chmod +x /usr/local/bin/gbrain
 VOLUME ["/data"]
 
 EXPOSE 3131

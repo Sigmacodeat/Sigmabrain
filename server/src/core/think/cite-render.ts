@@ -102,6 +102,69 @@ export function normalizeStructuredCitations(
 }
 
 /**
+ * The set of slugs / take-keys that were actually placed in front of the
+ * model during synthesis. A citation that points outside this set was
+ * invented by the model (a plausible-looking slug it never saw) — the
+ * single most common legal-RAG hallucination. `validateCitationsAgainstContext`
+ * drops those before they can reach the answer's evidence trail or
+ * `synthesis_evidence`.
+ */
+export interface CitationContext {
+  /**
+   * Lowercased slugs of every page-grain artifact shown to the model:
+   * page hits, the page_slug of every gathered take, and any graph slugs
+   * listed in the anchor block. Page-level citations `[slug]` are valid
+   * iff their slug is in here.
+   */
+  pageSlugs: Set<string>;
+  /**
+   * Lowercased `slug#row` keys of every gathered take. Take citations
+   * `[slug#row]` are valid iff their key is in here.
+   */
+  takeKeys: Set<string>;
+}
+
+/**
+ * Drop any citation that does not correspond to context actually retrieved
+ * for this synthesis. This is the grounding enforcement the think prompt
+ * only *asks* for ("Never fabricate slugs/rows") — here we make it true.
+ *
+ *   - Take citation `[slug#row]`  → valid iff `slug#row` ∈ ctx.takeKeys
+ *   - Page citation `[slug]`      → valid iff `slug`     ∈ ctx.pageSlugs
+ *
+ * Returns the kept citations, the dropped ones, and one
+ * `CITATION_NOT_IN_CONTEXT:<ref>` warning per drop so callers can surface
+ * exactly which fabricated references were removed. The answer body markers
+ * are NOT rewritten (see module note) — the structured list is the
+ * persisted source of truth, so cleaning it is what stops a hallucinated
+ * citation from being trusted downstream.
+ */
+export function validateCitationsAgainstContext(
+  citations: ParsedCitation[],
+  ctx: CitationContext,
+): { valid: ParsedCitation[]; invalid: ParsedCitation[]; warnings: string[] } {
+  const valid: ParsedCitation[] = [];
+  const invalid: ParsedCitation[] = [];
+  const warnings: string[] = [];
+  for (const c of citations) {
+    const slug = c.page_slug.toLowerCase();
+    const inContext =
+      c.row_num === null
+        ? ctx.pageSlugs.has(slug)
+        : ctx.takeKeys.has(`${slug}#${c.row_num}`);
+    if (inContext) {
+      valid.push(c);
+    } else {
+      invalid.push(c);
+      warnings.push(
+        `CITATION_NOT_IN_CONTEXT: ${c.page_slug}${c.row_num === null ? '' : `#${c.row_num}`}`,
+      );
+    }
+  }
+  return { valid, invalid, warnings };
+}
+
+/**
  * Combine the structured citations + body fallback into a single resolved
  * list. Strategy:
  *   - If structured has any valid entries, use them as the source of truth.

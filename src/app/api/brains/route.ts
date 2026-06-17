@@ -1,16 +1,34 @@
-import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
-import { engineContext } from "@/lib/engine";
+import { NextRequest, NextResponse } from "next/server";
+import { ENGINE_URL, requireAuthAction } from "@/lib/engine";
 
-export async function GET() {
-  const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+export async function GET(req: NextRequest) {
+  const ctx = await requireAuthAction("brain.read");
+  if (ctx instanceof Response) return ctx;
 
-  const ctx = await engineContext();
-  if (!ctx) return NextResponse.json({ error: "engine_context_failed" }, { status: 500 });
+  try {
+    const res = await fetch(`${ENGINE_URL}/api/stats`, { headers: ctx.headers });
+    if (res.ok) {
+      const stats = await res.json();
+      return NextResponse.json({
+        brains: [{
+          name: ctx.user.orgId ? "Team-Brain" : "Haupt-Brain",
+          slug: ctx.brainId,
+          source: "default",
+          isShared: !!ctx.user.orgId,
+          stats,
+        }],
+      });
+    }
+  } catch {
+    // Engine unreachable — fall back to minimal known data.
+  }
 
-  const brains = [
-    { name: "Haupt-Brain", slug: ctx.brainId, source: "default", engine: "pglite" },
-  ];
-  return NextResponse.json({ brains });
+  return NextResponse.json({
+    brains: [{
+      name: ctx.user.orgId ? "Team-Brain" : "Haupt-Brain",
+      slug: ctx.brainId,
+      source: "default",
+      isShared: !!ctx.user.orgId,
+    }],
+  });
 }

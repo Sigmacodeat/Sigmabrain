@@ -16,7 +16,6 @@ import {
   MarketingNav,
   MarketingFooter,
   SectionHeading,
-  FaqList,
   ICONS,
 } from "./chrome";
 import LiveDemo from "./live-demo";
@@ -25,6 +24,9 @@ import IndustryHeroMotif from "./industry-hero-motif";
 import ProductWorkflowShowcase from "./product-workflow-showcase";
 import DashboardReel from "./dashboard-reel";
 import SubsumioShowcase from "./subsumio-showcase";
+import TrustBand from "./trust-band";
+import StatsStrip from "./stats-strip";
+import { AnimatedFaqList } from "./animated-faq";
 
 /** Product-line branding (Subsumio, Taxumio, …): same funnel body, branded
  *  hero, and signup deep-links carrying the industry for prefill. */
@@ -142,10 +144,13 @@ export default function VerticalPage({
         <DashboardReel lang={lang} industry={industry} />
       </section>
 
-      {/* Pains */}
-      <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+      {/* Stats strip — dark band before the light pains section */}
+      <StatsStrip lang={lang} />
+
+      {/* Pains — LIGHT section for credibility + contrast rhythm */}
+      <section className="relative z-10 py-20 px-6" style={{ background: "var(--color-light-bg)" }}>
         <div className="max-w-5xl mx-auto">
-          <SectionHeading title={t.painsTitle} />
+          <SectionHeading title={t.painsTitle} tone="light" />
           <div className="grid md:grid-cols-3 gap-5">
             {t.pains.map((pain, i) => (
               <motion.div
@@ -154,11 +159,17 @@ export default function VerticalPage({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="p-6 rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]"
+                whileHover={{ y: -4 }}
+                className="p-6 rounded-2xl"
+                style={{
+                  background: "var(--color-light-surface)",
+                  border: "1px solid var(--color-light-border)",
+                  boxShadow: "0 1px 2px rgba(20,20,40,0.04), 0 8px 24px rgba(20,20,40,0.06)",
+                }}
               >
-                <AlertCircle size={18} className="text-amber-400/80 mb-4" />
-                <h3 className="text-base font-semibold text-[#e8e8f0] mb-2">{pain.title}</h3>
-                <p className="text-sm text-[#8888aa] leading-relaxed">{pain.desc}</p>
+                <AlertCircle size={18} className="text-amber-600 mb-4" />
+                <h3 className="text-base font-semibold mb-2" style={{ color: "var(--color-light-text)" }}>{pain.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--color-light-text-muted)" }}>{pain.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -199,11 +210,37 @@ export default function VerticalPage({
         </section>
       )}
 
-      {/* Proof */}
-      <section className="relative z-10 py-20 px-6 bg-[#0d0d1a]/50 border-y border-[#1e1e3a]">
+      {/* TrustBand — LIGHT section: credibility, security, GDPR */}
+      <TrustBand lang={lang} />
+
+      {/* Proof — LIGHT section with visual flair */}
+      <section className="relative z-10 py-20 px-6" style={{ background: "var(--color-light-bg)" }}>
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-black text-[#e8e8f0] mb-5">{t.proofTitle}</h2>
-          <p className="text-base text-[#8888aa] leading-relaxed">{t.proof}</p>
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <span
+              className="block text-8xl font-serif leading-none mb-2 select-none"
+              style={{ color: "var(--signal-blue)", opacity: 0.12 }}
+            >
+              &ldquo;
+            </span>
+            <h2
+              className="text-2xl md:text-3xl font-black mb-5 -mt-6"
+              style={{ color: "var(--color-light-text)" }}
+            >
+              {t.proofTitle}
+            </h2>
+            <p
+              className="text-base leading-relaxed max-w-2xl mx-auto"
+              style={{ color: "var(--color-light-text-muted)" }}
+            >
+              {t.proof}
+            </p>
+          </motion.div>
         </div>
       </section>
 
@@ -212,11 +249,11 @@ export default function VerticalPage({
         <BranchPricing lang={lang} industry={product?.industry ?? slug} />
       </section>
 
-      {/* FAQ */}
+      {/* FAQ — animated accordion */}
       <section className="relative z-10 py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <SectionHeading title="FAQ" />
-          <FaqList items={t.faq} />
+          <AnimatedFaqList items={t.faq} />
         </div>
       </section>
 

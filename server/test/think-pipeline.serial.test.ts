@@ -167,12 +167,17 @@ describe('runThink (with stub client)', () => {
     };
 
     const result = await runThink(engine, {
-      question: 'technical founder',  // matches pg_trgm against 'Strong technical founder'
+      // Matches both takes via pg_trgm ('CEO of Acme' row 1 + 'Strong technical
+      // founder' row 2) so both cited rows are actually gathered — the
+      // citation-grounding gate keeps a citation only when its row was retrieved.
+      question: 'CEO Acme technical founder',
       client: stubClient,
     });
 
     expect(result.answer).toContain('CEO of Acme');
     expect(result.citations).toHaveLength(2);
+    // Both citations point at gathered takes → none dropped as ungrounded.
+    expect(result.warnings).not.toContain('DROPPED_1_UNGROUNDED_CITATIONS');
     expect(result.citations[0].page_slug).toBe('people/alice-example');
     expect(result.gaps).toEqual(['no info on funding history']);
     expect(result.takesGathered).toBeGreaterThan(0);
@@ -198,7 +203,9 @@ describe('runThink (with stub client)', () => {
     };
 
     const result = await runThink(engine, {
-      question: 'malformed test',
+      // Same dual-match question so both inline-cited rows are gathered; the
+      // regex-fallback citations then survive the grounding gate.
+      question: 'CEO Acme technical founder',
       client: stubClient,
     });
 
@@ -238,7 +245,10 @@ describe('runThink (with stub client)', () => {
       }),
     };
 
-    const result = await runThink(engine, { question: 'persist test', client: stubClient });
+    // Question carries the slug seed ('persist test') AND the trigram match
+    // ('technical founder' → row 2) so the cited row is gathered and survives
+    // the grounding gate, producing a real evidence row.
+    const result = await runThink(engine, { question: 'persist test technical founder', client: stubClient });
     const saved = await persistSynthesis(engine, result);
     expect(saved.slug).toContain('synthesis/persist-test');
     expect(saved.evidenceInserted).toBe(1);
@@ -254,6 +264,34 @@ describe('runThink (with stub client)', () => {
       [page!.id],
     );
     expect(Number(ev[0]?.count)).toBe(1);
+  });
+
+  test('drops a fabricated citation (slug/row never gathered) and flags it', async () => {
+    const stubClient: ThinkLLMClient = {
+      create: async () => ({
+        id: 'msg_fab', type: 'message', role: 'assistant', model: 'stub',
+        stop_reason: 'end_turn', stop_sequence: null,
+        usage: { input_tokens: 10, output_tokens: 10, cache_creation_input_tokens: 0, cache_read_input_tokens: 0, server_tool_use: null, service_tier: null },
+        content: [{
+          type: 'text',
+          text: JSON.stringify({
+            answer: 'Grounded [people/alice-example#2] plus a made-up source [legal/statutes/de/hgb/p-377].',
+            citations: [
+              { page_slug: 'people/alice-example', row_num: 2, citation_index: 1 }, // gathered → kept
+              { page_slug: 'legal/statutes/de/hgb/p-377', row_num: null, citation_index: 2 }, // never gathered → dropped
+            ],
+            gaps: [],
+          }),
+        }],
+      }),
+    };
+    const result = await runThink(engine, { question: 'technical founder', client: stubClient });
+    // Only the grounded citation survives.
+    expect(result.citations).toHaveLength(1);
+    expect(result.citations[0].page_slug).toBe('people/alice-example');
+    // The fabricated one is named in the warnings, plus the drop tally.
+    expect(result.warnings).toContain('CITATION_NOT_IN_CONTEXT: legal/statutes/de/hgb/p-377');
+    expect(result.warnings).toContain('DROPPED_1_UNGROUNDED_CITATIONS');
   });
 });
 

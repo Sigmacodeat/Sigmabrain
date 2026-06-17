@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
-import { ENGINE_URL, engineContext, engineConfigurationResponse } from "@/lib/engine";
+import { ENGINE_URL, requireAuthAction, engineConfigurationResponse } from "@/lib/engine";
 import { runEval } from "@/lib/rag-eval";
 
 export const dynamic = "force-dynamic";
@@ -13,14 +12,8 @@ export const dynamic = "force-dynamic";
  * Nur Admin und Entwickler dürfen Evals ausführen.
  */
 export async function POST(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) return Response.json({ error: "unauthorized" }, { status: 401 });
-  if (me.role !== "admin") {
-    return Response.json({ error: "forbidden" }, { status: 403 });
-  }
-
-  const ctx = await engineContext();
-  if (!ctx) return Response.json({ error: "engine_unavailable" }, { status: 503 });
+  const ctx = await requireAuthAction("admin.*");
+  if (ctx instanceof Response) return ctx;
   const configErr = engineConfigurationResponse();
   if (configErr) return configErr;
 

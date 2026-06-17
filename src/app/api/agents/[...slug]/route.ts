@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { ENGINE_URL, engineConfigurationResponse, engineContext, unauthorized } from "@/lib/engine";
+import { ENGINE_URL, engineConfigurationResponse, requireEngineContext } from "@/lib/engine";
 
 /**
  * Dynamic route for agent job actions + inbox.
@@ -8,8 +8,8 @@ import { ENGINE_URL, engineConfigurationResponse, engineContext, unauthorized } 
  */
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {
-  const ctx = await engineContext();
-  if (!ctx) return unauthorized();
+  const ctx = await requireEngineContext(req, "agent.control", "heavy");
+  if (ctx instanceof Response) return ctx;
   const configError = engineConfigurationResponse();
   if (configError) return configError;
 
@@ -26,14 +26,15 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const res = await fetch(`${ENGINE_URL}/api/agents/${path}`, { headers: ctx.headers });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return Response.json(await res.json());
-  } catch {
+  } catch (err) {
+    console.error("[agents/slug] get failed:", err instanceof Error ? err.message : String(err));
     return Response.json({ error: "engine_unavailable" }, { status: 503 });
   }
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {
-  const ctx = await engineContext();
-  if (!ctx) return unauthorized();
+  const ctx = await requireEngineContext(req, "agent.control", "heavy");
+  if (ctx instanceof Response) return ctx;
   const configError = engineConfigurationResponse();
   if (configError) return configError;
 
@@ -51,18 +52,26 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
 
   try {
     const isInbox = action === "inbox";
-    const body = isInbox ? await req.json() : undefined;
+    let body: Record<string, unknown> | undefined;
+    if (isInbox) {
+      try {
+        body = await req.json();
+      } catch {
+        return Response.json({ error: "invalid_json" }, { status: 400 });
+      }
+    }
 
     const res = await fetch(`${ENGINE_URL}/api/agents/${id}/${action}`, {
       method: "POST",
       headers: isInbox
         ? { "Content-Type": "application/json", ...ctx.headers }
         : ctx.headers,
-      ...(isInbox ? { body: JSON.stringify(body) } : {}),
+      ...(isInbox && body ? { body: JSON.stringify(body) } : {}),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return Response.json(await res.json());
-  } catch {
+  } catch (err) {
+    console.error("[agents/slug] post failed:", err instanceof Error ? err.message : String(err));
     return Response.json({ error: "engine_unavailable" }, { status: 503 });
   }
 }

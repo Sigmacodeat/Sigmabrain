@@ -32,6 +32,11 @@ const onlyIdx = args.indexOf("--only");
 const ONLY = onlyIdx !== -1 ? new Set(args[onlyIdx + 1].split(",").map((s) => s.trim().toLowerCase())) : null;
 const dbIdx = args.indexOf("--db");
 const DB_OVERRIDE = dbIdx !== -1 ? args[dbIdx + 1] : null;
+// Target source. For the hosted SaaS the statutes live in ONE shared, public
+// `law-at`/`law-de` source that every tenant reads (the text is public — no
+// per-tenant copy). Omit for the local/host brain (default scope).
+const srcIdx = args.indexOf("--source");
+const SOURCE_ID = srcIdx !== -1 ? args[srcIdx + 1] : null;
 
 const CORPUS = join(import.meta.dir, "..", "..", "law-corpus");
 
@@ -51,6 +56,24 @@ const FILES: StatuteFile[] = [
   { file: "at/stpo-at.md", abbr: "stpo", jurisdiction: "at" },
   { file: "at/ugb.md", abbr: "ugb", jurisdiction: "at" },
   { file: "at/zpo-at.md", abbr: "zpo", jurisdiction: "at" },
+  // AT — tax (Austrian, NOT the German EStG/UStG)
+  { file: "at/estg-at.md", abbr: "estg", jurisdiction: "at" },
+  { file: "at/kstg-at.md", abbr: "kstg", jurisdiction: "at" },
+  { file: "at/ustg-at.md", abbr: "ustg", jurisdiction: "at" },
+  // AT — labour + social insurance
+  { file: "at/asvg.md", abbr: "asvg", jurisdiction: "at" },
+  { file: "at/arbvg.md", abbr: "arbvg", jurisdiction: "at" },
+  { file: "at/angg.md", abbr: "angg", jurisdiction: "at" },
+  // AT — consumer + tenancy
+  { file: "at/kschg.md", abbr: "kschg", jurisdiction: "at" },
+  { file: "at/mrg.md", abbr: "mrg", jurisdiction: "at" },
+  // AT — corporate + insolvency
+  { file: "at/gmbhg-at.md", abbr: "gmbhg", jurisdiction: "at" },
+  { file: "at/aktg-at.md", abbr: "aktg", jurisdiction: "at" },
+  { file: "at/io.md", abbr: "io", jurisdiction: "at" },
+  // AT — administrative + traffic
+  { file: "at/avg.md", abbr: "avg", jurisdiction: "at" },
+  { file: "at/stvo-at.md", abbr: "stvo", jurisdiction: "at" },
   // DE
   { file: "de/ao.md", abbr: "ao", jurisdiction: "de" },
   { file: "de/bgb.md", abbr: "bgb", jurisdiction: "de" },
@@ -111,13 +134,38 @@ async function main() {
   // Lazy-load the engine only when actually importing — keeps --dry-run dependency-free.
   let engine: any = null;
   if (!DRY) {
-    const { PGLiteEngine } = await import("../src/core/pglite-engine.ts");
-    const { loadConfig } = await import("../src/core/config.ts");
     const { importFromContent } = await import("../src/core/import-file.ts");
-    engine = new PGLiteEngine();
-    const dbPath = DB_OVERRIDE ?? loadConfig()?.database_path;
-    await engine.connect({ database_path: dbPath });
+    if (DB_OVERRIDE) {
+      // Explicit throwaway / local PGLite brain (verification runs).
+      const { PGLiteEngine } = await import("../src/core/pglite-engine.ts");
+      engine = new PGLiteEngine();
+      await engine.connect({ database_path: DB_OVERRIDE });
+    } else {
+      // Respect the CONFIGURED engine: Postgres in production (DATABASE_URL is
+      // set on the Hetzner engine), PGLite for a local file brain. Hardcoding
+      // PGLite here meant the per-§ corpus could never reach the Postgres prod
+      // brain — statutes would only ever be the unembeddable monolith there.
+      const { loadConfig, toEngineConfig } = await import("../src/core/config.ts");
+      const { createEngine } = await import("../src/core/engine-factory.ts");
+      const cfg = loadConfig();
+      if (!cfg) {
+        throw new Error(
+          "No engine configured. Set DATABASE_URL (Postgres) or a PGLite database_path " +
+            "in ~/.gbrain/config.json, or pass --db <path> for a throwaway brain.",
+        );
+      }
+      engine = await createEngine(toEngineConfig(cfg));
+      await engine.connect(toEngineConfig(cfg));
+    }
     await engine.initSchema();
+    // Shared statute source (e.g. --source law-at): create the row if missing so
+    // the FK holds under the multi-tenant fail-closed schema. Idempotent.
+    if (SOURCE_ID) {
+      await engine.executeRaw(
+        `INSERT INTO sources (id, name) VALUES ($1, $1) ON CONFLICT (id) DO NOTHING`,
+        [SOURCE_ID],
+      );
+    }
     // expose for the loop
     (globalThis as any).__importFromContent = importFromContent;
   }
@@ -152,7 +200,10 @@ async function main() {
     for (const section of sections) {
       const slug = `legal/statutes/${sf.jurisdiction}/${sf.abbr}/${section.id}`;
       try {
-        await importFromContent(engine, slug, sectionPage(sf, meta, section), { noEmbed: NO_EMBED });
+        await importFromContent(engine, slug, sectionPage(sf, meta, section), {
+          noEmbed: NO_EMBED,
+          ...(SOURCE_ID ? { sourceId: SOURCE_ID } : {}),
+        });
         okForLaw++;
       } catch (e) {
         totalErrors++;

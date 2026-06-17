@@ -3,6 +3,8 @@ import { hashPassword } from "@/lib/auth/password";
 import { getStore } from "@/lib/auth/store";
 import { verifyActionToken, bindFragment } from "@/lib/auth/tokens";
 import { hit, clientIp } from "@/lib/auth/rate-limit";
+import { revokeAllSessions } from "@/lib/auth/session";
+import { logAudit } from "@/lib/audit";
 
 export async function POST(req: NextRequest) {
   const ipLimit = await hit(`reset:ip:${clientIp(req.headers)}`, 10, 15 * 60_000);
@@ -43,5 +45,7 @@ export async function POST(req: NextRequest) {
   }
 
   await store.update(user.id, { passwordHash: await hashPassword(password) });
+  revokeAllSessions(user.id);
+  void logAudit("settings.update", "password_reset", { entityId: user.id });
   return NextResponse.json({ ok: true });
 }

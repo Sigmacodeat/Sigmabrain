@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { splitStatute } from "../src/core/legal/split-statute.ts";
+import { splitStatute, splitStatuteInline } from "../src/core/legal/split-statute.ts";
 
 const FIXTURE = `---
 title: "EStG — Einkommensteuergesetz"
@@ -110,5 +110,103 @@ describe("splitStatute — Article-based statutes (CH OR/ZGB, Grundgesetz)", () 
     expect(meta.abbreviation).toBe("OR");
     expect(sections[0].body).not.toContain("Obligationenrecht (OR) — Schweiz");
     expect(sections[0].body).toContain("Willensäusserung");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Inline-§ recovery for unstructured dumps (Austrian RIS PDF text).
+// These dumps carry no `## §` headings — the § markers are inline in the
+// running text, interleaved with cross-references that must NOT open sections.
+// ---------------------------------------------------------------------------
+
+const AT_DUMP = `---
+title: "ABGB — Allgemeines bürgerliches Gesetzbuch"
+type: "law"
+jurisdiction: "at"
+abbreviation: "ABGB"
+---
+
+Bundesrecht konsolidiert. Langtitel … § 1. Der Inbegriff der Gesetze ist das
+bürgerliche Recht. § 2. Sobald ein Gesetz kundgemacht worden ist. § 2a. Eine
+Sonderbestimmung. § 3. Die Wirksamkeit eines Gesetzes; siehe dazu § 323a. über
+Übergangsrecht. § 4. Die Gesetze gelten. § 5. Gesetze wirken nicht zurück.
+`;
+
+describe("splitStatute — inline-§ recovery (AT PDF dumps, no headings)", () => {
+  // The dump has fewer than the 10-marker trust floor, so exercise the pure
+  // function directly with a body that clears the threshold.
+  const body = Array.from({ length: 14 }, (_, i) => `§ ${i + 1}. Inhalt von Paragraph ${i + 1}.`)
+    .join(" gemäß § 1 und § 2 ");
+
+  test("recovers one section per inline § marker", () => {
+    const secs = splitStatuteInline(body);
+    expect(secs.length).toBe(14);
+    expect(secs[0]).toMatchObject({ marker: "§", ref: "1", id: "p-1" });
+    expect(secs[13]).toMatchObject({ ref: "14", id: "p-14" });
+  });
+
+  test("backward cross-references do not open spurious sections", () => {
+    const secs = splitStatuteInline(body);
+    // The "gemäß § 1 und § 2" cross-refs sit inside each section's body.
+    expect(secs.length).toBe(14);
+    expect(secs[5].body).toContain("gemäß § 1");
+  });
+
+  test("a lone far-forward cross-reference (§ 323a) is absorbed, not split out", () => {
+    const at = `§ 1. eins. § 2. zwei. § 2a. zwei-a. § 3. drei; vgl § 323a. weiter. § 4. vier. § 5. fünf. § 6. sechs. § 7. sieben. § 8. acht. § 9. neun. § 10. zehn.`;
+    const secs = splitStatuteInline(at);
+    const refs = secs.map((s) => s.ref);
+    expect(refs).not.toContain("323a");
+    expect(refs).toContain("3");
+    expect(refs).toContain("4");
+    // §3's body swallows the §323a cross-reference.
+    const p3 = secs.find((s) => s.ref === "3");
+    expect(p3?.body).toContain("323a");
+  });
+
+  test("a genuine large gap (… §5 → §60 → §61 …) is preserved via continuation", () => {
+    // Real codes start at §1; after a block of repealed §§ the next live § can
+    // sit a large gap forward. The continuation run (§60, §61, §62 …) proves
+    // it's a real boundary, not a cross-reference.
+    const head = `§ 1. eins. § 2. zwei. § 3. drei. § 4. vier. § 5. fünf. `;
+    const afterGap = Array.from({ length: 7 }, (_, i) => `§ ${60 + i}. p${60 + i}.`).join(" ");
+    const secs = splitStatuteInline(head + afterGap);
+    const refs = secs.map((s) => s.ref);
+    expect(refs).toContain("5");
+    expect(refs).toContain("60");
+    expect(refs).toContain("61");
+  });
+
+  test("full integration: splitStatute falls back to inline mode for a heading-less AT dump", () => {
+    const longDump = AT_DUMP.replace(
+      "§ 5. Gesetze wirken nicht zurück.",
+      Array.from({ length: 12 }, (_, i) => `§ ${i + 5}. Paragraph ${i + 5}.`).join(" "),
+    );
+    const { meta, sections } = splitStatute(longDump);
+    expect(meta.abbreviation).toBe("ABGB");
+    expect(sections.length).toBeGreaterThanOrEqual(10);
+    expect(sections[0].marker).toBe("§");
+  });
+
+  test("prose that merely cites a few §§ is NOT split (below trust floor)", () => {
+    const prose = "Der Kläger beruft sich auf § 823 und § 280 BGB sowie § 1 ABGB.";
+    expect(splitStatuteInline(prose).length).toBe(0);
+  });
+
+  test("last section spills its trailing appendix into a separate -anhang page", () => {
+    // The final § marker has no following marker, so it would absorb a large
+    // appendix (Anlagen/Übergangsrecht) and balloon past the embeddable size.
+    const head = Array.from({ length: 12 }, (_, i) => `§ ${i + 1}. kurzer Inhalt ${i + 1}.`).join(" ");
+    // Appendix with word boundaries so the cut lands cleanly, not mid-word.
+    const hugeAppendix = " Anlage zum Gesetz. " + "wort ".repeat(12000);
+    const secs = splitStatuteInline(head + ` § 13. Schlussparagraph.` + hugeAppendix);
+    const last = secs[secs.length - 1];
+    const lawSection = secs[secs.length - 2];
+    // The § itself stays embeddable; the bulk moves to a dedicated -anhang page.
+    expect(lawSection.ref).toBe("13");
+    expect(lawSection.body).toContain("§ 13");
+    expect(lawSection.body.length).toBeLessThanOrEqual(24000);
+    expect(last.ref).toBe("13-anhang");
+    expect(last.body.length).toBeGreaterThan(20000);
   });
 });

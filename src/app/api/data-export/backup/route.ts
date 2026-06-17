@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
-import { ENGINE_URL, engineContext, engineConfigurationResponse } from "@/lib/engine";
+import { ENGINE_URL, requireAuthAction, engineConfigurationResponse } from "@/lib/engine";
 
 export const dynamic = "force-dynamic";
 
@@ -11,12 +10,8 @@ export const dynamic = "force-dynamic";
  * Admin-only. Nützlich für Migrationen, Compliance, lokale Archive.
  */
 export async function GET(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) return Response.json({ error: "unauthorized" }, { status: 401 });
-  if (me.role !== "admin") return Response.json({ error: "forbidden" }, { status: 403 });
-
-  const ctx = await engineContext();
-  if (!ctx) return Response.json({ error: "engine_unavailable" }, { status: 503 });
+  const ctx = await requireAuthAction("admin.*");
+  if (ctx instanceof Response) return ctx;
   const configErr = engineConfigurationResponse();
   if (configErr) return configErr;
 
@@ -45,8 +40,8 @@ export async function GET(req: NextRequest) {
       export_metadata: {
         type: "full_backup",
         generated_at: new Date().toISOString(),
-        user_id: me.id,
-        user_email: me.email,
+        user_id: ctx.user.id,
+        user_email: ctx.user.email,
         total_pages: allPages.length,
         format: "JSON",
         description: "Complete backup of all Brain-Pages for migration or compliance archiving",

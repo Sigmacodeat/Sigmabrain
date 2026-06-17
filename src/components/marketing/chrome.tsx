@@ -117,13 +117,36 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
   const pathname = usePathname() || "/";
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const other: Lang = lang === "en" ? "de" : "en";
   const light = theme === "light";
   const linkCls = light ? "text-[#5b5b6b] hover:text-[#1a1a24]" : "text-[#8888aa] hover:text-[#e8e8f0]";
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
-    <nav className="relative z-50 max-w-7xl mx-auto px-6 py-4">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "backdrop-blur-xl shadow-lg shadow-black/20 border-b"
+          : ""
+      }`}
+      style={
+        scrolled
+          ? {
+              background: light ? "rgba(246,245,241,0.92)" : "rgba(6,6,15,0.88)",
+              borderBottomColor: light ? "var(--color-light-border)" : "#1e1e3a",
+            }
+          : undefined
+      }
+    >
+    <nav className="max-w-7xl mx-auto px-6 py-4">
       <div className="flex items-center justify-between">
         <Link href={p(lang, "")} aria-label={isSubsumio ? "Subsumio home" : "Sigmabrain home"}>
           <BrandLogo brand={brand} theme={theme} />
@@ -205,7 +228,7 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
             className={`hidden sm:flex items-center gap-1.5 text-xs rounded-full px-3 py-1.5 border ${light ? "text-[#5b5b6b] hover:text-[#1a1a24] border-[#e7e5dd] hover:border-[#c9c6bd]" : "text-[#8888aa] hover:text-[#e8e8f0] border-[#1e1e3a] hover:border-[#3a3a6a]"}`}
             aria-label={lang === "en" ? "Auf Deutsch lesen" : "Read in English"}
           >
-            <Globe size={12} /> {other.toUpperCase()}
+            <Globe size={12} /> {lang.toUpperCase()}
           </Link>
           <Link href={p(lang, "/login")} className="hidden sm:block">
             <Button variant="ghost" size="sm" className={light ? "text-[#1a1a24] hover:bg-black/5" : undefined}>{nav.signIn}</Button>
@@ -251,11 +274,12 @@ export function MarketingNav({ lang, theme = "dark" }: { lang: Lang; theme?: "li
           <Link href={p(lang, "/pricing")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.pricing}</Link>
           {!isSubsumio && <Link href={p(lang, "/compare")} className="block px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>{nav.compare}</Link>}
           <Link href={altPath(lang, pathname)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[#8888aa] hover:bg-[#1a1a35]" onClick={() => setMobileOpen(false)}>
-            <Globe size={13} /> {lang === "en" ? "Deutsch" : "English"}
+            <Globe size={13} /> {lang === "en" ? "Auf Deutsch lesen" : "Read in English"}
           </Link>
         </div>
       )}
     </nav>
+    </header>
     <SalesAgentWidget lang={lang} />
     </>
   );

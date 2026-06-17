@@ -37,9 +37,14 @@ interface DeLaw {
 }
 
 interface AtLaw {
-  /** Exact Kurztitel for the RIS BrKons title search — the Gesetzesnummer
-   *  is resolved dynamically (hardcoded numbers proved wrong in testing). */
+  /** Title term for the RIS BrKons API search query. The Gesetzesnummer is
+   *  resolved dynamically (hardcoded numbers proved wrong in testing). */
   searchTitle: string;
+  /** Exact RIS Kurztitel to match a result on, when it differs from the search
+   *  query term (e.g. query "Gesetz über Gesellschaften mit beschränkter
+   *  Haftung" → Kurztitel "GmbH-Gesetz"; query "Aktiengesetz 1965" → "Aktiengesetz").
+   *  Defaults to searchTitle. */
+  matchTitle?: string;
   abbr: string;
   title: string;
 }
@@ -71,6 +76,25 @@ const AT_LAWS: AtLaw[] = [
   { searchTitle: 'Bundesabgabenordnung', abbr: 'BAO', title: 'Bundesabgabenordnung' },
   { searchTitle: 'Exekutionsordnung', abbr: 'EO', title: 'Exekutionsordnung' },
   { searchTitle: 'Strafprozeßordnung 1975', abbr: 'StPO-AT', title: 'Strafprozeßordnung 1975 (Österreich)' },
+  // Tax (AT-specific — the DE EStG/UStG do NOT apply in Austria).
+  { searchTitle: 'Einkommensteuergesetz 1988', abbr: 'EStG-AT', title: 'Einkommensteuergesetz 1988 (Österreich)' },
+  { searchTitle: 'Körperschaftsteuergesetz 1988', abbr: 'KStG-AT', title: 'Körperschaftsteuergesetz 1988 (Österreich)' },
+  { searchTitle: 'Umsatzsteuergesetz 1994', abbr: 'UStG-AT', title: 'Umsatzsteuergesetz 1994 (Österreich)' },
+  // Labour + social insurance.
+  { searchTitle: 'Allgemeines Sozialversicherungsgesetz', abbr: 'ASVG', title: 'Allgemeines Sozialversicherungsgesetz' },
+  { searchTitle: 'Arbeitsverfassungsgesetz', abbr: 'ArbVG', title: 'Arbeitsverfassungsgesetz' },
+  { searchTitle: 'Angestelltengesetz', abbr: 'AngG', title: 'Angestelltengesetz' },
+  // Consumer + tenancy.
+  { searchTitle: 'Konsumentenschutzgesetz', abbr: 'KSchG', title: 'Konsumentenschutzgesetz' },
+  { searchTitle: 'Mietrechtsgesetz', abbr: 'MRG', title: 'Mietrechtsgesetz' },
+  // Corporate + insolvency.
+  { searchTitle: 'Gesetz über Gesellschaften mit beschränkter Haftung', matchTitle: 'GmbH-Gesetz', abbr: 'GmbHG-AT', title: 'GmbH-Gesetz (Österreich)' },
+  { searchTitle: 'Aktiengesetz 1965', matchTitle: 'Aktiengesetz', abbr: 'AktG-AT', title: 'Aktiengesetz (Österreich)' },
+  { searchTitle: 'Insolvenzordnung', abbr: 'IO', title: 'Insolvenzordnung (Österreich)' },
+  // Administrative + traffic + data protection.
+  { searchTitle: 'Allgemeines Verwaltungsverfahrensgesetz 1991', abbr: 'AVG', title: 'Allgemeines Verwaltungsverfahrensgesetz 1991' },
+  { searchTitle: 'Straßenverkehrsordnung 1960', abbr: 'StVO-AT', title: 'Straßenverkehrsordnung 1960 (Österreich)' },
+  { searchTitle: 'Datenschutzgesetz', abbr: 'DSG-AT', title: 'Datenschutzgesetz (Österreich)' },
 ];
 
 const args = process.argv.slice(2);
@@ -187,7 +211,7 @@ async function resolveGesetzesnummer(law: AtLaw): Promise<string | null> {
       for (const ref of refs as Array<Record<string, unknown>>) {
         const meta = (ref.Data as Record<string, unknown>)?.Metadaten as Record<string, unknown> | undefined;
         const bund = meta?.Bundesrecht as Record<string, unknown> | undefined;
-        if (bund?.Kurztitel !== law.searchTitle) continue;
+        if (bund?.Kurztitel !== (law.matchTitle ?? law.searchTitle)) continue;
         const docUrl = (meta?.Allgemein as Record<string, unknown> | undefined)?.DokumentUrl as string | undefined;
         if (!docUrl) continue;
         const page = await fetch(docUrl, { headers: RIS_UA, redirect: 'follow' });

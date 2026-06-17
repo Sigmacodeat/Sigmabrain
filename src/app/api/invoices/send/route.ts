@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireEngineContext } from "@/lib/engine";
 import { loadKanzleiSettings } from "@/lib/kanzlei-settings";
 import { api } from "@/lib/api";
 import nodemailer from "nodemailer";
+import { logAudit } from "@/lib/audit";
 
 export async function POST(req: NextRequest) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-  if (user.role !== "admin" && user.role !== "lawyer" && user.role !== "assistant") {
-    return NextResponse.json({ error: "forbidden" }, { status: 403 });
-  }
+  const ctx = await requireEngineContext(req, "invoice.write", "standard");
+  if (ctx instanceof Response) return ctx;
 
   let body: { invoiceSlug: string; toEmail?: string };
   try {
@@ -84,6 +80,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    void logAudit("invoice.send", "invoice", {
+      entityId: invoiceSlug,
+      details: { sentTo: recipient },
+    });
     return NextResponse.json({ ok: true, sentTo: recipient });
   } catch (err) {
     console.error("[invoice-send] failed:", err instanceof Error ? err.message : String(err));

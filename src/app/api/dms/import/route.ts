@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { getConnector } from "@/lib/dms";
-import { getSessionUser } from "@/lib/auth/server";
-import { engineContext } from "@/lib/engine";
+import { requireEngineContext, recordQuota } from "@/lib/engine";
 
 export const dynamic = "force-dynamic";
 
@@ -11,21 +10,24 @@ export const dynamic = "force-dynamic";
  * Body: { documentId: string }
  */
 export async function POST(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) return Response.json({ error: "unauthorized" }, { status: 401 });
+  const ctx = await requireEngineContext(req, "brain.write", "heavy", "uploads");
+  if (ctx instanceof Response) return ctx;
 
   const connector = await getConnector();
   if (!connector || !connector.isConfigured()) {
     return Response.json({ error: "dms_not_configured" }, { status: 503 });
   }
 
-  const { documentId } = (await req.json()) as { documentId?: string };
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return Response.json({ error: "invalid_json" }, { status: 400 });
+  }
+  const documentId = typeof body.documentId === "string" ? body.documentId.trim() : "";
   if (!documentId) {
     return Response.json({ error: "document_id_required" }, { status: 400 });
   }
-
-  const ctx = await engineContext();
-  if (!ctx) return Response.json({ error: "engine_context_failed" }, { status: 500 });
 
   try {
     const doc = await connector.getDocument(documentId);
@@ -34,6 +36,7 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await connector.importToBrain(doc, ctx.brainId, ctx.headers);
+    void recordQuota(ctx, "uploads");
     return Response.json(result);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

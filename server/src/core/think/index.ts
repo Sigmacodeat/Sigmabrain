@@ -22,7 +22,7 @@ import type { BrainEngine, SynthesisEvidenceInput } from '../engine.ts';
 import { runGather, renderPagesBlock, takesHitToTakeForPrompt } from './gather.ts';
 import { renderTakesBlock } from './sanitize.ts';
 import { buildThinkSystemPrompt, buildThinkUserMessage } from './prompt.ts';
-import { resolveCitations, type ParsedCitation } from './cite-render.ts';
+import { resolveCitations, validateCitationsAgainstContext, type ParsedCitation } from './cite-render.ts';
 import { resolveModel } from '../model-config.ts';
 import { chat as gatewayChat, probeChatModel, type ChatResult } from '../ai/gateway.ts';
 import { AIConfigError } from '../ai/errors.ts';
@@ -305,6 +305,8 @@ export async function runThink(
     takesHoldersAllowList: opts.takesHoldersAllowList,
     gatherLimit: modeLimits.gatherLimit,
     takesLimit: modeLimits.takesLimit,
+    sourceId: opts.sourceId,
+    sourceIds: opts.allowedSources,
   });
 
   // Render evidence blocks for the prompt
@@ -536,6 +538,30 @@ export async function runThink(
     for (const w of resolved.warnings) warnings.push(w);
   }
 
+  // Anti-hallucination: enforce that every citation points at context the
+  // model was actually shown. A citation to a slug/row that was never gathered
+  // is a fabrication (the #1 legal-RAG failure mode) — drop it here so it can
+  // never reach the answer's evidence trail or synthesis_evidence. The valid
+  // set built from `gather` is the only legitimate source of truth: page hits,
+  // every gathered take's page_slug, and the anchor's reachable graph slugs.
+  const citationContext = {
+    pageSlugs: new Set<string>([
+      ...gather.pages
+        .map(p => String((p as unknown as { slug?: string }).slug ?? '').toLowerCase())
+        .filter(Boolean),
+      ...gather.takes.map(t => t.page_slug.toLowerCase()),
+      ...gather.graphSlugs.map(s => s.toLowerCase()),
+    ]),
+    takeKeys: new Set<string>(
+      gather.takes.map(t => `${t.page_slug.toLowerCase()}#${t.row_num}`),
+    ),
+  };
+  const grounded = validateCitationsAgainstContext(resolved.citations, citationContext);
+  for (const w of grounded.warnings) warnings.push(w);
+  if (grounded.invalid.length > 0) {
+    warnings.push(`DROPPED_${grounded.invalid.length}_UNGROUNDED_CITATIONS`);
+  }
+
   // Round-loop scaffolding (rounds > 1 currently re-runs without gap-driven retrieval).
   // The loop is in place so the v0.29 gap-fill heuristic doesn't change the call site.
   for (let r = 1; r < rounds; r++) {
@@ -546,7 +572,7 @@ export async function runThink(
   return {
     question: opts.question,
     answer: response.answer,
-    citations: resolved.citations,
+    citations: grounded.valid,
     gaps: response.gaps,
     pagesGathered: gather.pages.length,
     takesGathered: gather.takes.length,

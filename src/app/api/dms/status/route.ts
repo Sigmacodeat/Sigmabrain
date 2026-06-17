@@ -1,4 +1,6 @@
+import { NextRequest } from "next/server";
 import { getConnector, isAnyDMSConfigured } from "@/lib/dms";
+import { requireAuthAction } from "@/lib/engine";
 
 export const dynamic = "force-dynamic";
 
@@ -6,7 +8,10 @@ export const dynamic = "force-dynamic";
  * GET /api/dms/status
  * Gibt zurück, ob ein DMS konfiguriert ist und welcher Provider aktiv ist.
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const ctx = await requireAuthAction("settings.read");
+  if (ctx instanceof Response) return ctx;
+
   const configured = isAnyDMSConfigured();
   if (!configured) {
     return Response.json({ configured: false });

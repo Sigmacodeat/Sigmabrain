@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { NextRequest, NextResponse } from "next/server";
+import { requireAuthAction } from "@/lib/engine";
 import { loadAllowedSenders } from "@/lib/whatsapp/verify";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+export async function GET(req: NextRequest) {
+  const ctx = await requireAuthAction("settings.read");
+  if (ctx instanceof Response) return ctx;
 
   const allowed = loadAllowedSenders();
   return NextResponse.json({

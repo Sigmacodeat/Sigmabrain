@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { ENGINE_URL, engineConfigurationResponse, engineContext } from "@/lib/engine";
+import { ENGINE_URL, engineConfigurationResponse, requireAuthAction } from "@/lib/engine";
 
 export const dynamic = "force-dynamic";
 
@@ -10,10 +10,8 @@ export const dynamic = "force-dynamic";
  * caller's tenant brain via engineContext headers.
  */
 export async function GET(req: NextRequest) {
-  const ctx = await engineContext();
-  if (!ctx || ctx.user.role !== "admin") {
-    return Response.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const ctx = await requireAuthAction("admin.*");
+  if (ctx instanceof Response) return ctx;
   const configError = engineConfigurationResponse();
   if (configError) return configError;
 
@@ -66,7 +64,8 @@ export async function GET(req: NextRequest) {
     });
 
     return Response.json({ entries: filtered, total: filtered.length });
-  } catch {
+  } catch (err) {
+    console.error("[audit] failed:", err instanceof Error ? err.message : String(err));
     return Response.json({ entries: [], total: 0 });
   }
 }

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getSessionUser } from "@/lib/auth/server";
+import { requireAuthAction } from "@/lib/engine";
 import { searchJudgements } from "@/lib/judgements";
 
 export const maxDuration = 30;
@@ -9,8 +9,8 @@ export const maxDuration = 30;
  * Query params: q (required), jurisdiction (at|de|all), court, from, to, page, limit.
  */
 export async function GET(req: NextRequest) {
-  const me = await getSessionUser();
-  if (!me) return Response.json({ error: "unauthorized" }, { status: 401 });
+  const ctx = await requireAuthAction("legal.judgements");
+  if (ctx instanceof Response) return ctx;
 
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") || "";
