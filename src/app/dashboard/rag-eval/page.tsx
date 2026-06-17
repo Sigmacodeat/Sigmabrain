@@ -37,8 +37,8 @@ export default function RagEvalPage() {
             <BarChart3 size={20} className="text-violet-600" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#15151d]">RAG-Eval</h1>
-            <p className="text-sm text-[#585866]">Retrieval-Qualitäts-Benchmark</p>
+            <h1 className="text-xl font-bold text-[color:var(--ds-text)]">RAG-Eval</h1>
+            <p className="text-sm text-[color:var(--ds-text-muted)]">Retrieval-Qualitäts-Benchmark</p>
           </div>
         </div>
         <Button
@@ -64,41 +64,41 @@ export default function RagEvalPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <div className={cn("rounded-xl border p-4 text-center", `border-${grade.color}-500/20 bg-${grade.color}-500/5`)}>
               <div className={cn("text-2xl font-bold", `text-${grade.color}-400`)}>{grade.label}</div>
-              <div className="text-xs text-[#585866] mt-1">Gesamtbewertung</div>
+              <div className="text-xs text-[color:var(--ds-text-muted)] mt-1">Gesamtbewertung</div>
             </div>
-            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 text-center">
+            <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 text-center">
               <div className="text-2xl font-bold text-blue-600">{(result.overallPrecision * 100).toFixed(1)}%</div>
-              <div className="text-xs text-[#585866] mt-1">Precision@10</div>
+              <div className="text-xs text-[color:var(--ds-text-muted)] mt-1">Precision@10</div>
             </div>
-            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 text-center">
+            <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 text-center">
               <div className="text-2xl font-bold text-emerald-600">{(result.overallRecall * 100).toFixed(1)}%</div>
-              <div className="text-xs text-[#585866] mt-1">Recall@10</div>
+              <div className="text-xs text-[color:var(--ds-text-muted)] mt-1">Recall@10</div>
             </div>
-            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 text-center">
+            <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 text-center">
               <div className="text-2xl font-bold text-amber-600">{result.overallMrr.toFixed(3)}</div>
-              <div className="text-xs text-[#585866] mt-1">MRR</div>
+              <div className="text-xs text-[color:var(--ds-text-muted)] mt-1">MRR</div>
             </div>
           </div>
 
           {/* Category Breakdown */}
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-            <h2 className="text-sm font-semibold text-[#15151d] mb-3">Nach Kategorie</h2>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)] mb-3">Nach Kategorie</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {Object.entries(result.byCategory).map(([cat, stats]) => (
-                <div key={cat} className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3">
-                  <div className="text-xs text-[#585866] uppercase tracking-wider mb-2">{cat}</div>
+                <div key={cat} className="rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3">
+                  <div className="text-xs text-[color:var(--ds-text-muted)] uppercase tracking-wider mb-2">{cat}</div>
                   <div className="space-y-1 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-[#585866]">Precision</span>
-                      <span className="text-[#15151d]">{(stats.precision * 100).toFixed(1)}%</span>
+                      <span className="text-[color:var(--ds-text-muted)]">Precision</span>
+                      <span className="text-[color:var(--ds-text)]">{(stats.precision * 100).toFixed(1)}%</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#585866]">Recall</span>
-                      <span className="text-[#15151d]">{(stats.recall * 100).toFixed(1)}%</span>
+                      <span className="text-[color:var(--ds-text-muted)]">Recall</span>
+                      <span className="text-[color:var(--ds-text)]">{(stats.recall * 100).toFixed(1)}%</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#585866]">MRR</span>
-                      <span className="text-[#15151d]">{stats.mrr.toFixed(3)}</span>
+                      <span className="text-[color:var(--ds-text-muted)]">MRR</span>
+                      <span className="text-[color:var(--ds-text)]">{stats.mrr.toFixed(3)}</span>
                     </div>
                   </div>
                 </div>
@@ -107,22 +107,22 @@ export default function RagEvalPage() {
           </div>
 
           {/* Per-Query Results */}
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-            <h2 className="text-sm font-semibold text-[#15151d] mb-3">Einzelergebnisse</h2>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)] mb-3">Einzelergebnisse</h2>
             <div className="space-y-2">
               {result.results.map((r: EvalResult) => {
                 const pass = r.precision >= 0.5 || r.recall >= 0.5;
                 return (
-                  <div key={r.queryId} className="flex items-center gap-3 p-3 rounded-lg border border-[#e2e4ec] bg-[#ffffff]">
+                  <div key={r.queryId} className="flex items-center gap-3 p-3 rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)]">
                     <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", pass ? "bg-emerald-500/10" : "bg-red-500/10")}>
                       {pass ? <CheckCircle2 size={16} className="text-emerald-600" /> : <XCircle size={16} className="text-red-600" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-[#15151d] truncate">{r.query}</span>
+                        <span className="text-sm text-[color:var(--ds-text)] truncate">{r.query}</span>
                         <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700 shrink-0">{r.category}</Badge>
                       </div>
-                      <div className="text-xs text-[#585866] mt-0.5">
+                      <div className="text-xs text-[color:var(--ds-text-muted)] mt-0.5">
                         P={(r.precision * 100).toFixed(0)}% · R={(r.recall * 100).toFixed(0)}% · MRR={r.mrr.toFixed(2)} · {r.retrievedSlugs.length} Treffer
                       </div>
                     </div>
@@ -132,16 +132,16 @@ export default function RagEvalPage() {
             </div>
           </div>
 
-          <p className="text-xs text-[#585866]">Eval-Lauf: {new Date(result.timestamp).toLocaleString("de-DE")}</p>
+          <p className="text-xs text-[color:var(--ds-text-muted)]">Eval-Lauf: {new Date(result.timestamp).toLocaleString("de-DE")}</p>
         </>
       )}
 
       {!result && !error && !loading && (
         <div className="text-center py-20 space-y-4">
-          <Target size={48} className="mx-auto text-[#e2e4ec]" />
+          <Target size={48} className="mx-auto text-[color:var(--ds-border)]" />
           <div>
-            <p className="text-[#585866]">Noch kein Eval durchgeführt.</p>
-            <p className="text-[#585866] text-sm mt-1">
+            <p className="text-[color:var(--ds-text-muted)]">Noch kein Eval durchgeführt.</p>
+            <p className="text-[color:var(--ds-text-muted)] text-sm mt-1">
               Klicke „Eval starten“, um die Retrieval-Qualität Ihres Brains zu benchmarken.
             </p>
           </div>

@@ -115,8 +115,8 @@ export default function ApprovalsPage() {
           <Gavel size={20} className="text-violet-600" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">Freigaben</h1>
-          <p className="text-sm text-[#585866]">Vier-Augen-Prinzip — KI-/Agenten-Vorschläge werden erst durch eine zweite Person wirksam</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Freigaben</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Vier-Augen-Prinzip — KI-/Agenten-Vorschläge werden erst durch eine zweite Person wirksam</p>
         </div>
       </div>
 
@@ -143,10 +143,10 @@ export default function ApprovalsPage() {
           <section className="space-y-2">
             <div className="flex items-center gap-2">
               <Clock size={14} className="text-amber-600" aria-hidden="true" />
-              <h2 className="text-sm font-semibold text-[#15151d]">Offen ({pending.length})</h2>
+              <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Offen ({pending.length})</h2>
             </div>
             {pending.length === 0 ? (
-              <p className="text-sm text-[#585866] py-6 text-center">Keine offenen Freigaben.</p>
+              <p className="text-sm text-[color:var(--ds-text-muted)] py-6 text-center">Keine offenen Freigaben.</p>
             ) : (
               pending.map((item) => (
                 <div key={item.slug} className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4 space-y-3">
@@ -156,9 +156,9 @@ export default function ApprovalsPage() {
                         <Badge variant="default" className="text-[10px] border bg-violet-500/10 text-violet-600 border-violet-500/20">
                           {ACTION_LABELS[item.action_type]}
                         </Badge>
-                        <span className="text-sm font-medium text-[#15151d] truncate">{item.summary}</span>
+                        <span className="text-sm font-medium text-[color:var(--ds-text)] truncate">{item.summary}</span>
                       </div>
-                      <p className="text-xs text-[#585866] mt-1">
+                      <p className="text-xs text-[color:var(--ds-text-muted)] mt-1">
                         Eingereicht von {item.proposed_by}
                         {item.proposed_at ? ` · ${new Date(item.proposed_at).toLocaleString("de-DE")}` : ""}
                       </p>
@@ -181,7 +181,7 @@ export default function ApprovalsPage() {
                         rows={2}
                         placeholder="Grund der Ablehnung (für die Akte dokumentiert)…"
                         aria-label="Grund der Ablehnung"
-                        className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-red-500/50 resize-y"
+                        className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-red-500/50 resize-y"
                       />
                       <div className="flex items-center gap-2">
                         <button
@@ -194,7 +194,7 @@ export default function ApprovalsPage() {
                         </button>
                         <button
                           onClick={() => { setRejecting(null); setReason(""); }}
-                          className="px-3 py-1.5 rounded-lg text-xs text-[#585866] hover:text-[#15151d]"
+                          className="px-3 py-1.5 rounded-lg text-xs text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"
                         >
                           Abbrechen
                         </button>
@@ -213,7 +213,7 @@ export default function ApprovalsPage() {
                       <button
                         onClick={() => { setRejecting(item.slug); setReason(""); }}
                         disabled={busy === item.slug}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e2e4ec] text-xs text-[#585866] hover:text-red-600 hover:border-red-500/30 disabled:opacity-60"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[color:var(--ds-border)] text-xs text-[color:var(--ds-text-muted)] hover:text-red-600 hover:border-red-500/30 disabled:opacity-60"
                       >
                         <XCircle size={13} />
                         Ablehnen
@@ -229,20 +229,20 @@ export default function ApprovalsPage() {
           {decided.length > 0 && (
             <section className="space-y-2">
               <div className="flex items-center gap-2">
-                <UserCheck size={14} className="text-[#585866]" aria-hidden="true" />
-                <h2 className="text-sm font-semibold text-[#15151d]">Entschieden ({decided.length})</h2>
+                <UserCheck size={14} className="text-[color:var(--ds-text-muted)]" aria-hidden="true" />
+                <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Entschieden ({decided.length})</h2>
               </div>
               {decided.map((item) => (
-                <div key={item.slug} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
+                <div key={item.slug} className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     {item.status === "approved" ? (
                       <Badge variant="default" className="text-[10px] border bg-emerald-500/10 text-emerald-600 border-emerald-500/20">Freigegeben</Badge>
                     ) : (
                       <Badge variant="default" className="text-[10px] border bg-red-500/10 text-red-600 border-red-500/20">Abgelehnt</Badge>
                     )}
-                    <span className="text-sm text-[#15151d] truncate">{item.summary}</span>
+                    <span className="text-sm text-[color:var(--ds-text)] truncate">{item.summary}</span>
                   </div>
-                  <p className="text-xs text-[#585866] mt-1">
+                  <p className="text-xs text-[color:var(--ds-text-muted)] mt-1">
                     {item.decided_by ? `${item.decided_by} · ` : ""}
                     {item.decided_at ? new Date(item.decided_at).toLocaleString("de-DE") : ""}
                   </p>

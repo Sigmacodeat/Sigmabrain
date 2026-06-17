@@ -60,17 +60,17 @@ function MaskedInput({
         value={value || ""}
         placeholder={placeholder}
         onChange={(e) => onChange?.(e.target.value)}
-        className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2.5 pr-20 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 font-mono transition-colors"
+        className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2.5 pr-20 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50 font-mono transition-colors"
       />
       <div className="absolute right-2 flex items-center gap-1">
         <button
           onClick={() => setShow(!show)}
-          className="p-1.5 text-[#585866] hover:text-[#585866] transition-colors"
+          className="p-1.5 text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] transition-colors"
         >
           {show ? <EyeOff size={13} /> : <Eye size={13} />}
         </button>
         {value && (
-          <button onClick={copy} className="p-1.5 text-[#585866] hover:text-[#585866] transition-colors">
+          <button onClick={copy} className="p-1.5 text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] transition-colors">
             {copied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
           </button>
         )}
@@ -81,10 +81,10 @@ function MaskedInput({
 
 function Field({ label, desc, children }: { label: string; desc?: string; children: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-3 gap-4 items-start py-4 border-b border-[#e2e4ec] last:border-0">
+    <div className="grid grid-cols-3 gap-4 items-start py-4 border-b border-[color:var(--ds-border)] last:border-0">
       <div>
-        <p className="text-sm font-medium text-[#15151d]">{label}</p>
-        {desc && <p className="text-xs text-[#585866] mt-0.5 leading-relaxed">{desc}</p>}
+        <p className="text-sm font-medium text-[color:var(--ds-text)]">{label}</p>
+        {desc && <p className="text-xs text-[color:var(--ds-text-muted)] mt-0.5 leading-relaxed">{desc}</p>}
       </div>
       <div className="col-span-2">{children}</div>
     </div>
@@ -277,12 +277,12 @@ export default function SettingsPage() {
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#15151d]">Einstellungen</h1>
-        <p className="text-sm text-[#585866] mt-0.5">Sigmabrain Engine & Dashboard konfigurieren</p>
+        <h1 className="text-2xl font-bold text-[color:var(--ds-text)]">Einstellungen</h1>
+        <p className="text-sm text-[color:var(--ds-text-muted)] mt-0.5">Sigmabrain Engine & Dashboard konfigurieren</p>
       </div>
 
       {/* Tab navigation */}
-      <div className="flex items-center gap-1 border-b border-[#e2e4ec] pb-px">
+      <div className="flex items-center gap-1 border-b border-[color:var(--ds-border)] pb-px">
         {ALL_TABS.filter((tab) => tab.allowed.includes(userRole)).map((tab) => {
           const Icon = tab.icon;
           return (
@@ -293,7 +293,7 @@ export default function SettingsPage() {
                 "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px",
                 activeTab === tab.id
                   ? "border-violet-500 text-violet-600"
-                  : "border-transparent text-[#585866] hover:text-[#15151d]"
+                  : "border-transparent text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"
               )}
             >
               <Icon size={14} />
@@ -306,10 +306,10 @@ export default function SettingsPage() {
       {/* Brain Settings */}
       {activeTab === "brain" && (
         <Card>
-          <div className="p-6 border-b border-[#e2e4ec]">
-            <h2 className="text-base font-semibold text-[#15151d]">Brain-Konfiguration</h2>
+          <div className="p-6 border-b border-[color:var(--ds-border)]">
+            <h2 className="text-base font-semibold text-[color:var(--ds-text)]">Brain-Konfiguration</h2>
           </div>
-          <div className="px-6 divide-y divide-[#e2e4ec]">
+          <div className="px-6 divide-y divide-[color:var(--ds-border)]">
             <Field label="Engine-URL" desc="URL des laufenden Sigmabrain-Engine-Servers">
               <Input
                 value={brainUrl}
@@ -342,7 +342,7 @@ export default function SettingsPage() {
                       "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
                       searchMode === mode
                         ? "bg-violet-600/15 text-violet-600 border-violet-500/30"
-                        : "text-[#585866] border-[#e2e4ec] hover:border-[#b4b9c8]"
+                        : "text-[color:var(--ds-text-muted)] border-[color:var(--ds-border)] hover:border-[color:var(--ds-border-strong)]"
                     )}
                   >
                     {mode}
@@ -358,11 +358,11 @@ export default function SettingsPage() {
                   "gbrain init --pglite",
                   "gbrain serve --http --with-worker --port 3001",
                 ].map((cmd) => (
-                  <div key={cmd} className="flex items-center gap-2 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-4 py-2.5">
+                  <div key={cmd} className="flex items-center gap-2 bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-4 py-2.5">
                     <code className="text-xs font-mono text-violet-600 flex-1">{cmd}</code>
                     <button
                       onClick={() => navigator.clipboard.writeText(cmd)}
-                      className="text-[#585866] hover:text-[#585866] transition-colors shrink-0"
+                      className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] transition-colors shrink-0"
                     >
                       <Copy size={12} />
                     </button>
@@ -377,11 +377,11 @@ export default function SettingsPage() {
       {/* API Keys */}
       {activeTab === "api" && (
         <Card>
-          <div className="p-6 border-b border-[#e2e4ec]">
-            <h2 className="text-base font-semibold text-[#15151d]">API Keys</h2>
-            <p className="text-sm text-[#585866] mt-1">Keys werden lokal gespeichert und nie an Server gesendet.</p>
+          <div className="p-6 border-b border-[color:var(--ds-border)]">
+            <h2 className="text-base font-semibold text-[color:var(--ds-text)]">API Keys</h2>
+            <p className="text-sm text-[color:var(--ds-text-muted)] mt-1">Keys werden lokal gespeichert und nie an Server gesendet.</p>
           </div>
-          <div className="px-6 divide-y divide-[#e2e4ec]">
+          <div className="px-6 divide-y divide-[color:var(--ds-border)]">
             <Field label="OpenAI API Key" desc="Für Embeddings und Synthese (text-embedding-3-small)">
               <div className="space-y-2">
                 <MaskedInput value={openaiKey} placeholder="sk-..." onChange={setOpenaiKey} />
@@ -409,7 +409,7 @@ export default function SettingsPage() {
               </div>
             </Field>
           </div>
-          <div className="p-6 border-t border-[#e2e4ec]">
+          <div className="p-6 border-t border-[color:var(--ds-border)]">
             <Button variant="glow" size="md" onClick={saveApiKeys}>
               {keysSaved ? "Gespeichert" : "Keys speichern"}
             </Button>
@@ -420,26 +420,26 @@ export default function SettingsPage() {
       {/* Dream Cycle */}
       {activeTab === "dream" && (
         <Card>
-          <div className="p-6 border-b border-[#e2e4ec]">
+          <div className="p-6 border-b border-[color:var(--ds-border)]">
             <div className="flex items-center gap-3">
               <Zap size={18} className="text-amber-600" />
               <div>
-                <h2 className="text-base font-semibold text-[#15151d]">Dream Cycle</h2>
-                <p className="text-sm text-[#585866]">Nächtliche Konsolidierung & Enrichment</p>
+                <h2 className="text-base font-semibold text-[color:var(--ds-text)]">Dream Cycle</h2>
+                <p className="text-sm text-[color:var(--ds-text-muted)]">Nächtliche Konsolidierung & Enrichment</p>
               </div>
               <Badge variant={dreamEnabled ? "success" : "warning"} className="ml-auto">
                 {dreamEnabled ? "Aktiv" : "Inaktiv"}
               </Badge>
             </div>
           </div>
-          <div className="px-6 divide-y divide-[#e2e4ec]">
+          <div className="px-6 divide-y divide-[color:var(--ds-border)]">
             <Field label="Dream Cycle aktivieren" desc="Täglich um 3:00 Uhr morgens">
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setDreamEnabled(!dreamEnabled)}
                   className={cn(
                     "relative w-10 h-6 rounded-full transition-colors",
-                    dreamEnabled ? "bg-amber-500" : "bg-[#e2e4ec]"
+                    dreamEnabled ? "bg-amber-500" : "bg-[color:var(--ds-border)]"
                   )}
                 >
                   <span className={cn(
@@ -447,7 +447,7 @@ export default function SettingsPage() {
                     dreamEnabled ? "translate-x-5" : "translate-x-1"
                   )} />
                 </button>
-                <span className="text-sm text-[#585866]">
+                <span className="text-sm text-[color:var(--ds-text-muted)]">
                   {dreamEnabled ? "Läuft täglich um 3:00 Uhr" : "Deaktiviert"}
                 </span>
               </div>
@@ -461,7 +461,7 @@ export default function SettingsPage() {
                   "Widersprüche in Fakten markieren",
                   "Aufgaben für den nächsten Tag vorbereiten",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-[#585866]">
+                  <li key={item} className="flex items-start gap-2 text-sm text-[color:var(--ds-text-muted)]">
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500/50 shrink-0 mt-1.5" />
                     {item}
                   </li>
@@ -475,11 +475,11 @@ export default function SettingsPage() {
       {/* Kanzlei */}
       {activeTab === "kanzlei" && (
         <Card>
-          <div className="p-6 border-b border-[#e2e4ec]">
-            <h2 className="text-base font-semibold text-[#15151d]">Kanzlei-Einstellungen</h2>
-            <p className="text-sm text-[#585866] mt-1">Verrechnung, Stundensatz & Abrechnung</p>
+          <div className="p-6 border-b border-[color:var(--ds-border)]">
+            <h2 className="text-base font-semibold text-[color:var(--ds-text)]">Kanzlei-Einstellungen</h2>
+            <p className="text-sm text-[color:var(--ds-text-muted)] mt-1">Verrechnung, Stundensatz & Abrechnung</p>
           </div>
-          <div className="px-6 divide-y divide-[#e2e4ec]">
+          <div className="px-6 divide-y divide-[color:var(--ds-border)]">
             <Field label="Kanzlei-Name" desc="Für Rechnungskopf und Mandanten-Portal">
               <Input
                 value={kanzleiName}
@@ -502,7 +502,7 @@ export default function SettingsPage() {
                 onChange={(e) => setKanzleiAdresse(e.target.value)}
                 placeholder={"Musterstraße 1\n1010 Wien"}
                 rows={3}
-                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2.5 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
+                className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2.5 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50"
               />
             </Field>
 
@@ -536,7 +536,7 @@ export default function SettingsPage() {
                       "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
                       tarifModell === opt.key
                         ? "bg-violet-600/15 text-violet-600 border-violet-500/30"
-                        : "text-[#585866] border-[#e2e4ec] hover:border-[#b4b9c8]"
+                        : "text-[color:var(--ds-text-muted)] border-[color:var(--ds-border)] hover:border-[color:var(--ds-border-strong)]"
                     )}
                   >
                     {opt.label}
@@ -549,11 +549,11 @@ export default function SettingsPage() {
               <>
                 <Field label="Stundensatz (€)" desc="Standard-Satz für Zeiterfassung">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Euro size={14} className="text-[#585866]" />
+                    <Euro size={14} className="text-[color:var(--ds-text-muted)]" />
                     <Input type="number" value={stundensatz} onChange={(e) => setStundensatz(e.target.value)} placeholder="200" className="w-32" />
-                    <span className="text-sm text-[#585866]">/ Stunde</span>
+                    <span className="text-sm text-[color:var(--ds-text-muted)]">/ Stunde</span>
                     <Input type="number" value={abrechnungstakt} onChange={(e) => setAbrechnungstakt(e.target.value)} placeholder="15" className="w-24 ml-2" />
-                    <span className="text-sm text-[#585866]">Min.-Takt</span>
+                    <span className="text-sm text-[color:var(--ds-text-muted)]">Min.-Takt</span>
                   </div>
                 </Field>
 
@@ -561,8 +561,8 @@ export default function SettingsPage() {
                   <div className="space-y-2">
                     {Object.entries(rechtsgebietSaetze).map(([gebiet, satz]) => (
                       <div key={gebiet} className="flex items-center gap-3">
-                        <span className="text-sm text-[#585866] w-32 capitalize">{gebiet}</span>
-                        <Euro size={12} className="text-[#585866]" />
+                        <span className="text-sm text-[color:var(--ds-text-muted)] w-32 capitalize">{gebiet}</span>
+                        <Euro size={12} className="text-[color:var(--ds-text-muted)]" />
                         <input
                           type="number"
                           value={String(satz)}
@@ -570,9 +570,9 @@ export default function SettingsPage() {
                             const updated = { ...rechtsgebietSaetze, [gebiet]: parseInt(e.target.value, 10) || 0 };
                             setRechtsgebietSaetze(updated);
                           }}
-                          className="w-24 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-1.5 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
+                          className="w-24 bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-1.5 text-sm text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
                         />
-                        <span className="text-xs text-[#585866]">€/h</span>
+                        <span className="text-xs text-[color:var(--ds-text-muted)]">€/h</span>
                       </div>
                     ))}
                   </div>
@@ -604,7 +604,7 @@ export default function SettingsPage() {
             <Field label="Zahlungsziel" desc="Standard-Fälligkeit neuer Rechnungen">
               <div className="flex items-center gap-2">
                 <Input type="number" value={zahlungszielTage} onChange={(e) => setZahlungszielTage(e.target.value)} placeholder="14" className="w-24" />
-                <span className="text-sm text-[#585866]">Tage netto</span>
+                <span className="text-sm text-[color:var(--ds-text-muted)]">Tage netto</span>
               </div>
             </Field>
 
@@ -613,7 +613,7 @@ export default function SettingsPage() {
                 value={rechnungFooter}
                 onChange={(e) => setRechnungFooter(e.target.value)}
                 rows={3}
-                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2.5 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
+                className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2.5 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50"
               />
             </Field>
 
@@ -631,7 +631,7 @@ export default function SettingsPage() {
                       "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
                       datevKontenrahmen === opt.key
                         ? "bg-emerald-600/15 text-emerald-600 border-emerald-500/30"
-                        : "text-[#585866] border-[#e2e4ec] hover:border-[#b4b9c8]"
+                        : "text-[color:var(--ds-text-muted)] border-[color:var(--ds-border)] hover:border-[color:var(--ds-border-strong)]"
                     )}
                   >
                     {opt.label}
@@ -652,7 +652,7 @@ export default function SettingsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
                 <Input value={smtpHost} onChange={(e) => setSmtpHost(e.target.value)} placeholder="mail.example.com" className="sm:col-span-2" />
                 <Input value={smtpPort} onChange={(e) => setSmtpPort(e.target.value)} placeholder="587" className="w-24" />
-                <label className="flex items-center gap-2 text-sm text-[#585866]">
+                <label className="flex items-center gap-2 text-sm text-[color:var(--ds-text-muted)]">
                   <input type="checkbox" checked={smtpSecure} onChange={(e) => setSmtpSecure(e.target.checked)} className="accent-violet-500" />
                   TLS
                 </label>
@@ -671,7 +671,7 @@ export default function SettingsPage() {
               <Input value={emailFrom} onChange={(e) => setEmailFrom(e.target.value)} placeholder="kanzlei@example.com" />
             </Field>
           </div>
-          <div className="p-6 border-t border-[#e2e4ec]">
+          <div className="p-6 border-t border-[color:var(--ds-border)]">
             {kanzleiSaveError && (
               <p className="text-sm text-red-600 mb-3">Speichern fehlgeschlagen: {kanzleiSaveError}</p>
             )}
@@ -685,19 +685,19 @@ export default function SettingsPage() {
       {/* Team */}
       {activeTab === "team" && (
         <Card>
-          <div className="p-6 border-b border-[#e2e4ec]">
-            <h2 className="text-base font-semibold text-[#15151d]">Team</h2>
-            <p className="text-sm text-[#585866] mt-1">Kanzlei-Mitarbeiter und Rollen</p>
+          <div className="p-6 border-b border-[color:var(--ds-border)]">
+            <h2 className="text-base font-semibold text-[color:var(--ds-text)]">Team</h2>
+            <p className="text-sm text-[color:var(--ds-text-muted)] mt-1">Kanzlei-Mitarbeiter und Rollen</p>
           </div>
-          <div className="px-6 divide-y divide-[#e2e4ec]">
+          <div className="px-6 divide-y divide-[color:var(--ds-border)]">
             {teamMembers.length === 0 ? (
-              <div className="py-8 text-center text-sm text-[#585866]">Keine Team-Mitglieder gefunden.</div>
+              <div className="py-8 text-center text-sm text-[color:var(--ds-text-muted)]">Keine Team-Mitglieder gefunden.</div>
             ) : (
               teamMembers.map((member) => (
                 <div key={member.id} className="py-4 flex items-center justify-between gap-4">
                   <div>
-                    <div className="text-sm font-medium text-[#15151d]">{member.name}</div>
-                    <div className="text-xs text-[#585866]">{member.email}</div>
+                    <div className="text-sm font-medium text-[color:var(--ds-text)]">{member.name}</div>
+                    <div className="text-xs text-[color:var(--ds-text-muted)]">{member.email}</div>
                   </div>
                   <select
                     value={member.role}
@@ -715,7 +715,7 @@ export default function SettingsPage() {
                         console.error("[team] failed to update role:", err instanceof Error ? err.message : String(err));
                       }
                     }}
-                    className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-1.5 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
+                    className="bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-1.5 text-sm text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
                   >
                     <option value="admin">Admin</option>
                     <option value="lawyer">Anwalt</option>
@@ -732,10 +732,10 @@ export default function SettingsPage() {
       {/* Account */}
       {activeTab === "account" && (
         <Card>
-          <div className="p-6 border-b border-[#e2e4ec]">
-            <h2 className="text-base font-semibold text-[#15151d]">Account</h2>
+          <div className="p-6 border-b border-[color:var(--ds-border)]">
+            <h2 className="text-base font-semibold text-[color:var(--ds-text)]">Account</h2>
           </div>
-          <div className="px-6 divide-y divide-[#e2e4ec]">
+          <div className="px-6 divide-y divide-[color:var(--ds-border)]">
             <Field label="Plan" desc="Dein aktuelles Abonnement">
               <div className="flex items-center gap-3">
                 <Badge variant="accent" className="text-sm px-3 py-1">Free</Badge>
@@ -750,19 +750,19 @@ export default function SettingsPage() {
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-[#585866]">Seiten</span>
-                    <span className="text-[#15151d] font-mono">0 / 100</span>
+                    <span className="text-[color:var(--ds-text-muted)]">Seiten</span>
+                    <span className="text-[color:var(--ds-text)] font-mono">0 / 100</span>
                   </div>
-                  <div className="h-1.5 bg-[#e2e4ec] rounded-full">
+                  <div className="h-1.5 bg-[color:var(--ds-border)] rounded-full">
                     <div className="h-full w-0 bg-violet-600 rounded-full" />
                   </div>
                 </div>
                 <div>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-[#585866]">Queries</span>
-                    <span className="text-[#15151d] font-mono">0 / 50</span>
+                    <span className="text-[color:var(--ds-text-muted)]">Queries</span>
+                    <span className="text-[color:var(--ds-text)] font-mono">0 / 50</span>
                   </div>
-                  <div className="h-1.5 bg-[#e2e4ec] rounded-full">
+                  <div className="h-1.5 bg-[color:var(--ds-border)] rounded-full">
                     <div className="h-full w-0 bg-violet-600 rounded-full" />
                   </div>
                 </div>
@@ -775,7 +775,7 @@ export default function SettingsPage() {
               <div className="space-y-3">
                 <div className="flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 rounded-lg px-4 py-3">
                   <Gift size={15} className="text-amber-600 shrink-0" />
-                  <p className="text-xs text-[#585866] leading-relaxed">
+                  <p className="text-xs text-[color:var(--ds-text-muted)] leading-relaxed">
                     12 Empfehlungen = ein Gratisjahr. Keine Obergrenze.
                     {referrals !== null && (
                       <span className="text-amber-600 font-medium"> Bisher geworben: {referrals}.</span>

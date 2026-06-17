@@ -308,7 +308,7 @@ function AgentDAG({ jobs, selectedJob, onSelectJob }: {
                   width={140}
                   height={60}
                   rx={8}
-                  fill={isSelected ? "#4c1d95" : "#e2e4ec"}
+                  fill={isSelected ? "#4c1d95" : "var(--ds-border)"}
                   stroke={isSelected ? "#8b5cf6" : "#2e2e5a"}
                   strokeWidth={isSelected ? 2 : 1}
                 />
@@ -325,7 +325,7 @@ function AgentDAG({ jobs, selectedJob, onSelectJob }: {
                     x={x + 130}
                     y={y + 16}
                     textAnchor="end"
-                    fill="#585866"
+                    fill="var(--ds-text-muted)"
                     fontSize={10}
                     fontFamily="monospace"
                   >
@@ -336,7 +336,7 @@ function AgentDAG({ jobs, selectedJob, onSelectJob }: {
                 <text
                   x={x + 12}
                   y={y + 32}
-                  fill="#15151d"
+                  fill="var(--ds-text)"
                   fontSize={12}
                   fontWeight={600}
                 >
@@ -346,7 +346,7 @@ function AgentDAG({ jobs, selectedJob, onSelectJob }: {
                 <text
                   x={x + 12}
                   y={y + 50}
-                  fill="#8a8a98"
+                  fill="var(--ds-text-subtle)"
                   fontSize={10}
                   fontFamily="monospace"
                 >
@@ -425,12 +425,12 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className={`w-3 h-3 rounded-full ${statusColor(job.status)}`} />
-          <h3 className="text-lg font-semibold text-[#15151d]">
+          <h3 className="text-lg font-semibold text-[color:var(--ds-text)]">
             {job.name === "supervisor" ? "Supervisor" : job.subagentDef?.replace("legal-", "").replace(/-/g, " ") || "Agent"}
           </h3>
-          <span className="text-xs text-[#585866] font-mono">#{job.id}</span>
+          <span className="text-xs text-[color:var(--ds-text-muted)] font-mono">#{job.id}</span>
         </div>
-        <span className="text-xs px-2 py-1 rounded-full bg-[#e2e4ec] text-[#585866]">
+        <span className="text-xs px-2 py-1 rounded-full bg-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]">
           {statusLabel(job.status)}
         </span>
       </div>
@@ -499,31 +499,31 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
         )}
       </div>
 
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-        <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Prompt</h4>
-        <p className="text-sm text-[#15151d] leading-relaxed">{job.prompt}</p>
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+        <h4 className="text-xs font-semibold text-[color:var(--ds-text-muted)] uppercase tracking-wider mb-2">Prompt</h4>
+        <p className="text-sm text-[color:var(--ds-text)] leading-relaxed">{job.prompt}</p>
       </div>
 
       {job.model && (
         <div className="flex items-center gap-2">
           <Sparkles size={14} className="text-violet-600" />
-          <span className="text-sm text-[#585866]">Modell: <span className="text-[#15151d]">{job.model}</span></span>
+          <span className="text-sm text-[color:var(--ds-text-muted)]">Modell: <span className="text-[color:var(--ds-text)]">{job.model}</span></span>
         </div>
       )}
 
       {job.tokens && (
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
-            <div className="text-lg font-mono font-semibold text-[#15151d]">{job.tokens.input.toLocaleString()}</div>
-            <div className="text-xs text-[#585866]">Input Tokens</div>
+          <div className="rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3 text-center">
+            <div className="text-lg font-mono font-semibold text-[color:var(--ds-text)]">{job.tokens.input.toLocaleString()}</div>
+            <div className="text-xs text-[color:var(--ds-text-muted)]">Input Tokens</div>
           </div>
-          <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
-            <div className="text-lg font-mono font-semibold text-[#15151d]">{job.tokens.output.toLocaleString()}</div>
-            <div className="text-xs text-[#585866]">Output Tokens</div>
+          <div className="rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3 text-center">
+            <div className="text-lg font-mono font-semibold text-[color:var(--ds-text)]">{job.tokens.output.toLocaleString()}</div>
+            <div className="text-xs text-[color:var(--ds-text-muted)]">Output Tokens</div>
           </div>
-          <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
+          <div className="rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3 text-center">
             <div className="text-lg font-mono font-semibold text-emerald-600">${job.cost?.toFixed(2) ?? "0.00"}</div>
-            <div className="text-xs text-[#585866]">Kosten</div>
+            <div className="text-xs text-[color:var(--ds-text-muted)]">Kosten</div>
           </div>
         </div>
       )}
@@ -531,10 +531,10 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       {job.progress && (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[#585866]">{job.progress.message}</span>
-            <span className="text-[#15151d] font-mono">{job.progress.step}/{job.progress.total}</span>
+            <span className="text-[color:var(--ds-text-muted)]">{job.progress.message}</span>
+            <span className="text-[color:var(--ds-text)] font-mono">{job.progress.step}/{job.progress.total}</span>
           </div>
-          <div className="h-2 rounded-full bg-[#e2e4ec] overflow-hidden">
+          <div className="h-2 rounded-full bg-[color:var(--ds-border)] overflow-hidden">
             <div
               className="h-full rounded-full bg-violet-500 transition-all"
               style={{ width: `${(job.progress.step / job.progress.total) * 100}%` }}
@@ -544,21 +544,21 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       )}
 
       {job.result && (
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-          <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Ergebnis</h4>
-          <p className="text-sm text-[#15151d] leading-relaxed whitespace-pre-wrap">{job.result}</p>
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+          <h4 className="text-xs font-semibold text-[color:var(--ds-text-muted)] uppercase tracking-wider mb-2">Ergebnis</h4>
+          <p className="text-sm text-[color:var(--ds-text)] leading-relaxed whitespace-pre-wrap">{job.result}</p>
         </div>
       )}
 
       {children.length > 0 && (
         <div>
-          <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Children</h4>
+          <h4 className="text-xs font-semibold text-[color:var(--ds-text-muted)] uppercase tracking-wider mb-2">Children</h4>
           <div className="space-y-2">
             {children.map(child => (
-              <div key={child.id} className="flex items-center gap-3 p-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
+              <div key={child.id} className="flex items-center gap-3 p-2 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)]">
                 <div className={`w-2 h-2 rounded-full ${statusColor(child.status)}`} />
-                <span className="text-sm text-[#15151d]">{child.subagentDef?.replace("legal-", "") || "subagent"}</span>
-                <span className="text-xs text-[#585866] font-mono">#{child.id}</span>
+                <span className="text-sm text-[color:var(--ds-text)]">{child.subagentDef?.replace("legal-", "") || "subagent"}</span>
+                <span className="text-xs text-[color:var(--ds-text-muted)] font-mono">#{child.id}</span>
               </div>
             ))}
           </div>
@@ -566,11 +566,11 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       )}
 
       {/* Inbox / Chat Panel */}
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] flex flex-col" style={{ maxHeight: 380 }}>
-        <div className="px-4 py-3 border-b border-[#e2e4ec] flex items-center justify-between">
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] flex flex-col" style={{ maxHeight: 380 }}>
+        <div className="px-4 py-3 border-b border-[color:var(--ds-border)] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MessageSquare size={14} className="text-violet-600" />
-            <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider">Inbox</h4>
+            <h4 className="text-xs font-semibold text-[color:var(--ds-text-muted)] uppercase tracking-wider">Inbox</h4>
             {messages.length > 0 && (
               <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-600 border border-violet-500/20">
                 {messages.length}
@@ -578,16 +578,16 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
             )}
           </div>
           {inboxLoading && messages.length === 0 && (
-            <Loader2 size={12} className="animate-spin text-[#585866]" />
+            <Loader2 size={12} className="animate-spin text-[color:var(--ds-text-muted)]" />
           )}
         </div>
 
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3 min-h-[120px]">
           {messages.length === 0 && !inboxLoading && (
             <div className="text-center py-6">
-              <Bot size={24} className="mx-auto text-[#e2e4ec] mb-2" />
-              <p className="text-xs text-[#585866]">Noch keine Nachrichten.</p>
-              <p className="text-[10px] text-[#74748a] mt-1">
+              <Bot size={24} className="mx-auto text-[color:var(--ds-border)] mb-2" />
+              <p className="text-xs text-[color:var(--ds-text-muted)]">Noch keine Nachrichten.</p>
+              <p className="text-[10px] text-[color:var(--ds-text-subtle)] mt-1">
                 {job.status === "active" || job.status === "waiting"
                   ? "Schreibe dem Agenten eine Steuerungsnachricht."
                   : "Inbox ist nur für aktive Jobs verfügbar."}
@@ -618,11 +618,11 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
                 <div className={cn(
                   "max-w-[80%] rounded-xl px-3 py-2 text-sm",
                   isUser
-                    ? "bg-violet-600/15 text-[#15151d] border border-violet-500/20"
-                    : "bg-[#eceef3] text-[#585866] border border-[#e2e4ec]"
+                    ? "bg-violet-600/15 text-[color:var(--ds-text)] border border-violet-500/20"
+                    : "bg-[color:var(--ds-hover)] text-[color:var(--ds-text-muted)] border border-[color:var(--ds-border)]"
                 )}>
                   <p className="leading-relaxed whitespace-pre-wrap break-words">{text}</p>
-                  <span className="text-[10px] text-[#74748a] mt-1 block">
+                  <span className="text-[10px] text-[color:var(--ds-text-subtle)] mt-1 block">
                     {new Date(msg.sent_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                     {msg.read_at && <span className="ml-1">· gelesen</span>}
                   </span>
@@ -636,8 +636,8 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
               <div className="w-6 h-6 rounded-full bg-violet-600/20 flex items-center justify-center shrink-0">
                 <Loader2 size={12} className="text-violet-600 animate-spin" />
               </div>
-              <div className="bg-violet-600/15 text-[#15151d] border border-violet-500/20 rounded-xl px-3 py-2 text-sm">
-                <span className="text-[#585866]">Senden…</span>
+              <div className="bg-violet-600/15 text-[color:var(--ds-text)] border border-violet-500/20 rounded-xl px-3 py-2 text-sm">
+                <span className="text-[color:var(--ds-text-muted)]">Senden…</span>
               </div>
             </div>
           )}
@@ -645,7 +645,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
 
         {/* Input */}
         {(job.status === "active" || job.status === "waiting" || job.status === "paused") && (
-          <div className="p-3 border-t border-[#e2e4ec]">
+          <div className="p-3 border-t border-[color:var(--ds-border)]">
             <div className="flex gap-2">
               <input
                 value={inboxInput}
@@ -654,7 +654,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
                 placeholder="Nachricht an Agenten…"
                 aria-label="Nachricht an Agenten"
                 disabled={inboxSending}
-                className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#74748a] focus:outline-none focus:border-violet-500/50 transition-colors disabled:opacity-50"
+                className="flex-1 bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-subtle)] focus:outline-none focus:border-violet-500/50 transition-colors disabled:opacity-50"
               />
               <button
                 onClick={handleSendMessage}
@@ -669,7 +669,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
         )}
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-[#585866]">
+      <div className="flex items-center gap-4 text-xs text-[color:var(--ds-text-muted)]">
         {job.startedAt && <span>Gestartet: {new Date(job.startedAt).toLocaleString("de-DE")}</span>}
         {job.completedAt && <span>Fertig: {new Date(job.completedAt).toLocaleString("de-DE")}</span>}
       </div>
@@ -713,12 +713,12 @@ export default function AgentsPage() {
   return (
     <div className="flex h-[calc(100vh-3.5rem)]">
       {/* Left: Job List + Submit */}
-      <div className="w-80 border-r border-[#e2e4ec] bg-[#ffffff] flex flex-col">
+      <div className="w-80 border-r border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] flex flex-col">
         {/* Workflow Templates */}
-        <div className="p-4 border-b border-[#e2e4ec] space-y-2">
+        <div className="p-4 border-b border-[color:var(--ds-border)] space-y-2">
           <div className="flex items-center gap-2">
             <Sparkles size={14} className="text-violet-600" />
-            <span className="text-xs font-semibold text-[#15151d]">Workflow Templates</span>
+            <span className="text-xs font-semibold text-[color:var(--ds-text)]">Workflow Templates</span>
           </div>
           <div className="space-y-1.5">
             {[
@@ -731,7 +731,7 @@ export default function AgentsPage() {
               <button
                 key={template.label}
                 onClick={() => { setSubmitPrompt(template.prompt); }}
-                className="w-full text-left px-2.5 py-1.5 rounded-lg bg-[#ffffff] border border-[#e2e4ec] text-xs text-[#585866] hover:border-violet-500/30 hover:text-[#15151d] transition-all"
+                className="w-full text-left px-2.5 py-1.5 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] text-xs text-[color:var(--ds-text-muted)] hover:border-violet-500/30 hover:text-[color:var(--ds-text)] transition-all"
               >
                 <span className="mr-1.5">{template.icon}</span>
                 {template.label}
@@ -741,18 +741,18 @@ export default function AgentsPage() {
         </div>
 
         {/* Submit Form */}
-        <div className="p-4 border-b border-[#e2e4ec]">
+        <div className="p-4 border-b border-[color:var(--ds-border)]">
           <form onSubmit={handleSubmit} className="space-y-2">
             <div className="flex items-center gap-2">
               <Sparkles size={14} className="text-violet-600" />
-              <span className="text-xs font-semibold text-[#15151d]">Neuer Supervisor</span>
+              <span className="text-xs font-semibold text-[color:var(--ds-text)]">Neuer Supervisor</span>
             </div>
             <input
               value={submitPrompt}
               onChange={e => setSubmitPrompt(e.target.value)}
               placeholder="Beschreibe die Aufgabe..."
               aria-label="Beschreibe die Aufgabe..."
-              className="w-full px-2.5 py-1.5 rounded-lg bg-[#ffffff] border border-[#e2e4ec] text-xs text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/40"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] text-xs text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/40"
             />
             <button
               type="submit"
@@ -766,12 +766,12 @@ export default function AgentsPage() {
         </div>
 
         {/* Header */}
-        <div className="p-4 border-b border-[#e2e4ec]">
+        <div className="p-4 border-b border-[color:var(--ds-border)]">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-[#15151d]">Agent Jobs</h2>
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Agent Jobs</h2>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-xs text-[#585866]">{activeCount} aktiv</span>
+              <span className="text-xs text-[color:var(--ds-text-muted)]">{activeCount} aktiv</span>
             </div>
           </div>
 
@@ -784,7 +784,7 @@ export default function AgentsPage() {
                   "px-2 py-1 rounded-md text-xs font-medium transition-all",
                   filter === f
                     ? "bg-violet-600/20 text-violet-600 border border-violet-500/20"
-                    : "text-[#585866] hover:text-[#585866] hover:bg-[#eceef3]"
+                    : "text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] hover:bg-[color:var(--ds-hover)]"
                 )}
               >
                 {f === "all" ? "Alle" : f === "active" ? "Aktiv" : f === "completed" ? "Fertig" : "Fehler"}
@@ -808,19 +808,19 @@ export default function AgentsPage() {
                 "w-full text-left p-3 rounded-lg border transition-all",
                 selectedJob === job.id
                   ? "bg-violet-600/10 border-violet-500/20"
-                  : "bg-[#ffffff] border-[#e2e4ec] hover:border-[#2e2e5a]"
+                  : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] hover:border-[color:var(--ds-border-strong)]"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
                 {statusIcon(job.status)}
-                <span className="text-xs font-medium text-[#15151d]">
+                <span className="text-xs font-medium text-[color:var(--ds-text)]">
                   {job.name === "supervisor" ? "Supervisor" : job.subagentDef?.replace("legal-", "") || "subagent"}
                 </span>
-                <span className="text-[10px] text-[#585866] font-mono ml-auto">#{job.id}</span>
+                <span className="text-[10px] text-[color:var(--ds-text-muted)] font-mono ml-auto">#{job.id}</span>
               </div>
-              <p className="text-xs text-[#585866] line-clamp-2">{job.prompt}</p>
+              <p className="text-xs text-[color:var(--ds-text-muted)] line-clamp-2">{job.prompt}</p>
               {job.progress && (
-                <div className="mt-2 h-1 rounded-full bg-[#e2e4ec] overflow-hidden">
+                <div className="mt-2 h-1 rounded-full bg-[color:var(--ds-border)] overflow-hidden">
                   <div
                     className="h-full rounded-full bg-violet-500"
                     style={{ width: `${(job.progress.step / job.progress.total) * 100}%` }}
@@ -833,21 +833,21 @@ export default function AgentsPage() {
       </div>
 
       {/* Middle: DAG Visualization */}
-      <div className="flex-1 flex flex-col bg-[#f5f6f9] overflow-hidden">
-        <div className="p-4 border-b border-[#e2e4ec] flex items-center justify-between">
+      <div className="flex-1 flex flex-col bg-[color:var(--ds-bg)] overflow-hidden">
+        <div className="p-4 border-b border-[color:var(--ds-border)] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Bot size={16} className="text-violet-600" />
-            <h2 className="text-sm font-semibold text-[#15151d]">Agent DAG</h2>
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Agent DAG</h2>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => refresh()}
-              className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3] transition-all"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] transition-all"
             >
               <RefreshCw size={12} />
               Aktualisieren
             </button>
-            <div className="flex items-center gap-3 text-xs text-[#585866]">
+            <div className="flex items-center gap-3 text-xs text-[color:var(--ds-text-muted)]">
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Fertig</span>
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500" /> Aktiv</span>
               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500" /> Wartend</span>
@@ -866,9 +866,9 @@ export default function AgentsPage() {
       </div>
 
       {/* Right: Detail Panel */}
-      <div className="w-96 border-l border-[#e2e4ec] bg-[#ffffff] overflow-y-auto">
-        <div className="p-4 border-b border-[#e2e4ec]">
-          <h2 className="text-sm font-semibold text-[#15151d]">Details</h2>
+      <div className="w-96 border-l border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] overflow-y-auto">
+        <div className="p-4 border-b border-[color:var(--ds-border)]">
+          <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Details</h2>
         </div>
         <div className="p-4">
           {selectedJobData ? (
@@ -879,8 +879,8 @@ export default function AgentsPage() {
             />
           ) : (
             <div className="text-center py-12">
-              <Bot size={32} className="mx-auto text-[#e2e4ec] mb-3" />
-              <p className="text-sm text-[#585866]">Wähle einen Job aus der Liste</p>
+              <Bot size={32} className="mx-auto text-[color:var(--ds-border)] mb-3" />
+              <p className="text-sm text-[color:var(--ds-text-muted)]">Wähle einen Job aus der Liste</p>
             </div>
           )}
         </div>

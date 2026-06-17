@@ -9,8 +9,8 @@ function Card({ className, glass, glow, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-xl border border-[#1e1e3a] bg-[#0d0d1a]",
-        glass && "backdrop-blur-md bg-[#0d0d1a]/80",
+        "rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)]",
+        glass && "backdrop-blur-md bg-[color:var(--ds-surface)]/80",
         glow && "shadow-lg shadow-violet-900/10",
         className
       )}
@@ -31,7 +31,7 @@ function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement
 function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("text-base font-semibold text-[#e8e8f0] leading-tight", className)}
+      className={cn("text-base font-semibold text-[color:var(--ds-text)] leading-tight", className)}
       {...props}
     />
   );
@@ -40,7 +40,7 @@ function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElem
 function CardDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("text-sm text-[#8888aa] leading-relaxed", className)}
+      className={cn("text-sm text-[color:var(--ds-text-muted)] leading-relaxed", className)}
       {...props}
     />
   );
@@ -56,7 +56,7 @@ function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement
   return (
     <div
       className={cn(
-        "flex items-center gap-2 p-6 pt-4 border-t border-[#1e1e3a]",
+        "flex items-center gap-2 p-6 pt-4 border-t border-[color:var(--ds-border)]",
         className
       )}
       {...props}

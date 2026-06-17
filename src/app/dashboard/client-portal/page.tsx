@@ -92,8 +92,8 @@ export default function ClientPortalPage() {
             <div className="w-16 h-16 rounded-2xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center mx-auto" aria-hidden="true">
               <Eye size={28} className="text-violet-600" />
             </div>
-            <h1 className="text-xl font-bold text-[#15151d]">Mandanten-Portal — Vorschau</h1>
-            <p className="text-sm text-[#585866]">
+            <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Mandanten-Portal — Vorschau</h1>
+            <p className="text-sm text-[color:var(--ds-text-muted)]">
               So sehen Ihre Mandanten künftig den Stand ihrer Akte.
             </p>
           </div>
@@ -131,15 +131,15 @@ export default function ClientPortalPage() {
             <User size={20} className="text-emerald-600" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#15151d]">Meine Akten</h1>
-            <p className="text-sm text-[#585866]">Übersicht über alle laufenden Mandate</p>
+            <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Meine Akten</h1>
+            <p className="text-sm text-[color:var(--ds-text-muted)]">Übersicht über alle laufenden Mandate</p>
           </div>
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setPreviewing(false)}
-          className="text-[#585866] hover:text-[#585866]"
+          className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)]"
         >
           Vorschau beenden
         </Button>
@@ -153,27 +153,27 @@ export default function ClientPortalPage() {
 
       {/* Cases */}
       {loading ? (
-        <div className="text-center py-20 text-[#585866]">
+        <div className="text-center py-20 text-[color:var(--ds-text-muted)]">
           <Loader2 size={24} className="mx-auto animate-spin mb-3" />
           Akten werden geladen…
         </div>
       ) : cases.length === 0 ? (
         <div className="text-center py-20 space-y-4">
-          <FileText size={48} className="mx-auto text-[#e2e4ec]" />
-          <p className="text-[#585866]">Keine Akten gefunden.</p>
-          <p className="text-[#585866] text-sm">Akten erscheinen hier, sobald sie in der Akte für die Portal-Vorschau freigegeben sind.</p>
+          <FileText size={48} className="mx-auto text-[color:var(--ds-border)]" />
+          <p className="text-[color:var(--ds-text-muted)]">Keine Akten gefunden.</p>
+          <p className="text-[color:var(--ds-text-muted)] text-sm">Akten erscheinen hier, sobald sie in der Akte für die Portal-Vorschau freigegeben sind.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {cases.map((c) => (
             <div
               key={c.id}
-              className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3"
+              className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-3"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-sm font-semibold text-[#15151d]">{c.title}</h2>
-                  <p className="text-xs text-[#585866] font-mono">{c.id}</p>
+                  <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">{c.title}</h2>
+                  <p className="text-xs text-[color:var(--ds-text-muted)] font-mono">{c.id}</p>
                 </div>
                 <Badge variant="default" className={`text-[10px] ${
                   c.status === "closed" ? "bg-gray-500/10 border-gray-500/20 text-gray-400" :
@@ -184,7 +184,7 @@ export default function ClientPortalPage() {
                 </Badge>
               </div>
 
-              <div className="flex items-center gap-4 text-xs text-[#585866]">
+              <div className="flex items-center gap-4 text-xs text-[color:var(--ds-text-muted)]">
                 <span className="flex items-center gap-1"><FileText size={10} />{c.documents} Dokumente</span>
                 <span className="flex items-center gap-1"><CalendarClock size={10} />{new Date(c.lastUpdate).toLocaleDateString("de-DE")}</span>
               </div>
@@ -194,7 +194,7 @@ export default function ClientPortalPage() {
                   <CheckCircle2 size={14} className="text-amber-600 shrink-0 mt-0.5" />
                   <div>
                     <p className="text-xs text-amber-600 font-medium">Nächster Schritt</p>
-                    <p className="text-xs text-[#585866]">{c.nextStep}</p>
+                    <p className="text-xs text-[color:var(--ds-text-muted)]">{c.nextStep}</p>
                   </div>
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function ClientPortalPage() {
                 <Link href={`/dashboard/cases/${encodeURIComponent(c.slug)}`} className="flex-1">
                   <Button
                     variant="secondary"
-                    className="w-full bg-[#eceef3] border border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a] text-xs"
+                    className="w-full bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] text-xs"
                   >
                     <FileText size={12} className="mr-1.5" />
                     Dokumente
@@ -213,7 +213,7 @@ export default function ClientPortalPage() {
                   variant="secondary"
                   disabled
                   title="Nachrichten sind erst im echten Mandantenportal verfügbar."
-                  className="flex-1 bg-[#eceef3] border border-[#e2e4ec] text-[#585866] text-xs disabled:opacity-60"
+                  className="flex-1 bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] text-xs disabled:opacity-60"
                 >
                   <MessageSquare size={12} className="mr-1.5" />
                   Nachricht

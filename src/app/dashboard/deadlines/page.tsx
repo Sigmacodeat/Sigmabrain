@@ -181,8 +181,8 @@ export default function DeadlinesPage() {
             <CalendarClock size={20} className="text-amber-600" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#15151d]">Fristen & Termine</h1>
-            <p className="text-sm text-[#585866]">{deadlines.length} Fristen aus allen Akten</p>
+            <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Fristen & Termine</h1>
+            <p className="text-sm text-[color:var(--ds-text-muted)]">{deadlines.length} Fristen aus allen Akten</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -202,21 +202,21 @@ export default function DeadlinesPage() {
                 setReminderStatus("Senden fehlgeschlagen.");
               }
             }}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[#e2e4ec] bg-[#ffffff] text-xs text-[#585866] hover:text-[#15151d] hover:border-[#b4b9c8] transition-all"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] text-xs text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:border-[color:var(--ds-border-strong)] transition-all"
           >
             <Mail size={14} />
             Erinnerungen senden
           </button>
           <button
             onClick={() => setShowCalc(!showCalc)}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[#e2e4ec] bg-[#ffffff] text-xs text-[#585866] hover:text-[#15151d] hover:border-[#b4b9c8] transition-all"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] text-xs text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:border-[color:var(--ds-border-strong)] transition-all"
           >
             <Calculator size={14} />
             Frist berechnen
           </button>
           <button
             onClick={() => setShowAiDetect(!showAiDetect)}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[#e2e4ec] bg-[#ffffff] text-xs text-[#585866] hover:text-[#15151d] hover:border-[#b4b9c8] transition-all"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] text-xs text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:border-[color:var(--ds-border-strong)] transition-all"
           >
             <Sparkles size={14} />
             Fristen erkennen
@@ -229,35 +229,35 @@ export default function DeadlinesPage() {
 
       {/* Deadline Calculator */}
       {showCalc && (
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[#15151d]">Fristenberechnung</h2>
-            <button onClick={() => setShowCalc(false)} className="text-[#585866] hover:text-[#15151d]"><XCircle size={16} /></button>
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Fristenberechnung</h2>
+            <button onClick={() => setShowCalc(false)} className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"><XCircle size={16} /></button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs text-[#585866] mb-1">Frist-Typ</label>
+              <label className="block text-xs text-[color:var(--ds-text-muted)] mb-1">Frist-Typ</label>
               <div className="relative">
                 <select
                   value={calcTemplate.key}
                   onChange={(e) => setCalcTemplate(DEADLINE_RULES.find((t) => t.key === e.target.value) || DEADLINE_RULES[0])}
-                  className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50 appearance-none"
+                  className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50 appearance-none"
                 >
                   {DEADLINE_RULES.map((t) => (
                     <option key={t.key} value={t.key}>{t.label} ({t.law})</option>
                   ))}
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#585866] pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[color:var(--ds-text-muted)] pointer-events-none" />
               </div>
-              <p className="text-[11px] text-[#585866] mt-1">{calcTemplate.description}</p>
+              <p className="text-[11px] text-[color:var(--ds-text-muted)] mt-1">{calcTemplate.description}</p>
             </div>
             <div>
-              <label className="block text-xs text-[#585866] mb-1">Startdatum (Zustellung / Ereignis)</label>
+              <label className="block text-xs text-[color:var(--ds-text-muted)] mb-1">Startdatum (Zustellung / Ereignis)</label>
               <input
                 type="date"
                 value={calcDate}
                 onChange={(e) => setCalcDate(e.target.value)}
-                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
+                className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
               />
             </div>
             <div className="flex items-end">
@@ -275,12 +275,12 @@ export default function DeadlinesPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-violet-600 font-medium">{calcResult.label} — {calcResult.law}</p>
-                  <p className="text-sm text-[#15151d] mt-1">
+                  <p className="text-sm text-[color:var(--ds-text)] mt-1">
                     Frist bis: <strong>{calcResult.dueDate.toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</strong>
                   </p>
-                  <p className="text-[11px] text-[#585866] mt-1">{calcResult.note}</p>
+                  <p className="text-[11px] text-[color:var(--ds-text-muted)] mt-1">{calcResult.note}</p>
                 </div>
-                <span className="text-xs text-[#585866]">
+                <span className="text-xs text-[color:var(--ds-text-muted)]">
                   {Math.ceil((calcResult.dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} Tage verbleibend
                 </span>
               </div>
@@ -291,15 +291,15 @@ export default function DeadlinesPage() {
 
       {/* AI Deadline Detection */}
       {showAiDetect && (
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles size={16} className="text-violet-600" />
-              <h2 className="text-sm font-semibold text-[#15151d]">Fristen erkennen</h2>
+              <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Fristen erkennen</h2>
             </div>
-            <button onClick={() => setShowAiDetect(false)} className="text-[#585866] hover:text-[#15151d]"><XCircle size={16} /></button>
+            <button onClick={() => setShowAiDetect(false)} className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"><XCircle size={16} /></button>
           </div>
-          <p className="text-xs text-[#585866]">
+          <p className="text-xs text-[color:var(--ds-text-muted)]">
             Fügen Sie einen Text (E-Mail, Brief, Gerichtsbescheid) ein. Die KI erkennt automatisch Fristen,
             Termine und gesetzliche Deadlines und schlägt deren Anlage vor.
           </p>
@@ -309,7 +309,7 @@ export default function DeadlinesPage() {
               onChange={(e) => setAiText(e.target.value)}
               placeholder="Text hier einfügen…"
               rows={4}
-              className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 resize-none"
+              className="flex-1 bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50 resize-none"
             />
           </div>
           <button
@@ -339,13 +339,13 @@ export default function DeadlinesPage() {
 
           {aiResults.length > 0 && (
             <div className="space-y-2">
-              <h3 className="text-xs font-semibold text-[#15151d]">{aiResults.length} Frist(en) erkannt</h3>
+              <h3 className="text-xs font-semibold text-[color:var(--ds-text)]">{aiResults.length} Frist(en) erkannt</h3>
               {aiResults.map((r, i) => (
-                <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
+                <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)]">
                   <div className={`w-2 h-2 rounded-full ${r.confidence === "high" ? "bg-emerald-400" : r.confidence === "medium" ? "bg-amber-400" : "bg-red-400"}`} />
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-[#15151d]">{r.description}</div>
-                    {r.date && <div className="text-xs text-[#585866]">{new Date(r.date).toLocaleDateString("de-DE")}</div>}
+                    <div className="text-sm text-[color:var(--ds-text)]">{r.description}</div>
+                    {r.date && <div className="text-xs text-[color:var(--ds-text-muted)]">{new Date(r.date).toLocaleDateString("de-DE")}</div>}
                   </div>
                   <Badge variant="default" className={`text-[10px] ${r.confidence === "high" ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600" : "border-amber-500/20 bg-amber-500/10 text-amber-600"}`}>
                     {r.confidence}
@@ -381,13 +381,13 @@ export default function DeadlinesPage() {
                 "flex items-center gap-3 px-4 py-3 rounded-xl border transition-all text-left",
                 filter === key
                   ? "bg-violet-600/10 border-violet-500/30"
-                  : "bg-[#ffffff] border-[#e2e4ec] hover:border-[#2a2a4a]"
+                  : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] hover:border-[color:var(--ds-border-strong)]"
               )}
             >
               <Icon size={18} className={cn("shrink-0", STATUS_TEXT[cfg.color])} aria-hidden="true" />
               <div>
-                <div className="text-lg font-bold text-[#15151d]">{count}</div>
-                <div className="text-xs text-[#585866]">{cfg.label}</div>
+                <div className="text-lg font-bold text-[color:var(--ds-text)]">{count}</div>
+                <div className="text-xs text-[color:var(--ds-text-muted)]">{cfg.label}</div>
               </div>
             </button>
           );
@@ -397,13 +397,13 @@ export default function DeadlinesPage() {
       {/* Filters */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-md">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--ds-text-muted)]" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Fristen suchen…"
             aria-label="Fristen suchen"
-            className="pl-9 bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+            className="pl-9 bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
           />
         </div>
         {filter !== "all" && (
@@ -430,10 +430,10 @@ export default function DeadlinesPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20 space-y-4">
-          <CalendarClock size={48} className="mx-auto text-[#e2e4ec]" />
+          <CalendarClock size={48} className="mx-auto text-[color:var(--ds-border)]" />
           <div>
-            <p className="text-[#585866] text-lg">Keine Fristen gefunden</p>
-            <p className="text-[#585866] text-sm mt-1">
+            <p className="text-[color:var(--ds-text-muted)] text-lg">Keine Fristen gefunden</p>
+            <p className="text-[color:var(--ds-text-muted)] text-sm mt-1">
               {deadlines.length === 0
                 ? "Fristen werden automatisch aus hochgeladenen Dokumenten extrahiert."
                 : "Passe deine Filter an."}
@@ -455,7 +455,7 @@ export default function DeadlinesPage() {
                     ? "border-red-500/20 bg-red-500/5"
                     : d.status === "warning"
                     ? "border-amber-500/20 bg-amber-500/5"
-                    : "border-[#e2e4ec] bg-[#ffffff]"
+                    : "border-[color:var(--ds-border)] bg-[color:var(--ds-surface)]"
                 )}
               >
                 <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border", STATUS_BG[statusCfg.color], STATUS_BORDER[statusCfg.color])} aria-hidden="true">
@@ -463,8 +463,8 @@ export default function DeadlinesPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-[#15151d]">{d.description}</span>
-                    <Badge variant="default" className="text-[10px] bg-[#eceef3] border border-[#e2e4ec] text-[#585866]">
+                    <span className="font-medium text-[color:var(--ds-text)]">{d.description}</span>
+                    <Badge variant="default" className="text-[10px] bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]">
                       {TYPE_CONFIG[d.type] || d.type}
                     </Badge>
                     <Badge
@@ -479,7 +479,7 @@ export default function DeadlinesPage() {
                       {d.reviewStatus === "approved" ? "Freigegeben" : "Review offen"}
                     </Badge>
                     {d.law && (
-                      <Badge variant="default" className="text-[10px] bg-[#eceef3] border border-[#e2e4ec] text-[#585866]">
+                      <Badge variant="default" className="text-[10px] bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]">
                         {d.law}
                       </Badge>
                     )}
@@ -490,17 +490,17 @@ export default function DeadlinesPage() {
                     )}
                   </div>
                   {d.caseTitle && (
-                    <div className="text-xs text-[#585866] mt-0.5">
+                    <div className="text-xs text-[color:var(--ds-text-muted)] mt-0.5">
                       <FileText size={10} className="inline mr-1" />
                       {d.caseTitle}
                     </div>
                   )}
                 </div>
                 <div className="text-right shrink-0">
-                  <div className={cn("text-sm font-medium", days < 0 ? "text-red-600" : days <= 3 ? "text-amber-600" : "text-[#15151d]")}>
+                  <div className={cn("text-sm font-medium", days < 0 ? "text-red-600" : days <= 3 ? "text-amber-600" : "text-[color:var(--ds-text)]")}>
                     {new Date(d.date).toLocaleDateString("de-DE")}
                   </div>
-                  <div className="text-xs text-[#585866]">
+                  <div className="text-xs text-[color:var(--ds-text-muted)]">
                     {days < 0 ? `${Math.abs(days)} Tage überfällig` : days === 0 ? "Heute" : days === 1 ? "Morgen" : `in ${days} Tagen`}
                   </div>
                 </div>

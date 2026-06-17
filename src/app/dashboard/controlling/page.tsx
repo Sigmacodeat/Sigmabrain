@@ -80,8 +80,8 @@ export default function ControllingPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#15151d]">Leistungscontrolling</h1>
-          <p className="text-sm text-[#585866]">Übersicht über Anwälte, Stunden und Umsatz</p>
+          <h1 className="text-xl font-semibold text-[color:var(--ds-text)]">Leistungscontrolling</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Übersicht über Anwälte, Stunden und Umsatz</p>
         </div>
         <div className="flex gap-2">
           {(["month", "quarter", "year"] as const).map((p) => (
@@ -91,7 +91,7 @@ export default function ControllingPage() {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 period === p
                   ? "bg-violet-500/20 text-violet-600 border border-violet-500/30"
-                  : "bg-[#eceef3] text-[#585866] border border-[#e2e4ec] hover:border-[#b4b9c8]"
+                  : "bg-[color:var(--ds-hover)] text-[color:var(--ds-text-muted)] border border-[color:var(--ds-border)] hover:border-[color:var(--ds-border-strong)]"
               }`}
             >
               {p === "month" ? "Monat" : p === "quarter" ? "Quartal" : "Jahr"}
@@ -101,48 +101,48 @@ export default function ControllingPage() {
       </div>
 
       {loading ? (
-        <div className="text-sm text-[#585866]">Lade Daten …</div>
+        <div className="text-sm text-[color:var(--ds-text-muted)]">Lade Daten …</div>
       ) : (
         <>
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-              <div className="flex items-center gap-2 text-[#585866] mb-2">
+            <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+              <div className="flex items-center gap-2 text-[color:var(--ds-text-muted)] mb-2">
                 <Users size={14} />
                 <span className="text-xs">Anwälte</span>
               </div>
-              <div className="text-2xl font-semibold text-[#15151d]">{stats.length}</div>
+              <div className="text-2xl font-semibold text-[color:var(--ds-text)]">{stats.length}</div>
             </div>
-            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-              <div className="flex items-center gap-2 text-[#585866] mb-2">
+            <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+              <div className="flex items-center gap-2 text-[color:var(--ds-text-muted)] mb-2">
                 <Clock size={14} />
                 <span className="text-xs">Gesamtstunden</span>
               </div>
-              <div className="text-2xl font-semibold text-[#15151d]">{totalHours.toFixed(1)} h</div>
+              <div className="text-2xl font-semibold text-[color:var(--ds-text)]">{totalHours.toFixed(1)} h</div>
             </div>
-            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-              <div className="flex items-center gap-2 text-[#585866] mb-2">
+            <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+              <div className="flex items-center gap-2 text-[color:var(--ds-text-muted)] mb-2">
                 <Euro size={14} />
                 <span className="text-xs">Gesamtumsatz</span>
               </div>
               <div className="text-2xl font-semibold text-emerald-600">{totalRevenue.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</div>
             </div>
-            <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-              <div className="flex items-center gap-2 text-[#585866] mb-2">
+            <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+              <div className="flex items-center gap-2 text-[color:var(--ds-text-muted)] mb-2">
                 <TrendingUp size={14} />
                 <span className="text-xs">Ø Stundensatz</span>
               </div>
-              <div className="text-2xl font-semibold text-[#15151d]">
+              <div className="text-2xl font-semibold text-[color:var(--ds-text)]">
                 {totalHours > 0 ? Math.round(totalRevenue / totalHours) : 0} €
               </div>
             </div>
           </div>
 
           {/* Lawyer Table */}
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] overflow-hidden">
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#e2e4ec] text-[#585866]">
+                <tr className="border-b border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]">
                   <th className="text-left px-4 py-3 font-medium">Anwalt</th>
                   <th className="text-right px-4 py-3 font-medium">Akten</th>
                   <th className="text-right px-4 py-3 font-medium">Stunden</th>
@@ -155,14 +155,14 @@ export default function ControllingPage() {
                 {stats.map((s) => {
                   const utilization = Math.min(100, Math.round((s.totalHours / s.targetHours) * 100));
                   return (
-                    <tr key={s.name} className="border-b border-[#e2e4ec]/50 hover:bg-[#ffffff] transition-colors">
-                      <td className="px-4 py-3 text-[#15151d]">{s.name}</td>
-                      <td className="px-4 py-3 text-right text-[#585866]">{s.caseCount}</td>
-                      <td className="px-4 py-3 text-right text-[#15151d]">{s.totalHours.toFixed(1)} h</td>
-                      <td className="px-4 py-3 text-right text-[#15151d]">{s.billedHours.toFixed(1)} h</td>
+                    <tr key={s.name} className="border-b border-[color:var(--ds-border)]/50 hover:bg-[color:var(--ds-surface)] transition-colors">
+                      <td className="px-4 py-3 text-[color:var(--ds-text)]">{s.name}</td>
+                      <td className="px-4 py-3 text-right text-[color:var(--ds-text-muted)]">{s.caseCount}</td>
+                      <td className="px-4 py-3 text-right text-[color:var(--ds-text)]">{s.totalHours.toFixed(1)} h</td>
+                      <td className="px-4 py-3 text-right text-[color:var(--ds-text)]">{s.billedHours.toFixed(1)} h</td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <div className="w-20 h-1.5 rounded-full bg-[#e2e4ec] overflow-hidden">
+                          <div className="w-20 h-1.5 rounded-full bg-[color:var(--ds-border)] overflow-hidden">
                             <div
                               className={`h-full rounded-full ${
                                 utilization >= 80 ? "bg-emerald-400" : utilization >= 50 ? "bg-amber-400" : "bg-red-400"
@@ -170,7 +170,7 @@ export default function ControllingPage() {
                               style={{ width: `${utilization}%` }}
                             />
                           </div>
-                          <span className="text-xs text-[#585866]">{utilization}%</span>
+                          <span className="text-xs text-[color:var(--ds-text-muted)]">{utilization}%</span>
                         </div>
                       </td>
                       <td className="px-4 py-3 text-right font-medium text-emerald-600">

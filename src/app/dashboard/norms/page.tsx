@@ -200,21 +200,21 @@ function NormsPageInner() {
           <BookOpen size={20} className="text-blue-600" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">Normen</h1>
-          <p className="text-sm text-[#585866]">Gesetze und Rechtsvorschriften durchsuchen</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Normen</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Gesetze und Rechtsvorschriften durchsuchen</p>
         </div>
       </div>
 
       {/* Search */}
       <div className="flex gap-2">
         <div className="relative flex-1 max-w-lg">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--ds-text-muted)]" />
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Norm suchen… z.B. § 823 BGB, Art. 5 GG"
             aria-label="Norm suchen… z.B. § 823 BGB, Art. 5 GG"
-            className="pl-9 bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+            className="pl-9 bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
           />
         </div>
       </div>
@@ -230,12 +230,12 @@ function NormsPageInner() {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
                 jurisdiction === j
                   ? "bg-violet-600/15 border-violet-500/30 text-violet-600"
-                  : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:border-[#b4b9c8] hover:text-[#15151d]"
+                  : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:border-[color:var(--ds-border-strong)] hover:text-[color:var(--ds-text)]"
               }`}
             >
               {j === "all" ? "Alle" : j === "at" ? "🇦🇹 AT" : j === "de" ? "🇩🇪 DE" : "🇨🇭 CH"}
               {j !== "all" && counts > 0 && (
-                <span className="ml-1.5 px-1 py-0.5 rounded bg-[#e2e4ec] text-[10px]">{counts}</span>
+                <span className="ml-1.5 px-1 py-0.5 rounded bg-[color:var(--ds-border)] text-[10px]">{counts}</span>
               )}
             </button>
           );
@@ -251,12 +251,12 @@ function NormsPageInner() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setSelectedNorm(null)}
-                className="text-[#585866] hover:text-[#15151d]"
+                className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"
               >
                 <ArrowLeft size={16} />
               </Button>
               <div>
-                <h2 className="text-lg font-bold text-[#15151d]">{selectedNorm.title}</h2>
+                <h2 className="text-lg font-bold text-[color:var(--ds-text)]">{selectedNorm.title}</h2>
                 <div className="flex items-center gap-2 mt-1">
                   <Badge variant="default" className="text-[10px] bg-blue-600/10 border-blue-500/20 text-blue-600">
                     {CODE_LABELS[selectedNorm.code] || selectedNorm.code.toUpperCase()}
@@ -278,18 +278,18 @@ function NormsPageInner() {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#eceef3] border border-[#e2e4ec] text-[#585866] hover:text-violet-600 hover:border-violet-500/30 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:text-violet-600 hover:border-violet-500/30 transition-all"
               title="Text kopieren"
             >
               {copied ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
               {copied ? "Kopiert" : "Kopieren"}
             </button>
           </div>
-          <div className="text-sm text-[#585866] whitespace-pre-wrap leading-relaxed max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-lg p-4 border border-[#e2e4ec]">
+          <div className="text-sm text-[color:var(--ds-text-muted)] whitespace-pre-wrap leading-relaxed max-h-[60vh] overflow-y-auto bg-[color:var(--ds-surface)] rounded-lg p-4 border border-[color:var(--ds-border)]">
             {detailLoading ? (
               <div className="flex items-center gap-2 py-4">
                 <Loader2 size={14} className="animate-spin text-violet-600" />
-                <span className="text-xs text-[#585866]">Gesetzestext wird geladen…</span>
+                <span className="text-xs text-[color:var(--ds-text-muted)]">Gesetzestext wird geladen…</span>
               </div>
             ) : (
               fullContent || selectedNorm.content
@@ -306,8 +306,8 @@ function NormsPageInner() {
 
       {/* Stats bar */}
       {!loading && norms.length > 0 && (
-        <div className="flex items-center gap-4 text-xs text-[#585866]">
-          <span className="flex items-center gap-1"><Scale size={12} /> <strong className="text-[#15151d]">{norms.length}</strong> Gesetze</span>
+        <div className="flex items-center gap-4 text-xs text-[color:var(--ds-text-muted)]">
+          <span className="flex items-center gap-1"><Scale size={12} /> <strong className="text-[color:var(--ds-text)]">{norms.length}</strong> Gesetze</span>
           <span className="flex items-center gap-1"><Globe size={12} /> AT: {norms.filter(n => n.jurisdiction === "at").length}</span>
           <span className="flex items-center gap-1"><Globe size={12} /> DE: {norms.filter(n => n.jurisdiction === "de").length}</span>
           <span className="flex items-center gap-1"><Globe size={12} /> CH: {norms.filter(n => n.jurisdiction === "ch").length}</span>
@@ -321,36 +321,36 @@ function NormsPageInner() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 space-y-3">
-          <BookOpen size={40} className="mx-auto text-[#e2e4ec]" />
-          <p className="text-sm text-[#585866]">Keine Gesetze gefunden.</p>
-          <p className="text-xs text-[#585866]">{norms.length > 0 ? "Passe den Filter oder die Suche an." : "Importiere Gesetze über das CLI."}</p>
+          <BookOpen size={40} className="mx-auto text-[color:var(--ds-border)]" />
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Keine Gesetze gefunden.</p>
+          <p className="text-xs text-[color:var(--ds-text-muted)]">{norms.length > 0 ? "Passe den Filter oder die Suche an." : "Importiere Gesetze über das CLI."}</p>
         </div>
       ) : (
         <div className="space-y-4">
           {Object.entries(byCode).map(([code, items]) => (
             <div key={code} className="space-y-2">
-              <h3 className="text-xs font-semibold text-[#585866] uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-xs font-semibold text-[color:var(--ds-text-muted)] uppercase tracking-wider flex items-center gap-2">
                 <BookOpen size={12} />
                 {CODE_LABELS[code] || code.toUpperCase()}
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#e2e4ec] text-[#585866]">{items.length}</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]">{items.length}</span>
               </h3>
               <div className="space-y-1">
                 {items.map((n) => (
                   <button
                     key={n.slug}
                     onClick={() => setSelectedNorm(n)}
-                    className="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#eceef3] transition-colors group border border-transparent hover:border-[#e2e4ec]"
+                    className="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[color:var(--ds-hover)] transition-colors group border border-transparent hover:border-[color:var(--ds-border)]"
                   >
                     <span className={`w-2 h-2 rounded-full shrink-0 ${
                       n.jurisdiction === "at" ? "bg-red-400" :
                       n.jurisdiction === "ch" ? "bg-emerald-400" :
                       "bg-blue-400"
                     }`} />
-                    <span className="text-sm text-[#585866] group-hover:text-[#15151d] flex-1 truncate">{n.title}</span>
+                    <span className="text-sm text-[color:var(--ds-text-muted)] group-hover:text-[color:var(--ds-text)] flex-1 truncate">{n.title}</span>
                     {n.jurisdiction && (
-                      <span className="text-[10px] text-[#585866] bg-[#e2e4ec] px-1.5 py-0.5 rounded uppercase">{n.jurisdiction}</span>
+                      <span className="text-[10px] text-[color:var(--ds-text-muted)] bg-[color:var(--ds-border)] px-1.5 py-0.5 rounded uppercase">{n.jurisdiction}</span>
                     )}
-                    <ChevronRight size={12} className="text-[#585866] group-hover:text-violet-600 shrink-0" />
+                    <ChevronRight size={12} className="text-[color:var(--ds-text-muted)] group-hover:text-violet-600 shrink-0" />
                   </button>
                 ))}
               </div>

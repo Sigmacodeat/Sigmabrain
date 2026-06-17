@@ -56,17 +56,17 @@ export default function DataExportPage() {
           <Archive size={20} className="text-emerald-600" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">Datenexport</h1>
-          <p className="text-sm text-[#585866]">DSGVO Art. 20 — Recht auf Datenübertragbarkeit</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Datenexport</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">DSGVO Art. 20 — Recht auf Datenübertragbarkeit</p>
         </div>
       </div>
 
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-4">
         <div className="flex items-start gap-3">
           <Shield size={18} className="text-emerald-600 shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm text-[#15151d] font-medium">Ihre Daten gehören Ihnen</p>
-            <p className="text-xs text-[#585866] mt-1">
+            <p className="text-sm text-[color:var(--ds-text)] font-medium">Ihre Daten gehören Ihnen</p>
+            <p className="text-xs text-[color:var(--ds-text-muted)] mt-1">
               Nach Art. 20 der DSGVO haben Sie das Recht, Ihre personenbezogenen Daten in einem
               strukturierten, gängigen und maschinenlesbaren Format zu erhalten.
               Der Export umfasst alle Ihre Akten, Kontakte, Rechnungen, Fristen, Zeiten,
@@ -99,14 +99,14 @@ export default function DataExportPage() {
             <span className="text-sm font-medium text-emerald-600">Export erfolgreich</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
-              <div className="text-xl font-bold text-[#15151d]">{stats.total}</div>
-              <div className="text-xs text-[#585866]">Gesamt</div>
+            <div className="rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3 text-center">
+              <div className="text-xl font-bold text-[color:var(--ds-text)]">{stats.total}</div>
+              <div className="text-xs text-[color:var(--ds-text-muted)]">Gesamt</div>
             </div>
             {Object.entries(stats.byType).map(([type, count]) => (
-              <div key={type} className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
-                <div className="text-xl font-bold text-[#15151d]">{count}</div>
-                <div className="text-xs text-[#585866]">{type}</div>
+              <div key={type} className="rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3 text-center">
+                <div className="text-xl font-bold text-[color:var(--ds-text)]">{count}</div>
+                <div className="text-xs text-[color:var(--ds-text-muted)]">{type}</div>
               </div>
             ))}
           </div>
@@ -119,8 +119,8 @@ export default function DataExportPage() {
           <div className="flex items-start gap-3">
             <Database size={18} className="text-violet-600 shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-[#15151d] font-medium">Voll-Backup (Admin)</p>
-              <p className="text-xs text-[#585866] mt-1">
+              <p className="text-sm text-[color:var(--ds-text)] font-medium">Voll-Backup (Admin)</p>
+              <p className="text-xs text-[color:var(--ds-text-muted)] mt-1">
                 Exportiert ALLE Brain-Pages als vollständiges JSON-Backup.
                 Nützlich für Migrationen, Compliance-Archivierung und Disaster Recovery.
               </p>

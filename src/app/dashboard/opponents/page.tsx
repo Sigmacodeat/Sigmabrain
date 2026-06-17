@@ -106,28 +106,28 @@ export default function OpponentsPage() {
           <ShieldAlert size={20} className="text-red-600" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">Gegner-Analyse</h1>
-          <p className="text-sm text-[#585866]">Intelligence über Gegner aus allen Akten</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Gegner-Analyse</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Intelligence über Gegner aus allen Akten</p>
         </div>
       </div>
 
       {/* Stats summary */}
       {opponents.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
-            <div className="text-xs text-[#585866]">Gegner gesamt</div>
-            <div className="text-xl font-bold text-[#15151d]">{opponents.length}</div>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3">
+            <div className="text-xs text-[color:var(--ds-text-muted)]">Gegner gesamt</div>
+            <div className="text-xl font-bold text-[color:var(--ds-text)]">{opponents.length}</div>
           </div>
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
-            <div className="text-xs text-[#585866]">Häufigster Gegner</div>
-            <div className="text-sm font-bold text-[#15151d] truncate">{opponents[0]?.name}</div>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3">
+            <div className="text-xs text-[color:var(--ds-text-muted)]">Häufigster Gegner</div>
+            <div className="text-sm font-bold text-[color:var(--ds-text)] truncate">{opponents[0]?.name}</div>
           </div>
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
-            <div className="text-xs text-[#585866]">Gesamt-Akten</div>
-            <div className="text-xl font-bold text-[#15151d]">{opponents.reduce((s, o) => s + o.caseCount, 0)}</div>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3">
+            <div className="text-xs text-[color:var(--ds-text-muted)]">Gesamt-Akten</div>
+            <div className="text-xl font-bold text-[color:var(--ds-text)]">{opponents.reduce((s, o) => s + o.caseCount, 0)}</div>
           </div>
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
-            <div className="text-xs text-[#585866]">Gewonnen</div>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3">
+            <div className="text-xs text-[color:var(--ds-text-muted)]">Gewonnen</div>
             <div className="text-xl font-bold text-emerald-600">{opponents.reduce((s, o) => s + o.wins, 0)}</div>
           </div>
         </div>
@@ -146,9 +146,9 @@ export default function OpponentsPage() {
         </div>
       ) : opponents.length === 0 ? (
         <div className="text-center py-20 space-y-4">
-          <ShieldAlert size={48} className="mx-auto text-[#e2e4ec]" />
-          <p className="text-[#585866]">Noch keine Gegner in den Akten erfasst.</p>
-          <p className="text-[#585866] text-sm">Füge Gegner bei der Akten-Erstellung hinzu.</p>
+          <ShieldAlert size={48} className="mx-auto text-[color:var(--ds-border)]" />
+          <p className="text-[color:var(--ds-text-muted)]">Noch keine Gegner in den Akten erfasst.</p>
+          <p className="text-[color:var(--ds-text-muted)] text-sm">Füge Gegner bei der Akten-Erstellung hinzu.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -156,14 +156,14 @@ export default function OpponentsPage() {
             <div className="space-y-4">
               <button
                 onClick={() => setSelectedOpponent(null)}
-                className="text-sm text-[#585866] hover:text-[#15151d] transition-colors"
+                className="text-sm text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] transition-colors"
               >
                 ← Zurück zur Übersicht
               </button>
 
-              <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-                <h2 className="text-lg font-bold text-[#15151d]">{selectedOpponent.name}</h2>
-                <div className="flex items-center gap-3 text-sm text-[#585866] mt-1">
+              <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+                <h2 className="text-lg font-bold text-[color:var(--ds-text)]">{selectedOpponent.name}</h2>
+                <div className="flex items-center gap-3 text-sm text-[color:var(--ds-text-muted)] mt-1">
                   <span>{selectedOpponent.caseCount} Akten</span>
                   <span className={selectedOpponent.winRate >= 0.5 ? "text-emerald-600" : "text-red-600"}>
                     {Math.round(selectedOpponent.winRate * 100)}% Siegquote
@@ -174,21 +174,21 @@ export default function OpponentsPage() {
               <div className="grid grid-cols-3 gap-3">
                 <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-center">
                   <div className="text-xl font-bold text-emerald-600">{selectedOpponent.wins}</div>
-                  <div className="text-xs text-[#585866]">Gewonnen</div>
+                  <div className="text-xs text-[color:var(--ds-text-muted)]">Gewonnen</div>
                 </div>
                 <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-center">
                   <div className="text-xl font-bold text-red-600">{selectedOpponent.losses}</div>
-                  <div className="text-xs text-[#585866]">Verloren</div>
+                  <div className="text-xs text-[color:var(--ds-text-muted)]">Verloren</div>
                 </div>
                 <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-3 text-center">
                   <div className="text-xl font-bold text-blue-600">{selectedOpponent.settlements}</div>
-                  <div className="text-xs text-[#585866]">Erledigt</div>
+                  <div className="text-xs text-[color:var(--ds-text-muted)]">Erledigt</div>
                 </div>
               </div>
 
               {selectedOpponent.preferredAreas.length > 0 && (
-                <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-                  <h3 className="text-sm font-semibold text-[#15151d] mb-2">Rechtsgebiete</h3>
+                <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+                  <h3 className="text-sm font-semibold text-[color:var(--ds-text)] mb-2">Rechtsgebiete</h3>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedOpponent.preferredAreas.map((area) => (
                       <Badge key={area} variant="default" className="text-[10px] bg-violet-600/5 border-violet-500/10 text-violet-600">
@@ -199,8 +199,8 @@ export default function OpponentsPage() {
                 </div>
               )}
 
-              <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
-                <h3 className="text-sm font-semibold text-[#15151d] mb-2">Akten</h3>
+              <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
+                <h3 className="text-sm font-semibold text-[color:var(--ds-text)] mb-2">Akten</h3>
                 <div className="space-y-2">
                   {selectedOpponent.recentCases.map((c) => {
                     const statusColor =
@@ -212,14 +212,14 @@ export default function OpponentsPage() {
                       <Link
                         key={c.slug}
                         href={`/dashboard/cases/${encodeURIComponent(c.slug)}`}
-                        className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#eceef3] transition-colors group"
+                        className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[color:var(--ds-hover)] transition-colors group"
                       >
-                        <span className="text-sm text-[#15151d]">{c.title}</span>
+                        <span className="text-sm text-[color:var(--ds-text)]">{c.title}</span>
                         <div className="flex items-center gap-2">
                           <span className={`text-xs ${statusColor}`}>
                             {c.status === "won" ? "Gewonnen" : c.status === "lost" ? "Verloren" : c.status === "settled" ? "Erledigt" : c.status}
                           </span>
-                          <ChevronRight size={12} className="text-[#585866] group-hover:text-violet-600" />
+                          <ChevronRight size={12} className="text-[color:var(--ds-text-muted)] group-hover:text-violet-600" />
                         </div>
                       </Link>
                     );
@@ -233,14 +233,14 @@ export default function OpponentsPage() {
                 <button
                   key={o.name}
                   onClick={() => setSelectedOpponent(o)}
-                  className="w-full flex items-center gap-4 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:border-violet-500/30 hover:bg-violet-600/5 transition-all text-left group"
+                  className="w-full flex items-center gap-4 px-4 py-3 rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] hover:border-violet-500/30 hover:bg-violet-600/5 transition-all text-left group"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-[#eceef3] border border-[#e2e4ec] flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] flex items-center justify-center shrink-0">
                     <ShieldAlert size={18} className="text-red-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-[#15151d]">{o.name}</div>
-                    <div className="text-xs text-[#585866]">
+                    <div className="font-medium text-[color:var(--ds-text)]">{o.name}</div>
+                    <div className="text-xs text-[color:var(--ds-text-muted)]">
                       {o.caseCount} Akten · {o.preferredAreas.slice(0, 2).join(", ")}
                     </div>
                   </div>
@@ -248,9 +248,9 @@ export default function OpponentsPage() {
                     <div className={cn("text-sm font-medium", o.winRate >= 0.5 ? "text-emerald-600" : "text-red-600")}>
                       {Math.round(o.winRate * 100)}%
                     </div>
-                    <div className="text-xs text-[#585866]">Siegquote</div>
+                    <div className="text-xs text-[color:var(--ds-text-muted)]">Siegquote</div>
                   </div>
-                  <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-600 shrink-0" />
+                  <ChevronRight size={16} className="text-[color:var(--ds-text-muted)] group-hover:text-violet-600 shrink-0" />
                 </button>
               ))}
             </div>

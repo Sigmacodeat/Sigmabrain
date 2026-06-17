@@ -90,20 +90,20 @@ export default function ApiKeysPage() {
           <Key size={20} className="text-violet-600" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">API-Keys</h1>
-          <p className="text-sm text-[#585866]">Drittanbieter-Integration (Zapier, beA, DATEV)</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">API-Keys</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Drittanbieter-Integration (Zapier, beA, DATEV)</p>
         </div>
       </div>
 
       {/* Create Key */}
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
-        <h2 className="text-sm font-semibold text-[#15151d]">Neuen API-Key erstellen</h2>
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-3">
+        <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Neuen API-Key erstellen</h2>
         <div className="flex gap-2">
           <input
             value={newKeyName}
             onChange={(e) => setNewKeyName(e.target.value)}
             placeholder="z. B. Zapier-Integration"
-            className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
+            className="flex-1 bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50"
             onKeyDown={(e) => e.key === "Enter" && createKey()}
           />
           <Button
@@ -123,11 +123,11 @@ export default function ApiKeysPage() {
               <AlertTriangle size={16} className="text-amber-600" />
               <span className="text-sm font-medium text-amber-600">Key wird nur EINMAL angezeigt</span>
             </div>
-            <div className="flex items-center gap-2 bg-[#ffffff] rounded-lg px-3 py-2 border border-[#e2e4ec]">
-              <code className="text-sm text-[#15151d] font-mono flex-1 break-all">{newKeyPlaintext}</code>
+            <div className="flex items-center gap-2 bg-[color:var(--ds-surface)] rounded-lg px-3 py-2 border border-[color:var(--ds-border)]">
+              <code className="text-sm text-[color:var(--ds-text)] font-mono flex-1 break-all">{newKeyPlaintext}</code>
               <button
                 onClick={() => copyKey(newKeyPlaintext)}
-                className="p-1.5 rounded-lg text-[#585866] hover:text-violet-600 hover:bg-violet-500/10 transition-all"
+                className="p-1.5 rounded-lg text-[color:var(--ds-text-muted)] hover:text-violet-600 hover:bg-violet-500/10 transition-all"
               >
                 {copied ? <CheckCircle2 size={14} className="text-emerald-600" /> : <Copy size={14} />}
               </button>
@@ -143,10 +143,10 @@ export default function ApiKeysPage() {
       </div>
 
       {/* Keys List */}
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] overflow-hidden">
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-[#e2e4ec] text-[#585866]">
+            <tr className="border-b border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]">
               <th className="text-left px-4 py-3 font-medium">Name</th>
               <th className="text-left px-4 py-3 font-medium">Prefix</th>
               <th className="text-left px-4 py-3 font-medium">Scopes</th>
@@ -157,14 +157,14 @@ export default function ApiKeysPage() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={6} className="px-4 py-8 text-center text-[#585866]"><Loader2 size={16} className="animate-spin inline mr-2" />Lade…</td></tr>
+              <tr><td colSpan={6} className="px-4 py-8 text-center text-[color:var(--ds-text-muted)]"><Loader2 size={16} className="animate-spin inline mr-2" />Lade…</td></tr>
             ) : keys.length === 0 ? (
-              <tr><td colSpan={6} className="px-4 py-8 text-center text-[#585866]">Noch keine API-Keys vorhanden.</td></tr>
+              <tr><td colSpan={6} className="px-4 py-8 text-center text-[color:var(--ds-text-muted)]">Noch keine API-Keys vorhanden.</td></tr>
             ) : (
               keys.map((k) => (
-                <tr key={k.id} className="border-b border-[#e2e4ec]/50 hover:bg-[#ffffff] transition-colors">
-                  <td className="px-4 py-3 text-[#15151d]">{k.name}</td>
-                  <td className="px-4 py-3 text-[#585866] font-mono">{k.prefix}…</td>
+                <tr key={k.id} className="border-b border-[color:var(--ds-border)]/50 hover:bg-[color:var(--ds-surface)] transition-colors">
+                  <td className="px-4 py-3 text-[color:var(--ds-text)]">{k.name}</td>
+                  <td className="px-4 py-3 text-[color:var(--ds-text-muted)] font-mono">{k.prefix}…</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
                       {k.scopes.map((s) => (
@@ -179,11 +179,11 @@ export default function ApiKeysPage() {
                       <span className="text-xs text-red-600">Inaktiv</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-[#585866]">{new Date(k.createdAt).toLocaleDateString("de-DE")}</td>
+                  <td className="px-4 py-3 text-[color:var(--ds-text-muted)]">{new Date(k.createdAt).toLocaleDateString("de-DE")}</td>
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => deleteKey(k.id)}
-                      className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all"
+                      className="p-1.5 rounded-lg text-[color:var(--ds-text-muted)] hover:text-red-600 hover:bg-red-500/10 transition-all"
                       title="Löschen"
                     >
                       <Trash2 size={14} />
@@ -197,12 +197,12 @@ export default function ApiKeysPage() {
       </div>
 
       {/* Webhook Info */}
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-2">
-        <h2 className="text-sm font-semibold text-[#15151d]">Webhook-Endpoint</h2>
-        <code className="block text-xs text-[#585866] font-mono bg-[#ffffff] rounded-lg px-3 py-2 border border-[#e2e4ec]">
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-2">
+        <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Webhook-Endpoint</h2>
+        <code className="block text-xs text-[color:var(--ds-text-muted)] font-mono bg-[color:var(--ds-surface)] rounded-lg px-3 py-2 border border-[color:var(--ds-border)]">
           POST https://ihre-domain.de/api/webhook/incoming
         </code>
-        <p className="text-xs text-[#585866]">
+        <p className="text-xs text-[color:var(--ds-text-muted)]">
           Header: <code className="text-violet-600">X-API-Key: sk_live_…</code><br />
           Events: <code className="text-violet-600">case.created</code>, <code className="text-violet-600">deadline.due</code>, <code className="text-violet-600">invoice.paid</code>, <code className="text-violet-600">email.received</code>
         </p>

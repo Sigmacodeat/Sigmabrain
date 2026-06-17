@@ -205,14 +205,14 @@ export default function VerfahrensdokuPage() {
     textarea = false,
   ) => (
     <div>
-      <label className="text-xs text-[#585866] block mb-1.5">{label}</label>
+      <label className="text-xs text-[color:var(--ds-text-muted)] block mb-1.5">{label}</label>
       {textarea ? (
         <textarea
           value={form[key]}
           onChange={(e) => set(key, e.target.value)}
           placeholder={placeholder}
           rows={3}
-          className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 resize-y"
+          className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50 resize-y"
         />
       ) : (
         <input
@@ -220,7 +220,7 @@ export default function VerfahrensdokuPage() {
           value={form[key]}
           onChange={(e) => set(key, e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50"
+          className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50"
         />
       )}
     </div>
@@ -235,8 +235,8 @@ export default function VerfahrensdokuPage() {
             <ScrollText size={20} className="text-violet-600" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#15151d]">GoBD-Verfahrensdokumentation</h1>
-            <p className="text-sm text-[#585866]">Vorlage aus Kanzlei-Stammdaten + Ablaufbeschreibung (GoBD Rz. 151 ff.)</p>
+            <h1 className="text-xl font-bold text-[color:var(--ds-text)]">GoBD-Verfahrensdokumentation</h1>
+            <p className="text-sm text-[color:var(--ds-text-muted)]">Vorlage aus Kanzlei-Stammdaten + Ablaufbeschreibung (GoBD Rz. 151 ff.)</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -275,8 +275,8 @@ export default function VerfahrensdokuPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
         <div className="space-y-4">
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-[#15151d]">Stammdaten</h2>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-3">
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Stammdaten</h2>
             {field("Kanzlei / Unternehmen", "kanzleiName", "z.B. Kanzlei Muster")}
             {field("Vertretungsberechtigte/r", "anwaltName", "z.B. RA Dr. Muster")}
             {field("USt-IdNr.", "ustId", "DE123456789")}
@@ -284,16 +284,16 @@ export default function VerfahrensdokuPage() {
             {field("Stand (Datum)", "stand", today)}
           </div>
 
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-[#15151d]">Ablaufbeschreibung</h2>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-3">
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Ablaufbeschreibung</h2>
             {field("Eingesetzte DV-Systeme", "systeme", "Sigmabrain, DATEV, beA …")}
             {field("Belegeingang", "belegEingang", "Wie kommen Belege herein? (Post, E-Mail, Upload, Scan)", true)}
             {field("Erfassung & Verbuchung", "erfassung", "Wie/wann werden Belege erfasst und verbucht?", true)}
             {field("Ablage & Aufbewahrungsort", "ablageOrt", "Wo werden Belege unveränderbar abgelegt?", true)}
           </div>
 
-          <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-[#15151d]">Betrieb & Kontrolle</h2>
+          <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-3">
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Betrieb & Kontrolle</h2>
             {field("Datensicherung / Backup", "backup", "Sicherungskonzept, Frequenz, Aufbewahrung der Backups", true)}
             {field("Zugriffsschutz", "zugriffsschutz", "Berechtigungskonzept, Authentifizierung", true)}
             {field("Internes Kontrollsystem (IKS)", "iks", "Funktionstrennung, Plausibilitätskontrollen", true)}
@@ -301,12 +301,12 @@ export default function VerfahrensdokuPage() {
         </div>
 
         {/* Preview */}
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-2 lg:sticky lg:top-6 lg:self-start">
-          <div className="flex items-center gap-2 text-[#585866]">
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-2 lg:sticky lg:top-6 lg:self-start">
+          <div className="flex items-center gap-2 text-[color:var(--ds-text-muted)]">
             <FileText size={14} className="text-violet-600" />
-            <span className="text-sm font-semibold text-[#15151d]">Vorschau (Markdown)</span>
+            <span className="text-sm font-semibold text-[color:var(--ds-text)]">Vorschau (Markdown)</span>
           </div>
-          <pre className="text-[11px] text-[#585866] font-mono whitespace-pre-wrap leading-relaxed max-h-[70vh] overflow-y-auto">
+          <pre className="text-[11px] text-[color:var(--ds-text-muted)] font-mono whitespace-pre-wrap leading-relaxed max-h-[70vh] overflow-y-auto">
             {markdown}
           </pre>
         </div>

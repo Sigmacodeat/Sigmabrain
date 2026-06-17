@@ -117,8 +117,8 @@ export default function ConnectorsPage() {
             <Plug size={20} className="text-blue-600" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#15151d]">Konnektoren</h1>
-            <p className="text-sm text-[#585866]">Externe Systeme verbinden und synchronisieren</p>
+            <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Konnektoren</h1>
+            <p className="text-sm text-[color:var(--ds-text-muted)]">Externe Systeme verbinden und synchronisieren</p>
           </div>
         </div>
       </div>
@@ -165,35 +165,35 @@ export default function ConnectorsPage() {
                   "flex items-center gap-4 px-4 py-3 rounded-xl border transition-all",
                   isLegal
                     ? "border-violet-500/20 bg-violet-600/5"
-                    : "border-[#e2e4ec] bg-[#ffffff]"
+                    : "border-[color:var(--ds-border)] bg-[color:var(--ds-surface)]"
                 )}
               >
                 <div className={cn(
                   "w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border",
-                  isLegal ? "bg-violet-600/10 border-violet-500/20" : "bg-[#eceef3] border-[#e2e4ec]"
+                  isLegal ? "bg-violet-600/10 border-violet-500/20" : "bg-[color:var(--ds-hover)] border-[color:var(--ds-border)]"
                 )}>
-                  <Icon size={18} className={isLegal ? "text-violet-600" : "text-[#585866]"} />
+                  <Icon size={18} className={isLegal ? "text-violet-600" : "text-[color:var(--ds-text-muted)]"} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-[#15151d]">{label}</span>
+                    <span className="font-medium text-[color:var(--ds-text)]">{label}</span>
                     {isLegal && (
                       <Badge variant="default" className="text-[10px] bg-violet-600/10 border-violet-500/20 text-violet-600">
                         Kanzlei
                       </Badge>
                     )}
                     {!c.configured && (
-                      <Badge variant="default" className="text-[10px] bg-[#eceef3] border-[#e2e4ec] text-[#585866]">
+                      <Badge variant="default" className="text-[10px] bg-[color:var(--ds-hover)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]">
                         Nicht eingerichtet
                       </Badge>
                     )}
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-[#585866] mt-0.5">
-                    <span className={cn("flex items-center gap-1", c.enabled ? "text-emerald-600" : "text-[#585866]")}>
+                  <div className="flex items-center gap-3 text-xs text-[color:var(--ds-text-muted)] mt-0.5">
+                    <span className={cn("flex items-center gap-1", c.enabled ? "text-emerald-600" : "text-[color:var(--ds-text-muted)]")}>
                       {c.enabled ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
                       {c.enabled ? "Aktiviert" : "Deaktiviert"}
                     </span>
-                    <span className={cn("flex items-center gap-1", c.connected ? "text-emerald-600" : "text-[#585866]")}>
+                    <span className={cn("flex items-center gap-1", c.connected ? "text-emerald-600" : "text-[color:var(--ds-text-muted)]")}>
                       {c.connected ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
                       {c.connected ? "Verbunden" : "Getrennt"}
                     </span>
@@ -206,7 +206,7 @@ export default function ConnectorsPage() {
                     size="sm"
                     disabled={!c.configured || toggling === c.service}
                     onClick={() => handleToggle(c.service)}
-                    className="text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3] gap-1.5 text-xs"
+                    className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] gap-1.5 text-xs"
                   >
                     {toggling === c.service ? <Loader2 size={12} className="animate-spin" /> : c.enabled ? <XCircle size={12} /> : <CheckCircle2 size={12} />}
                     {c.enabled ? "Deaktivieren" : "Aktivieren"}
@@ -216,7 +216,7 @@ export default function ConnectorsPage() {
                     size="sm"
                     disabled={!c.configured || !c.enabled || syncing === c.service}
                     onClick={() => handleSync(c.service)}
-                    className="text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3] gap-1.5 text-xs"
+                    className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] gap-1.5 text-xs"
                   >
                     {syncing === c.service ? <Loader2 size={12} className="animate-spin" /> : <RefreshCw size={12} />}
                     Sync
@@ -229,24 +229,24 @@ export default function ConnectorsPage() {
       )}
 
       {/* CLI reference */}
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
-        <h2 className="text-sm font-semibold text-[#15151d]">CLI-Kommandos</h2>
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-3">
+        <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">CLI-Kommandos</h2>
         <div className="space-y-2 font-mono text-xs">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)]">
             <span className="text-violet-600">$</span>
-            <span className="text-[#585866]">gbrain connector add legal-judgements --query &quot;Haftung&quot; --jurisdiction at</span>
+            <span className="text-[color:var(--ds-text-muted)]">gbrain connector add legal-judgements --query &quot;Haftung&quot; --jurisdiction at</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)]">
             <span className="text-violet-600">$</span>
-            <span className="text-[#585866]">gbrain connector add bea-import --watch-dir ~/Downloads/bea</span>
+            <span className="text-[color:var(--ds-text-muted)]">gbrain connector add bea-import --watch-dir ~/Downloads/bea</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)]">
             <span className="text-violet-600">$</span>
-            <span className="text-[#585866]">gbrain connector sync legal-judgements</span>
+            <span className="text-[color:var(--ds-text-muted)]">gbrain connector sync legal-judgements</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)]">
             <span className="text-violet-600">$</span>
-            <span className="text-[#585866]">gbrain connector list</span>
+            <span className="text-[color:var(--ds-text-muted)]">gbrain connector list</span>
           </div>
         </div>
       </div>

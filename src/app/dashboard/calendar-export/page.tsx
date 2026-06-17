@@ -153,8 +153,8 @@ export default function CalendarExportPage() {
             <Calendar size={20} className="text-blue-600" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#15151d]">Kalender-Export</h1>
-            <p className="text-sm text-[#585866]">Fristen & Termine als iCal (.ics)</p>
+            <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Kalender-Export</h1>
+            <p className="text-sm text-[color:var(--ds-text-muted)]">Fristen & Termine als iCal (.ics)</p>
           </div>
         </div>
         <Button
@@ -189,7 +189,7 @@ export default function CalendarExportPage() {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
               filter === f
                 ? "bg-blue-600/15 text-blue-600 border-blue-500/30"
-                : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
+                : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"
             }`}
           >
             {f === "all" ? "Alle" : f === "deadline" ? "Fristen" : f === "hearing" ? "Verhandlungen" : "Besprechungen"}
@@ -199,12 +199,12 @@ export default function CalendarExportPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
-          <div className="text-xs text-[#585866]">Anstehend</div>
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3 text-center">
+          <div className="text-xs text-[color:var(--ds-text-muted)]">Anstehend</div>
           <div className="text-xl font-bold text-blue-600">{upcoming.length}</div>
         </div>
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
-          <div className="text-xs text-[#585866]">Überfällig</div>
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-3 text-center">
+          <div className="text-xs text-[color:var(--ds-text-muted)]">Überfällig</div>
           <div className="text-xl font-bold text-red-600">{overdue.length}</div>
         </div>
       </div>
@@ -217,12 +217,12 @@ export default function CalendarExportPage() {
 
       {/* Events */}
       {loading ? (
-        <div className="text-center py-20 text-[#585866]">Lade Termine…</div>
+        <div className="text-center py-20 text-[color:var(--ds-text-muted)]">Lade Termine…</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20 space-y-4">
-          <CalendarClock size={48} className="mx-auto text-[#e2e4ec]" />
-          <p className="text-[#585866]">Keine Termine gefunden.</p>
-          <p className="text-[#585866] text-sm">Erstellen Sie Fristen in Akten oder nutzen Sie den Deadline-Extractor.</p>
+          <CalendarClock size={48} className="mx-auto text-[color:var(--ds-border)]" />
+          <p className="text-[color:var(--ds-text-muted)]">Keine Termine gefunden.</p>
+          <p className="text-[color:var(--ds-text-muted)] text-sm">Erstellen Sie Fristen in Akten oder nutzen Sie den Deadline-Extractor.</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -235,13 +235,13 @@ export default function CalendarExportPage() {
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
                   isOverdue
                     ? "border-red-500/20 bg-red-500/5"
-                    : "border-[#e2e4ec] bg-[#ffffff]"
+                    : "border-[color:var(--ds-border)] bg-[color:var(--ds-surface)]"
                 }`}
               >
                 <div className={cn("w-2 h-2 rounded-full shrink-0", STATUS_BG[color])} aria-hidden="true" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-[#15151d]">{ev.title}</span>
+                    <span className="text-sm font-medium text-[color:var(--ds-text)]">{ev.title}</span>
                     <Badge variant="default" className={cn("text-[10px] border", statusBadgeClasses(color))}>
                       {ev.type === "deadline" ? "Frist" : ev.type === "hearing" ? "Verhandlung" : ev.type === "meeting" ? "Besprechung" : "Erinnerung"}
                     </Badge>
@@ -251,16 +251,16 @@ export default function CalendarExportPage() {
                       </Badge>
                     )}
                   </div>
-                  <div className="text-xs text-[#585866] mt-0.5">
+                  <div className="text-xs text-[color:var(--ds-text-muted)] mt-0.5">
                     {new Date(ev.date).toLocaleDateString("de-DE", { weekday: "short", day: "numeric", month: "long", year: "numeric" })}
                     {ev.caseNumber && ` · Akte ${ev.caseNumber}`}
                     {ev.location && ` · ${ev.location}`}
                   </div>
                   {ev.description && (
-                    <div className="text-xs text-[#585866] mt-1 line-clamp-1">{ev.description}</div>
+                    <div className="text-xs text-[color:var(--ds-text-muted)] mt-1 line-clamp-1">{ev.description}</div>
                   )}
                 </div>
-                <div className="shrink-0 text-xs text-[#585866]">
+                <div className="shrink-0 text-xs text-[color:var(--ds-text-muted)]">
                   {isOverdue ? <AlertTriangle size={14} className="text-red-600" /> : <Clock size={14} className="text-blue-600" />}
                 </div>
               </div>

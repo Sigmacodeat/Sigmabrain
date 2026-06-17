@@ -44,7 +44,7 @@ function UsageCard() {
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2.5">
             <Gauge size={16} className="text-violet-600" aria-hidden />
-            <h2 className="text-sm font-semibold text-[#15151d]">Verbrauch (Fair Use)</h2>
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Verbrauch (Fair Use)</h2>
           </div>
           {usage.shared && <Badge>Team-Pool</Badge>}
         </div>
@@ -54,13 +54,13 @@ function UsageCard() {
           return (
             <div key={row.label}>
               <div className="flex items-baseline justify-between mb-1.5">
-                <span className="text-xs text-[#585866]">{row.label}</span>
-                <span className={`text-xs font-mono ${warn ? "text-amber-600" : "text-[#585866]"}`}>
+                <span className="text-xs text-[color:var(--ds-text-muted)]">{row.label}</span>
+                <span className={`text-xs font-mono ${warn ? "text-amber-600" : "text-[color:var(--ds-text-muted)]"}`}>
                   {row.used.toLocaleString("de-DE")} / {row.max.toLocaleString("de-DE")}
                 </span>
               </div>
               <div
-                className="h-1.5 rounded-full bg-[#e2e4ec] overflow-hidden"
+                className="h-1.5 rounded-full bg-[color:var(--ds-border)] overflow-hidden"
                 role="progressbar"
                 aria-valuenow={row.used}
                 aria-valuemin={0}
@@ -75,7 +75,7 @@ function UsageCard() {
             </div>
           );
         })}
-        <p className="text-xs text-[#585866] leading-relaxed">
+        <p className="text-xs text-[color:var(--ds-text-muted)] leading-relaxed">
           Fair Use heißt: Beim Erreichen des Limits drosseln wir nicht still und es gibt keine
           Überraschungsrechnung — wir melden uns und besprechen das passende Paket.
         </p>
@@ -168,8 +168,8 @@ function BillingInner() {
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#15151d]">Abrechnung</h1>
-        <p className="text-sm text-[#585866] mt-0.5">Plan, Zahlung und Empfehlungs-Guthaben</p>
+        <h1 className="text-2xl font-bold text-[color:var(--ds-text)]">Abrechnung</h1>
+        <p className="text-sm text-[color:var(--ds-text-muted)] mt-0.5">Plan, Zahlung und Empfehlungs-Guthaben</p>
       </div>
 
       {status === "success" && (
@@ -197,21 +197,21 @@ function BillingInner() {
       <Card>
         <div className="p-6 flex items-center justify-between flex-wrap gap-4">
           <div>
-            <p className="text-xs text-[#585866] uppercase tracking-wider mb-1">Aktueller Plan</p>
+            <p className="text-xs text-[color:var(--ds-text-muted)] uppercase tracking-wider mb-1">Aktueller Plan</p>
             <div className="flex items-center gap-3">
-              <span className="text-xl font-bold text-[#15151d] capitalize">{currentPlan}</span>
+              <span className="text-xl font-bold text-[color:var(--ds-text)] capitalize">{currentPlan}</span>
               <Badge variant={currentPlan === "free" ? "default" : "accent"}>
                 {currentPlan === "free" ? "Kostenlos" : "Aktiv"}
               </Badge>
             </div>
-            {me?.user && <p className="text-xs text-[#585866] mt-1">{me.user.email}</p>}
+            {me?.user && <p className="text-xs text-[color:var(--ds-text-muted)] mt-1">{me.user.email}</p>}
           </div>
           {typeof me?.referrals === "number" && (
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
               <Gift size={16} className="text-amber-600" />
               <div>
-                <p className="text-sm font-semibold text-[#15151d]">{me.referrals} Empfehlung{me.referrals === 1 ? "" : "en"}</p>
-                <p className="text-xs text-[#585866]">= {me.referrals} Gratismonat{me.referrals === 1 ? "" : "e"} verdient</p>
+                <p className="text-sm font-semibold text-[color:var(--ds-text)]">{me.referrals} Empfehlung{me.referrals === 1 ? "" : "en"}</p>
+                <p className="text-xs text-[color:var(--ds-text-muted)]">= {me.referrals} Gratismonat{me.referrals === 1 ? "" : "e"} verdient</p>
               </div>
             </div>
           )}
@@ -227,18 +227,18 @@ function BillingInner() {
               key={plan.id}
               className={`p-6 rounded-2xl border flex flex-col ${
                 plan.highlight && !isCurrent
-                  ? "border-violet-500/50 bg-gradient-to-b from-violet-500/10 to-[#ffffff]"
-                  : "border-[#e2e4ec] bg-[#ffffff]"
+                  ? "border-violet-500/50 bg-gradient-to-b from-violet-500/10 to-[color:var(--ds-surface)]"
+                  : "border-[color:var(--ds-border)] bg-[color:var(--ds-surface)]"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <p className="text-sm font-medium text-[#585866]">{plan.name}</p>
+                <p className="text-sm font-medium text-[color:var(--ds-text-muted)]">{plan.name}</p>
                 {isCurrent && <Badge variant="success">Aktiv</Badge>}
               </div>
-              <p className="text-2xl font-bold text-[#15151d] mb-4">{plan.price}</p>
+              <p className="text-2xl font-bold text-[color:var(--ds-text)] mb-4">{plan.price}</p>
               <ul className="space-y-2 flex-1 mb-6">
                 {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-xs text-[#585866]">
+                  <li key={f} className="flex items-start gap-2 text-xs text-[color:var(--ds-text-muted)]">
                     <Check size={13} className="text-violet-600 shrink-0 mt-0.5" />
                     {f}
                   </li>
@@ -260,7 +260,7 @@ function BillingInner() {
         })}
       </div>
 
-      <p className="text-xs text-[#585866]">
+      <p className="text-xs text-[color:var(--ds-text-muted)]">
         Enterprise (EU-/On-Prem-Hosting, AVV, SSO)?{" "}
         <a href="mailto:hello@sigmabrain.com" className="text-violet-600 hover:underline">Sprich mit uns</a>.
         Jahreszahlung −20 % — im Checkout wählbar.

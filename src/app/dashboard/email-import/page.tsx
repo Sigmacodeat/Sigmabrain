@@ -81,8 +81,8 @@ export default function EmailImportPage() {
           <Mail size={20} className="text-blue-600" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">E-Mail-Import</h1>
-          <p className="text-sm text-[#585866]">Mandanten-E-Mails automatisch Akten zuordnen</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">E-Mail-Import</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Mandanten-E-Mails automatisch Akten zuordnen</p>
         </div>
       </div>
 
@@ -93,11 +93,11 @@ export default function EmailImportPage() {
           const files = Array.from(e.dataTransfer.files).filter((f) => f.name.endsWith(".eml") || f.name.endsWith(".msg"));
           void onDrop(files);
         }}
-        className="rounded-xl border border-dashed border-[#d6d9e3] bg-[#ffffff] p-8 text-center hover:border-blue-500/30 hover:bg-blue-500/[0.02] transition-all duration-300 cursor-pointer"
+        className="rounded-xl border border-dashed border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-8 text-center hover:border-blue-500/30 hover:bg-blue-500/[0.02] transition-all duration-300 cursor-pointer"
         onClick={() => document.getElementById("email-file-input")?.click()}
       >
-        <Upload size={32} className="mx-auto text-[#e2e4ec] mb-3" />
-        <p className="text-sm text-[#585866]">.eml-Dateien hierher ziehen oder klicken</p>
+        <Upload size={32} className="mx-auto text-[color:var(--ds-border)] mb-3" />
+        <p className="text-sm text-[color:var(--ds-text-muted)]">.eml-Dateien hierher ziehen oder klicken</p>
         <input
           id="email-file-input"
           type="file"
@@ -123,7 +123,7 @@ export default function EmailImportPage() {
       {parsed.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[#15151d]">{parsed.length} E-Mail(s) erkannt</h2>
+            <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">{parsed.length} E-Mail(s) erkannt</h2>
             <Button
               variant="primary"
               className="bg-blue-600 hover:bg-blue-500 text-white gap-2 text-sm"
@@ -144,16 +144,16 @@ export default function EmailImportPage() {
 
           <div className="space-y-2">
             {parsed.map((email, i) => (
-              <div key={i} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-2">
+              <div key={i} className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-[#15151d] truncate">{email.subject}</span>
+                  <span className="text-sm font-medium text-[color:var(--ds-text)] truncate">{email.subject}</span>
                   {email.confidence === "high" ? (
                     <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-600">Hoch</span>
                   ) : (
                     <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-amber-500/20 bg-amber-500/10 text-amber-600">Unsicher</span>
                   )}
                 </div>
-                <div className="text-xs text-[#585866]">
+                <div className="text-xs text-[color:var(--ds-text-muted)]">
                   {email.fromName} &lt;{email.from}&gt; · {email.date}
                 </div>
                 {email.suggestedCaseSlug && (
@@ -163,7 +163,7 @@ export default function EmailImportPage() {
                   </div>
                 )}
                 {email.attachments.length > 0 && (
-                  <div className="text-xs text-[#585866]">{email.attachments.length} Anhänge</div>
+                  <div className="text-xs text-[color:var(--ds-text-muted)]">{email.attachments.length} Anhänge</div>
                 )}
               </div>
             ))}

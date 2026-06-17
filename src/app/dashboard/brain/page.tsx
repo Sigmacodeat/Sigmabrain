@@ -159,8 +159,8 @@ export default function BrainPage() {
 
   return (
     <div className="flex h-full overflow-hidden">
-      <div className="w-52 shrink-0 border-r border-[#e2e4ec] bg-[#ffffff] p-4 space-y-1 overflow-y-auto">
-        <p className="text-xs text-[#585866] uppercase tracking-wider font-medium mb-3">Typ</p>
+      <div className="w-52 shrink-0 border-r border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-1 overflow-y-auto">
+        <p className="text-xs text-[color:var(--ds-text-muted)] uppercase tracking-wider font-medium mb-3">Typ</p>
         {TYPE_FILTERS.map((f) => {
           const Icon = f.icon;
           return (
@@ -171,7 +171,7 @@ export default function BrainPage() {
                 "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all",
                 filter === f.key
                   ? "bg-violet-600/15 text-violet-600 border border-violet-500/20"
-                  : "text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3]"
+                  : "text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)]"
               )}
             >
               <Icon size={14} className="shrink-0" />
@@ -181,7 +181,7 @@ export default function BrainPage() {
         })}
 
         <div className="pt-4 pb-2">
-          <p className="text-xs text-[#585866] uppercase tracking-wider font-medium mb-3">Sortierung</p>
+          <p className="text-xs text-[color:var(--ds-text-muted)] uppercase tracking-wider font-medium mb-3">Sortierung</p>
           {[
             { key: "updated" as const, label: "Aktualisiert" },
             { key: "title" as const, label: "Titel A–Z" },
@@ -194,7 +194,7 @@ export default function BrainPage() {
                 "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all",
                 sort === s.key
                   ? "bg-violet-600/15 text-violet-600 border border-violet-500/20"
-                  : "text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3]"
+                  : "text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)]"
               )}
             >
               <SortAsc size={14} className="shrink-0" />
@@ -205,7 +205,7 @@ export default function BrainPage() {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <div className="sticky top-0 z-10 bg-[#f5f6f9] border-b border-[#e2e4ec] px-6 py-4">
+        <div className="sticky top-0 z-10 bg-[color:var(--ds-bg)] border-b border-[color:var(--ds-border)] px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="flex-1">
               <Input
@@ -223,17 +223,17 @@ export default function BrainPage() {
         </div>
 
         <div className="px-6 py-4">
-          <div className="flex items-center gap-4 mb-6 text-sm text-[#585866]">
+          <div className="flex items-center gap-4 mb-6 text-sm text-[color:var(--ds-text-muted)]">
             <span>
-              <strong className="text-[#15151d]">{stats.pages}</strong> Seiten
+              <strong className="text-[color:var(--ds-text)]">{stats.pages}</strong> Seiten
             </span>
             <span>·</span>
             <span>
-              <strong className="text-[#15151d]">{stats.entities}</strong> Entitäten
+              <strong className="text-[color:var(--ds-text)]">{stats.entities}</strong> Entitäten
             </span>
             <span>·</span>
             <span>
-              <strong className="text-[#15151d]">{stats.edges}</strong> Kanten
+              <strong className="text-[color:var(--ds-text)]">{stats.edges}</strong> Kanten
             </span>
             {searching && (
               <>
@@ -245,13 +245,13 @@ export default function BrainPage() {
 
           {loading ? (
             <div className="flex justify-center py-20">
-              <Loader2 size={28} className="animate-spin text-[#585866]" />
+              <Loader2 size={28} className="animate-spin text-[color:var(--ds-text-muted)]" />
             </div>
           ) : isEmpty ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <BookOpen size={40} className="text-[#e2e4ec] mb-4" />
-              <h3 className="text-lg font-semibold text-[#15151d] mb-2">Brain ist leer</h3>
-              <p className="text-sm text-[#585866] mb-6 max-w-sm">
+              <BookOpen size={40} className="text-[color:var(--ds-border)] mb-4" />
+              <h3 className="text-lg font-semibold text-[color:var(--ds-text)] mb-2">Brain ist leer</h3>
+              <p className="text-sm text-[color:var(--ds-text-muted)] mb-6 max-w-sm">
                 Lade Dokumente hoch oder verbinde Sigmabrain mit einem bestehenden Brain-Repo.
               </p>
               <div className="flex gap-3">
@@ -264,7 +264,7 @@ export default function BrainPage() {
               </div>
             </div>
           ) : displayed.length === 0 ? (
-            <div className="text-center py-16 text-[#585866] text-sm">Keine Treffer für „{query}“</div>
+            <div className="text-center py-16 text-[color:var(--ds-text-muted)] text-sm">Keine Treffer für „{query}“</div>
           ) : (
             <div className="space-y-2">
               {displayed.map((page) => {
@@ -274,19 +274,19 @@ export default function BrainPage() {
                   <a
                     key={page.slug}
                     href={`/dashboard/brain/${page.slug.split("/").map(encodeURIComponent).join("/")}`}
-                    className="flex items-center gap-4 p-4 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:border-[#b4b9c8] hover:bg-[#eceef3] transition-all group"
+                    className="flex items-center gap-4 p-4 rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] hover:border-[color:var(--ds-border-strong)] hover:bg-[color:var(--ds-hover)] transition-all group"
                   >
                     <div className="w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 bg-violet-500/10 border-violet-500/20">
                       <TypeIcon size={16} className="text-violet-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-[#15151d] truncate">{page.title}</span>
+                        <span className="text-sm font-medium text-[color:var(--ds-text)] truncate">{page.title}</span>
                         <Badge variant={typeColorMap[page.type] as Parameters<typeof Badge>[0]["variant"]}>
                           {page.type}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-[#585866]">
+                      <div className="flex items-center gap-3 text-xs text-[color:var(--ds-text-muted)]">
                         <span className="font-mono">{page.slug}</span>
                         {page.words > 0 && (
                           <>
@@ -308,19 +308,19 @@ export default function BrainPage() {
                         )}
                       </div>
                       {"snippet" in page && page.snippet && (
-                        <p className="text-xs text-[#585866] mt-2 line-clamp-2">{page.snippet}</p>
+                        <p className="text-xs text-[color:var(--ds-text-muted)] mt-2 line-clamp-2">{page.snippet}</p>
                       )}
                       {tags && tags.length > 0 && (
                         <div className="flex items-center gap-1 mt-2">
                           {tags.map((tag) => (
-                            <span key={tag} className="text-xs font-mono text-[#585866] bg-[#e2e4ec] px-1.5 py-0.5 rounded">
+                            <span key={tag} className="text-xs font-mono text-[color:var(--ds-text-muted)] bg-[color:var(--ds-border)] px-1.5 py-0.5 rounded">
                               #{tag}
                             </span>
                           ))}
                         </div>
                       )}
                     </div>
-                    <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-600 transition-colors shrink-0" />
+                    <ChevronRight size={16} className="text-[color:var(--ds-text-muted)] group-hover:text-violet-600 transition-colors shrink-0" />
                   </a>
                 );
               })}

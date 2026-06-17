@@ -139,8 +139,8 @@ export default function CompliancePage() {
           <ShieldCheck size={20} className="text-emerald-600" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">Compliance-Selbstauskunft</h1>
-          <p className="text-sm text-[#585866]">DSGVO-, GwG- & GoBD-Checkliste für die Kanzlei — Status pro Punkt selbst pflegen</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Compliance-Selbstauskunft</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">DSGVO-, GwG- & GoBD-Checkliste für die Kanzlei — Status pro Punkt selbst pflegen</p>
         </div>
       </div>
 
@@ -164,7 +164,7 @@ export default function CompliancePage() {
             "flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all",
             activeTab === "dsgvo"
               ? "bg-emerald-600/10 border-emerald-500/30 text-emerald-600"
-              : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
+              : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"
           )}
         >
           <Lock size={14} aria-hidden="true" />
@@ -178,7 +178,7 @@ export default function CompliancePage() {
             "flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all",
             activeTab === "gwg"
               ? "bg-blue-600/10 border-blue-500/30 text-blue-600"
-              : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
+              : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"
           )}
         >
           <ShieldAlert size={14} aria-hidden="true" />
@@ -192,7 +192,7 @@ export default function CompliancePage() {
             "flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all",
             activeTab === "gobd"
               ? "bg-violet-600/10 border-violet-500/30 text-violet-600"
-              : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
+              : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"
           )}
         >
           <Archive size={14} aria-hidden="true" />
@@ -204,22 +204,22 @@ export default function CompliancePage() {
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-center">
           <div className="text-xl font-bold text-emerald-600">{okCount}</div>
-          <div className="text-xs text-[#585866]">OK</div>
+          <div className="text-xs text-[color:var(--ds-text-muted)]">OK</div>
         </div>
         <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-center">
           <div className="text-xl font-bold text-amber-600">{warnCount}</div>
-          <div className="text-xs text-[#585866]">Offen</div>
+          <div className="text-xs text-[color:var(--ds-text-muted)]">Offen</div>
         </div>
         <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-center">
           <div className="text-xl font-bold text-red-600">{failCount}</div>
-          <div className="text-xs text-[#585866]">Fehlt</div>
+          <div className="text-xs text-[color:var(--ds-text-muted)]">Fehlt</div>
         </div>
       </div>
 
       {/* Save state */}
       <div aria-live="polite" className="min-h-5 text-xs">
         {saving && (
-          <span className="inline-flex items-center gap-1.5 text-[#585866]">
+          <span className="inline-flex items-center gap-1.5 text-[color:var(--ds-text-muted)]">
             <Loader2 size={12} className="animate-spin" aria-hidden="true" /> Speichert…
           </span>
         )}
@@ -261,7 +261,7 @@ export default function CompliancePage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-[#15151d]">{check.label}</span>
+                    <span className="text-sm font-medium text-[color:var(--ds-text)]">{check.label}</span>
                     <Badge variant="default" className={cn(
                       "text-[10px] border",
                       status === "ok"
@@ -273,7 +273,7 @@ export default function CompliancePage() {
                       {STATUS_LABEL[status]}
                     </Badge>
                   </div>
-                  <p className="text-xs text-[#585866] mt-1">{check.description}</p>
+                  <p className="text-xs text-[color:var(--ds-text-muted)] mt-1">{check.description}</p>
                 </div>
               </button>
             );

@@ -44,6 +44,104 @@
   --brand-gradient-from: #20d3c2;
   --brand-gradient-via: #2f6bff;
   --brand-gradient-to: #8b5cf6;
+
+  /* ────────────────────────────────────────────────────────────────
+     Design-system neutral scale (--ds-*) — the SINGLE source of truth
+     for every surface, border and text neutral in the product.
+     Default values here = the DARK marketing/app-shell theme, so the
+     shared primitives (Card/Button/Badge) and the marketing site keep
+     their current look with zero change. The dashboard overrides these
+     to a light theme below, and the dark-mode toggle re-darkens them.
+     Rule: components reference var(--ds-*); never hardcode a neutral hex.
+     ──────────────────────────────────────────────────────────────── */
+  --ds-bg: #06060f;          /* app/page background          */
+  --ds-surface: #0d0d1a;     /* card / panel surface         */
+  --ds-surface-2: #12122a;   /* nested / elevated surface    */
+  --ds-hover: #1a1a35;       /* row / control hover          */
+  --ds-border: #1e1e3a;      /* hairline borders + dividers  */
+  --ds-border-strong: #3a3a6a; /* emphasised borders         */
+  --ds-text: #e8e8f0;        /* primary text  (AAA on bg)    */
+  --ds-text-muted: #8888aa;  /* secondary text               */
+  --ds-text-subtle: #6a6a85; /* tertiary / disabled labels   */
+}
+
+/* LIGHT theme — scoped to the authenticated dashboard shell.
+   WCAG-AA verified on #ffffff: text 16.9:1, muted 6.4:1, subtle 4.7:1. */
+[data-app="dashboard"],
+[data-app="dashboard"][data-theme="light"] {
+  --ds-bg: #f5f6f9;
+  --ds-surface: #ffffff;
+  --ds-surface-2: #f1f3f4;
+  --ds-hover: #eceef3;
+  --ds-border: #e2e4ec;
+  --ds-border-strong: #b4b9c8;
+  --ds-text: #15151d;
+  --ds-text-muted: #585866;  /* 6.4:1 on white — AA body    */
+  --ds-text-subtle: #6c6c7e; /* 4.7:1 on white — AA (was #9a9aa8 @ 2.6:1, FAILED) */
+  color-scheme: light;
+}
+
+/* DARK theme — premium near-black for the dashboard.
+   WCAG-AA verified on #12121f: text 15.1:1, muted 6.1:1, subtle 4.6:1. */
+[data-app="dashboard"][data-theme="dark"] {
+  --ds-bg: #0a0a14;
+  --ds-surface: #12121f;
+  --ds-surface-2: #1a1a2c;
+  --ds-hover: #20203a;
+  --ds-border: #262643;
+  --ds-border-strong: #3a3a5e;
+  --ds-text: #e9e9f2;
+  --ds-text-muted: #a0a0bd;  /* 6.1:1 on #12121f — AA       */
+  --ds-text-subtle: #74748f; /* 4.6:1 — AA                  */
+  color-scheme: dark;
+}
+
+/* Semantic accent legibility in dashboard dark mode. The light theme
+   uses the -600 Tailwind shades (correct on white); on a dark surface
+   those drop below AA, so lift them to the -400 family. Contained,
+   single-source override — no per-file edits. */
+[data-app="dashboard"][data-theme="dark"] .text-violet-600 { color: #a78bfa; }
+[data-app="dashboard"][data-theme="dark"] .text-violet-700 { color: #a78bfa; }
+[data-app="dashboard"][data-theme="dark"] .text-blue-600,
+[data-app="dashboard"][data-theme="dark"] .text-blue-700 { color: #60a5fa; }
+[data-app="dashboard"][data-theme="dark"] .text-emerald-600,
+[data-app="dashboard"][data-theme="dark"] .text-emerald-700 { color: #34d399; }
+[data-app="dashboard"][data-theme="dark"] .text-amber-600,
+[data-app="dashboard"][data-theme="dark"] .text-amber-700 { color: #fbbf24; }
+[data-app="dashboard"][data-theme="dark"] .text-red-600,
+[data-app="dashboard"][data-theme="dark"] .text-red-700 { color: #f87171; }
+
+/* Dashboard background follows the theme token (overrides the global
+   dark body paint set in the @theme block / body rule). */
+[data-app="dashboard"] { background: var(--ds-bg); }
+
+/* Theme crossfade — surfaces/text glide instead of hard-cutting. */
+[data-app="dashboard"],
+[data-app="dashboard"] * {
+  transition-property: color, background-color, border-color, fill, stroke;
+}
+
+/* Tailwind-typography prose follows the design tokens in BOTH themes.
+   Several pages used `prose prose-invert` (light text) which rendered
+   invisible on the light dashboard; binding the prose vars to --ds-*
+   makes long-form content theme-correct regardless of the invert class. */
+[data-app="dashboard"] .prose,
+[data-app="dashboard"] .prose-invert {
+  --tw-prose-body: var(--ds-text-muted);
+  --tw-prose-headings: var(--ds-text);
+  --tw-prose-lead: var(--ds-text-muted);
+  --tw-prose-links: var(--brand-primary);
+  --tw-prose-bold: var(--ds-text);
+  --tw-prose-counters: var(--ds-text-subtle);
+  --tw-prose-bullets: var(--ds-border-strong);
+  --tw-prose-hr: var(--ds-border);
+  --tw-prose-quotes: var(--ds-text);
+  --tw-prose-quote-borders: var(--ds-border);
+  --tw-prose-code: var(--ds-text);
+  --tw-prose-pre-code: var(--ds-text);
+  --tw-prose-pre-bg: var(--ds-surface-2);
+  --tw-prose-th-borders: var(--ds-border-strong);
+  --tw-prose-td-borders: var(--ds-border);
 }
 
 /* Brand typography: Space Grotesk carries every headline — the geometric,

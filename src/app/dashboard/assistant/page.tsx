@@ -134,21 +134,21 @@ export default function AssistantPage() {
   return (
     <div className="h-[calc(100vh-64px)] flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-[#e2e4ec] flex items-center justify-between">
+      <div className="p-4 border-b border-[color:var(--ds-border)] flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
             <Bot size={16} className="text-violet-600" />
           </div>
           <div>
-            <h1 className="text-sm font-semibold text-[#15151d]">Legal Assistant</h1>
-            <p className="text-xs text-[#585866]">KI-gestützter Rechtsassistent mit Dokumenten-Analyse</p>
+            <h1 className="text-sm font-semibold text-[color:var(--ds-text)]">Legal Assistant</h1>
+            <p className="text-xs text-[color:var(--ds-text-muted)]">KI-gestützter Rechtsassistent mit Dokumenten-Analyse</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <select
             value={assistantJurisdiction}
             onChange={(e) => setAssistantJurisdiction(e.target.value as "de" | "at" | "ch" | "eu")}
-            className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-2 py-1.5 text-xs text-[#15151d] focus:outline-none focus:border-violet-500/50"
+            className="bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-2 py-1.5 text-xs text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
             title="Rechtsraum auswählen"
           >
             <option value="de">🇩🇪 DE</option>
@@ -156,7 +156,7 @@ export default function AssistantPage() {
             <option value="ch">🇨🇭 CH</option>
             <option value="eu">🇪🇺 EU</option>
           </select>
-          <button onClick={clearChat} className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all" title="Chat löschen">
+          <button onClick={clearChat} className="p-1.5 rounded-lg text-[color:var(--ds-text-muted)] hover:text-red-600 hover:bg-red-500/10 transition-all" title="Chat löschen">
             <Trash2 size={14} />
           </button>
         </div>
@@ -165,8 +165,8 @@ export default function AssistantPage() {
       {/* Messages */}
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full space-y-4 text-[#585866]">
-            <Bot size={48} className="text-[#e2e4ec]" />
+          <div className="flex flex-col items-center justify-center h-full space-y-4 text-[color:var(--ds-text-muted)]">
+            <Bot size={48} className="text-[color:var(--ds-border)]" />
             <p className="text-sm">Wie kann ich dir heute helfen?</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-w-lg">
               {[
@@ -178,7 +178,7 @@ export default function AssistantPage() {
                 <button
                   key={suggestion}
                   onClick={() => { setInput(suggestion); inputRef.current?.focus(); }}
-                  className="text-left text-xs px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec] text-[#585866] hover:border-violet-500/30 hover:text-[#15151d] transition-all"
+                  className="text-left text-xs px-3 py-2 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:border-violet-500/30 hover:text-[color:var(--ds-text)] transition-all"
                 >
                   {suggestion}
                 </button>
@@ -197,8 +197,8 @@ export default function AssistantPage() {
             <div className={`max-w-[80%] space-y-1 ${msg.role === "user" ? "items-end" : "items-start"}`}>
               <div className={`rounded-xl px-4 py-3 text-sm leading-relaxed ${
                 msg.role === "user"
-                  ? "bg-violet-600/15 border border-violet-500/20 text-[#15151d]"
-                  : "bg-[#ffffff] border border-[#e2e4ec] text-[#c8c8e0]"
+                  ? "bg-violet-600/15 border border-violet-500/20 text-[color:var(--ds-text)]"
+                  : "bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]"
               }`}>
                 {msg.role === "assistant" ? (
                   <div className="prose prose-invert prose-sm max-w-none"
@@ -208,9 +208,9 @@ export default function AssistantPage() {
                   msg.content
                 )}
                 {msg.attachments && msg.attachments.length > 0 && (
-                  <div className="mt-2 pt-2 border-t border-[#e2e4ec] space-y-1">
+                  <div className="mt-2 pt-2 border-t border-[color:var(--ds-border)] space-y-1">
                     {msg.attachments.map((att) => (
-                      <div key={att.slug} className="flex items-center gap-1 text-[10px] text-[#585866]">
+                      <div key={att.slug} className="flex items-center gap-1 text-[10px] text-[color:var(--ds-text-muted)]">
                         <FileText size={10} /> {att.name}
                       </div>
                     ))}
@@ -223,7 +223,7 @@ export default function AssistantPage() {
                     <a
                       key={c.slug}
                       href={`/dashboard/brain/${c.slug.split("/").map(encodeURIComponent).join("/")}`}
-                      className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-[#eceef3] border border-[#e2e4ec] text-violet-600 hover:text-violet-700 hover:border-violet-500/30 transition-all"
+                      className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] text-violet-600 hover:text-violet-700 hover:border-violet-500/30 transition-all"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -233,7 +233,7 @@ export default function AssistantPage() {
                   ))}
                 </div>
               )}
-              <div className="text-[10px] text-[#585866] flex items-center gap-2">
+              <div className="text-[10px] text-[color:var(--ds-text-muted)] flex items-center gap-2">
                 <span className="flex items-center gap-1">
                   <Clock size={8} />
                   {new Date(msg.timestamp).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
@@ -255,8 +255,8 @@ export default function AssistantPage() {
               </div>
             </div>
             {msg.role === "user" && (
-              <div className="w-7 h-7 rounded-lg bg-[#eceef3] border border-[#e2e4ec] flex items-center justify-center shrink-0">
-                <User size={14} className="text-[#585866]" />
+              <div className="w-7 h-7 rounded-lg bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] flex items-center justify-center shrink-0">
+                <User size={14} className="text-[color:var(--ds-text-muted)]" />
               </div>
             )}
           </div>
@@ -267,7 +267,7 @@ export default function AssistantPage() {
             <div className="w-7 h-7 rounded-lg bg-violet-600/15 border border-violet-500/20 flex items-center justify-center shrink-0">
               <Loader2 size={14} className="text-violet-600 animate-spin" />
             </div>
-            <div className="text-sm text-[#585866]">Denke nach…</div>
+            <div className="text-sm text-[color:var(--ds-text-muted)]">Denke nach…</div>
           </div>
         )}
 
@@ -275,7 +275,7 @@ export default function AssistantPage() {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-[#e2e4ec] space-y-2">
+      <div className="p-4 border-t border-[color:var(--ds-border)] space-y-2">
         {attachments.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {attachments.map((att) => (
@@ -288,7 +288,7 @@ export default function AssistantPage() {
         )}
         {error && <div className="text-xs text-red-600">{error}</div>}
         <div className="flex items-end gap-2">
-          <label className="shrink-0 p-2 rounded-lg bg-[#eceef3] border border-[#e2e4ec] text-[#585866] hover:text-violet-600 hover:border-violet-500/30 cursor-pointer transition-all">
+          <label className="shrink-0 p-2 rounded-lg bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:text-violet-600 hover:border-violet-500/30 cursor-pointer transition-all">
             <Upload size={16} />
             <input type="file" className="hidden" onChange={handleFileUpload} />
           </label>
@@ -299,7 +299,7 @@ export default function AssistantPage() {
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
             rows={1}
             placeholder="Frage stellen oder Dokument analysieren…"
-            className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 resize-none min-h-[40px] max-h-[120px]"
+            className="flex-1 bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50 resize-none min-h-[40px] max-h-[120px]"
           />
           <Button onClick={sendMessage} disabled={loading || (!input.trim() && attachments.length === 0)} className="bg-violet-600 hover:bg-violet-500 text-white shrink-0 h-10 w-10 p-0">
             <Send size={16} />

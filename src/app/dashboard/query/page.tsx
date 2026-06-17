@@ -147,14 +147,14 @@ function AssistantMessage({ msg }: { msg: Message }) {
       <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center shrink-0 mt-0.5 relative">
         <Brain size={14} className="text-white" />
         {msg.isStreaming && (
-          <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#f5f6f9] animate-pulse" />
+          <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[color:var(--ds-bg)] animate-pulse" />
         )}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-xs font-medium text-violet-600">Sigmabrain</span>
           {msg.isStreaming ? (
-            <span className="text-xs text-[#585866]">antwortet…</span>
+            <span className="text-xs text-[color:var(--ds-text-muted)]">antwortet…</span>
           ) : (
             // EU AI Act Art. 50: KI-synthetisierte Antwort sichtbar kennzeichnen.
             <>
@@ -180,7 +180,7 @@ function AssistantMessage({ msg }: { msg: Message }) {
           )}
         </div>
 
-        <div className="text-sm text-[#15151d] leading-relaxed whitespace-pre-wrap bg-[#ffffff] border border-[#e2e4ec] rounded-xl p-4">
+        <div className="text-sm text-[color:var(--ds-text)] leading-relaxed whitespace-pre-wrap bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-xl p-4">
           {msg.content}
           {msg.isStreaming && (
             <span className="inline-block w-0.5 h-4 bg-violet-400 animate-pulse ml-0.5 align-text-bottom" />
@@ -190,7 +190,7 @@ function AssistantMessage({ msg }: { msg: Message }) {
         {/* Citations */}
         {msg.citations && msg.citations.length > 0 && (
           <div className="mt-3 flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-[#585866]">Quellen:</span>
+            <span className="text-xs text-[color:var(--ds-text-muted)]">Quellen:</span>
             {msg.citations.map((c) => (
               <CitationPill key={c.slug} slug={c.slug} title={c.title} />
             ))}
@@ -230,7 +230,7 @@ function AssistantMessage({ msg }: { msg: Message }) {
                           {cat.label}
                         </Badge>
                       </div>
-                      <p className="text-xs text-[#585866] mt-0.5 leading-relaxed">{gap}</p>
+                      <p className="text-xs text-[color:var(--ds-text-muted)] mt-0.5 leading-relaxed">{gap}</p>
                     </div>
                   </div>
                 );
@@ -244,7 +244,7 @@ function AssistantMessage({ msg }: { msg: Message }) {
           <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
             <button
               onClick={copy}
-              className="flex items-center gap-1 text-xs text-[#585866] hover:text-[#585866] transition-colors"
+              className="flex items-center gap-1 text-xs text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] transition-colors"
             >
               {copied ? <Check size={11} /> : <Copy size={11} />}
               {copied ? "Kopiert" : "Kopieren"}
@@ -404,38 +404,38 @@ export default function QueryPage() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[#e2e4ec] shrink-0">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-[color:var(--ds-border)] shrink-0">
         <div>
-          <h1 className="text-lg font-bold text-[#15151d]">Brain Query</h1>
-          <p className="text-xs text-[#585866] mt-0.5">KI-Synthese mit Wissensgraph</p>
+          <h1 className="text-lg font-bold text-[color:var(--ds-text)]">Brain Query</h1>
+          <p className="text-xs text-[color:var(--ds-text-muted)] mt-0.5">KI-Synthese mit Wissensgraph</p>
         </div>
         <div className="flex items-center gap-2">
           {/* Mode selector */}
           <div className="relative">
             <button
               onClick={() => setShowModeMenu(!showModeMenu)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#e2e4ec] bg-[#ffffff] text-xs text-[#585866] hover:border-[#b4b9c8] hover:text-[#15151d] transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] text-xs text-[color:var(--ds-text-muted)] hover:border-[color:var(--ds-border-strong)] hover:text-[color:var(--ds-text)] transition-all"
             >
               <Settings2 size={12} />
               {MODE_LABELS[queryMode].label}
               <ChevronDown size={11} />
             </button>
             {showModeMenu && (
-              <div className="absolute right-0 top-full mt-1 w-52 bg-[#ffffff] border border-[#e2e4ec] rounded-xl shadow-xl z-50 overflow-hidden">
+              <div className="absolute right-0 top-full mt-1 w-52 bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-xl shadow-xl z-50 overflow-hidden">
                 {(Object.entries(MODE_LABELS) as [typeof queryMode, typeof MODE_LABELS[typeof queryMode]][]).map(([key, val]) => (
                   <button
                     key={key}
                     onClick={() => { setQueryMode(key); setShowModeMenu(false); }}
                     className={cn(
-                      "w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-[#eceef3] transition-colors",
+                      "w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-[color:var(--ds-hover)] transition-colors",
                       queryMode === key && "bg-violet-500/10"
                     )}
                   >
                     <div className="flex-1">
-                      <p className={cn("text-sm font-medium", queryMode === key ? "text-violet-600" : "text-[#15151d]")}>
+                      <p className={cn("text-sm font-medium", queryMode === key ? "text-violet-600" : "text-[color:var(--ds-text)]")}>
                         {val.label}
                       </p>
-                      <p className="text-xs text-[#585866] mt-0.5">{val.desc}</p>
+                      <p className="text-xs text-[color:var(--ds-text-muted)] mt-0.5">{val.desc}</p>
                     </div>
                     {queryMode === key && <Check size={14} className="text-violet-600 shrink-0 mt-0.5" />}
                   </button>
@@ -451,7 +451,7 @@ export default function QueryPage() {
               onClick={() => setMessages([])}
               title="Chat leeren"
             >
-              <Trash2 size={14} className="text-[#585866]" />
+              <Trash2 size={14} className="text-[color:var(--ds-text-muted)]" />
             </Button>
           )}
         </div>
@@ -464,21 +464,21 @@ export default function QueryPage() {
             <div className="w-16 h-16 rounded-2xl bg-violet-600/20 border border-violet-500/20 flex items-center justify-center mb-6">
               <Brain size={28} className="text-violet-600" />
             </div>
-            <h2 className="text-xl font-bold text-[#15151d] mb-2">Was möchtest du wissen?</h2>
-            <p className="text-sm text-[#585866] mb-8 leading-relaxed">
+            <h2 className="text-xl font-bold text-[color:var(--ds-text)] mb-2">Was möchtest du wissen?</h2>
+            <p className="text-sm text-[color:var(--ds-text-muted)] mb-8 leading-relaxed">
               Stelle natürlichsprachliche Fragen. Sigmabrain synthesiert Antworten aus deinem Brain mit Quellen-Zitaten und zeigt dir, was es noch nicht weiß.
             </p>
 
             <div className="w-full space-y-2">
               <div className="flex items-center gap-2 mb-3">
                 <Lightbulb size={13} className="text-amber-600" />
-                <span className="text-xs text-[#585866] font-medium uppercase tracking-wider">Beispiel-Queries</span>
+                <span className="text-xs text-[color:var(--ds-text-muted)] font-medium uppercase tracking-wider">Beispiel-Queries</span>
               </div>
               {examples.map((q) => (
                 <button
                   key={q}
                   onClick={() => { setInput(q); inputRef.current?.focus(); }}
-                  className="w-full text-left px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff] text-sm text-[#585866] hover:border-[#b4b9c8] hover:text-[#15151d] hover:bg-[#eceef3] transition-all"
+                  className="w-full text-left px-4 py-3 rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] text-sm text-[color:var(--ds-text-muted)] hover:border-[color:var(--ds-border-strong)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] transition-all"
                 >
                   {q}
                 </button>
@@ -490,10 +490,10 @@ export default function QueryPage() {
             <div key={msg.id}>
               {msg.role === "user" ? (
                 <div className="flex items-start gap-3 justify-end">
-                  <div className="max-w-[80%] px-4 py-3 rounded-xl bg-violet-600/15 border border-violet-500/20 text-sm text-[#15151d]">
+                  <div className="max-w-[80%] px-4 py-3 rounded-xl bg-violet-600/15 border border-violet-500/20 text-sm text-[color:var(--ds-text)]">
                     {msg.content}
                   </div>
-                  <div className="w-8 h-8 rounded-lg bg-[#e2e4ec] flex items-center justify-center shrink-0 mt-0.5 text-xs text-[#585866] font-semibold">
+                  <div className="w-8 h-8 rounded-lg bg-[color:var(--ds-border)] flex items-center justify-center shrink-0 mt-0.5 text-xs text-[color:var(--ds-text-muted)] font-semibold">
                     Du
                   </div>
                 </div>
@@ -507,8 +507,8 @@ export default function QueryPage() {
       </div>
 
       {/* Input */}
-      <div className="shrink-0 px-6 pb-6 pt-3 border-t border-[#e2e4ec]">
-        <div className="relative flex items-end gap-3 bg-[#ffffff] border border-[#e2e4ec] rounded-2xl p-3 focus-within:border-violet-500/50 transition-colors">
+      <div className="shrink-0 px-6 pb-6 pt-3 border-t border-[color:var(--ds-border)]">
+        <div className="relative flex items-end gap-3 bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-2xl p-3 focus-within:border-violet-500/50 transition-colors">
           <textarea
             ref={inputRef}
             value={input}
@@ -516,7 +516,7 @@ export default function QueryPage() {
             onKeyDown={handleKeyDown}
             placeholder="Frage dein Brain…"
             rows={1}
-            className="flex-1 bg-transparent text-sm text-[#15151d] placeholder:text-[#585866] resize-none focus:outline-none leading-relaxed min-h-[24px] max-h-36"
+            className="flex-1 bg-transparent text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] resize-none focus:outline-none leading-relaxed min-h-[24px] max-h-36"
             style={{ height: "auto" }}
             onInput={(e) => {
               const t = e.currentTarget;
@@ -525,7 +525,7 @@ export default function QueryPage() {
             }}
           />
           <div className="flex items-center gap-2 shrink-0">
-            <div className="flex items-center gap-1 text-xs text-[#585866]">
+            <div className="flex items-center gap-1 text-xs text-[color:var(--ds-text-muted)]">
               <Badge variant="default" className="text-xs">
                 {MODE_LABELS[queryMode].label}
               </Badge>
@@ -545,7 +545,7 @@ export default function QueryPage() {
             </Button>
           </div>
         </div>
-        <p className="text-xs text-[#585866] mt-2 text-center">
+        <p className="text-xs text-[color:var(--ds-text-muted)] mt-2 text-center">
           Enter zum Senden · Shift+Enter für Zeilenumbruch
         </p>
       </div>

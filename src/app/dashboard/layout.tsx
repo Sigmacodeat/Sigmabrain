@@ -51,6 +51,8 @@ import {
   FolderOpen,
   Sparkles,
   Globe,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -179,9 +181,32 @@ function useBrainStatus() {
   return { pages, entities, lastSync, dreamCycle };
 }
 
+type Theme = "light" | "dark";
+
+function useTheme(): [Theme, () => void] {
+  // Lazy init from localStorage, falling back to the OS preference. Guarded
+  // for SSR; the matching inline script in the layout paints the right theme
+  // before hydration so there is no flash.
+  const [theme, setTheme] = useState<Theme>("light");
+  useEffect(() => {
+    const stored = localStorage.getItem("gbrain-theme") as Theme | null;
+    const next = stored ?? (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    setTheme(next);
+  }, []);
+  const toggle = () => {
+    setTheme((prev) => {
+      const next: Theme = prev === "light" ? "dark" : "light";
+      try { localStorage.setItem("gbrain-theme", next); } catch {}
+      return next;
+    });
+  };
+  return [theme, toggle];
+}
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [theme, toggleTheme] = useTheme();
   const pathname = usePathname();
   const router = useRouter();
   const { pages, entities, dreamCycle } = useBrainStatus();
@@ -289,7 +314,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           const b = brains.find((brain) => brain.slug === e.target.value);
           if (b) selectBrain(b);
         }}
-        className="bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-2 py-1 text-xs text-[#585866] focus:outline-none focus:border-[var(--brand-primary)]"
+        className="bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-2 py-1 text-xs text-[color:var(--ds-text-muted)] focus:outline-none focus:border-[var(--brand-primary)]"
         title="Aktiven Brain wechseln"
       >
         {brains.map((b) => (
@@ -319,7 +344,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex h-screen bg-[#f5f6f9] overflow-hidden" style={styleForIndustry(industry)} data-industry={industry ?? "core"}>
+    <div className="flex h-screen bg-[color:var(--ds-bg)] overflow-hidden" style={styleForIndustry(industry)} data-industry={industry ?? "core"} data-app="dashboard" data-theme={theme}>
+      {/* No-flash: paint the stored/OS theme onto the shell before React hydrates. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){try{var t=localStorage.getItem('gbrain-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');var r=document.querySelector('[data-app=\\'dashboard\\']');if(r)r.setAttribute('data-theme',t);}catch(e){}})();`,
+        }}
+      />
       {/* Mobile overlay backdrop */}
       {mobileOpen && (
         <div
@@ -331,7 +362,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar */}
       <aside
         className={cn(
-          "flex flex-col border-r border-[#e2e4ec] bg-[#ffffff] transition-all duration-200 shrink-0 z-50",
+          "flex flex-col border-r border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] transition-all duration-200 shrink-0 z-50",
           "fixed inset-y-0 left-0 md:static",
           collapsed ? "md:w-14" : "md:w-56",
           mobileOpen ? "translate-x-0 w-56" : "-translate-x-full md:translate-x-0",
@@ -340,21 +371,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         {/* Logo */}
         <div className={cn(
-          "flex items-center gap-2.5 border-b border-[#e2e4ec] h-14 px-4",
+          "flex items-center gap-2.5 border-b border-[color:var(--ds-border)] h-14 px-4",
           collapsed && "md:justify-center md:px-0"
         )}>
           <button
             onClick={() => setMobileOpen(false)}
-            className="md:hidden text-[#585866] hover:text-[#15151d] transition-colors mr-1"
+            className="md:hidden text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] transition-colors mr-1"
           >
             <X size={18} />
           </button>
           {isSubsumio ? <SubsumioMark size={28} /> : <SigmaMark size={28} className="shrink-0" />}
-          <span className="font-display text-sm font-bold text-[#15151d] tracking-tight md:hidden">
+          <span className="font-display text-sm font-bold text-[color:var(--ds-text)] tracking-tight md:hidden">
             {isSubsumio ? <>Subsum<span className="brand-text">•io</span></> : <>Sigma<span className="brand-text">brain</span></>}
           </span>
           {!collapsed && (
-            <span className="hidden md:inline font-display text-sm font-bold text-[#15151d] tracking-tight">
+            <span className="hidden md:inline font-display text-sm font-bold text-[color:var(--ds-text)] tracking-tight">
               {isSubsumio ? <>Subsum<span className="brand-text">•io</span></> : <>Sigma<span className="brand-text">brain</span></>}
             </span>
           )}
@@ -362,15 +393,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Brain status */}
         {!collapsed && (
-          <div className="mx-3 mt-3 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
+          <div className="mx-3 mt-3 px-3 py-2 rounded-lg bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)]">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs text-[#585866]">Brain Status</span>
+              <span className="text-xs text-[color:var(--ds-text-muted)]">Brain Status</span>
               <div className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-xs text-emerald-600">Active</span>
               </div>
             </div>
-            <div className="text-xs text-[#585866] font-mono">{pages} pages · {entities} entities</div>
+            <div className="text-xs text-[color:var(--ds-text-muted)] font-mono">{pages} pages · {entities} entities</div>
           </div>
         )}
 
@@ -383,7 +414,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div key={section.title} className="mb-3">
               {!collapsed && (
                 <div className="px-3 mb-1">
-                  <span className="text-[10px] uppercase tracking-wider text-[#585866] font-semibold">{section.title}</span>
+                  <span className="text-[10px] uppercase tracking-wider text-[color:var(--ds-text-muted)] font-semibold">{section.title}</span>
                 </div>
               )}
               <div className="space-y-0.5">
@@ -394,7 +425,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       <div
                         key={item.href}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 text-[#9a9aa8] cursor-default select-none",
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/40 text-[color:var(--ds-text-subtle)] cursor-default select-none",
                           collapsed && "justify-center px-0"
                         )}
                         title={collapsed ? `${item.label} — bald` : undefined}
@@ -404,7 +435,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         {!collapsed && (
                           <span className="flex items-center justify-between flex-1">
                             {item.label}
-                            <span className="text-[9px] font-semibold uppercase tracking-wide text-[#8a8a98] border border-[#cfd2dd] rounded px-1 py-0.5">bald</span>
+                            <span className="text-[9px] font-semibold uppercase tracking-wide text-[color:var(--ds-text-subtle)] border border-[color:var(--ds-border-strong)] rounded px-1 py-0.5">bald</span>
                           </span>
                         )}
                       </div>
@@ -420,7 +451,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         collapsed && "justify-center px-0",
                         active
                           ? "brand-soft brand-text border brand-border"
-                          : "text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3]"
+                          : "text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)]"
                       )}
                       title={collapsed ? item.label : undefined}
                     >
@@ -444,7 +475,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Zap size={12} className={cn("shrink-0", dreamCycle ? "text-emerald-600" : "text-amber-600")} />
               <span className={cn("text-xs font-semibold", dreamCycle ? "text-emerald-600" : "text-amber-600")}>Dream Cycle</span>
             </div>
-            <p className="text-[11px] text-[#585866] mt-1 leading-snug">
+            <p className="text-[11px] text-[color:var(--ds-text-muted)] mt-1 leading-snug">
               {dreamCycle
                 ? `Letzter Lauf: ${new Date(dreamCycle).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}`
                 : "Nächtliche Konsolidierung — noch nicht geplant"}
@@ -453,10 +484,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
 
         {/* Bottom — Verwaltung */}
-        <div className="px-2 pb-3 space-y-0.5 border-t border-[#e2e4ec] pt-3">
+        <div className="px-2 pb-3 space-y-0.5 border-t border-[color:var(--ds-border)] pt-3">
           {!collapsed && (
             <div className="px-3 mb-1">
-              <span className="text-[10px] uppercase tracking-wider text-[#585866] font-semibold">Verwaltung</span>
+              <span className="text-[10px] uppercase tracking-wider text-[color:var(--ds-text-muted)] font-semibold">Verwaltung</span>
             </div>
           )}
           {BOTTOM_ITEMS.map((item) => {
@@ -471,7 +502,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   collapsed && "justify-center px-0",
                 active
                     ? "brand-soft brand-text border brand-border"
-                    : "text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3]"
+                    : "text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)]"
                 )}
                 title={collapsed ? item.label : undefined}
               >
@@ -484,7 +515,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <button
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#585866] hover:text-[#585866] hover:bg-[#eceef3] transition-all duration-150",
+              "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] hover:bg-[color:var(--ds-hover)] transition-all duration-150",
               collapsed && "justify-center px-0"
             )}
           >
@@ -496,17 +527,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Topbar */}
-        <header className="h-14 border-b border-[#e2e4ec] bg-[#ffffff] flex items-center justify-between px-4 md:px-6 shrink-0">
+        <header className="h-14 border-b border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] flex items-center justify-between px-4 md:px-6 shrink-0">
           <div className="flex items-center gap-3 flex-1 max-w-md">
             <button
               onClick={() => setMobileOpen(true)}
-              className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3] transition-all"
+              className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] transition-all"
               aria-label="Menü öffnen"
             >
               <Menu size={18} />
             </button>
             <div className="relative flex-1">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--ds-text-muted)]" />
               <input
                 type="text"
                 value={searchQuery}
@@ -518,15 +549,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   }
                 }}
                 placeholder="Brain durchsuchen…"
-                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg pl-9 pr-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-[var(--brand-primary)] transition-colors"
+                className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg pl-9 pr-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-[var(--brand-primary)] transition-colors"
               />
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              title={theme === "dark" ? "Zu hellem Design wechseln" : "Zu dunklem Design wechseln"}
+              aria-label={theme === "dark" ? "Helles Design aktivieren" : "Dunkles Design aktivieren"}
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] hover:bg-[color:var(--ds-hover)] transition-all"
+            >
+              {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
             <div className="relative">
               <button
                 onClick={() => setNotifOpen(!notifOpen)}
-                className="w-8 h-8 rounded-lg flex items-center justify-center text-[#585866] hover:text-[#585866] hover:bg-[#eceef3] transition-all relative"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] hover:bg-[color:var(--ds-hover)] transition-all relative"
               >
                 <Bell size={15} />
                 {notifications.filter((n) => !n.read).length > 0 && (
@@ -534,18 +573,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 )}
               </button>
               {notifOpen && (
-                <div className="absolute right-0 top-10 w-72 rounded-xl border border-[#e2e4ec] bg-[#ffffff] shadow-xl z-50 p-3 space-y-2">
+                <div className="absolute right-0 top-10 w-72 rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] shadow-xl z-50 p-3 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#15151d]">Benachrichtigungen</span>
-                    <button onClick={() => setNotifOpen(false)} className="text-[#585866] hover:text-[#15151d]"><X size={14} /></button>
+                    <span className="text-xs font-semibold text-[color:var(--ds-text)]">Benachrichtigungen</span>
+                    <button onClick={() => setNotifOpen(false)} className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]"><X size={14} /></button>
                   </div>
                   {notifications.length === 0 ? (
-                    <p className="text-xs text-[#585866] py-2">Keine neuen Benachrichtigungen.</p>
+                    <p className="text-xs text-[color:var(--ds-text-muted)] py-2">Keine neuen Benachrichtigungen.</p>
                   ) : (
                     notifications.map((n) => (
-                      <div key={n.id} className={`rounded-lg border p-2.5 ${n.type === "deadline" ? "border-amber-500/20 bg-amber-500/5" : n.type === "dream" ? "brand-border brand-soft" : "border-[#e2e4ec] bg-[#ffffff]"}`}>
-                        <div className="text-xs font-medium text-[#15151d]">{n.title}</div>
-                        <div className="text-[11px] text-[#585866]">{n.message}</div>
+                      <div key={n.id} className={`rounded-lg border p-2.5 ${n.type === "deadline" ? "border-amber-500/20 bg-amber-500/5" : n.type === "dream" ? "brand-border brand-soft" : "border-[color:var(--ds-border)] bg-[color:var(--ds-surface)]"}`}>
+                        <div className="text-xs font-medium text-[color:var(--ds-text)]">{n.title}</div>
+                        <div className="text-[11px] text-[color:var(--ds-text-muted)]">{n.message}</div>
                       </div>
                     ))
                   )}
@@ -561,7 +600,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               onClick={logout}
               title="Abmelden"
               aria-label="Abmelden"
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-[color:var(--ds-text-muted)] hover:text-red-600 hover:bg-red-500/10 transition-all"
             >
               <LogOut size={15} />
             </button>

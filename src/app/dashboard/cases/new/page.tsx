@@ -160,13 +160,13 @@ export default function NewCasePage() {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <div className="flex items-center gap-2 mb-6">
-        <Link href="/dashboard/cases" aria-label="Zurück zur Aktenliste" className="text-[#585866] hover:text-[#15151d] transition-colors">
+        <Link href="/dashboard/cases" aria-label="Zurück zur Aktenliste" className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)] transition-colors">
           <ArrowLeft size={16} aria-hidden="true" />
         </Link>
         <div className="w-8 h-8 rounded-lg bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
           <Briefcase size={16} className="text-violet-600" />
         </div>
-        <h1 className="text-lg font-bold text-[#15151d]">Neue Akte</h1>
+        <h1 className="text-lg font-bold text-[color:var(--ds-text)]">Neue Akte</h1>
       </div>
 
       {error && (
@@ -178,38 +178,38 @@ export default function NewCasePage() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Basic info */}
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
-          <h2 className="text-sm font-semibold text-[#15151d]">Grunddaten</h2>
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-4">
+          <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Grunddaten</h2>
 
           <div>
-            <label htmlFor="case-title" className="block text-xs text-[#585866] mb-1.5">Titel *</label>
+            <label htmlFor="case-title" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Titel *</label>
             <Input
               id="case-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="z.B. Musterfall GmbH vs. Schuldner AG"
-              className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+              className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="case-number" className="block text-xs text-[#585866] mb-1.5">Aktenzeichen</label>
+              <label htmlFor="case-number" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Aktenzeichen</label>
               <Input
                 id="case-number"
                 value={caseNumber}
                 onChange={(e) => setCaseNumber(e.target.value)}
                 placeholder="z.B. 2026-001"
-                className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+                className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
               />
             </div>
             <div>
-              <label htmlFor="case-status" className="block text-xs text-[#585866] mb-1.5">Status</label>
+              <label htmlFor="case-status" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Status</label>
               <select
                 id="case-status"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
+                className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
               >
                 {STATUS_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -220,29 +220,29 @@ export default function NewCasePage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="case-legal-area" className="block text-xs text-[#585866] mb-1.5">Rechtsgebiet</label>
+              <label htmlFor="case-legal-area" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Rechtsgebiet</label>
               <Input
                 id="case-legal-area"
                 value={legalArea}
                 onChange={(e) => setLegalArea(e.target.value)}
                 placeholder="z.B. Zivilrecht"
-                className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+                className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
               />
             </div>
             <div>
-              <label htmlFor="case-sub-area" className="block text-xs text-[#585866] mb-1.5">Untergebiet</label>
+              <label htmlFor="case-sub-area" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Untergebiet</label>
               <Input
                 id="case-sub-area"
                 value={subArea}
                 onChange={(e) => setSubArea(e.target.value)}
                 placeholder="z.B. Vertragsrecht"
-                className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+                className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
               />
             </div>
           </div>
 
           <div>
-            <span id="case-priority-label" className="block text-xs text-[#585866] mb-1.5">Priorität</span>
+            <span id="case-priority-label" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Priorität</span>
             <div className="flex gap-2" role="group" aria-labelledby="case-priority-label">
               {PRIORITY_OPTIONS.map((o) => (
                 <button
@@ -260,7 +260,7 @@ export default function NewCasePage() {
                         : o.value === "low"
                         ? "bg-gray-500/10 border-gray-500/30 text-gray-400"
                         : "bg-blue-500/10 border-blue-500/30 text-blue-600"
-                      : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#585866]"
+                      : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)]"
                   )}
                 >
                   {o.label}
@@ -271,24 +271,24 @@ export default function NewCasePage() {
         </div>
 
         {/* Parties */}
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
-          <h2 className="text-sm font-semibold text-[#15151d]">Beteiligte</h2>
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-4">
+          <h2 className="text-sm font-semibold text-[color:var(--ds-text)]">Beteiligte</h2>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="case-client" className="block text-xs text-[#585866] mb-1.5">Mandant</label>
+              <label htmlFor="case-client" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Mandant</label>
               <Input
                 id="case-client"
                 value={clientName}
                 onChange={(e) => { setClientName(e.target.value); if (clientSlug) setClientSlug(""); }}
                 placeholder="Name des Mandanten"
-                className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+                className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
               />
               {clients.length > 0 && (
                 <select
                   value={clientSlug}
                   onChange={(e) => applyContact(e.target.value, "client")}
-                  className="mt-2 w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-xs text-[#15151d] focus:outline-none focus:border-violet-500/50"
+                  className="mt-2 w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-xs text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
                 >
                   <option value="">Kontakt verknüpfen…</option>
                   {clients.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
@@ -296,19 +296,19 @@ export default function NewCasePage() {
               )}
             </div>
             <div>
-              <label htmlFor="case-opponent" className="block text-xs text-[#585866] mb-1.5">Gegner</label>
+              <label htmlFor="case-opponent" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Gegner</label>
               <Input
                 id="case-opponent"
                 value={opponentName}
                 onChange={(e) => { setOpponentName(e.target.value); if (opponentSlug) setOpponentSlug(""); }}
                 placeholder="Name der Gegenseite"
-                className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+                className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
               />
               {opponents.length > 0 && (
                 <select
                   value={opponentSlug}
                   onChange={(e) => applyContact(e.target.value, "opponent")}
-                  className="mt-2 w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-xs text-[#15151d] focus:outline-none focus:border-violet-500/50"
+                  className="mt-2 w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-xs text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
                 >
                   <option value="">Kontakt verknüpfen…</option>
                   {opponents.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
@@ -319,19 +319,19 @@ export default function NewCasePage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="case-court" className="block text-xs text-[#585866] mb-1.5">Gericht</label>
+              <label htmlFor="case-court" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Gericht</label>
               <Input
                 id="case-court"
                 value={courtName}
                 onChange={(e) => { setCourtName(e.target.value); if (courtSlug) setCourtSlug(""); }}
                 placeholder="z.B. LG Wien"
-                className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+                className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
               />
               {courts.length > 0 && (
                 <select
                   value={courtSlug}
                   onChange={(e) => applyContact(e.target.value, "court")}
-                  className="mt-2 w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-xs text-[#15151d] focus:outline-none focus:border-violet-500/50"
+                  className="mt-2 w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-xs text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
                 >
                   <option value="">Kontakt verknüpfen…</option>
                   {courts.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
@@ -339,19 +339,19 @@ export default function NewCasePage() {
               )}
             </div>
             <div>
-              <label htmlFor="case-lawyer" className="block text-xs text-[#585866] mb-1.5">Zuständiger Anwalt</label>
+              <label htmlFor="case-lawyer" className="block text-xs text-[color:var(--ds-text-muted)] mb-1.5">Zuständiger Anwalt</label>
               <Input
                 id="case-lawyer"
                 value={lawyerName}
                 onChange={(e) => { setLawyerName(e.target.value); if (lawyerSlug) setLawyerSlug(""); }}
                 placeholder="Name des Anwalts"
-                className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+                className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
               />
               {lawyers.length > 0 && (
                 <select
                   value={lawyerSlug}
                   onChange={(e) => applyContact(e.target.value, "lawyer")}
-                  className="mt-2 w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-xs text-[#15151d] focus:outline-none focus:border-violet-500/50"
+                  className="mt-2 w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-xs text-[color:var(--ds-text)] focus:outline-none focus:border-violet-500/50"
                 >
                   <option value="">Kontakt verknüpfen…</option>
                   {lawyers.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
@@ -362,31 +362,31 @@ export default function NewCasePage() {
         </div>
 
         {/* Facts */}
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
-          <h2 className="text-sm font-semibold text-[#15151d]"><label htmlFor="case-facts">Sachverhalt</label></h2>
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-4">
+          <h2 className="text-sm font-semibold text-[color:var(--ds-text)]"><label htmlFor="case-facts">Sachverhalt</label></h2>
           <textarea
             id="case-facts"
             value={facts}
             onChange={(e) => setFacts(e.target.value)}
             rows={6}
             placeholder="Beschreibe den Sachverhalt…"
-            className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2.5 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50 resize-y"
+            className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2.5 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-violet-500/50 resize-y"
           />
         </div>
 
         {/* Tags */}
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
-          <h2 className="text-sm font-semibold text-[#15151d]"><label htmlFor="case-tags">Tags</label></h2>
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-4">
+          <h2 className="text-sm font-semibold text-[color:var(--ds-text)]"><label htmlFor="case-tags">Tags</label></h2>
           <Input
             id="case-tags"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             placeholder="Komma-getrennte Tags: z.B. Vertragsbruch, Schadensersatz"
-            className="bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+            className="bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
           />
         </div>
 
-        <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
+        <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -395,8 +395,8 @@ export default function NewCasePage() {
               className="mt-1"
             />
             <span>
-              <span className="block text-sm font-semibold text-[#15151d]">Für Mandantenportal-Vorschau freigeben</span>
-              <span className="block text-xs text-[#585866] mt-0.5">
+              <span className="block text-sm font-semibold text-[color:var(--ds-text)]">Für Mandantenportal-Vorschau freigeben</span>
+              <span className="block text-xs text-[color:var(--ds-text-muted)] mt-0.5">
                 Nur freigegebene Akten erscheinen in der Portal-Vorschau. Ein echter Mandantenlogin bleibt ein separates Deployment.
               </span>
             </span>
@@ -406,7 +406,7 @@ export default function NewCasePage() {
         {/* Actions */}
         <div className="flex items-center justify-end gap-3 pt-2">
           <Link href="/dashboard/cases">
-            <Button type="button" variant="ghost" className="text-[#585866] hover:text-[#15151d]">
+            <Button type="button" variant="ghost" className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text)]">
               Abbrechen
             </Button>
           </Link>

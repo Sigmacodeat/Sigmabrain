@@ -163,13 +163,13 @@ export default function RechtsprechungPage() {
           <Landmark size={20} className="text-blue-600" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">Rechtsprechung</h1>
-          <p className="text-sm text-[#585866]">Urteile und Entscheidungen durchsuchen</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Rechtsprechung</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Urteile und Entscheidungen durchsuchen</p>
         </div>
       </div>
 
       {/* Search */}
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 space-y-4">
         <div className="flex gap-2">
           {(["at", "de", "all"] as const).map((j) => (
             <button
@@ -179,7 +179,7 @@ export default function RechtsprechungPage() {
                 "px-3 py-1.5 rounded-lg text-xs font-medium border transition-all",
                 jurisdiction === j
                   ? "bg-violet-600/10 border-violet-500/30 text-violet-600"
-                  : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#585866]"
+                  : "bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)]"
               )}
             >
               {j === "at" ? "🇦🇹 Österreich" : j === "de" ? "🇩🇪 Deutschland" : "🌍 Beide"}
@@ -188,14 +188,14 @@ export default function RechtsprechungPage() {
         </div>
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585866]" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--ds-text-muted)]" />
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="Urteil suchen… z.B. Haftung, Vertragsbruch, Datenschutz"
               aria-label="Urteil suchen… z.B. Haftung, Vertragsbruch, Datenschutz"
-              className="pl-9 bg-[#ffffff] border-[#e2e4ec] text-[#15151d] placeholder:text-[#585866] focus:border-violet-500/50"
+              className="pl-9 bg-[color:var(--ds-surface)] border-[color:var(--ds-border)] text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:border-violet-500/50"
             />
           </div>
           <Button
@@ -213,11 +213,11 @@ export default function RechtsprechungPage() {
       {/* Results */}
       {searched && results.length === 0 && !searching && (
         <div className="text-center py-20 space-y-4">
-          <Landmark size={48} className="mx-auto text-[#e2e4ec]" />
+          <Landmark size={48} className="mx-auto text-[color:var(--ds-border)]" />
           <div>
-            <p className="text-[#585866]">Keine Urteile im Brain gefunden.</p>
-            <p className="text-[#585866] text-sm mt-1">
-              Nutze den <code className="font-mono text-xs bg-[#eceef3] px-1.5 py-0.5 rounded">legal-judgements</code> Konnektor um Rechtsprechung zu importieren.
+            <p className="text-[color:var(--ds-text-muted)]">Keine Urteile im Brain gefunden.</p>
+            <p className="text-[color:var(--ds-text-muted)] text-sm mt-1">
+              Nutze den <code className="font-mono text-xs bg-[color:var(--ds-hover)] px-1.5 py-0.5 rounded">legal-judgements</code> Konnektor um Rechtsprechung zu importieren.
             </p>
           </div>
         </div>
@@ -226,33 +226,33 @@ export default function RechtsprechungPage() {
       {results.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-[#585866]">{results.length} Ergebnisse</p>
+            <p className="text-sm text-[color:var(--ds-text-muted)]">{results.length} Ergebnisse</p>
           </div>
           {results.map((r) => (
             <div
               key={r.id}
-              className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 hover:border-violet-500/30 transition-all"
+              className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-4 hover:border-violet-500/30 transition-all"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-[#15151d]">{r.title}</span>
+                    <span className="font-medium text-[color:var(--ds-text)]">{r.title}</span>
                     <Badge variant="default" className={cn(
                       "text-[10px] border",
                       r.source === "brain" ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-600" :
                       r.source === "ris-ogd" ? "bg-blue-500/5 border-blue-500/20 text-blue-600" :
-                      "bg-[#eceef3] border-[#e2e4ec] text-[#585866]"
+                      "bg-[color:var(--ds-hover)] border-[color:var(--ds-border)] text-[color:var(--ds-text-muted)]"
                     )}>
                       {r.source === "brain" ? "Brain" : r.source === "ris-ogd" ? "RIS-OGD" : "KI"}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-[#585866] mb-2">
+                  <div className="flex items-center gap-3 text-xs text-[color:var(--ds-text-muted)] mb-2">
                     <span className="flex items-center gap-1"><Landmark size={10} />{r.court}</span>
                     <span className="flex items-center gap-1"><Calendar size={10} />{new Date(r.date).toLocaleDateString("de-DE")}</span>
                     {r.az && <span className="font-mono">{r.az}</span>}
                     {r.ecli && <span className="font-mono text-[10px]">{r.ecli}</span>}
                   </div>
-                  <p className="text-sm text-[#585866] line-clamp-3">{r.summary}</p>
+                  <p className="text-sm text-[color:var(--ds-text-muted)] line-clamp-3">{r.summary}</p>
                   {r.keywords.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       {r.keywords.map((k) => (
@@ -268,7 +268,7 @@ export default function RechtsprechungPage() {
                     href={r.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 w-8 h-8 rounded-lg bg-[#eceef3] border border-[#e2e4ec] flex items-center justify-center text-[#585866] hover:text-violet-600 hover:border-violet-500/30 transition-all"
+                    className="shrink-0 w-8 h-8 rounded-lg bg-[color:var(--ds-hover)] border border-[color:var(--ds-border)] flex items-center justify-center text-[color:var(--ds-text-muted)] hover:text-violet-600 hover:border-violet-500/30 transition-all"
                   >
                     <ExternalLink size={14} />
                   </a>

@@ -36,7 +36,7 @@ export default function KanzleiSettingsPage() {
 
   if (loading) {
     return (
-      <div className="p-6 max-w-3xl mx-auto flex items-center gap-2 text-[#585866]">
+      <div className="p-6 max-w-3xl mx-auto flex items-center gap-2 text-[color:var(--ds-text-muted)]">
         <Loader2 size={16} className="animate-spin" /> Lade Kanzlei-Einstellungen…
       </div>
     );
@@ -55,8 +55,8 @@ export default function KanzleiSettingsPage() {
           <Building2 size={20} className="text-slate-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#15151d]">Kanzlei-Einstellungen</h1>
-          <p className="text-sm text-[#585866]">Briefkopf, Bankverbindung, Logo für Rechnungen</p>
+          <h1 className="text-xl font-bold text-[color:var(--ds-text)]">Kanzlei-Einstellungen</h1>
+          <p className="text-sm text-[color:var(--ds-text-muted)]">Briefkopf, Bankverbindung, Logo für Rechnungen</p>
         </div>
       </div>
 
@@ -66,7 +66,7 @@ export default function KanzleiSettingsPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-5 space-y-4">
+      <div className="rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] p-5 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field label="Kanzleiname" value={settings.kanzleiName} onChange={(v) => update("kanzleiName", v)} />
           <Field label="Straße" value={settings.street ?? ""} onChange={(v) => update("street", v)} />
@@ -108,12 +108,12 @@ export default function KanzleiSettingsPage() {
 function Field({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <div className="space-y-1">
-      <label className="text-xs text-[#585866]">{label}</label>
+      <label className="text-xs text-[color:var(--ds-text-muted)]">{label}</label>
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-slate-500/50"
+        className="w-full bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-lg px-3 py-2 text-sm text-[color:var(--ds-text)] placeholder:text-[color:var(--ds-text-muted)] focus:outline-none focus:border-slate-500/50"
       />
     </div>
   );

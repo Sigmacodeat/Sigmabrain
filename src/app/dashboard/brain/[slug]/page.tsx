@@ -108,32 +108,32 @@ export default function BrainDetailPage() {
       if (trimmed.startsWith("# ")) {
         flushList();
         elements.push(
-          <h1 key={i} className="text-2xl font-bold text-[#15151d] mb-4 mt-2">{trimmed.slice(2)}</h1>
+          <h1 key={i} className="text-2xl font-bold text-[color:var(--ds-text)] mb-4 mt-2">{trimmed.slice(2)}</h1>
         );
       } else if (trimmed.startsWith("## ")) {
         flushList();
         elements.push(
-          <h2 key={i} className="text-lg font-semibold text-violet-600 mb-3 mt-6 pb-2 border-b border-[#e2e4ec]">
+          <h2 key={i} className="text-lg font-semibold text-violet-600 mb-3 mt-6 pb-2 border-b border-[color:var(--ds-border)]">
             {trimmed.slice(3)}
           </h2>
         );
       } else if (trimmed.startsWith("- ")) {
         listItems.push(
-          <li key={i} className="text-sm text-[#585866] leading-relaxed">
+          <li key={i} className="text-sm text-[color:var(--ds-text-muted)] leading-relaxed">
             {trimmed.slice(2)}
           </li>
         );
       } else if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
         flushList();
         elements.push(
-          <p key={i} className="text-sm text-[#15151d] font-semibold mb-2">{trimmed.slice(2, -2)}</p>
+          <p key={i} className="text-sm text-[color:var(--ds-text)] font-semibold mb-2">{trimmed.slice(2, -2)}</p>
         );
       } else if (trimmed === "") {
         flushList();
       } else {
         flushList();
         elements.push(
-          <p key={i} className="text-sm text-[#585866] leading-relaxed mb-3">{trimmed}</p>
+          <p key={i} className="text-sm text-[color:var(--ds-text-muted)] leading-relaxed mb-3">{trimmed}</p>
         );
       }
     });
@@ -146,19 +146,19 @@ export default function BrainDetailPage() {
       {/* Main */}
       <div className="flex-1 overflow-y-auto">
         {/* Breadcrumb + Actions */}
-        <div className="sticky top-0 z-10 bg-[#f5f6f9] border-b border-[#e2e4ec] px-6 py-3 flex items-center justify-between">
+        <div className="sticky top-0 z-10 bg-[color:var(--ds-bg)] border-b border-[color:var(--ds-border)] px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link href="/dashboard/brain" className="text-[#585866] hover:text-[#585866] transition-colors">
+            <Link href="/dashboard/brain" className="text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] transition-colors">
               <ArrowLeft size={16} />
             </Link>
-            <span className="text-xs text-[#585866]">Brain</span>
-            <span className="text-xs text-[#e2e4ec]">/</span>
-            <span className="text-xs text-[#585866] font-mono truncate max-w-[200px]">{slug}</span>
+            <span className="text-xs text-[color:var(--ds-text-muted)]">Brain</span>
+            <span className="text-xs text-[color:var(--ds-border)]">/</span>
+            <span className="text-xs text-[color:var(--ds-text-muted)] font-mono truncate max-w-[200px]">{slug}</span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={copySlug}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-[#585866] hover:text-[#585866] hover:bg-[#eceef3] transition-all"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] hover:bg-[color:var(--ds-hover)] transition-all"
             >
               {copied ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
               {copied ? "Kopiert" : "Slug"}
@@ -169,7 +169,7 @@ export default function BrainDetailPage() {
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
                 editMode
                   ? "bg-violet-600/20 text-violet-600 border border-violet-500/30"
-                  : "text-[#585866] hover:text-[#585866] hover:bg-[#eceef3]"
+                  : "text-[color:var(--ds-text-muted)] hover:text-[color:var(--ds-text-muted)] hover:bg-[color:var(--ds-hover)]"
               )}
             >
               {editMode ? <Eye size={12} /> : <Edit3 size={12} />}
@@ -179,7 +179,7 @@ export default function BrainDetailPage() {
         </div>
 
         {loading && (
-          <div className="flex-1 flex flex-col items-center justify-center gap-3 text-[#585866]">
+          <div className="flex-1 flex flex-col items-center justify-center gap-3 text-[color:var(--ds-text-muted)]">
             <Loader2 size={24} className="animate-spin" />
             <p className="text-sm">Seite wird geladen…</p>
           </div>
@@ -187,7 +187,7 @@ export default function BrainDetailPage() {
         {!loading && !page && (
           <div className="flex-1 flex flex-col items-center justify-center gap-3 text-rose-600">
             <p className="text-sm font-medium">Seite nicht gefunden</p>
-            <p className="text-xs text-[#585866]">{slug}</p>
+            <p className="text-xs text-[color:var(--ds-text-muted)]">{slug}</p>
           </div>
         )}
         {page && (
@@ -199,11 +199,11 @@ export default function BrainDetailPage() {
                   <TypeIcon size={18} />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-[#15151d]">{page.title}</h1>
+                  <h1 className="text-2xl font-bold text-[color:var(--ds-text)]">{page.title}</h1>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant="document">{page.source}</Badge>
-                    <span className="text-xs text-[#585866]">·</span>
-                    <span className="text-xs text-[#585866] font-mono">{page.word_count} Wörter</span>
+                    <span className="text-xs text-[color:var(--ds-text-muted)]">·</span>
+                    <span className="text-xs text-[color:var(--ds-text-muted)] font-mono">{page.word_count} Wörter</span>
                   </div>
                 </div>
               </div>
@@ -211,7 +211,7 @@ export default function BrainDetailPage() {
               {/* Tags */}
               {page.tags && page.tags.length > 0 && (
                 <div className="flex items-center gap-1.5 flex-wrap mt-3">
-                  <Tag size={12} className="text-[#585866] mr-1" />
+                  <Tag size={12} className="text-[color:var(--ds-text-muted)] mr-1" />
                   {page.tags.map((tag) => (
                     <span
                       key={tag}
@@ -224,7 +224,7 @@ export default function BrainDetailPage() {
               )}
 
               {/* Meta */}
-              <div className="flex items-center gap-4 mt-3 text-xs text-[#585866]">
+              <div className="flex items-center gap-4 mt-3 text-xs text-[color:var(--ds-text-muted)]">
                 <span className="flex items-center gap-1">
                   <Clock size={11} />
                   Erstellt: {page.created_at}
@@ -242,7 +242,7 @@ export default function BrainDetailPage() {
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full h-[400px] bg-[#ffffff] border border-[#e2e4ec] rounded-xl p-4 text-sm text-[#15151d] font-mono leading-relaxed focus:outline-none focus:border-violet-500/50 resize-y"
+                  className="w-full h-[400px] bg-[color:var(--ds-surface)] border border-[color:var(--ds-border)] rounded-xl p-4 text-sm text-[color:var(--ds-text)] font-mono leading-relaxed focus:outline-none focus:border-violet-500/50 resize-y"
                   spellCheck={false}
                 />
                 <div className="flex items-center gap-2">
@@ -266,7 +266,7 @@ export default function BrainDetailPage() {
             {/* Graph Links */}
             {!editMode && ((page as PageGraphExtras).links?.length ?? 0) > 0 && (
               <div className="mt-10">
-                <h3 className="text-sm font-semibold text-[#15151d] mb-4 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[color:var(--ds-text)] mb-4 flex items-center gap-2">
                   <Network size={14} className="text-violet-600" />
                   Verknüpfungen im Graph
                 </h3>
@@ -275,18 +275,18 @@ export default function BrainDetailPage() {
                     <Link
                       key={link.target}
                       href={`/dashboard/brain/${encodeURIComponent(link.target)}`}
-                      className="flex items-center gap-3 p-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:border-[#b4b9c8] hover:bg-[#eceef3] transition-all group"
+                      className="flex items-center gap-3 p-3 rounded-xl border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] hover:border-[color:var(--ds-border-strong)] hover:bg-[color:var(--ds-hover)] transition-all group"
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-mono text-violet-600 bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">
                           {link.type}
                         </span>
-                        <span className="text-xs text-[#585866]">→</span>
+                        <span className="text-xs text-[color:var(--ds-text-muted)]">→</span>
                       </div>
-                      <span className="text-sm text-[#15151d] group-hover:text-violet-700 transition-colors flex-1">
+                      <span className="text-sm text-[color:var(--ds-text)] group-hover:text-violet-700 transition-colors flex-1">
                         {link.target}
                       </span>
-                      <ExternalLink size={12} className="text-[#585866] group-hover:text-violet-600 transition-colors" />
+                      <ExternalLink size={12} className="text-[color:var(--ds-text-muted)] group-hover:text-violet-600 transition-colors" />
                     </Link>
                   ))}
                 </div>
@@ -298,11 +298,11 @@ export default function BrainDetailPage() {
 
       {/* Right sidebar: Related */}
       {page && (
-        <div className="w-72 shrink-0 border-l border-[#e2e4ec] bg-[#ffffff] overflow-y-auto p-5 space-y-6">
+        <div className="w-72 shrink-0 border-l border-[color:var(--ds-border)] bg-[color:var(--ds-surface)] overflow-y-auto p-5 space-y-6">
           {/* Related pages */}
           {((page as PageGraphExtras).related?.length ?? 0) > 0 && (
             <div>
-              <p className="text-xs text-[#585866] uppercase tracking-wider font-medium mb-3">Verwandte Seiten</p>
+              <p className="text-xs text-[color:var(--ds-text-muted)] uppercase tracking-wider font-medium mb-3">Verwandte Seiten</p>
               <div className="space-y-2">
                 {((page as PageGraphExtras).related ?? []).map((rel) => {
                   const RelIcon = TYPE_ICON[rel.type] || FileText;
@@ -310,12 +310,12 @@ export default function BrainDetailPage() {
                     <Link
                       key={rel.slug}
                       href={`/dashboard/brain/${encodeURIComponent(rel.slug)}`}
-                      className="flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-[#eceef3] transition-colors group"
+                      className="flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-[color:var(--ds-hover)] transition-colors group"
                     >
-                      <RelIcon size={14} className="text-[#585866] group-hover:text-violet-600 transition-colors shrink-0" />
+                      <RelIcon size={14} className="text-[color:var(--ds-text-muted)] group-hover:text-violet-600 transition-colors shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-[#15151d] truncate">{rel.title}</p>
-                        <p className="text-[10px] text-[#585866] font-mono">{rel.slug}</p>
+                        <p className="text-xs font-medium text-[color:var(--ds-text)] truncate">{rel.title}</p>
+                        <p className="text-[10px] text-[color:var(--ds-text-muted)] font-mono">{rel.slug}</p>
                       </div>
                       <span className="text-[10px] font-mono text-emerald-600">{(rel.relevance * 100).toFixed(0)}%</span>
                     </Link>
@@ -328,7 +328,7 @@ export default function BrainDetailPage() {
           {/* Entities */}
           {((page as PageGraphExtras).entities?.length ?? 0) > 0 && (
             <div>
-              <p className="text-xs text-[#585866] uppercase tracking-wider font-medium mb-3">Erkannte Entitäten</p>
+              <p className="text-xs text-[color:var(--ds-text-muted)] uppercase tracking-wider font-medium mb-3">Erkannte Entitäten</p>
               <div className="space-y-2">
                 {((page as PageGraphExtras).entities ?? []).map((ent) => {
                   const EntIcon = TYPE_ICON[ent.type] || FileText;
@@ -336,14 +336,14 @@ export default function BrainDetailPage() {
                   return (
                     <div
                       key={ent.slug}
-                      className="flex items-center gap-2.5 p-2.5 rounded-lg border border-[#e2e4ec] bg-[#ffffff]"
+                      className="flex items-center gap-2.5 p-2.5 rounded-lg border border-[color:var(--ds-border)] bg-[color:var(--ds-surface)]"
                     >
                       <div className={cn("w-7 h-7 rounded-md border flex items-center justify-center", entStyle)}>
                         <EntIcon size={12} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-[#15151d]">{ent.name}</p>
-                        <p className="text-[10px] text-[#585866] font-mono">{ent.type}</p>
+                        <p className="text-xs font-medium text-[color:var(--ds-text)]">{ent.name}</p>
+                        <p className="text-[10px] text-[color:var(--ds-text-muted)] font-mono">{ent.type}</p>
                       </div>
                       {ent.salience !== undefined && (
                         <span className="text-[10px] font-mono text-violet-600">{(ent.salience * 100).toFixed(0)}%</span>
@@ -357,7 +357,7 @@ export default function BrainDetailPage() {
 
           {/* Quick actions */}
           <div>
-            <p className="text-xs text-[#585866] uppercase tracking-wider font-medium mb-3">Aktionen</p>
+            <p className="text-xs text-[color:var(--ds-text-muted)] uppercase tracking-wider font-medium mb-3">Aktionen</p>
             <div className="space-y-1.5">
               <Button variant="secondary" size="sm" className="w-full justify-start">
                 <BookOpen size={12} /> Im Brain suchen
