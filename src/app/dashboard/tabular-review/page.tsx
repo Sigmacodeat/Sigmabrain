@@ -78,7 +78,7 @@ export default function TabularReviewPage() {
     <div className="p-6 max-w-full space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-          <Table2 size={20} className="text-violet-400" />
+          <Table2 size={20} className="text-violet-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Massen-Review</h1>
@@ -122,12 +122,12 @@ export default function TabularReviewPage() {
                 className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50"
               />
               {questions.length > 1 && (
-                <button onClick={() => removeQuestion(i)} className="text-[#585866] hover:text-red-400 p-2"><X size={15} /></button>
+                <button onClick={() => removeQuestion(i)} className="text-[#585866] hover:text-red-600 p-2"><X size={15} /></button>
               )}
             </div>
           ))}
           {questions.length < 8 && (
-            <button onClick={addQuestion} className="flex items-center gap-1.5 text-xs text-violet-400 hover:underline">
+            <button onClick={addQuestion} className="flex items-center gap-1.5 text-xs text-violet-600 hover:underline">
               <Plus size={13} /> Frage hinzufügen
             </button>
           )}
@@ -140,7 +140,7 @@ export default function TabularReviewPage() {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-amber-500/20 bg-amber-500/5 text-sm text-amber-400">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-amber-500/20 bg-amber-500/5 text-sm text-amber-600">
           <AlertTriangle size={16} /> {error}
         </div>
       )}
@@ -151,9 +151,9 @@ export default function TabularReviewPage() {
           <div className="flex items-center justify-between">
             <p className="text-sm text-[#585866]">
               {result.document_count} Dokumente × {result.questions.length} Fragen
-              {result.truncated && <span className="text-amber-400"> · gekürzt auf {result.document_count}</span>}
+              {result.truncated && <span className="text-amber-600"> · gekürzt auf {result.document_count}</span>}
             </p>
-            <button onClick={exportCsv} className="flex items-center gap-1.5 text-xs text-violet-400 hover:underline">
+            <button onClick={exportCsv} className="flex items-center gap-1.5 text-xs text-violet-600 hover:underline">
               <Download size={13} /> CSV-Export
             </button>
           </div>
@@ -171,13 +171,13 @@ export default function TabularReviewPage() {
                 {result.rows.map((row) => (
                   <tr key={row.slug} className="border-t border-[#e2e4ec] hover:bg-[#ffffff]/50">
                     <td className="px-4 py-3 text-[#15151d] align-top sticky left-0 bg-[#ffffff] font-medium">
-                      <a href={`/dashboard/brain/${row.slug}`} className="hover:text-violet-300">{row.title}</a>
+                      <a href={`/dashboard/brain/${row.slug}`} className="hover:text-violet-700">{row.title}</a>
                     </td>
                     {row.cells.map((cell, i) => (
                       <td key={i} className="px-4 py-3 text-[#585866] align-top border-l border-[#e2e4ec]/60 leading-relaxed">
                         {cell.answer}
                         {cell.citations.length > 0 && (
-                          <span className="block mt-1 text-[10px] text-violet-400/70">↳ {cell.citations[0].title}</span>
+                          <span className="block mt-1 text-[10px] text-violet-600/70">↳ {cell.citations[0].title}</span>
                         )}
                       </td>
                     ))}

@@ -41,29 +41,29 @@ const STATUS_CONFIG: Record<string, { label: string; icon: React.ElementType; ic
   sent: {
     label: "Versendet",
     icon: Send,
-    iconClass: "text-blue-400",
-    badgeClass: "bg-blue-500/5 border-blue-500/20 text-blue-400",
+    iconClass: "text-blue-600",
+    badgeClass: "bg-blue-500/5 border-blue-500/20 text-blue-600",
     tileClass: "bg-blue-500/10",
   },
   signed: {
     label: "Unterschrieben",
     icon: CheckCircle2,
-    iconClass: "text-emerald-400",
-    badgeClass: "bg-emerald-500/5 border-emerald-500/20 text-emerald-400",
+    iconClass: "text-emerald-600",
+    badgeClass: "bg-emerald-500/5 border-emerald-500/20 text-emerald-600",
     tileClass: "bg-emerald-500/10",
   },
   declined: {
     label: "Abgelehnt",
     icon: XCircle,
-    iconClass: "text-red-400",
-    badgeClass: "bg-red-500/5 border-red-500/20 text-red-400",
+    iconClass: "text-red-600",
+    badgeClass: "bg-red-500/5 border-red-500/20 text-red-600",
     tileClass: "bg-red-500/10",
   },
   expired: {
     label: "Abgelaufen",
     icon: Clock,
-    iconClass: "text-amber-400",
-    badgeClass: "bg-amber-500/5 border-amber-500/20 text-amber-400",
+    iconClass: "text-amber-600",
+    badgeClass: "bg-amber-500/5 border-amber-500/20 text-amber-600",
     tileClass: "bg-amber-500/10",
   },
 };
@@ -181,7 +181,7 @@ export default function SignaturePage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-600/15 border border-indigo-500/20 flex items-center justify-center">
-            <FileSignature size={20} className="text-indigo-400" />
+            <FileSignature size={20} className="text-indigo-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">e-Signatur</h1>
@@ -191,7 +191,7 @@ export default function SignaturePage() {
         <div className="flex items-center gap-2">
           <a
             href="/dashboard/settings"
-            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-400 hover:bg-amber-500/10 transition-all"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-600 hover:bg-amber-500/10 transition-all"
           >
             <Settings size={14} />
             Anbieter konfigurieren
@@ -210,13 +210,13 @@ export default function SignaturePage() {
       {/* Setup hint */}
       <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
         <div className="flex items-start gap-3">
-          <AlertTriangle size={18} className="text-amber-400 shrink-0 mt-0.5" />
+          <AlertTriangle size={18} className="text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm text-amber-400 font-medium">Externer Signatur-Provider erforderlich</p>
+            <p className="text-sm text-amber-600 font-medium">Externer Signatur-Provider erforderlich</p>
             <p className="text-xs text-[#585866] mt-1">
               Sigmabrain speichert Signatur-Anfragen revisionsfähig im Brain und verfolgt Status.
               Der rechtlich wirksame Versand erfolgt über einen Anbieter wie{" "}
-              <a href="https://developers.docusign.com/" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Docusign</a>
+              <a href="https://developers.docusign.com/" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">Docusign</a>
               {" "}oder ein Kanzlei-Signaturportal. Kein Demo-Versand wird vorgetäuscht.
             </p>
           </div>
@@ -224,7 +224,7 @@ export default function SignaturePage() {
       </div>
 
       {notice && (
-        <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3 text-sm text-blue-300" role="status">
+        <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3 text-sm text-blue-700" role="status">
           {notice}
         </div>
       )}
@@ -232,7 +232,7 @@ export default function SignaturePage() {
       {/* Create form */}
       {showCreate && (
         <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4 space-y-4">
-          <h2 className="text-sm font-semibold text-indigo-400">Unterschriften-Anfrage erstellen</h2>
+          <h2 className="text-sm font-semibold text-indigo-600">Unterschriften-Anfrage erstellen</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs text-[#585866] mb-1">Dokument</label>
@@ -291,7 +291,7 @@ export default function SignaturePage() {
       {/* List */}
       {loading ? (
         <div className="flex justify-center py-20">
-          <Loader2 size={24} className="animate-spin text-indigo-400" />
+          <Loader2 size={24} className="animate-spin text-indigo-600" />
         </div>
       ) : requests.length === 0 ? (
         <div className="text-center py-20 space-y-4">
@@ -331,7 +331,7 @@ export default function SignaturePage() {
 	                  {req.status === "draft" && (
 	                    <button
 	                      onClick={() => markPrepared(req)}
-	                      className="p-2 rounded-lg text-[#585866] hover:text-indigo-400 hover:bg-indigo-500/10 transition-all"
+	                      className="p-2 rounded-lg text-[#585866] hover:text-indigo-600 hover:bg-indigo-500/10 transition-all"
 	                      title="Als extern versendet markieren"
 	                    >
 	                      <Send size={14} />

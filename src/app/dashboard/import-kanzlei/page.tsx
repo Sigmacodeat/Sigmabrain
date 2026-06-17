@@ -158,7 +158,7 @@ export default function ImportKanzleiPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center" aria-hidden="true">
-          <FileSpreadsheet size={20} className="text-blue-400" />
+          <FileSpreadsheet size={20} className="text-blue-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Kanzlei-Import</h1>
@@ -168,8 +168,8 @@ export default function ImportKanzleiPage() {
 
       {/* Honest framing */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl border border-blue-500/20 bg-blue-500/5" role="note">
-        <Info size={16} className="text-blue-400 shrink-0 mt-0.5" aria-hidden="true" />
-        <p className="text-xs text-blue-300/90 leading-relaxed">
+        <Info size={16} className="text-blue-600 shrink-0 mt-0.5" aria-hidden="true" />
+        <p className="text-xs text-blue-700/90 leading-relaxed">
           Exportiere die Aktenliste deiner Kanzleisoftware als <strong>CSV</strong> (RA-MICRO, Advoware
           und DATEV Anwalt können das) und lade sie hier hoch. Die Spalten werden automatisch zugeordnet —
           <strong> prüfe die Zuordnung</strong>, bevor du importierst. Umlaute falsch? Datei als UTF-8 neu speichern.
@@ -182,7 +182,7 @@ export default function ImportKanzleiPage() {
         "flex flex-col items-center justify-center gap-2 py-10 rounded-xl border border-dashed cursor-pointer transition-all duration-300",
         headers.length ? "border-[#d6d9e3] bg-[#ffffff]" : "border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50"
       )}>
-        <UploadCloud size={28} className="text-blue-400" aria-hidden="true" />
+        <UploadCloud size={28} className="text-blue-600" aria-hidden="true" />
         <span className="text-sm text-[#15151d]">{fileName || "CSV-Datei wählen oder hierher ziehen"}</span>
         {headers.length > 0 && <span className="text-xs text-[#585866]">{rows.length} Zeilen erkannt · andere Datei wählen</span>}
         <input
@@ -193,7 +193,7 @@ export default function ImportKanzleiPage() {
         />
       </label>
 
-      {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
+      {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
 
       {/* Mapping + preview */}
       {headers.length > 0 && (
@@ -204,7 +204,7 @@ export default function ImportKanzleiPage() {
               {FIELDS.map((f) => (
                 <div key={f.key} className="flex items-center gap-2">
                   <label htmlFor={`map-${f.key}`} className="text-xs text-[#585866] w-36 shrink-0">
-                    {f.label}{f.required && <span className="text-red-400"> *</span>}
+                    {f.label}{f.required && <span className="text-red-600"> *</span>}
                   </label>
                   <select
                     id={`map-${f.key}`}
@@ -221,7 +221,7 @@ export default function ImportKanzleiPage() {
               ))}
             </div>
             {titleCol < 0 && (
-              <p className="text-xs text-amber-400 flex items-center gap-1.5">
+              <p className="text-xs text-amber-600 flex items-center gap-1.5">
                 <AlertTriangle size={12} /> „Bezeichnung / Rubrum&quot; muss zugeordnet sein.
               </p>
             )}
@@ -265,9 +265,9 @@ export default function ImportKanzleiPage() {
             </Button>
             {result && (
               <span className="text-sm flex items-center gap-1.5">
-                <CheckCircle2 size={15} className="text-emerald-400" />
-                <span className="text-emerald-400">{result.ok} importiert</span>
-                {result.failed > 0 && <span className="text-red-400">· {result.failed} fehlgeschlagen</span>}
+                <CheckCircle2 size={15} className="text-emerald-600" />
+                <span className="text-emerald-600">{result.ok} importiert</span>
+                {result.failed > 0 && <span className="text-red-600">· {result.failed} fehlgeschlagen</span>}
               </span>
             )}
           </div>

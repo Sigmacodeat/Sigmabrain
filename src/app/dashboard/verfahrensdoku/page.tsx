@@ -232,7 +232,7 @@ export default function VerfahrensdokuPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-            <ScrollText size={20} className="text-violet-400" />
+            <ScrollText size={20} className="text-violet-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">GoBD-Verfahrensdokumentation</h1>
@@ -261,8 +261,8 @@ export default function VerfahrensdokuPage() {
 
       {/* Honest framing */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
-        <Info size={16} className="text-amber-400 shrink-0 mt-0.5" />
-        <p className="text-xs text-amber-400 leading-relaxed">
+        <Info size={16} className="text-amber-600 shrink-0 mt-0.5" />
+        <p className="text-xs text-amber-600 leading-relaxed">
           Dies erzeugt eine <strong>Vorlage</strong>, kein prüfungssicheres Dokument. Die
           Verfahrensdokumentation muss an den tatsächlichen Kanzleiablauf angepasst,
           anwaltlich/steuerlich geprüft und vom Berater bzw. Betriebsprüfer abgenommen
@@ -270,7 +270,7 @@ export default function VerfahrensdokuPage() {
         </p>
       </div>
 
-      {saveError && <div className="text-xs text-red-400">{saveError}</div>}
+      {saveError && <div className="text-xs text-red-600">{saveError}</div>}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
@@ -303,7 +303,7 @@ export default function VerfahrensdokuPage() {
         {/* Preview */}
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-2 lg:sticky lg:top-6 lg:self-start">
           <div className="flex items-center gap-2 text-[#585866]">
-            <FileText size={14} className="text-violet-400" />
+            <FileText size={14} className="text-violet-600" />
             <span className="text-sm font-semibold text-[#15151d]">Vorschau (Markdown)</span>
           </div>
           <pre className="text-[11px] text-[#585866] font-mono whitespace-pre-wrap leading-relaxed max-h-[70vh] overflow-y-auto">

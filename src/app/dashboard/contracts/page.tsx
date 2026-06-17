@@ -38,10 +38,10 @@ interface ContractItem {
 }
 
 const RISK_COLORS: Record<string, string> = {
-  low: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
-  medium: "bg-amber-500/10 border-amber-500/20 text-amber-400",
-  high: "bg-red-500/10 border-red-500/20 text-red-400",
-  critical: "bg-red-600/20 border-red-500/30 text-red-300",
+  low: "bg-emerald-500/10 border-emerald-500/20 text-emerald-600",
+  medium: "bg-amber-500/10 border-amber-500/20 text-amber-600",
+  high: "bg-red-500/10 border-red-500/20 text-red-600",
+  critical: "bg-red-600/20 border-red-500/30 text-red-700",
 };
 
 const RISK_LABELS: Record<string, string> = {
@@ -53,9 +53,9 @@ const RISK_LABELS: Record<string, string> = {
 
 const STATUS_COLORS: Record<string, string> = {
   draft: "bg-[#eceef3] border-[#e2e4ec] text-[#585866]",
-  reviewed: "bg-violet-500/10 border-violet-500/20 text-violet-300",
-  approved: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
-  signed: "bg-blue-500/10 border-blue-500/20 text-blue-400",
+  reviewed: "bg-violet-500/10 border-violet-500/20 text-violet-700",
+  approved: "bg-emerald-500/10 border-emerald-500/20 text-emerald-600",
+  signed: "bg-blue-500/10 border-blue-500/20 text-blue-600",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -256,7 +256,7 @@ export default function ContractsPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-            <ShieldCheck size={20} className="text-violet-400" />
+            <ShieldCheck size={20} className="text-violet-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Vertrags-Intelligenz</h1>
@@ -287,7 +287,7 @@ export default function ContractsPage() {
             {["Kaufvertrag","Dienstvertrag","Werkvertrag","Mietvertrag","NDA / Geheimhaltung","Arbeitsvertrag","Lizenzvertrag","GmbH-Vertrag","Sonstige"].map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
           <textarea value={newContent} onChange={(e) => setNewContent(e.target.value)} rows={8} placeholder="Vertragstext hier einfügen…" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
-          {createError && <p className="text-xs text-red-400">{createError}</p>}
+          {createError && <p className="text-xs text-red-600">{createError}</p>}
           <div className="flex justify-end">
             <Button onClick={createContract} disabled={!newTitle.trim()} className="bg-violet-600 hover:bg-violet-500 text-white gap-2"><Save size={14} /> Speichern</Button>
           </div>
@@ -304,10 +304,10 @@ export default function ContractsPage() {
             {reviewQuestions.map((q, i) => (
               <div key={i} className="flex items-center gap-2">
                 <input value={q} onChange={(e) => setReviewQuestions((qs) => qs.map((qq, idx) => (idx === i ? e.target.value : qq)))} placeholder={`Frage ${i + 1}`} className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
-                <button onClick={() => setReviewQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="text-[#585866] hover:text-red-400"><X size={14} /></button>
+                <button onClick={() => setReviewQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="text-[#585866] hover:text-red-600"><X size={14} /></button>
               </div>
             ))}
-            {reviewQuestions.length < 8 && <button onClick={() => setReviewQuestions((qs) => [...qs, ""])} className="text-xs text-violet-400 hover:underline">+ Frage hinzufügen</button>}
+            {reviewQuestions.length < 8 && <button onClick={() => setReviewQuestions((qs) => [...qs, ""])} className="text-xs text-violet-600 hover:underline">+ Frage hinzufügen</button>}
           </div>
           <div className="flex items-center gap-3">
             <Button onClick={runReview} disabled={reviewLoading} className="bg-violet-600 hover:bg-violet-500 text-white gap-2">
@@ -321,7 +321,7 @@ export default function ContractsPage() {
               }}><Download size={14} /> CSV Export</Button>
             )}
           </div>
-          {reviewError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{reviewError}</div>}
+          {reviewError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">{reviewError}</div>}
           {reviewResult && reviewResult.rows.length > 0 && (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -338,14 +338,14 @@ export default function ContractsPage() {
         <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Verträge suchen…" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg pl-9 pr-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
       </div>
 
-      {loadError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{loadError}</div>}
+      {loadError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">{loadError}</div>}
 
       {/* Summary stats */}
       {!loading && contracts.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-              <BarChart3 size={14} className="text-violet-400" />
+              <BarChart3 size={14} className="text-violet-600" />
             </div>
             <div>
               <p className="text-lg font-bold text-[#15151d]">{contracts.length}</p>
@@ -354,7 +354,7 @@ export default function ContractsPage() {
           </div>
           <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-              <ShieldCheck size={14} className="text-emerald-400" />
+              <ShieldCheck size={14} className="text-emerald-600" />
             </div>
             <div>
               <p className="text-lg font-bold text-[#15151d]">{contracts.filter(c => c.status === "approved" || c.status === "signed").length}</p>
@@ -363,7 +363,7 @@ export default function ContractsPage() {
           </div>
           <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-              <AlertTriangle size={14} className="text-amber-400" />
+              <AlertTriangle size={14} className="text-amber-600" />
             </div>
             <div>
               <p className="text-lg font-bold text-[#15151d]">{contracts.filter(c => c.riskLevel === "medium" || c.riskLevel === "high" || c.riskLevel === "critical").length}</p>
@@ -372,7 +372,7 @@ export default function ContractsPage() {
           </div>
           <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-              <AlertTriangle size={14} className="text-red-400" />
+              <AlertTriangle size={14} className="text-red-600" />
             </div>
             <div>
               <p className="text-lg font-bold text-[#15151d]">{contracts.filter(c => c.riskLevel === "critical").length}</p>
@@ -413,7 +413,7 @@ export default function ContractsPage() {
                     </select>
                   </div>
                   <textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} rows={6} placeholder="Vertragstext" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] focus:outline-none focus:border-violet-500/50" />
-                  {editError && <p className="text-xs text-red-400">{editError}</p>}
+                  {editError && <p className="text-xs text-red-600">{editError}</p>}
                   <div className="flex justify-end">
                     <Button onClick={saveEdit} disabled={!editTitle.trim()} className="bg-violet-600 hover:bg-violet-500 text-white gap-2"><Save size={14} /> Speichern</Button>
                   </div>
@@ -426,7 +426,7 @@ export default function ContractsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-medium text-[#15151d]">{contract.title}</span>
-                      {contract.contractType && <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{contract.contractType}</Badge>}
+                      {contract.contractType && <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700">{contract.contractType}</Badge>}
                       <Badge variant="default" className={`text-[10px] border ${STATUS_COLORS[contract.status || "draft"]}`}>{STATUS_LABELS[contract.status || "draft"]}</Badge>
                     </div>
                     {contract.parties && <p className="text-xs text-[#585866] mt-1">{contract.parties}</p>}
@@ -445,10 +445,10 @@ export default function ContractsPage() {
                           />
                         </div>
                         <span className={`text-[10px] font-medium whitespace-nowrap ${
-                          contract.riskLevel === "low" ? "text-emerald-400" :
-                          contract.riskLevel === "medium" ? "text-amber-400" :
-                          contract.riskLevel === "high" ? "text-red-400" :
-                          "text-red-300"
+                          contract.riskLevel === "low" ? "text-emerald-600" :
+                          contract.riskLevel === "medium" ? "text-amber-600" :
+                          contract.riskLevel === "high" ? "text-red-600" :
+                          "text-red-700"
                         }`}>
                           {contract.riskScore !== undefined ? `${contract.riskScore}/100` : RISK_LABELS[contract.riskLevel]} — {RISK_LABELS[contract.riskLevel]}
                         </span>
@@ -456,15 +456,15 @@ export default function ContractsPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <button onClick={() => analyzeContract(contract)} disabled={isAnalyzing} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="KI-Analyse">
+                    <button onClick={() => analyzeContract(contract)} disabled={isAnalyzing} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-600 hover:bg-violet-500/10 transition-all" title="KI-Analyse">
                       {isAnalyzing ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
                     </button>
-                    <button onClick={() => startEdit(contract)} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="Bearbeiten"><Pencil size={14} /></button>
-                    <button onClick={() => deleteContract(contract.slug)} className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen"><Trash2 size={14} /></button>
+                    <button onClick={() => startEdit(contract)} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-600 hover:bg-violet-500/10 transition-all" title="Bearbeiten"><Pencil size={14} /></button>
+                    <button onClick={() => deleteContract(contract.slug)} className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all" title="Löschen"><Trash2 size={14} /></button>
                   </div>
                 </div>
                 <div className="text-xs text-[#585866] line-clamp-2">{contract.content.slice(0, 200)}…</div>
-                {isAnalyzing && <div className="flex items-center gap-2 text-xs text-violet-400"><Loader2 size={14} className="animate-spin" /> KI analysiert Vertrag…</div>}
+                {isAnalyzing && <div className="flex items-center gap-2 text-xs text-violet-600"><Loader2 size={14} className="animate-spin" /> KI analysiert Vertrag…</div>}
                 {analyzingSlug === contract.slug && analysisResult && (
                   <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-3">
                     <div className="flex items-center justify-between">

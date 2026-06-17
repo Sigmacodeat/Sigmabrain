@@ -114,7 +114,7 @@ export default function ConnectorsPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center">
-            <Plug size={20} className="text-blue-400" />
+            <Plug size={20} className="text-blue-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Konnektoren</h1>
@@ -125,8 +125,8 @@ export default function ConnectorsPage() {
 
       {/* Info */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
-        <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
-        <p className="text-sm text-amber-400">
+        <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />
+        <p className="text-sm text-amber-600">
           Zugangsdaten werden weiterhin über die CLI eingerichtet: <code className="font-mono text-xs bg-amber-500/10 px-1.5 py-0.5 rounded">gbrain connector add &lt;service&gt;</code>. 
           Status, Aktivierung und manuelle Syncs laufen hier direkt über die Engine.
         </p>
@@ -134,13 +134,13 @@ export default function ConnectorsPage() {
 
       {/* Message */}
       {message && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-violet-500/20 bg-violet-500/5 text-violet-400 text-sm">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-violet-500/20 bg-violet-500/5 text-violet-600 text-sm">
           <CheckCircle2 size={16} className="shrink-0" />
           {message}
         </div>
       )}
       {error && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-red-500/20 bg-red-500/5 text-red-400 text-sm">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-red-500/20 bg-red-500/5 text-red-600 text-sm">
           <XCircle size={16} className="shrink-0" />
           {error}
         </div>
@@ -149,7 +149,7 @@ export default function ConnectorsPage() {
       {/* List */}
       {loading ? (
         <div className="flex items-center justify-center py-20" role="status" aria-label="Wird geladen">
-          <Loader2 size={24} className="text-violet-400 animate-spin" />
+          <Loader2 size={24} className="text-violet-600 animate-spin" />
         </div>
       ) : (
         <div className="space-y-2">
@@ -172,13 +172,13 @@ export default function ConnectorsPage() {
                   "w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border",
                   isLegal ? "bg-violet-600/10 border-violet-500/20" : "bg-[#eceef3] border-[#e2e4ec]"
                 )}>
-                  <Icon size={18} className={isLegal ? "text-violet-400" : "text-[#585866]"} />
+                  <Icon size={18} className={isLegal ? "text-violet-600" : "text-[#585866]"} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-[#15151d]">{label}</span>
                     {isLegal && (
-                      <Badge variant="default" className="text-[10px] bg-violet-600/10 border-violet-500/20 text-violet-400">
+                      <Badge variant="default" className="text-[10px] bg-violet-600/10 border-violet-500/20 text-violet-600">
                         Kanzlei
                       </Badge>
                     )}
@@ -189,11 +189,11 @@ export default function ConnectorsPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-3 text-xs text-[#585866] mt-0.5">
-                    <span className={cn("flex items-center gap-1", c.enabled ? "text-emerald-400" : "text-[#585866]")}>
+                    <span className={cn("flex items-center gap-1", c.enabled ? "text-emerald-600" : "text-[#585866]")}>
                       {c.enabled ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
                       {c.enabled ? "Aktiviert" : "Deaktiviert"}
                     </span>
-                    <span className={cn("flex items-center gap-1", c.connected ? "text-emerald-400" : "text-[#585866]")}>
+                    <span className={cn("flex items-center gap-1", c.connected ? "text-emerald-600" : "text-[#585866]")}>
                       {c.connected ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
                       {c.connected ? "Verbunden" : "Getrennt"}
                     </span>
@@ -233,19 +233,19 @@ export default function ConnectorsPage() {
         <h2 className="text-sm font-semibold text-[#15151d]">CLI-Kommandos</h2>
         <div className="space-y-2 font-mono text-xs">
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
-            <span className="text-violet-400">$</span>
+            <span className="text-violet-600">$</span>
             <span className="text-[#585866]">gbrain connector add legal-judgements --query &quot;Haftung&quot; --jurisdiction at</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
-            <span className="text-violet-400">$</span>
+            <span className="text-violet-600">$</span>
             <span className="text-[#585866]">gbrain connector add bea-import --watch-dir ~/Downloads/bea</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
-            <span className="text-violet-400">$</span>
+            <span className="text-violet-600">$</span>
             <span className="text-[#585866]">gbrain connector sync legal-judgements</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]">
-            <span className="text-violet-400">$</span>
+            <span className="text-violet-600">$</span>
             <span className="text-[#585866]">gbrain connector list</span>
           </div>
         </div>

@@ -71,7 +71,7 @@ export default function WhatsAppDashboardPage() {
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
-          <MessageSquare size={20} className="text-emerald-400" />
+          <MessageSquare size={20} className="text-emerald-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">WhatsApp Copilot</h1>
@@ -80,7 +80,7 @@ export default function WhatsAppDashboardPage() {
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{error}</div>
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">{error}</div>
       )}
 
       {loading ? (
@@ -98,7 +98,7 @@ export default function WhatsAppDashboardPage() {
 
           <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-5 space-y-4">
             <div className="flex items-center gap-2">
-              <ShieldCheck size={16} className="text-emerald-400" />
+              <ShieldCheck size={16} className="text-emerald-600" />
               <h2 className="text-sm font-semibold text-[#15151d]">Setup</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
@@ -137,7 +137,7 @@ export default function WhatsAppDashboardPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-amber-400">Keine erlaubten WhatsApp-Sender konfiguriert.</p>
+              <p className="text-xs text-amber-600">Keine erlaubten WhatsApp-Sender konfiguriert.</p>
             )}
           </div>
 
@@ -152,7 +152,7 @@ export default function WhatsAppDashboardPage() {
 }
 
 function Metric({ label, value, ok, warn }: { label: string; value: string; ok?: boolean; warn?: boolean }) {
-  const color = ok ? "text-emerald-400" : warn ? "text-amber-400" : "text-[#15151d]";
+  const color = ok ? "text-emerald-600" : warn ? "text-amber-600" : "text-[#15151d]";
   return (
     <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
       <div className={`text-lg font-bold ${color}`}>{value}</div>
@@ -164,7 +164,7 @@ function Metric({ label, value, ok, warn }: { label: string; value: string; ok?:
 function SetupFlag({ label, ok }: { label: string; ok: boolean }) {
   return (
     <div className="flex items-center gap-2 rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2">
-      {ok ? <CheckCircle2 size={12} className="text-emerald-400" /> : <XCircle size={12} className="text-red-400" />}
+      {ok ? <CheckCircle2 size={12} className="text-emerald-600" /> : <XCircle size={12} className="text-red-600" />}
       <span className="text-[#585866]">{label}</span>
     </div>
   );
@@ -186,7 +186,7 @@ function LogPanel({ title, pages }: { title: string; pages: BrainPage[] }) {
               <div key={page.slug} className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] px-3 py-2 space-y-1">
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-xs font-medium text-[#15151d] truncate">{page.title}</div>
-                  <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">
+                  <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700">
                     {status}
                   </Badge>
                 </div>
@@ -195,7 +195,7 @@ function LogPanel({ title, pages }: { title: string; pages: BrainPage[] }) {
                   {text(fm.intent) && <span> · {text(fm.intent)}</span>}
                 </div>
                 {text(fm.error) && (
-                  <div className="text-[11px] text-red-300 flex items-center gap-1">
+                  <div className="text-[11px] text-red-700 flex items-center gap-1">
                     <AlertTriangle size={10} /> {text(fm.error)}
                   </div>
                 )}

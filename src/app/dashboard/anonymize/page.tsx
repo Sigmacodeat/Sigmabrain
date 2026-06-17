@@ -54,7 +54,7 @@ export default function AnonymizePage() {
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
-          <ShieldCheck size={20} className="text-emerald-400" />
+          <ShieldCheck size={20} className="text-emerald-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Anonymisierung</h1>
@@ -85,7 +85,7 @@ export default function AnonymizePage() {
           <div className="flex items-center justify-between">
             <label className="text-xs uppercase tracking-wider text-[#585866] font-semibold">Anonymisiert</label>
             {result && (
-              <button onClick={copyResult} className="flex items-center gap-1.5 text-xs text-emerald-400 hover:underline">
+              <button onClick={copyResult} className="flex items-center gap-1.5 text-xs text-emerald-600 hover:underline">
                 {copied ? <Check size={13} /> : <Copy size={13} />}
                 {copied ? "Kopiert" : "Kopieren"}
               </button>
@@ -101,7 +101,7 @@ export default function AnonymizePage() {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-red-500/20 bg-red-500/5 text-sm text-red-400">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-red-500/20 bg-red-500/5 text-sm text-red-600">
           <AlertTriangle size={16} /> {error}
         </div>
       )}
@@ -111,7 +111,7 @@ export default function AnonymizePage() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm text-[#585866]">{result.count} Ersetzungen:</span>
             {Object.entries(result.stats).map(([type, n]) => (
-              <Badge key={type} variant="default" className="text-xs bg-emerald-500/10 border-emerald-500/20 text-emerald-300">
+              <Badge key={type} variant="default" className="text-xs bg-emerald-500/10 border-emerald-500/20 text-emerald-700">
                 {TYPE_LABELS[type] ?? type}: {n}
               </Badge>
             ))}
@@ -133,7 +133,7 @@ export default function AnonymizePage() {
                   <tbody className="font-mono">
                     {result.replacements.map((r, i) => (
                       <tr key={i} className="border-t border-[#e2e4ec]/60">
-                        <td className="py-1 pr-4 text-emerald-400 whitespace-nowrap">{r.placeholder}</td>
+                        <td className="py-1 pr-4 text-emerald-600 whitespace-nowrap">{r.placeholder}</td>
                         <td className="py-1 text-[#c8c8e0] break-all">{r.original}</td>
                       </tr>
                     ))}

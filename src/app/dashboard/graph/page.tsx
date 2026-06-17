@@ -194,7 +194,7 @@ export default function GraphPage() {
             <Network size={40} className="text-[#e2e4ec] mb-4" />
             <h3 className="text-lg font-semibold text-[#15151d] mb-2">Graph ist leer</h3>
             <p className="text-sm text-[#585866] mb-2">Lade Dokumente hoch um den Wissensgraph zu befüllen</p>
-            {error && <p className="text-xs text-red-400">{error}</p>}
+            {error && <p className="text-xs text-red-600">{error}</p>}
           </div>
         ) : (
           <>
@@ -277,7 +277,7 @@ export default function GraphPage() {
           <div className="space-y-4">
             <div>
               <p className="text-xs text-[#585866] uppercase tracking-wider mb-2">Slug</p>
-              <p className="text-sm font-mono text-violet-400 bg-violet-500/10 px-3 py-2 rounded-lg">{selected.id}</p>
+              <p className="text-sm font-mono text-violet-600 bg-violet-500/10 px-3 py-2 rounded-lg">{selected.id}</p>
             </div>
             <div>
               <p className="text-xs text-[#585866] uppercase tracking-wider mb-2">Verbindungen</p>
@@ -297,7 +297,7 @@ export default function GraphPage() {
                 const otherNode = nodes.find((n) => n.id === other);
                 return (
                   <div key={i} className="flex items-center gap-2 text-xs mb-2">
-                    <span className="font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded">{link.type}</span>
+                    <span className="font-mono text-violet-600 bg-violet-500/10 px-2 py-0.5 rounded">{link.type}</span>
                     <span className="text-[#585866]">→</span>
                     <span className="text-[#15151d]">{otherNode?.name || other}</span>
                   </div>

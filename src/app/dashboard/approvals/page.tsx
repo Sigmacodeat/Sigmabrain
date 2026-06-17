@@ -112,7 +112,7 @@ export default function ApprovalsPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center" aria-hidden="true">
-          <Gavel size={20} className="text-violet-400" />
+          <Gavel size={20} className="text-violet-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Freigaben</h1>
@@ -122,8 +122,8 @@ export default function ApprovalsPage() {
 
       {/* Honest framing */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl border border-violet-500/20 bg-violet-500/5" role="note">
-        <Info size={16} className="text-violet-400 shrink-0 mt-0.5" aria-hidden="true" />
-        <p className="text-xs text-violet-300/90 leading-relaxed">
+        <Info size={16} className="text-violet-600 shrink-0 mt-0.5" aria-hidden="true" />
+        <p className="text-xs text-violet-700/90 leading-relaxed">
           Risikoreiche Aktionen (Schriftsatz freigeben, Frist notieren, Buchung, Versand) werden
           <strong> nicht autonom </strong> wirksam. Sie landen hier und brauchen die Freigabe einer
           zweiten Person — berufsrechtliche Letztverantwortung + EU-AI-Act-Aufsichtspflicht
@@ -131,18 +131,18 @@ export default function ApprovalsPage() {
         </p>
       </div>
 
-      {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
+      {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
 
       {loading ? (
         <div className="flex items-center justify-center py-20" role="status" aria-label="Lädt">
-          <Loader2 size={24} className="text-violet-400 animate-spin" aria-hidden="true" />
+          <Loader2 size={24} className="text-violet-600 animate-spin" aria-hidden="true" />
         </div>
       ) : (
         <>
           {/* Offen */}
           <section className="space-y-2">
             <div className="flex items-center gap-2">
-              <Clock size={14} className="text-amber-400" aria-hidden="true" />
+              <Clock size={14} className="text-amber-600" aria-hidden="true" />
               <h2 className="text-sm font-semibold text-[#15151d]">Offen ({pending.length})</h2>
             </div>
             {pending.length === 0 ? (
@@ -153,7 +153,7 @@ export default function ApprovalsPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <Badge variant="default" className="text-[10px] border bg-violet-500/10 text-violet-400 border-violet-500/20">
+                        <Badge variant="default" className="text-[10px] border bg-violet-500/10 text-violet-600 border-violet-500/20">
                           {ACTION_LABELS[item.action_type]}
                         </Badge>
                         <span className="text-sm font-medium text-[#15151d] truncate">{item.summary}</span>
@@ -165,7 +165,7 @@ export default function ApprovalsPage() {
                       {item.target_slug && (
                         <a
                           href={`/dashboard/brain/${encodeURIComponent(item.target_slug)}`}
-                          className="inline-flex items-center gap-1 mt-1.5 text-xs text-violet-400 hover:underline font-mono"
+                          className="inline-flex items-center gap-1 mt-1.5 text-xs text-violet-600 hover:underline font-mono"
                         >
                           <FileText size={11} aria-hidden="true" /> {item.target_slug}
                         </a>
@@ -213,7 +213,7 @@ export default function ApprovalsPage() {
                       <button
                         onClick={() => { setRejecting(item.slug); setReason(""); }}
                         disabled={busy === item.slug}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e2e4ec] text-xs text-[#585866] hover:text-red-400 hover:border-red-500/30 disabled:opacity-60"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e2e4ec] text-xs text-[#585866] hover:text-red-600 hover:border-red-500/30 disabled:opacity-60"
                       >
                         <XCircle size={13} />
                         Ablehnen
@@ -236,9 +236,9 @@ export default function ApprovalsPage() {
                 <div key={item.slug} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     {item.status === "approved" ? (
-                      <Badge variant="default" className="text-[10px] border bg-emerald-500/10 text-emerald-400 border-emerald-500/20">Freigegeben</Badge>
+                      <Badge variant="default" className="text-[10px] border bg-emerald-500/10 text-emerald-600 border-emerald-500/20">Freigegeben</Badge>
                     ) : (
-                      <Badge variant="default" className="text-[10px] border bg-red-500/10 text-red-400 border-red-500/20">Abgelehnt</Badge>
+                      <Badge variant="default" className="text-[10px] border bg-red-500/10 text-red-600 border-red-500/20">Abgelehnt</Badge>
                     )}
                     <span className="text-sm text-[#15151d] truncate">{item.summary}</span>
                   </div>
@@ -247,7 +247,7 @@ export default function ApprovalsPage() {
                     {item.decided_at ? new Date(item.decided_at).toLocaleString("de-DE") : ""}
                   </p>
                   {item.reject_reason && (
-                    <p className="text-xs text-red-400/80 mt-1">Grund: {item.reject_reason}</p>
+                    <p className="text-xs text-red-600/80 mt-1">Grund: {item.reject_reason}</p>
                   )}
                 </div>
               ))}

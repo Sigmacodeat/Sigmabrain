@@ -65,7 +65,7 @@ export default function NormsPage() {
     <Suspense
       fallback={
         <div className="flex items-center justify-center py-20" role="status" aria-label="Wird geladen">
-          <Loader2 size={24} className="text-violet-400 animate-spin" aria-hidden="true" />
+          <Loader2 size={24} className="text-violet-600 animate-spin" aria-hidden="true" />
         </div>
       }
     >
@@ -197,7 +197,7 @@ function NormsPageInner() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center">
-          <BookOpen size={20} className="text-blue-400" />
+          <BookOpen size={20} className="text-blue-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Normen</h1>
@@ -229,7 +229,7 @@ function NormsPageInner() {
               onClick={() => setJurisdiction(j)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
                 jurisdiction === j
-                  ? "bg-violet-600/15 border-violet-500/30 text-violet-400"
+                  ? "bg-violet-600/15 border-violet-500/30 text-violet-600"
                   : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:border-[#b4b9c8] hover:text-[#15151d]"
               }`}
             >
@@ -258,13 +258,13 @@ function NormsPageInner() {
               <div>
                 <h2 className="text-lg font-bold text-[#15151d]">{selectedNorm.title}</h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="default" className="text-[10px] bg-blue-600/10 border-blue-500/20 text-blue-400">
+                  <Badge variant="default" className="text-[10px] bg-blue-600/10 border-blue-500/20 text-blue-600">
                     {CODE_LABELS[selectedNorm.code] || selectedNorm.code.toUpperCase()}
                   </Badge>
                   <Badge variant="default" className={`text-[10px] border ${
-                    selectedNorm.jurisdiction === "at" ? "bg-red-500/10 border-red-500/20 text-red-400" :
-                    selectedNorm.jurisdiction === "ch" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
-                    "bg-blue-500/10 border-blue-500/20 text-blue-400"
+                    selectedNorm.jurisdiction === "at" ? "bg-red-500/10 border-red-500/20 text-red-600" :
+                    selectedNorm.jurisdiction === "ch" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600" :
+                    "bg-blue-500/10 border-blue-500/20 text-blue-600"
                   }`}>
                     {selectedNorm.jurisdiction === "at" ? "🇦🇹 Österreich" :
                      selectedNorm.jurisdiction === "ch" ? "🇨🇭 Schweiz" : "🇩🇪 Deutschland"}
@@ -278,17 +278,17 @@ function NormsPageInner() {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#eceef3] border border-[#e2e4ec] text-[#585866] hover:text-violet-400 hover:border-violet-500/30 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#eceef3] border border-[#e2e4ec] text-[#585866] hover:text-violet-600 hover:border-violet-500/30 transition-all"
               title="Text kopieren"
             >
-              {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+              {copied ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
               {copied ? "Kopiert" : "Kopieren"}
             </button>
           </div>
           <div className="text-sm text-[#585866] whitespace-pre-wrap leading-relaxed max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-lg p-4 border border-[#e2e4ec]">
             {detailLoading ? (
               <div className="flex items-center gap-2 py-4">
-                <Loader2 size={14} className="animate-spin text-violet-400" />
+                <Loader2 size={14} className="animate-spin text-violet-600" />
                 <span className="text-xs text-[#585866]">Gesetzestext wird geladen…</span>
               </div>
             ) : (
@@ -299,7 +299,7 @@ function NormsPageInner() {
       )}
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
@@ -317,7 +317,7 @@ function NormsPageInner() {
       {/* Norm list grouped by code */}
       {loading ? (
         <div className="flex items-center justify-center py-20" role="status" aria-label="Wird geladen">
-          <Loader2 size={24} className="text-violet-400 animate-spin" />
+          <Loader2 size={24} className="text-violet-600 animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 space-y-3">
@@ -350,7 +350,7 @@ function NormsPageInner() {
                     {n.jurisdiction && (
                       <span className="text-[10px] text-[#585866] bg-[#e2e4ec] px-1.5 py-0.5 rounded uppercase">{n.jurisdiction}</span>
                     )}
-                    <ChevronRight size={12} className="text-[#585866] group-hover:text-violet-400 shrink-0" />
+                    <ChevronRight size={12} className="text-[#585866] group-hover:text-violet-600 shrink-0" />
                   </button>
                 ))}
               </div>

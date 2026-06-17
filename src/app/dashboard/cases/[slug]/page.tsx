@@ -397,7 +397,7 @@ export default function CaseDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 size={24} className="text-violet-400 animate-spin" />
+        <Loader2 size={24} className="text-violet-600 animate-spin" />
       </div>
     );
   }
@@ -425,18 +425,18 @@ export default function CaseDetailPage() {
       {/* Save errors must be visible (tasks/time entries would silently vanish) */}
       <div aria-live="assertive">
         {saveError && (
-          <div className="flex items-center gap-2 px-6 py-2 bg-red-500/10 border-b border-red-500/20 text-sm text-red-400" role="alert">
+          <div className="flex items-center gap-2 px-6 py-2 bg-red-500/10 border-b border-red-500/20 text-sm text-red-600" role="alert">
             <AlertTriangle size={14} aria-hidden="true" />
             {saveError}
           </div>
         )}
         {conflictWarning && (
-          <div className="flex items-center gap-2 px-6 py-2 bg-amber-500/10 border-b border-amber-500/20 text-sm text-amber-400" role="alert">
+          <div className="flex items-center gap-2 px-6 py-2 bg-amber-500/10 border-b border-amber-500/20 text-sm text-amber-600" role="alert">
             <AlertTriangle size={14} aria-hidden="true" />
             {conflictWarning}
             <button
               onClick={() => window.location.reload()}
-              className="ml-auto text-xs text-violet-400 hover:underline"
+              className="ml-auto text-xs text-violet-600 hover:underline"
             >
               Jetzt aktualisieren
             </button>
@@ -463,10 +463,10 @@ export default function CaseDetailPage() {
               <h1 className="text-lg font-bold text-[#15151d]">{caseData.title}</h1>
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="default" className={cn("text-[10px] border",
-                  caseData.priority === "critical" ? "bg-red-500/10 text-red-400 border-red-500/20" :
-                  caseData.priority === "high" ? "bg-amber-500/10 text-amber-400 border-amber-500/20" :
+                  caseData.priority === "critical" ? "bg-red-500/10 text-red-600 border-red-500/20" :
+                  caseData.priority === "high" ? "bg-amber-500/10 text-amber-600 border-amber-500/20" :
                   caseData.priority === "low" ? "bg-gray-500/10 text-gray-400 border-gray-500/20" :
-                  "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                  "bg-blue-500/10 text-blue-600 border-blue-500/20"
                 )}>
                   {caseData.priority}
                 </Badge>
@@ -496,7 +496,7 @@ export default function CaseDetailPage() {
             <span className="flex items-center gap-1">
               <Users size={10} />Mandant:{" "}
               {caseData.clientSlug ? (
-                <Link href={`/dashboard/contacts?highlight=${encodeURIComponent(caseData.clientSlug)}`} className="text-violet-400 hover:underline">{caseData.clientName}</Link>
+                <Link href={`/dashboard/contacts?highlight=${encodeURIComponent(caseData.clientSlug)}`} className="text-violet-600 hover:underline">{caseData.clientName}</Link>
               ) : (
                 <span className="text-[#585866]">{caseData.clientName}</span>
               )}
@@ -526,7 +526,7 @@ export default function CaseDetailPage() {
                 className={cn(
                   "flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-all whitespace-nowrap",
                   activeTab === tab.key
-                    ? "border-violet-400 text-violet-400"
+                    ? "border-violet-400 text-violet-600"
                     : "border-transparent text-[#585866] hover:text-[#15151d]"
                 )}
               >
@@ -567,7 +567,7 @@ export default function CaseDetailPage() {
                       className={cn(
                         "border text-sm",
                         caseData.portalEnabled
-                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/15"
+                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/15"
                           : "bg-[#eceef3] border-[#e2e4ec] text-[#15151d] hover:bg-[#1a1a3a]"
                       )}
                       onClick={() => {
@@ -622,12 +622,12 @@ export default function CaseDetailPage() {
                 {/* Portal link display */}
                 {portalUrl && (userRole === "admin" || userRole === "lawyer") && (
                   <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 space-y-2">
-                    <p className="text-xs text-emerald-400 font-medium mb-1">Portal-Link (30 Tage gültig)</p>
+                    <p className="text-xs text-emerald-600 font-medium mb-1">Portal-Link (30 Tage gültig)</p>
                     <div className="flex items-center gap-2">
                       <code className="text-xs font-mono text-[#585866] flex-1 break-all">{portalUrl}</code>
                       <button
                         onClick={() => { navigator.clipboard.writeText(portalUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-                        className="text-xs text-violet-400 hover:underline shrink-0"
+                        className="text-xs text-violet-600 hover:underline shrink-0"
                       >
                         {copied ? "Kopiert" : "Kopieren"}
                       </button>
@@ -651,7 +651,7 @@ export default function CaseDetailPage() {
                             setSaveError("Portal-Link konnte nicht widerrufen werden.");
                           }
                         }}
-                        className="text-xs text-red-400 hover:underline shrink-0"
+                        className="text-xs text-red-600 hover:underline shrink-0"
                       >
                         Widerrufen
                       </button>
@@ -726,9 +726,9 @@ export default function CaseDetailPage() {
                 <p className="text-xs text-[#585866]">Kontakte werden geladen…</p>
               )}
               {contacts.length === 0 && !contactsLoading && (
-                <p className="text-xs text-amber-400">
+                <p className="text-xs text-amber-600">
                   Noch keine Kontakte angelegt.{" "}
-                  <Link href="/dashboard/contacts" className="text-violet-400 hover:underline">Kontakt anlegen →</Link>
+                  <Link href="/dashboard/contacts" className="text-violet-600 hover:underline">Kontakt anlegen →</Link>
                 </p>
               )}
             </div>
@@ -756,7 +756,7 @@ export default function CaseDetailPage() {
                 <ul className="space-y-1.5">
                   {caseData.claims.map((claim, i) => (
                     <li key={i} className="text-sm text-[#585866] flex items-start gap-2">
-                      <span className="text-violet-400 mt-0.5">•</span>
+                      <span className="text-violet-600 mt-0.5">•</span>
                       {claim}
                     </li>
                   ))}
@@ -771,7 +771,7 @@ export default function CaseDetailPage() {
                 <ul className="space-y-1.5">
                   {caseData.defenses.map((def, i) => (
                     <li key={i} className="text-sm text-[#585866] flex items-start gap-2">
-                      <span className="text-emerald-400 mt-0.5">•</span>
+                      <span className="text-emerald-600 mt-0.5">•</span>
                       {def}
                     </li>
                   ))}
@@ -782,11 +782,11 @@ export default function CaseDetailPage() {
             {/* Strategy */}
             {caseData.strategy && (
               <div className="rounded-xl border border-violet-500/20 bg-violet-600/5 p-4">
-                <h3 className="text-sm font-semibold text-violet-400 mb-2">Empfohlene Strategie</h3>
+                <h3 className="text-sm font-semibold text-violet-600 mb-2">Empfohlene Strategie</h3>
                 <p className="text-sm text-[#585866] mb-3">{caseData.strategy.recommended}</p>
                 {caseData.strategy.risks && caseData.strategy.risks.length > 0 && (
                   <div className="mt-3">
-                    <h4 className="text-xs font-semibold text-red-400 mb-1">Risiken</h4>
+                    <h4 className="text-xs font-semibold text-red-600 mb-1">Risiken</h4>
                     <ul className="space-y-1">
                       {(caseData.strategy.risks ?? []).map((r, i) => (
                         <li key={i} className="text-xs text-[#585866]">
@@ -909,7 +909,7 @@ export default function CaseDetailPage() {
             </div>
 
             {uploadError && (
-              <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+              <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
                 {uploadError}
               </div>
             )}
@@ -924,7 +924,7 @@ export default function CaseDetailPage() {
               <div className="space-y-2">
                 {caseData.documents.map((doc) => (
                   <div key={doc.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-[#e2e4ec] bg-[#ffffff]">
-                    <FileText size={16} className="text-violet-400 shrink-0" />
+                    <FileText size={16} className="text-violet-600 shrink-0" />
 	                    <div className="flex-1 min-w-0">
 	                      <div className="text-sm text-[#15151d] truncate">{doc.name}</div>
 	                      <div className="text-xs text-[#585866]">
@@ -936,7 +936,7 @@ export default function CaseDetailPage() {
                       {(doc.slug || doc.url) && (
                         <Link
                           href={`/dashboard/brain/${encodeURIComponent(doc.slug || doc.url || "")}`}
-                          className="text-[#585866] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
+                          className="text-[#585866] hover:text-violet-600 transition-colors px-2 py-1 text-xs"
                         >
                           Öffnen
                         </Link>
@@ -947,7 +947,7 @@ export default function CaseDetailPage() {
                         setCaseData({ ...caseData, documents: updated });
                         saveCaseUpdate({ documents: updated });
                       }}
-                      className="text-[#585866] hover:text-red-400 transition-colors"
+                      className="text-[#585866] hover:text-red-600 transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -1028,10 +1028,10 @@ export default function CaseDetailPage() {
               <div className="rounded-lg border border-violet-500/20 bg-violet-500/5 p-3 space-y-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs font-medium text-violet-400">Frist aus Regel berechnen</p>
+                    <p className="text-xs font-medium text-violet-600">Frist aus Regel berechnen</p>
                     <p className="text-[11px] text-[#585866]">Erzeugt eine prüfbare Frist mit Rechtsgrundlage und Audit-Eintrag.</p>
                   </div>
-                  <Badge variant="default" className="text-[10px] bg-violet-500/10 border-violet-500/20 text-violet-400">
+                  <Badge variant="default" className="text-[10px] bg-violet-500/10 border-violet-500/20 text-violet-600">
                     Review erforderlich
                   </Badge>
                 </div>
@@ -1109,10 +1109,10 @@ export default function CaseDetailPage() {
             <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles size={16} className="text-blue-400" />
-                  <span className="text-sm font-medium text-blue-400">KI-Fristen-Erkennung</span>
+                  <Sparkles size={16} className="text-blue-600" />
+                  <span className="text-sm font-medium text-blue-600">KI-Fristen-Erkennung</span>
                 </div>
-                <Badge variant="default" className="text-[10px] bg-blue-500/10 border-blue-500/20 text-blue-400">Beta</Badge>
+                <Badge variant="default" className="text-[10px] bg-blue-500/10 border-blue-500/20 text-blue-600">Beta</Badge>
               </div>
               <p className="text-xs text-[#585866]">
                 Fügen Sie E-Mail-Text oder ein Schriftstück ein — die KI erkennt automatisch Fristen und Termine.
@@ -1173,13 +1173,13 @@ export default function CaseDetailPage() {
                         <div className="text-xs text-[#585866]">{d.date} · {d.type}</div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <Badge variant="default" className="text-[10px] bg-emerald-500/10 border-emerald-500/20 text-emerald-400">
+                        <Badge variant="default" className="text-[10px] bg-emerald-500/10 border-emerald-500/20 text-emerald-600">
                           {Math.round(d.confidence * 100)}%
                         </Badge>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="text-xs border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10"
+                          className="text-xs border-emerald-500/30 text-emerald-600 hover:bg-emerald-500/10"
                           onClick={() => {
                             const entry: DeadlineEntry = {
                               id: `dl-${Date.now()}`,
@@ -1226,11 +1226,11 @@ export default function CaseDetailPage() {
 	                    isCritical ? "critical" :
 	                    isWarning ? "warning" : "pending";
                   const statusConfig: Record<string, { label: string; color: string; border: string }> = {
-                    pending: { label: "Ausstehend", color: "text-blue-400", border: "border-blue-500/20 bg-blue-500/5" },
-                    warning: { label: "Bald fällig", color: "text-amber-400", border: "border-amber-500/20 bg-amber-500/5" },
-                    critical: { label: "Kritisch", color: "text-red-400", border: "border-red-500/20 bg-red-500/5" },
-                    overdue: { label: "Überfällig", color: "text-rose-400", border: "border-rose-500/20 bg-rose-500/5" },
-                    done: { label: "Erledigt", color: "text-emerald-400", border: "border-emerald-500/20 bg-emerald-500/5" },
+                    pending: { label: "Ausstehend", color: "text-blue-600", border: "border-blue-500/20 bg-blue-500/5" },
+                    warning: { label: "Bald fällig", color: "text-amber-600", border: "border-amber-500/20 bg-amber-500/5" },
+                    critical: { label: "Kritisch", color: "text-red-600", border: "border-red-500/20 bg-red-500/5" },
+                    overdue: { label: "Überfällig", color: "text-rose-600", border: "border-rose-500/20 bg-rose-500/5" },
+                    done: { label: "Erledigt", color: "text-emerald-600", border: "border-emerald-500/20 bg-emerald-500/5" },
                   };
                   const cfg = statusConfig[status];
                   return (
@@ -1246,12 +1246,12 @@ export default function CaseDetailPage() {
                               className={cn(
                                 "text-[10px] border",
                                 dl.review_status === "approved"
-                                  ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                                  ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600"
                                   : dl.review_status === "rejected"
-                                  ? "bg-red-500/10 border-red-500/20 text-red-400"
+                                  ? "bg-red-500/10 border-red-500/20 text-red-600"
                                   : dl.review_status === "reviewed"
-                                  ? "bg-blue-500/10 border-blue-500/20 text-blue-400"
-                                  : "bg-amber-500/10 border-amber-500/20 text-amber-400"
+                                  ? "bg-blue-500/10 border-blue-500/20 text-blue-600"
+                                  : "bg-amber-500/10 border-amber-500/20 text-amber-600"
                               )}
                             >
                               {dl.review_status === "approved" ? "Freigegeben" : dl.review_status === "rejected" ? "Abgelehnt" : dl.review_status === "reviewed" ? "Geprüft" : "Ungeprüft"}
@@ -1271,13 +1271,13 @@ export default function CaseDetailPage() {
                                 setDeadlinesList(updated);
                                 saveCaseUpdate({ deadlines: updated });
                               }}
-                              className="text-[#585866] hover:text-emerald-400 transition-colors px-2 py-1 text-xs"
+                              className="text-[#585866] hover:text-emerald-600 transition-colors px-2 py-1 text-xs"
                             >
                               {dl.review_status === "approved" ? "Prüfung offen" : "Freigeben"}
                             </button>
 	                          <button
 	                            onClick={() => { setEditingDeadlineIndex(i); setDeadlineForm(dl); }}
-                            className="text-[#585866] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
+                            className="text-[#585866] hover:text-violet-600 transition-colors px-2 py-1 text-xs"
                           >
                             Bearbeiten
                           </button>
@@ -1287,7 +1287,7 @@ export default function CaseDetailPage() {
                               setDeadlinesList(updated);
                               saveCaseUpdate({ deadlines: updated });
                             }}
-                            className="text-[#585866] hover:text-red-400 transition-colors px-2 py-1"
+                            className="text-[#585866] hover:text-red-600 transition-colors px-2 py-1"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -1296,7 +1296,7 @@ export default function CaseDetailPage() {
                       <div className="flex items-center gap-3 text-xs text-[#585866]">
                         <span>{dlDate.toLocaleDateString("de-DE", { weekday: "short", day: "numeric", month: "long", year: "numeric" })}</span>
                         {!isOverdue && status !== "done" && <span className={cfg.color}>({daysUntil} Tage)</span>}
-                        {isOverdue && <span className="text-rose-400">({Math.abs(daysUntil)} Tage überfällig)</span>}
+                        {isOverdue && <span className="text-rose-600">({Math.abs(daysUntil)} Tage überfällig)</span>}
 	                        {dl.type && <Badge variant="default" className="text-[10px] bg-[#eceef3] border-[#e2e4ec] text-[#585866]">{dl.type === "deadline" ? "Frist" : dl.type === "hearing" ? "Verhandlung" : dl.type === "meeting" ? "Besprechung" : dl.type === "filing" ? "Schriftstück" : "Erinnerung"}</Badge>}
                           {dl.law && <Badge variant="default" className="text-[10px] bg-[#eceef3] border-[#e2e4ec] text-[#585866]">{dl.law}</Badge>}
 	                      </div>
@@ -1382,7 +1382,7 @@ export default function CaseDetailPage() {
                       className={cn(
                         "w-5 h-5 rounded border flex items-center justify-center transition-all shrink-0",
                         task.done
-                          ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-400"
+                          ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-600"
                           : "border-[#e2e4ec] hover:border-violet-500/30"
                       )}
                     >
@@ -1397,7 +1397,7 @@ export default function CaseDetailPage() {
                         setTasks(updated);
                         saveCaseUpdate({ tasks: updated });
                       }}
-                      className="text-[#585866] hover:text-red-400 transition-colors"
+                      className="text-[#585866] hover:text-red-600 transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -1414,10 +1414,10 @@ export default function CaseDetailPage() {
               {/* Case entity (center) */}
               <div className="md:col-span-2 rounded-xl border border-violet-500/20 bg-violet-600/5 p-4 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-violet-600/15 flex items-center justify-center">
-                  <Briefcase size={20} className="text-violet-400" />
+                  <Briefcase size={20} className="text-violet-600" />
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-violet-400">{caseData.title}</div>
+                  <div className="text-sm font-semibold text-violet-600">{caseData.title}</div>
                   <div className="text-xs text-[#585866]">{caseData.caseNumber} · {caseData.legalArea}</div>
                 </div>
               </div>
@@ -1426,7 +1426,7 @@ export default function CaseDetailPage() {
               {caseData.clientName && (
                 <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-emerald-600/15 flex items-center justify-center">
-                    <Users size={20} className="text-emerald-400" />
+                    <Users size={20} className="text-emerald-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-[#585866]">Mandant</div>
@@ -1439,7 +1439,7 @@ export default function CaseDetailPage() {
               {caseData.opponentName && (
                 <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-red-600/15 flex items-center justify-center">
-                    <ShieldAlert size={20} className="text-red-400" />
+                    <ShieldAlert size={20} className="text-red-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-[#585866]">Gegner</div>
@@ -1452,7 +1452,7 @@ export default function CaseDetailPage() {
               {caseData.courtName && (
                 <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-600/15 flex items-center justify-center">
-                    <Landmark size={20} className="text-blue-400" />
+                    <Landmark size={20} className="text-blue-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-[#585866]">Gericht</div>
@@ -1465,7 +1465,7 @@ export default function CaseDetailPage() {
               {caseData.ownLawyerName && (
                 <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-amber-600/15 flex items-center justify-center">
-                    <User size={20} className="text-amber-400" />
+                    <User size={20} className="text-amber-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-[#585866]">Anwalt</div>
@@ -1478,7 +1478,7 @@ export default function CaseDetailPage() {
               {caseData.claims.length > 0 && (
                 <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-violet-600/15 flex items-center justify-center">
-                    <Scale size={20} className="text-violet-400" />
+                    <Scale size={20} className="text-violet-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-[#585866]">Ansprüche</div>
@@ -1491,7 +1491,7 @@ export default function CaseDetailPage() {
               {evidenceList.length > 0 && (
                 <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-orange-600/15 flex items-center justify-center">
-                    <ShieldAlert size={20} className="text-orange-400" />
+                    <ShieldAlert size={20} className="text-orange-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-[#585866]">Beweismittel</div>
@@ -1517,7 +1517,7 @@ export default function CaseDetailPage() {
               {deadlinesList.length > 0 && (
                 <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-pink-600/15 flex items-center justify-center">
-                    <CalendarClock size={20} className="text-pink-400" />
+                    <CalendarClock size={20} className="text-pink-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-[#585866]">Fristen</div>
@@ -1536,7 +1536,7 @@ export default function CaseDetailPage() {
                     const citations = parseCitations(caseData.facts).filter((s) => s.isCitation).map((s) => s.text);
                     if (citations.length === 0) return <p className="text-xs text-[#585866]">Keine Normen im Sachverhalt zitiert.</p>;
                     return citations.map((c, i) => (
-                      <Link key={i} href={`/dashboard/norms?citation=${encodeURIComponent(c)}`} className="text-xs bg-violet-600/10 text-violet-400 border border-violet-500/20 rounded-lg px-2.5 py-1 hover:bg-violet-600/20 transition-colors">
+                      <Link key={i} href={`/dashboard/norms?citation=${encodeURIComponent(c)}`} className="text-xs bg-violet-600/10 text-violet-600 border border-violet-500/20 rounded-lg px-2.5 py-1 hover:bg-violet-600/20 transition-colors">
                         {c}
                       </Link>
                     ));
@@ -1662,7 +1662,7 @@ export default function CaseDetailPage() {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         {ev.type && (
-                          <Badge variant="default" className="text-[10px] bg-violet-600/5 border-violet-500/10 text-violet-400">
+                          <Badge variant="default" className="text-[10px] bg-violet-600/5 border-violet-500/10 text-violet-600">
                             {ev.type}
                           </Badge>
                         )}
@@ -1671,7 +1671,7 @@ export default function CaseDetailPage() {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => { setEditingEvidenceIndex(i); setEvidenceForm(ev); }}
-                          className="text-[#585866] hover:text-violet-400 transition-colors px-2 py-1 text-xs"
+                          className="text-[#585866] hover:text-violet-600 transition-colors px-2 py-1 text-xs"
                         >
                           Bearbeiten
                         </button>
@@ -1681,7 +1681,7 @@ export default function CaseDetailPage() {
                             setEvidenceList(updated);
                             saveCaseUpdate({ evidence: updated });
                           }}
-                          className="text-[#585866] hover:text-red-400 transition-colors px-2 py-1"
+                          className="text-[#585866] hover:text-red-600 transition-colors px-2 py-1"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -1730,7 +1730,7 @@ export default function CaseDetailPage() {
               <div className="flex items-center gap-3">
                 <div className={cn(
                   "text-2xl font-mono font-bold tracking-tight",
-                  timerRunning ? "text-emerald-400" : "text-[#585866]"
+                  timerRunning ? "text-emerald-600" : "text-[#585866]"
                 )}>
                   {String(Math.floor(elapsedSeconds / 60)).padStart(2, "0")}:{String(elapsedSeconds % 60).padStart(2, "0")}
                 </div>
@@ -1741,7 +1741,7 @@ export default function CaseDetailPage() {
                       setTimerStartAt(Date.now());
                       setElapsedSeconds(0);
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/15 text-emerald-400 border border-emerald-500/30 text-xs font-medium hover:bg-emerald-600/25 transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/15 text-emerald-600 border border-emerald-500/30 text-xs font-medium hover:bg-emerald-600/25 transition-all"
                   >
                     <Play size={14} /> Start
                   </button>
@@ -1755,7 +1755,7 @@ export default function CaseDetailPage() {
                       setElapsedSeconds(0);
                       setTimerMinutes(String(minutes));
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/15 text-red-400 border border-red-500/30 text-xs font-medium hover:bg-red-600/25 transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/15 text-red-600 border border-red-500/30 text-xs font-medium hover:bg-red-600/25 transition-all"
                   >
                     <Square size={14} /> Stop
                   </button>
@@ -1865,7 +1865,7 @@ export default function CaseDetailPage() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-sm text-[#15151d]">{entry.description}</span>
-                          {entry.activity_type && <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{entry.activity_type}</Badge>}
+                          {entry.activity_type && <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700">{entry.activity_type}</Badge>}
                           {entry.billed && <Badge variant="success" className="text-[10px]">abgerechnet</Badge>}
                           {entry.billable === false && <Badge variant="warning" className="text-[10px]">intern</Badge>}
                         </div>
@@ -1885,7 +1885,7 @@ export default function CaseDetailPage() {
                               setTimeEntries(updated);
                               saveCaseUpdate({ timeEntries: updated });
                             }}
-                            className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                            className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all"
                             title="Buchung löschen"
                           >
                             <Trash2 size={13} />
@@ -1991,7 +1991,7 @@ export default function CaseDetailPage() {
                               setExpensesList(updated);
                               saveCaseUpdate({ expenses: updated });
                             }}
-                            className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                            className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all"
                             title="Auslage löschen"
                           >
                             <Trash2 size={13} />
@@ -2078,12 +2078,12 @@ export default function CaseDetailPage() {
             {queryResult && (
               <div className="rounded-xl border border-violet-500/20 bg-violet-600/5 p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-violet-400 font-medium">KI-Antwort</span>
+                  <span className="text-xs text-violet-600 font-medium">KI-Antwort</span>
                   <button
                     onClick={() => copyToClipboard(queryResult)}
                     className="text-[#585866] hover:text-[#585866] transition-colors"
                   >
-                    {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                    {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
                   </button>
                 </div>
                 <div className="text-sm text-[#15151d] whitespace-pre-wrap leading-relaxed">

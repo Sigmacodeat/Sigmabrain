@@ -136,7 +136,7 @@ export default function CompliancePage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center" aria-hidden="true">
-          <ShieldCheck size={20} className="text-emerald-400" />
+          <ShieldCheck size={20} className="text-emerald-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Compliance-Selbstauskunft</h1>
@@ -146,8 +146,8 @@ export default function CompliancePage() {
 
       {/* Honest framing: this is a maintained checklist, not an automated audit */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5" role="note">
-        <Info size={16} className="text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />
-        <p className="text-xs text-amber-400 leading-relaxed">
+        <Info size={16} className="text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+        <p className="text-xs text-amber-600 leading-relaxed">
           Diese Checkliste ist eine <strong>Selbsteinschätzung</strong> und wird im Brain
           gespeichert. Sie ersetzt keine Datenschutz-Beratung und keine automatische Prüfung.
           Klicke auf einen Punkt, um den Status zu ändern (OK → Offen → Fehlt).
@@ -163,7 +163,7 @@ export default function CompliancePage() {
           className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all",
             activeTab === "dsgvo"
-              ? "bg-emerald-600/10 border-emerald-500/30 text-emerald-400"
+              ? "bg-emerald-600/10 border-emerald-500/30 text-emerald-600"
               : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
           )}
         >
@@ -177,7 +177,7 @@ export default function CompliancePage() {
           className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all",
             activeTab === "gwg"
-              ? "bg-blue-600/10 border-blue-500/30 text-blue-400"
+              ? "bg-blue-600/10 border-blue-500/30 text-blue-600"
               : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
           )}
         >
@@ -191,7 +191,7 @@ export default function CompliancePage() {
           className={cn(
             "flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all",
             activeTab === "gobd"
-              ? "bg-violet-600/10 border-violet-500/30 text-violet-400"
+              ? "bg-violet-600/10 border-violet-500/30 text-violet-600"
               : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
           )}
         >
@@ -203,15 +203,15 @@ export default function CompliancePage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-center">
-          <div className="text-xl font-bold text-emerald-400">{okCount}</div>
+          <div className="text-xl font-bold text-emerald-600">{okCount}</div>
           <div className="text-xs text-[#585866]">OK</div>
         </div>
         <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-center">
-          <div className="text-xl font-bold text-amber-400">{warnCount}</div>
+          <div className="text-xl font-bold text-amber-600">{warnCount}</div>
           <div className="text-xs text-[#585866]">Offen</div>
         </div>
         <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-center">
-          <div className="text-xl font-bold text-red-400">{failCount}</div>
+          <div className="text-xl font-bold text-red-600">{failCount}</div>
           <div className="text-xs text-[#585866]">Fehlt</div>
         </div>
       </div>
@@ -223,13 +223,13 @@ export default function CompliancePage() {
             <Loader2 size={12} className="animate-spin" aria-hidden="true" /> Speichert…
           </span>
         )}
-        {saveError && <span className="text-red-400">{saveError}</span>}
+        {saveError && <span className="text-red-600">{saveError}</span>}
       </div>
 
       {/* Checks list */}
       {loading ? (
         <div className="flex items-center justify-center py-20" role="status" aria-label="Checkliste wird geladen">
-          <Loader2 size={24} className="text-violet-400 animate-spin" aria-hidden="true" />
+          <Loader2 size={24} className="text-violet-600 animate-spin" aria-hidden="true" />
         </div>
       ) : (
         <div className="space-y-2">
@@ -252,11 +252,11 @@ export default function CompliancePage() {
               >
                 <div className="shrink-0 mt-0.5" aria-hidden="true">
                   {status === "ok" ? (
-                    <CheckCircle2 size={16} className="text-emerald-400" />
+                    <CheckCircle2 size={16} className="text-emerald-600" />
                   ) : status === "warn" ? (
-                    <AlertTriangle size={16} className="text-amber-400" />
+                    <AlertTriangle size={16} className="text-amber-600" />
                   ) : (
-                    <XCircle size={16} className="text-red-400" />
+                    <XCircle size={16} className="text-red-600" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -265,10 +265,10 @@ export default function CompliancePage() {
                     <Badge variant="default" className={cn(
                       "text-[10px] border",
                       status === "ok"
-                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                        ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
                         : status === "warn"
-                        ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                        : "bg-red-500/10 text-red-400 border-red-500/20"
+                        ? "bg-amber-500/10 text-amber-600 border-amber-500/20"
+                        : "bg-red-500/10 text-red-600 border-red-500/20"
                     )}>
                       {STATUS_LABEL[status]}
                     </Badge>

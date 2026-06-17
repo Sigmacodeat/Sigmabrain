@@ -43,7 +43,7 @@ function UsageCard() {
       <div className="p-6 space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2.5">
-            <Gauge size={16} className="text-violet-400" aria-hidden />
+            <Gauge size={16} className="text-violet-600" aria-hidden />
             <h2 className="text-sm font-semibold text-[#15151d]">Verbrauch (Fair Use)</h2>
           </div>
           {usage.shared && <Badge>Team-Pool</Badge>}
@@ -55,7 +55,7 @@ function UsageCard() {
             <div key={row.label}>
               <div className="flex items-baseline justify-between mb-1.5">
                 <span className="text-xs text-[#585866]">{row.label}</span>
-                <span className={`text-xs font-mono ${warn ? "text-amber-400" : "text-[#585866]"}`}>
+                <span className={`text-xs font-mono ${warn ? "text-amber-600" : "text-[#585866]"}`}>
                   {row.used.toLocaleString("de-DE")} / {row.max.toLocaleString("de-DE")}
                 </span>
               </div>
@@ -174,20 +174,20 @@ function BillingInner() {
 
       {status === "success" && (
         <div className="flex items-center gap-3 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10">
-          <Sparkles size={16} className="text-emerald-400" />
-          <p className="text-sm text-emerald-300">Zahlung erfolgreich — dein Plan wird in Kürze aktualisiert.</p>
+          <Sparkles size={16} className="text-emerald-600" />
+          <p className="text-sm text-emerald-700">Zahlung erfolgreich — dein Plan wird in Kürze aktualisiert.</p>
         </div>
       )}
       {status === "cancelled" && (
         <div className="flex items-center gap-3 p-4 rounded-xl border border-amber-500/30 bg-amber-500/10">
-          <AlertTriangle size={16} className="text-amber-400" />
-          <p className="text-sm text-amber-300">Checkout abgebrochen — dein bisheriger Plan bleibt aktiv.</p>
+          <AlertTriangle size={16} className="text-amber-600" />
+          <p className="text-sm text-amber-700">Checkout abgebrochen — dein bisheriger Plan bleibt aktiv.</p>
         </div>
       )}
       {notice && (
         <div className="flex items-start gap-3 p-4 rounded-xl border border-blue-500/30 bg-blue-500/10">
-          <CreditCard size={16} className="text-blue-400 shrink-0 mt-0.5" />
-          <p className="text-sm text-blue-300">{notice}</p>
+          <CreditCard size={16} className="text-blue-600 shrink-0 mt-0.5" />
+          <p className="text-sm text-blue-700">{notice}</p>
         </div>
       )}
 
@@ -208,7 +208,7 @@ function BillingInner() {
           </div>
           {typeof me?.referrals === "number" && (
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
-              <Gift size={16} className="text-amber-400" />
+              <Gift size={16} className="text-amber-600" />
               <div>
                 <p className="text-sm font-semibold text-[#15151d]">{me.referrals} Empfehlung{me.referrals === 1 ? "" : "en"}</p>
                 <p className="text-xs text-[#585866]">= {me.referrals} Gratismonat{me.referrals === 1 ? "" : "e"} verdient</p>
@@ -239,7 +239,7 @@ function BillingInner() {
               <ul className="space-y-2 flex-1 mb-6">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-xs text-[#585866]">
-                    <Check size={13} className="text-violet-400 shrink-0 mt-0.5" />
+                    <Check size={13} className="text-violet-600 shrink-0 mt-0.5" />
                     {f}
                   </li>
                 ))}
@@ -262,7 +262,7 @@ function BillingInner() {
 
       <p className="text-xs text-[#585866]">
         Enterprise (EU-/On-Prem-Hosting, AVV, SSO)?{" "}
-        <a href="mailto:hello@sigmabrain.com" className="text-violet-400 hover:underline">Sprich mit uns</a>.
+        <a href="mailto:hello@sigmabrain.com" className="text-violet-600 hover:underline">Sprich mit uns</a>.
         Jahreszahlung −20 % — im Checkout wählbar.
       </p>
     </div>

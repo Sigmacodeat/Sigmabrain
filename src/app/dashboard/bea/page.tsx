@@ -133,7 +133,7 @@ export default function BeaPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center" aria-hidden="true">
-            <Mail size={20} className="text-blue-400" />
+            <Mail size={20} className="text-blue-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">beA — elektronischer Rechtsverkehr</h1>
@@ -153,8 +153,8 @@ export default function BeaPage() {
 
       {/* Honest framing: Sigmabrain does NOT send via beA */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5" role="note">
-        <Info size={16} className="text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />
-        <div className="text-sm text-amber-400">
+        <Info size={16} className="text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+        <div className="text-sm text-amber-600">
           <p className="font-medium mb-1">Kein Versand über Sigmabrain</p>
           <p className="text-xs leading-relaxed">
             Der beA-Versand erfordert eine zertifizierte beA-Software mit Anwalts-Signaturkarte.
@@ -166,7 +166,7 @@ export default function BeaPage() {
       </div>
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
@@ -180,7 +180,7 @@ export default function BeaPage() {
           className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4 space-y-4"
           onSubmit={(e) => { e.preventDefault(); void saveDraft(); }}
         >
-          <h2 className="text-sm font-semibold text-blue-400">Neuer beA-Entwurf</h2>
+          <h2 className="text-sm font-semibold text-blue-600">Neuer beA-Entwurf</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="bea-recipient" className="text-xs text-[#585866] block mb-1">Empfänger (Gericht/Behörde) *</label>
@@ -254,7 +254,7 @@ export default function BeaPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20" role="status" aria-label="beA-Nachrichten werden geladen">
-          <Loader2 size={24} className="text-blue-400 animate-spin" aria-hidden="true" />
+          <Loader2 size={24} className="text-blue-600 animate-spin" aria-hidden="true" />
         </div>
       ) : (
         <>
@@ -273,16 +273,16 @@ export default function BeaPage() {
                     className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff]"
                   >
                     <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0" aria-hidden="true">
-                      <FileText size={14} className="text-amber-400" />
+                      <FileText size={14} className="text-amber-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium text-[#15151d]">{msg.subject}</span>
-                        <Badge variant="default" className="text-[10px] bg-amber-500/10 text-amber-400 border-amber-500/20">
+                        <Badge variant="default" className="text-[10px] bg-amber-500/10 text-amber-600 border-amber-500/20">
                           Entwurf
                         </Badge>
                         {msg.aiGenerated && (
-                          <Badge variant="default" className="text-[10px] bg-amber-500/10 text-amber-300 border-amber-500/30">
+                          <Badge variant="default" className="text-[10px] bg-amber-500/10 text-amber-700 border-amber-500/30">
                             {AI_BADGE_LABEL}
                           </Badge>
                         )}
@@ -307,7 +307,7 @@ export default function BeaPage() {
                 <div className="text-sm text-[#585866] py-4 space-y-1">
                   <p>Keine importierten beA-Nachrichten.</p>
                   <p className="text-xs">
-                    Import einrichten: <code className="font-mono text-blue-400">gbrain connector add bea-import --watch-dir ~/Downloads/bea</code>
+                    Import einrichten: <code className="font-mono text-blue-600">gbrain connector add bea-import --watch-dir ~/Downloads/bea</code>
                   </p>
                 </div>
               ) : (
@@ -317,7 +317,7 @@ export default function BeaPage() {
                     className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff]"
                   >
                     <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0" aria-hidden="true">
-                      <Inbox size={14} className="text-blue-400" />
+                      <Inbox size={14} className="text-blue-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-sm font-medium text-[#15151d]">{msg.subject}</span>

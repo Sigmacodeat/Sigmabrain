@@ -272,7 +272,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const online = useNetworkStatus();
     if (online) return null;
     return (
-      <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg border border-red-500/20 bg-red-500/5 text-red-400 text-xs font-medium" title="Offline — Änderungen werden lokal zwischengespeichert">
+      <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg border border-red-500/20 bg-red-500/5 text-red-600 text-xs font-medium" title="Offline — Änderungen werden lokal zwischengespeichert">
         <CloudOff size={12} />
         Offline
       </div>
@@ -305,7 +305,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
       <div className="mx-3 mt-2 px-3 py-2 rounded-lg bg-amber-500/5 border border-amber-500/20">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-amber-400 font-medium">{pendingCount} Änderung(en) ausstehend</span>
+          <span className="text-xs text-amber-600 font-medium">{pendingCount} Änderung(en) ausstehend</span>
           <button
             onClick={() => void syncPending()}
             disabled={syncing}
@@ -367,7 +367,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <span className="text-xs text-[#585866]">Brain Status</span>
               <div className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs text-emerald-400">Active</span>
+                <span className="text-xs text-emerald-600">Active</span>
               </div>
             </div>
             <div className="text-xs text-[#585866] font-mono">{pages} pages · {entities} entities</div>
@@ -441,8 +441,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             dreamCycle ? "border-emerald-500/20 bg-emerald-500/[0.06]" : "border-amber-500/20 bg-amber-500/[0.06]"
           )}>
             <div className="flex items-center gap-2">
-              <Zap size={12} className={cn("shrink-0", dreamCycle ? "text-emerald-400" : "text-amber-400")} />
-              <span className={cn("text-xs font-semibold", dreamCycle ? "text-emerald-400" : "text-amber-400")}>Dream Cycle</span>
+              <Zap size={12} className={cn("shrink-0", dreamCycle ? "text-emerald-600" : "text-amber-600")} />
+              <span className={cn("text-xs font-semibold", dreamCycle ? "text-emerald-600" : "text-amber-600")}>Dream Cycle</span>
             </div>
             <p className="text-[11px] text-[#585866] mt-1 leading-snug">
               {dreamCycle
@@ -561,7 +561,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               onClick={logout}
               title="Abmelden"
               aria-label="Abmelden"
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all"
             >
               <LogOut size={15} />
             </button>

@@ -170,7 +170,7 @@ export default function BrainPage() {
               className={cn(
                 "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all",
                 filter === f.key
-                  ? "bg-violet-600/15 text-violet-400 border border-violet-500/20"
+                  ? "bg-violet-600/15 text-violet-600 border border-violet-500/20"
                   : "text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3]"
               )}
             >
@@ -193,7 +193,7 @@ export default function BrainPage() {
               className={cn(
                 "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all",
                 sort === s.key
-                  ? "bg-violet-600/15 text-violet-400 border border-violet-500/20"
+                  ? "bg-violet-600/15 text-violet-600 border border-violet-500/20"
                   : "text-[#585866] hover:text-[#15151d] hover:bg-[#eceef3]"
               )}
             >
@@ -238,7 +238,7 @@ export default function BrainPage() {
             {searching && (
               <>
                 <span>·</span>
-                <Loader2 size={14} className="animate-spin text-violet-400" />
+                <Loader2 size={14} className="animate-spin text-violet-600" />
               </>
             )}
           </div>
@@ -277,7 +277,7 @@ export default function BrainPage() {
                     className="flex items-center gap-4 p-4 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:border-[#b4b9c8] hover:bg-[#eceef3] transition-all group"
                   >
                     <div className="w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 bg-violet-500/10 border-violet-500/20">
-                      <TypeIcon size={16} className="text-violet-400" />
+                      <TypeIcon size={16} className="text-violet-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
@@ -320,7 +320,7 @@ export default function BrainPage() {
                         </div>
                       )}
                     </div>
-                    <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-400 transition-colors shrink-0" />
+                    <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-600 transition-colors shrink-0" />
                   </a>
                 );
               })}

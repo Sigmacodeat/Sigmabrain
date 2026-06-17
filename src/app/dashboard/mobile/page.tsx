@@ -63,7 +63,7 @@ export default function MobilePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 size={24} className="text-violet-400 animate-spin" />
+        <Loader2 size={24} className="text-violet-600 animate-spin" />
       </div>
     );
   }
@@ -73,7 +73,7 @@ export default function MobilePage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-teal-600/15 border border-teal-500/20 flex items-center justify-center">
-          <Smartphone size={20} className="text-teal-400" />
+          <Smartphone size={20} className="text-teal-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Mobile</h1>
@@ -98,9 +98,9 @@ export default function MobilePage() {
               f.available ? "border-emerald-500/20 bg-emerald-500/5" : "border-[#e2e4ec] bg-[#ffffff]"
             )}
           >
-            <f.icon size={18} className={cn("mx-auto mb-2", f.available ? "text-emerald-400" : "text-[#74748a]")} />
+            <f.icon size={18} className={cn("mx-auto mb-2", f.available ? "text-emerald-600" : "text-[#74748a]")} />
             <div className="text-xs text-[#585866]">{f.label}</div>
-            <div className={cn("text-xs font-medium", f.available ? "text-emerald-400" : "text-[#74748a]")}>
+            <div className={cn("text-xs font-medium", f.available ? "text-emerald-600" : "text-[#74748a]")}>
               {f.available ? "Verfügbar" : "Nicht verfügbar"}
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function MobilePage() {
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-teal-500/10 flex items-center justify-center">
-              <Bell size={18} className="text-teal-400" />
+              <Bell size={18} className="text-teal-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-[#15151d]">Push-Benachrichtigungen</p>
@@ -138,7 +138,7 @@ export default function MobilePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center">
-                <Camera size={18} className="text-violet-400" />
+                <Camera size={18} className="text-violet-600" />
               </div>
               <div>
                 <p className="text-sm font-medium text-[#15151d]">Dokumenten-Scan</p>
@@ -184,7 +184,7 @@ export default function MobilePage() {
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
-              <Fingerprint size={18} className="text-amber-400" />
+              <Fingerprint size={18} className="text-amber-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-[#15151d]">Biometrische Entsperrung</p>
@@ -208,7 +208,7 @@ export default function MobilePage() {
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <Share2 size={18} className="text-blue-400" />
+              <Share2 size={18} className="text-blue-600" />
             </div>
             <div>
               <p className="text-sm font-medium text-[#15151d]">Teilen</p>
@@ -231,9 +231,9 @@ export default function MobilePage() {
       {!caps?.isNative && (
         <div className="rounded-xl border border-teal-500/20 bg-teal-500/5 p-4">
           <div className="flex items-start gap-3">
-            <QrCode size={18} className="text-teal-400 shrink-0 mt-0.5" />
+            <QrCode size={18} className="text-teal-600 shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-teal-400 font-medium">Native App installieren</p>
+              <p className="text-sm text-teal-600 font-medium">Native App installieren</p>
               <p className="text-xs text-[#585866] mt-1">
                 Für Push, Biometrie und Kamera-Scan: Baue die Capacitor-App mit{" "}
                 <code className="font-mono text-xs bg-[#eceef3] px-1.5 py-0.5 rounded">bun run build:mobile</code>.

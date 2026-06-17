@@ -47,7 +47,7 @@ export default function SecuritySettingsPage() {
     <div className="p-6 max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-amber-600/15 border border-amber-500/20 flex items-center justify-center">
-          <Shield size={20} className="text-amber-400" />
+          <Shield size={20} className="text-amber-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Sicherheit</h1>
@@ -57,16 +57,16 @@ export default function SecuritySettingsPage() {
 
       {enabled ? (
         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 flex items-center gap-3">
-          <CheckCircle2 size={18} className="text-emerald-400" />
+          <CheckCircle2 size={18} className="text-emerald-600" />
           <div>
-            <p className="text-sm text-emerald-400 font-medium">2FA ist aktiviert</p>
+            <p className="text-sm text-emerald-600 font-medium">2FA ist aktiviert</p>
             <p className="text-xs text-[#585866]">Ihr Account ist durch TOTP-geschützt.</p>
           </div>
         </div>
       ) : (
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
           <div className="flex items-start gap-3">
-            <KeyRound size={16} className="text-amber-400 shrink-0 mt-0.5" />
+            <KeyRound size={16} className="text-amber-600 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm text-[#15151d] font-medium">Zwei-Faktor-Authentifizierung (2FA)</p>
               <p className="text-xs text-[#585866] mt-1">
@@ -116,7 +116,7 @@ export default function SecuritySettingsPage() {
           )}
 
           {error && (
-            <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs text-red-300 flex items-center gap-2">
+            <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs text-red-700 flex items-center gap-2">
               <AlertTriangle size={14} />
               {error}
             </div>

@@ -124,7 +124,7 @@ function CitationPill({ slug, title }: { slug: string; title: string }) {
     <a
       href={`/dashboard/brain/${encodeURIComponent(slug)}`}
       title={title}
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-violet-500/20 bg-violet-500/10 text-xs text-violet-400 hover:bg-violet-500/20 hover:border-violet-500/40 transition-all font-mono"
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-violet-500/20 bg-violet-500/10 text-xs text-violet-600 hover:bg-violet-500/20 hover:border-violet-500/40 transition-all font-mono"
     >
       <FileText size={10} />
       {slug}
@@ -152,13 +152,13 @@ function AssistantMessage({ msg }: { msg: Message }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-xs font-medium text-violet-400">Sigmabrain</span>
+          <span className="text-xs font-medium text-violet-600">Sigmabrain</span>
           {msg.isStreaming ? (
             <span className="text-xs text-[#585866]">antwortet…</span>
           ) : (
             // EU AI Act Art. 50: KI-synthetisierte Antwort sichtbar kennzeichnen.
             <>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-[10px] font-medium">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-700 text-[10px] font-medium">
                 {AI_BADGE_LABEL}
               </span>
               {/* Quellendeckung: Halluzinations-Vorsicht-Signal, keine Korrektheits-Garantie. */}
@@ -201,25 +201,25 @@ function AssistantMessage({ msg }: { msg: Message }) {
         {msg.gaps && msg.gaps.length > 0 && (
           <div className="mt-3 p-3 rounded-lg bg-amber-500/5 border border-amber-500/20">
             <div className="flex items-center gap-1.5 mb-2">
-              <AlertCircle size={13} className="text-amber-400" />
-              <span className="text-xs font-medium text-amber-400">Lücken im Brain</span>
+              <AlertCircle size={13} className="text-amber-600" />
+              <span className="text-xs font-medium text-amber-600">Lücken im Brain</span>
             </div>
             <div className="space-y-2">
               {msg.gaps.map((gap, i) => {
                 const lower = gap.toLowerCase();
                 const cat = lower.includes("frist") || lower.includes("termin") || lower.includes("deadline")
-                  ? { label: "Frist", icon: CalendarClock, color: "text-red-400", bg: "bg-red-500/5", border: "border-red-500/20" }
+                  ? { label: "Frist", icon: CalendarClock, color: "text-red-600", bg: "bg-red-500/5", border: "border-red-500/20" }
                   : lower.includes("gesetz") || lower.includes("norm") || lower.includes("§") || lower.includes("paragraph") || lower.includes("bgb") || lower.includes("zpo") || lower.includes("abgb") || lower.includes("avg")
-                  ? { label: "Norm", icon: BookOpen, color: "text-blue-400", bg: "bg-blue-500/5", border: "border-blue-500/20" }
+                  ? { label: "Norm", icon: BookOpen, color: "text-blue-600", bg: "bg-blue-500/5", border: "border-blue-500/20" }
                   : lower.includes("urteil") || lower.includes("entscheidung") || lower.includes("rspr") || lower.includes("rechtsprechung")
-                  ? { label: "Rechtsprechung", icon: Landmark, color: "text-violet-400", bg: "bg-violet-500/5", border: "border-violet-500/20" }
+                  ? { label: "Rechtsprechung", icon: Landmark, color: "text-violet-600", bg: "bg-violet-500/5", border: "border-violet-500/20" }
                   : lower.includes("beweis") || lower.includes("zeug") || lower.includes("gutachten")
-                  ? { label: "Beweis", icon: FileWarning, color: "text-orange-400", bg: "bg-orange-500/5", border: "border-orange-500/20" }
+                  ? { label: "Beweis", icon: FileWarning, color: "text-orange-600", bg: "bg-orange-500/5", border: "border-orange-500/20" }
                   : lower.includes("dokument") || lower.includes("schriftst") || lower.includes("vertrag")
                   ? { label: "Dokument", icon: FileText, color: "text-gray-400", bg: "bg-gray-500/5", border: "border-gray-500/20" }
                   : lower.includes("risiko") || lower.includes("haftung") || lower.includes("strafe") || lower.includes("versto")
-                  ? { label: "Risiko", icon: ShieldAlert, color: "text-rose-400", bg: "bg-rose-500/5", border: "border-rose-500/20" }
-                  : { label: "Allgemein", icon: Scale, color: "text-amber-400", bg: "bg-amber-500/5", border: "border-amber-500/20" };
+                  ? { label: "Risiko", icon: ShieldAlert, color: "text-rose-600", bg: "bg-rose-500/5", border: "border-rose-500/20" }
+                  : { label: "Allgemein", icon: Scale, color: "text-amber-600", bg: "bg-amber-500/5", border: "border-amber-500/20" };
                 const Icon = cat.icon;
                 return (
                   <div key={i} className={cn("flex items-start gap-2 rounded-lg border px-2.5 py-2", cat.bg, cat.border)}>
@@ -432,12 +432,12 @@ export default function QueryPage() {
                     )}
                   >
                     <div className="flex-1">
-                      <p className={cn("text-sm font-medium", queryMode === key ? "text-violet-400" : "text-[#15151d]")}>
+                      <p className={cn("text-sm font-medium", queryMode === key ? "text-violet-600" : "text-[#15151d]")}>
                         {val.label}
                       </p>
                       <p className="text-xs text-[#585866] mt-0.5">{val.desc}</p>
                     </div>
-                    {queryMode === key && <Check size={14} className="text-violet-400 shrink-0 mt-0.5" />}
+                    {queryMode === key && <Check size={14} className="text-violet-600 shrink-0 mt-0.5" />}
                   </button>
                 ))}
               </div>
@@ -462,7 +462,7 @@ export default function QueryPage() {
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center h-full text-center max-w-lg mx-auto">
             <div className="w-16 h-16 rounded-2xl bg-violet-600/20 border border-violet-500/20 flex items-center justify-center mb-6">
-              <Brain size={28} className="text-violet-400" />
+              <Brain size={28} className="text-violet-600" />
             </div>
             <h2 className="text-xl font-bold text-[#15151d] mb-2">Was möchtest du wissen?</h2>
             <p className="text-sm text-[#585866] mb-8 leading-relaxed">
@@ -471,7 +471,7 @@ export default function QueryPage() {
 
             <div className="w-full space-y-2">
               <div className="flex items-center gap-2 mb-3">
-                <Lightbulb size={13} className="text-amber-400" />
+                <Lightbulb size={13} className="text-amber-600" />
                 <span className="text-xs text-[#585866] font-medium uppercase tracking-wider">Beispiel-Queries</span>
               </div>
               {examples.map((q) => (

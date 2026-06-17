@@ -137,7 +137,7 @@ export default function AssistantPage() {
       <div className="p-4 border-b border-[#e2e4ec] flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-            <Bot size={16} className="text-violet-400" />
+            <Bot size={16} className="text-violet-600" />
           </div>
           <div>
             <h1 className="text-sm font-semibold text-[#15151d]">Legal Assistant</h1>
@@ -156,7 +156,7 @@ export default function AssistantPage() {
             <option value="ch">🇨🇭 CH</option>
             <option value="eu">🇪🇺 EU</option>
           </select>
-          <button onClick={clearChat} className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Chat löschen">
+          <button onClick={clearChat} className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all" title="Chat löschen">
             <Trash2 size={14} />
           </button>
         </div>
@@ -191,7 +191,7 @@ export default function AssistantPage() {
           <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
             {msg.role === "assistant" && (
               <div className="w-7 h-7 rounded-lg bg-violet-600/15 border border-violet-500/20 flex items-center justify-center shrink-0">
-                <Bot size={14} className="text-violet-400" />
+                <Bot size={14} className="text-violet-600" />
               </div>
             )}
             <div className={`max-w-[80%] space-y-1 ${msg.role === "user" ? "items-end" : "items-start"}`}>
@@ -223,7 +223,7 @@ export default function AssistantPage() {
                     <a
                       key={c.slug}
                       href={`/dashboard/brain/${c.slug.split("/").map(encodeURIComponent).join("/")}`}
-                      className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-[#eceef3] border border-[#e2e4ec] text-violet-400 hover:text-violet-300 hover:border-violet-500/30 transition-all"
+                      className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-[#eceef3] border border-[#e2e4ec] text-violet-600 hover:text-violet-700 hover:border-violet-500/30 transition-all"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -245,10 +245,10 @@ export default function AssistantPage() {
                       setCopiedId(msg.id);
                       setTimeout(() => setCopiedId(null), 2000);
                     }}
-                    className="flex items-center gap-1 hover:text-violet-400 transition-colors"
+                    className="flex items-center gap-1 hover:text-violet-600 transition-colors"
                     title="Antwort kopieren"
                   >
-                    {copiedId === msg.id ? <Check size={8} className="text-emerald-400" /> : <Copy size={8} />}
+                    {copiedId === msg.id ? <Check size={8} className="text-emerald-600" /> : <Copy size={8} />}
                     {copiedId === msg.id ? "Kopiert" : "Kopieren"}
                   </button>
                 )}
@@ -265,7 +265,7 @@ export default function AssistantPage() {
         {loading && messages[messages.length - 1]?.role !== "assistant" && (
           <div className="flex gap-3">
             <div className="w-7 h-7 rounded-lg bg-violet-600/15 border border-violet-500/20 flex items-center justify-center shrink-0">
-              <Loader2 size={14} className="text-violet-400 animate-spin" />
+              <Loader2 size={14} className="text-violet-600 animate-spin" />
             </div>
             <div className="text-sm text-[#585866]">Denke nach…</div>
           </div>
@@ -279,16 +279,16 @@ export default function AssistantPage() {
         {attachments.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {attachments.map((att) => (
-              <div key={att.slug} className="flex items-center gap-1.5 text-[10px] px-2 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-300">
+              <div key={att.slug} className="flex items-center gap-1.5 text-[10px] px-2 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-700">
                 <FileText size={10} /> {att.name}
-                <button onClick={() => setAttachments((a) => a.filter((x) => x.slug !== att.slug))} className="text-violet-400 hover:text-red-400"><X size={10} /></button>
+                <button onClick={() => setAttachments((a) => a.filter((x) => x.slug !== att.slug))} className="text-violet-600 hover:text-red-600"><X size={10} /></button>
               </div>
             ))}
           </div>
         )}
-        {error && <div className="text-xs text-red-400">{error}</div>}
+        {error && <div className="text-xs text-red-600">{error}</div>}
         <div className="flex items-end gap-2">
-          <label className="shrink-0 p-2 rounded-lg bg-[#eceef3] border border-[#e2e4ec] text-[#585866] hover:text-violet-400 hover:border-violet-500/30 cursor-pointer transition-all">
+          <label className="shrink-0 p-2 rounded-lg bg-[#eceef3] border border-[#e2e4ec] text-[#585866] hover:text-violet-600 hover:border-violet-500/30 cursor-pointer transition-all">
             <Upload size={16} />
             <input type="file" className="hidden" onChange={handleFileUpload} />
           </label>

@@ -55,9 +55,9 @@ const STATUS_CONFIG: Record<string, { label: string; icon: React.ElementType; co
 
 const PRIORITY_COLORS: Record<string, string> = {
   low: "bg-gray-500/10 text-gray-400 border-gray-500/20",
-  medium: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  high: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  critical: "bg-red-500/10 text-red-400 border-red-500/20",
+  medium: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+  high: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+  critical: "bg-red-500/10 text-red-600 border-red-500/20",
 };
 
 function parseCase(page: BrainPage): LegalCaseItem {
@@ -149,7 +149,7 @@ export default function CasesPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-            <Briefcase size={20} className="text-violet-400" />
+            <Briefcase size={20} className="text-violet-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Akten</h1>
@@ -205,7 +205,7 @@ export default function CasesPage() {
         {statusFilter !== "all" && (
           <Badge
             variant="default"
-            className="cursor-pointer bg-violet-600/10 border border-violet-500/30 text-violet-400"
+            className="cursor-pointer bg-violet-600/10 border border-violet-500/30 text-violet-600"
             onClick={() => setStatusFilter("all")}
           >
             {STATUS_CONFIG[statusFilter]?.label} ×
@@ -214,7 +214,7 @@ export default function CasesPage() {
       </div>
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
@@ -222,7 +222,7 @@ export default function CasesPage() {
       {/* List */}
       {loading ? (
         <div className="flex items-center justify-center py-20" role="status" aria-label="Wird geladen">
-          <Loader2 size={24} className="text-violet-400 animate-spin" />
+          <Loader2 size={24} className="text-violet-600 animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20 space-y-4">
@@ -281,11 +281,11 @@ export default function CasesPage() {
                       {statusCfg.label}
                     </Badge>
                   </div>
-                  <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-400 transition-colors shrink-0" />
+                  <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-600 transition-colors shrink-0" />
                 </Link>
                 <button
                   onClick={(e) => { e.stopPropagation(); deleteCase(c.slug); }}
-                  className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all shrink-0"
+                  className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all shrink-0"
                   title="Akte löschen"
                 >
                   <Trash2 size={14} />

@@ -71,7 +71,7 @@ function MaskedInput({
         </button>
         {value && (
           <button onClick={copy} className="p-1.5 text-[#585866] hover:text-[#585866] transition-colors">
-            {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+            {copied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
           </button>
         )}
       </div>
@@ -292,7 +292,7 @@ export default function SettingsPage() {
               className={cn(
                 "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px",
                 activeTab === tab.id
-                  ? "border-violet-500 text-violet-400"
+                  ? "border-violet-500 text-violet-600"
                   : "border-transparent text-[#585866] hover:text-[#15151d]"
               )}
             >
@@ -321,8 +321,8 @@ export default function SettingsPage() {
             <Field label="Verbindungsstatus" desc="Prüft ob die Sigmabrain Engine erreichbar ist">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  <AlertTriangle size={14} className={engineStatus === "online" ? "text-emerald-400" : "text-amber-400"} />
-                  <span className={cn("text-sm", engineStatus === "online" ? "text-emerald-400" : "text-amber-400")}>
+                  <AlertTriangle size={14} className={engineStatus === "online" ? "text-emerald-600" : "text-amber-600"} />
+                  <span className={cn("text-sm", engineStatus === "online" ? "text-emerald-600" : "text-amber-600")}>
                     {engineStatus === "checking" ? "Prüfe…" : engineStatus === "online" ? "Verbunden" : "Nicht verbunden"}
                   </span>
                 </div>
@@ -341,7 +341,7 @@ export default function SettingsPage() {
                     className={cn(
                       "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
                       searchMode === mode
-                        ? "bg-violet-600/15 text-violet-400 border-violet-500/30"
+                        ? "bg-violet-600/15 text-violet-600 border-violet-500/30"
                         : "text-[#585866] border-[#e2e4ec] hover:border-[#b4b9c8]"
                     )}
                   >
@@ -359,7 +359,7 @@ export default function SettingsPage() {
                   "gbrain serve --http --with-worker --port 3001",
                 ].map((cmd) => (
                   <div key={cmd} className="flex items-center gap-2 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-4 py-2.5">
-                    <code className="text-xs font-mono text-violet-400 flex-1">{cmd}</code>
+                    <code className="text-xs font-mono text-violet-600 flex-1">{cmd}</code>
                     <button
                       onClick={() => navigator.clipboard.writeText(cmd)}
                       className="text-[#585866] hover:text-[#585866] transition-colors shrink-0"
@@ -386,7 +386,7 @@ export default function SettingsPage() {
               <div className="space-y-2">
                 <MaskedInput value={openaiKey} placeholder="sk-..." onChange={setOpenaiKey} />
                 <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-violet-400 hover:underline">
+                  className="inline-flex items-center gap-1 text-xs text-violet-600 hover:underline">
                   API Key erstellen <ExternalLink size={10} />
                 </a>
               </div>
@@ -396,7 +396,7 @@ export default function SettingsPage() {
               <div className="space-y-2">
                 <MaskedInput value={anthropicKey} placeholder="sk-ant-..." onChange={setAnthropicKey} />
                 <a href="https://console.anthropic.com/keys" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-violet-400 hover:underline">
+                  className="inline-flex items-center gap-1 text-xs text-violet-600 hover:underline">
                   API Key erstellen <ExternalLink size={10} />
                 </a>
               </div>
@@ -422,7 +422,7 @@ export default function SettingsPage() {
         <Card>
           <div className="p-6 border-b border-[#e2e4ec]">
             <div className="flex items-center gap-3">
-              <Zap size={18} className="text-amber-400" />
+              <Zap size={18} className="text-amber-600" />
               <div>
                 <h2 className="text-base font-semibold text-[#15151d]">Dream Cycle</h2>
                 <p className="text-sm text-[#585866]">Nächtliche Konsolidierung & Enrichment</p>
@@ -535,7 +535,7 @@ export default function SettingsPage() {
                     className={cn(
                       "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
                       tarifModell === opt.key
-                        ? "bg-violet-600/15 text-violet-400 border-violet-500/30"
+                        ? "bg-violet-600/15 text-violet-600 border-violet-500/30"
                         : "text-[#585866] border-[#e2e4ec] hover:border-[#b4b9c8]"
                     )}
                   >
@@ -583,8 +583,8 @@ export default function SettingsPage() {
             {(tarifModell === "rvg" || tarifModell === "ratg") && (
               <div className="py-4">
                 <div className="flex items-start gap-3 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/5">
-                  <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" />
-                  <p className="text-xs text-amber-400">
+                  <AlertTriangle size={14} className="text-amber-600 shrink-0 mt-0.5" />
+                  <p className="text-xs text-amber-600">
                     {tarifModell === "rvg"
                       ? "RVG-Gebühren werden automatisch nach der deutschen Rechtsanwaltsvergütungsordnung berechnet. Stundensatz ist nur für Beratungen relevant."
                       : "RATG-Gebühren werden automatisch nach der österreichischen Rechtsanwaltstarifordnung berechnet. Stundensatz ist nur für Beratungen relevant."}
@@ -630,7 +630,7 @@ export default function SettingsPage() {
                     className={cn(
                       "px-4 py-2 rounded-lg text-sm font-medium border transition-all",
                       datevKontenrahmen === opt.key
-                        ? "bg-emerald-600/15 text-emerald-400 border-emerald-500/30"
+                        ? "bg-emerald-600/15 text-emerald-600 border-emerald-500/30"
                         : "text-[#585866] border-[#e2e4ec] hover:border-[#b4b9c8]"
                     )}
                   >
@@ -673,7 +673,7 @@ export default function SettingsPage() {
           </div>
           <div className="p-6 border-t border-[#e2e4ec]">
             {kanzleiSaveError && (
-              <p className="text-sm text-red-400 mb-3">Speichern fehlgeschlagen: {kanzleiSaveError}</p>
+              <p className="text-sm text-red-600 mb-3">Speichern fehlgeschlagen: {kanzleiSaveError}</p>
             )}
             <Button variant="glow" size="md" onClick={saveKanzleiProfile}>
               {kanzleiSaved ? "Gespeichert" : "Einstellungen speichern"}
@@ -774,11 +774,11 @@ export default function SettingsPage() {
             >
               <div className="space-y-3">
                 <div className="flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 rounded-lg px-4 py-3">
-                  <Gift size={15} className="text-amber-400 shrink-0" />
+                  <Gift size={15} className="text-amber-600 shrink-0" />
                   <p className="text-xs text-[#585866] leading-relaxed">
                     12 Empfehlungen = ein Gratisjahr. Keine Obergrenze.
                     {referrals !== null && (
-                      <span className="text-amber-400 font-medium"> Bisher geworben: {referrals}.</span>
+                      <span className="text-amber-600 font-medium"> Bisher geworben: {referrals}.</span>
                     )}
                   </p>
                 </div>
@@ -788,7 +788,7 @@ export default function SettingsPage() {
                 />
                 <Link
                   href="/partners"
-                  className="inline-flex items-center gap-1 text-xs text-violet-400 hover:underline"
+                  className="inline-flex items-center gap-1 text-xs text-violet-600 hover:underline"
                 >
                   Mehr verdienen? Zum Partnerprogramm (30 % wiederkehrend) <ExternalLink size={10} />
                 </Link>

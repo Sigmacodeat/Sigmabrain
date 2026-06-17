@@ -178,7 +178,7 @@ export default function DeadlinesPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-600/15 border border-amber-500/20 flex items-center justify-center">
-            <CalendarClock size={20} className="text-amber-400" />
+            <CalendarClock size={20} className="text-amber-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Fristen & Termine</h1>
@@ -224,7 +224,7 @@ export default function DeadlinesPage() {
         </div>
       </div>
       {reminderStatus && (
-        <div className="text-sm text-amber-400">{reminderStatus}</div>
+        <div className="text-sm text-amber-600">{reminderStatus}</div>
       )}
 
       {/* Deadline Calculator */}
@@ -274,7 +274,7 @@ export default function DeadlinesPage() {
             <div className="rounded-lg border border-violet-500/20 bg-violet-500/5 p-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-violet-400 font-medium">{calcResult.label} — {calcResult.law}</p>
+                  <p className="text-xs text-violet-600 font-medium">{calcResult.label} — {calcResult.law}</p>
                   <p className="text-sm text-[#15151d] mt-1">
                     Frist bis: <strong>{calcResult.dueDate.toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</strong>
                   </p>
@@ -294,7 +294,7 @@ export default function DeadlinesPage() {
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles size={16} className="text-violet-400" />
+              <Sparkles size={16} className="text-violet-600" />
               <h2 className="text-sm font-semibold text-[#15151d]">Fristen erkennen</h2>
             </div>
             <button onClick={() => setShowAiDetect(false)} className="text-[#585866] hover:text-[#15151d]"><XCircle size={16} /></button>
@@ -347,7 +347,7 @@ export default function DeadlinesPage() {
                     <div className="text-sm text-[#15151d]">{r.description}</div>
                     {r.date && <div className="text-xs text-[#585866]">{new Date(r.date).toLocaleDateString("de-DE")}</div>}
                   </div>
-                  <Badge variant="default" className={`text-[10px] ${r.confidence === "high" ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400" : "border-amber-500/20 bg-amber-500/10 text-amber-400"}`}>
+                  <Badge variant="default" className={`text-[10px] ${r.confidence === "high" ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600" : "border-amber-500/20 bg-amber-500/10 text-amber-600"}`}>
                     {r.confidence}
                   </Badge>
                 </div>
@@ -360,8 +360,8 @@ export default function DeadlinesPage() {
       {/* Alert banner */}
       {(counts.critical || 0) > 0 && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-red-500/20 bg-red-500/5">
-          <AlertTriangle size={18} className="text-red-400 shrink-0" />
-          <p className="text-sm text-red-400">
+          <AlertTriangle size={18} className="text-red-600 shrink-0" />
+          <p className="text-sm text-red-600">
             {counts.critical} kritische Frist{counts.critical === 1 ? "" : "en"} in den nächsten 3 Tagen
           </p>
         </div>
@@ -409,7 +409,7 @@ export default function DeadlinesPage() {
         {filter !== "all" && (
           <Badge
             variant="default"
-            className="cursor-pointer bg-violet-600/10 border border-violet-500/30 text-violet-400"
+            className="cursor-pointer bg-violet-600/10 border border-violet-500/30 text-violet-600"
             onClick={() => setFilter("all")}
           >
             {STATUS_CONFIG[filter]?.label} ×
@@ -418,7 +418,7 @@ export default function DeadlinesPage() {
       </div>
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
@@ -426,7 +426,7 @@ export default function DeadlinesPage() {
       {/* List */}
       {loading ? (
         <div className="flex items-center justify-center py-20" role="status" aria-label="Wird geladen">
-          <Loader2 size={24} className="text-violet-400 animate-spin" />
+          <Loader2 size={24} className="text-violet-600 animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20 space-y-4">
@@ -472,8 +472,8 @@ export default function DeadlinesPage() {
                       className={cn(
                         "text-[10px] border",
                         d.reviewStatus === "approved"
-                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                          : "bg-amber-500/10 border-amber-500/20 text-amber-400"
+                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600"
+                          : "bg-amber-500/10 border-amber-500/20 text-amber-600"
                       )}
                     >
                       {d.reviewStatus === "approved" ? "Freigegeben" : "Review offen"}
@@ -484,7 +484,7 @@ export default function DeadlinesPage() {
                       </Badge>
                     )}
                     {d.reminderSentAt && (
-                      <Badge variant="default" className="text-[10px] bg-blue-500/10 border-blue-500/20 text-blue-400">
+                      <Badge variant="default" className="text-[10px] bg-blue-500/10 border-blue-500/20 text-blue-600">
                         Erinnerung gesendet
                       </Badge>
                     )}
@@ -497,7 +497,7 @@ export default function DeadlinesPage() {
                   )}
                 </div>
                 <div className="text-right shrink-0">
-                  <div className={cn("text-sm font-medium", days < 0 ? "text-red-400" : days <= 3 ? "text-amber-400" : "text-[#15151d]")}>
+                  <div className={cn("text-sm font-medium", days < 0 ? "text-red-600" : days <= 3 ? "text-amber-600" : "text-[#15151d]")}>
                     {new Date(d.date).toLocaleDateString("de-DE")}
                   </div>
                   <div className="text-xs text-[#585866]">

@@ -53,7 +53,7 @@ export default function DataExportPage() {
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
-          <Archive size={20} className="text-emerald-400" />
+          <Archive size={20} className="text-emerald-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Datenexport</h1>
@@ -63,7 +63,7 @@ export default function DataExportPage() {
 
       <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
         <div className="flex items-start gap-3">
-          <Shield size={18} className="text-emerald-400 shrink-0 mt-0.5" />
+          <Shield size={18} className="text-emerald-600 shrink-0 mt-0.5" />
           <div>
             <p className="text-sm text-[#15151d] font-medium">Ihre Daten gehören Ihnen</p>
             <p className="text-xs text-[#585866] mt-1">
@@ -87,7 +87,7 @@ export default function DataExportPage() {
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
       )}
@@ -95,8 +95,8 @@ export default function DataExportPage() {
       {stats && (
         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-3">
           <div className="flex items-center gap-2">
-            <FileJson size={16} className="text-emerald-400" />
-            <span className="text-sm font-medium text-emerald-400">Export erfolgreich</span>
+            <FileJson size={16} className="text-emerald-600" />
+            <span className="text-sm font-medium text-emerald-600">Export erfolgreich</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
@@ -117,7 +117,7 @@ export default function DataExportPage() {
       {isAdmin && (
         <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 space-y-4">
           <div className="flex items-start gap-3">
-            <Database size={18} className="text-violet-400 shrink-0 mt-0.5" />
+            <Database size={18} className="text-violet-600 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm text-[#15151d] font-medium">Voll-Backup (Admin)</p>
               <p className="text-xs text-[#585866] mt-1">
@@ -128,7 +128,7 @@ export default function DataExportPage() {
           </div>
           <Button
             variant="outline"
-            className="border-violet-500/30 text-violet-400 hover:bg-violet-500/10 gap-2 text-sm"
+            className="border-violet-500/30 text-violet-600 hover:bg-violet-500/10 gap-2 text-sm"
             onClick={async () => {
               setBackupLoading(true);
               setBackupError(null);
@@ -157,7 +157,7 @@ export default function DataExportPage() {
             {backupLoading ? "Erstelle Backup…" : "Voll-Backup herunterladen"}
           </Button>
           {backupError && (
-            <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+            <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
               {backupError}
             </div>
           )}

@@ -208,7 +208,7 @@ export default function DatevExportPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-green-600/15 border border-green-500/20 flex items-center justify-center">
-          <FileSpreadsheet size={20} className="text-green-400" />
+          <FileSpreadsheet size={20} className="text-green-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">DATEV Export</h1>
@@ -268,15 +268,15 @@ export default function DatevExportPage() {
 
       {/* Info */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
-        <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
-        <p className="text-sm text-amber-400">
+        <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />
+        <p className="text-sm text-amber-600">
           Der Export berücksichtigt nur bereits abgerechnete, abrechenbare Positionen aus Akten.
           Bitte Kontenrahmen, Steuerschlüssel und Importformat vor dem DATEV-Import durch Ihren Steuerberater verifizieren.
         </p>
       </div>
 
       {loadError && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-red-500/20 bg-red-500/5 text-red-400 text-sm">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-red-500/20 bg-red-500/5 text-red-600 text-sm">
           <AlertTriangle size={16} className="shrink-0" />
           {loadError}
         </div>
@@ -294,7 +294,7 @@ export default function DatevExportPage() {
         </div>
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
           <div className="text-xs text-[#585866]">Netto-Betrag</div>
-          <div className="text-xl font-bold text-emerald-400">{totalAmount.toLocaleString("de-DE")} €</div>
+          <div className="text-xl font-bold text-emerald-600">{totalAmount.toLocaleString("de-DE")} €</div>
         </div>
       </div>
 
@@ -328,7 +328,7 @@ export default function DatevExportPage() {
                 </Badge>
                 <div className="text-right shrink-0">
                   <div className="text-sm text-[#15151d] font-mono">{entry.kind === "time" ? `${(entry.hours ?? 0).toFixed(1)}h` : "Auslage"}</div>
-                  <div className="text-xs text-emerald-400 font-mono">{entry.amount.toFixed(0)} €</div>
+                  <div className="text-xs text-emerald-600 font-mono">{entry.amount.toFixed(0)} €</div>
                 </div>
               </div>
             ))}
@@ -347,7 +347,7 @@ export default function DatevExportPage() {
               onClick={copyCsv}
               className="text-[#585866] hover:text-[#15151d] gap-1.5 text-xs"
             >
-              {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+              {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
               Kopieren
             </Button>
             <Button

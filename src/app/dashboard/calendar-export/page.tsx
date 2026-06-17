@@ -150,7 +150,7 @@ export default function CalendarExportPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center">
-            <Calendar size={20} className="text-blue-400" />
+            <Calendar size={20} className="text-blue-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Kalender-Export</h1>
@@ -169,8 +169,8 @@ export default function CalendarExportPage() {
 
       {/* Info */}
       <div className="flex items-start gap-3 px-4 py-3 rounded-xl border border-blue-500/20 bg-blue-500/5">
-        <CalendarClock size={16} className="text-blue-400 shrink-0 mt-0.5" />
-        <div className="text-sm text-blue-400">
+        <CalendarClock size={16} className="text-blue-600 shrink-0 mt-0.5" />
+        <div className="text-sm text-blue-600">
           <p className="font-medium mb-1">Importieren Sie die .ics-Datei in:</p>
           <ul className="space-y-0.5 text-xs">
             <li>• Outlook: Datei → Öffnen und Exportieren → Importieren/Exportieren → iCalendar</li>
@@ -188,7 +188,7 @@ export default function CalendarExportPage() {
             onClick={() => setFilter(f)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
               filter === f
-                ? "bg-blue-600/15 text-blue-400 border-blue-500/30"
+                ? "bg-blue-600/15 text-blue-600 border-blue-500/30"
                 : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
             }`}
           >
@@ -201,16 +201,16 @@ export default function CalendarExportPage() {
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
           <div className="text-xs text-[#585866]">Anstehend</div>
-          <div className="text-xl font-bold text-blue-400">{upcoming.length}</div>
+          <div className="text-xl font-bold text-blue-600">{upcoming.length}</div>
         </div>
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
           <div className="text-xs text-[#585866]">Überfällig</div>
-          <div className="text-xl font-bold text-red-400">{overdue.length}</div>
+          <div className="text-xl font-bold text-red-600">{overdue.length}</div>
         </div>
       </div>
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
@@ -246,7 +246,7 @@ export default function CalendarExportPage() {
                       {ev.type === "deadline" ? "Frist" : ev.type === "hearing" ? "Verhandlung" : ev.type === "meeting" ? "Besprechung" : "Erinnerung"}
                     </Badge>
                     {isOverdue && (
-                      <Badge variant="default" className="text-[10px] bg-red-500/10 text-red-400 border-red-500/20">
+                      <Badge variant="default" className="text-[10px] bg-red-500/10 text-red-600 border-red-500/20">
                         Überfällig
                       </Badge>
                     )}
@@ -261,7 +261,7 @@ export default function CalendarExportPage() {
                   )}
                 </div>
                 <div className="shrink-0 text-xs text-[#585866]">
-                  {isOverdue ? <AlertTriangle size={14} className="text-red-400" /> : <Clock size={14} className="text-blue-400" />}
+                  {isOverdue ? <AlertTriangle size={14} className="text-red-600" /> : <Clock size={14} className="text-blue-600" />}
                 </div>
               </div>
             );

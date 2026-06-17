@@ -90,7 +90,7 @@ export default function ClientPortalPage() {
         <div className="w-full max-w-md space-y-6">
           <div className="text-center space-y-2">
             <div className="w-16 h-16 rounded-2xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center mx-auto" aria-hidden="true">
-              <Eye size={28} className="text-violet-400" />
+              <Eye size={28} className="text-violet-600" />
             </div>
             <h1 className="text-xl font-bold text-[#15151d]">Mandanten-Portal — Vorschau</h1>
             <p className="text-sm text-[#585866]">
@@ -100,8 +100,8 @@ export default function ClientPortalPage() {
 
           <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4" role="note">
             <div className="flex items-start gap-2">
-              <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />
-              <p className="text-xs text-amber-400 leading-relaxed">
+              <AlertTriangle size={14} className="text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+              <p className="text-xs text-amber-600 leading-relaxed">
                 Dies ist eine <strong>Vorschau für die Kanzlei</strong> — sie zeigt alle Akten
                 der explizit freigegebenen Akten. Das echte Mandanten-Portal mit eigenem Login pro Mandant und
                 Akten-Filterung ist ein separates Deployment und noch nicht Teil dieses Dashboards.
@@ -128,7 +128,7 @@ export default function ClientPortalPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
-            <User size={20} className="text-emerald-400" />
+            <User size={20} className="text-emerald-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Meine Akten</h1>
@@ -146,7 +146,7 @@ export default function ClientPortalPage() {
       </div>
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
@@ -177,8 +177,8 @@ export default function ClientPortalPage() {
                 </div>
                 <Badge variant="default" className={`text-[10px] ${
                   c.status === "closed" ? "bg-gray-500/10 border-gray-500/20 text-gray-400" :
-                  c.status === "won" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
-                  "bg-blue-500/10 border-blue-500/20 text-blue-400"
+                  c.status === "won" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600" :
+                  "bg-blue-500/10 border-blue-500/20 text-blue-600"
                 }`}>
                   {c.status === "closed" ? "Geschlossen" : c.status === "won" ? "Gewonnen" : "Offen"}
                 </Badge>
@@ -191,9 +191,9 @@ export default function ClientPortalPage() {
 
               <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-3">
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 size={14} className="text-amber-400 shrink-0 mt-0.5" />
+                  <CheckCircle2 size={14} className="text-amber-600 shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-xs text-amber-400 font-medium">Nächster Schritt</p>
+                    <p className="text-xs text-amber-600 font-medium">Nächster Schritt</p>
                     <p className="text-xs text-[#585866]">{c.nextStep}</p>
                   </div>
                 </div>

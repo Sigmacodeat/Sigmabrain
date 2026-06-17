@@ -222,10 +222,10 @@ function statusLabel(status: AgentJob["status"]): string {
 
 function statusIcon(status: AgentJob["status"]) {
   switch (status) {
-    case "completed": return <CheckCircle2 size={14} className="text-emerald-400" />;
-    case "active": return <Loader2 size={14} className="text-blue-400 animate-spin" />;
-    case "waiting": return <Clock size={14} className="text-amber-400" />;
-    case "failed": return <XCircle size={14} className="text-red-400" />;
+    case "completed": return <CheckCircle2 size={14} className="text-emerald-600" />;
+    case "active": return <Loader2 size={14} className="text-blue-600 animate-spin" />;
+    case "waiting": return <Clock size={14} className="text-amber-600" />;
+    case "failed": return <XCircle size={14} className="text-red-600" />;
     case "paused": return <Pause size={14} className="text-gray-400" />;
   }
 }
@@ -446,7 +446,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
               await onRefresh();
             }}
             disabled={acting !== null}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-600/15 text-amber-400 text-xs font-medium border border-amber-500/20 hover:bg-amber-600/25 disabled:opacity-40 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-600/15 text-amber-600 text-xs font-medium border border-amber-500/20 hover:bg-amber-600/25 disabled:opacity-40 transition-all"
           >
             {acting === "pause" ? <Loader2 size={12} className="animate-spin" /> : <Pause size={12} />}
             Pausieren
@@ -461,7 +461,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
               await onRefresh();
             }}
             disabled={acting !== null}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/15 text-emerald-400 text-xs font-medium border border-emerald-500/20 hover:bg-emerald-600/25 disabled:opacity-40 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/15 text-emerald-600 text-xs font-medium border border-emerald-500/20 hover:bg-emerald-600/25 disabled:opacity-40 transition-all"
           >
             {acting === "resume" ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} />}
             Fortsetzen
@@ -476,7 +476,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
               await onRefresh();
             }}
             disabled={acting !== null}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/15 text-red-400 text-xs font-medium border border-red-500/20 hover:bg-red-600/25 disabled:opacity-40 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/15 text-red-600 text-xs font-medium border border-red-500/20 hover:bg-red-600/25 disabled:opacity-40 transition-all"
           >
             {acting === "cancel" ? <Loader2 size={12} className="animate-spin" /> : <XCircle size={12} />}
             Abbrechen
@@ -491,7 +491,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
               await onRefresh();
             }}
             disabled={acting !== null}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600/15 text-violet-400 text-xs font-medium border border-violet-500/20 hover:bg-violet-600/25 disabled:opacity-40 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600/15 text-violet-600 text-xs font-medium border border-violet-500/20 hover:bg-violet-600/25 disabled:opacity-40 transition-all"
           >
             {acting === "replay" ? <Loader2 size={12} className="animate-spin" /> : <RotateCcw size={12} />}
             Neu starten
@@ -506,7 +506,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
 
       {job.model && (
         <div className="flex items-center gap-2">
-          <Sparkles size={14} className="text-violet-400" />
+          <Sparkles size={14} className="text-violet-600" />
           <span className="text-sm text-[#585866]">Modell: <span className="text-[#15151d]">{job.model}</span></span>
         </div>
       )}
@@ -522,7 +522,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
             <div className="text-xs text-[#585866]">Output Tokens</div>
           </div>
           <div className="rounded-lg border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
-            <div className="text-lg font-mono font-semibold text-emerald-400">${job.cost?.toFixed(2) ?? "0.00"}</div>
+            <div className="text-lg font-mono font-semibold text-emerald-600">${job.cost?.toFixed(2) ?? "0.00"}</div>
             <div className="text-xs text-[#585866]">Kosten</div>
           </div>
         </div>
@@ -569,10 +569,10 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
       <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] flex flex-col" style={{ maxHeight: 380 }}>
         <div className="px-4 py-3 border-b border-[#e2e4ec] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <MessageSquare size={14} className="text-violet-400" />
+            <MessageSquare size={14} className="text-violet-600" />
             <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider">Inbox</h4>
             {messages.length > 0 && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-600 border border-violet-500/20">
                 {messages.length}
               </span>
             )}
@@ -611,9 +611,9 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
                   "w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5",
                   isUser ? "bg-violet-600/20" : isSystem ? "bg-amber-500/10" : "bg-emerald-500/10"
                 )}>
-                  {isUser ? <User size={12} className="text-violet-400" /> :
-                    isSystem ? <Bot size={12} className="text-amber-400" /> :
-                    <Bot size={12} className="text-emerald-400" />}
+                  {isUser ? <User size={12} className="text-violet-600" /> :
+                    isSystem ? <Bot size={12} className="text-amber-600" /> :
+                    <Bot size={12} className="text-emerald-600" />}
                 </div>
                 <div className={cn(
                   "max-w-[80%] rounded-xl px-3 py-2 text-sm",
@@ -634,7 +634,7 @@ function JobDetail({ job, allJobs, onRefresh }: { job: AgentJob; allJobs: AgentJ
           {inboxSending && (
             <div className="flex flex-row-reverse gap-2.5">
               <div className="w-6 h-6 rounded-full bg-violet-600/20 flex items-center justify-center shrink-0">
-                <Loader2 size={12} className="text-violet-400 animate-spin" />
+                <Loader2 size={12} className="text-violet-600 animate-spin" />
               </div>
               <div className="bg-violet-600/15 text-[#15151d] border border-violet-500/20 rounded-xl px-3 py-2 text-sm">
                 <span className="text-[#585866]">Senden…</span>
@@ -717,7 +717,7 @@ export default function AgentsPage() {
         {/* Workflow Templates */}
         <div className="p-4 border-b border-[#e2e4ec] space-y-2">
           <div className="flex items-center gap-2">
-            <Sparkles size={14} className="text-violet-400" />
+            <Sparkles size={14} className="text-violet-600" />
             <span className="text-xs font-semibold text-[#15151d]">Workflow Templates</span>
           </div>
           <div className="space-y-1.5">
@@ -744,7 +744,7 @@ export default function AgentsPage() {
         <div className="p-4 border-b border-[#e2e4ec]">
           <form onSubmit={handleSubmit} className="space-y-2">
             <div className="flex items-center gap-2">
-              <Sparkles size={14} className="text-violet-400" />
+              <Sparkles size={14} className="text-violet-600" />
               <span className="text-xs font-semibold text-[#15151d]">Neuer Supervisor</span>
             </div>
             <input
@@ -757,7 +757,7 @@ export default function AgentsPage() {
             <button
               type="submit"
               disabled={submitting || !submitPrompt.trim()}
-              className="w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg bg-violet-600/20 text-violet-400 text-xs font-medium border border-violet-500/20 hover:bg-violet-600/30 disabled:opacity-40 transition-all"
+              className="w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg bg-violet-600/20 text-violet-600 text-xs font-medium border border-violet-500/20 hover:bg-violet-600/30 disabled:opacity-40 transition-all"
             >
               {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
               {submitting ? "Starte..." : "Starten"}
@@ -783,7 +783,7 @@ export default function AgentsPage() {
                 className={cn(
                   "px-2 py-1 rounded-md text-xs font-medium transition-all",
                   filter === f
-                    ? "bg-violet-600/20 text-violet-400 border border-violet-500/20"
+                    ? "bg-violet-600/20 text-violet-600 border border-violet-500/20"
                     : "text-[#585866] hover:text-[#585866] hover:bg-[#eceef3]"
                 )}
               >
@@ -797,7 +797,7 @@ export default function AgentsPage() {
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
           {loading && jobs.length === 0 && (
             <div className="flex items-center justify-center py-8">
-              <Loader2 size={20} className="text-violet-400 animate-spin" />
+              <Loader2 size={20} className="text-violet-600 animate-spin" />
             </div>
           )}
           {filteredJobs.map((job: AgentJob) => (
@@ -836,7 +836,7 @@ export default function AgentsPage() {
       <div className="flex-1 flex flex-col bg-[#f5f6f9] overflow-hidden">
         <div className="p-4 border-b border-[#e2e4ec] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Bot size={16} className="text-violet-400" />
+            <Bot size={16} className="text-violet-600" />
             <h2 className="text-sm font-semibold text-[#15151d]">Agent DAG</h2>
           </div>
           <div className="flex items-center gap-4">

@@ -90,7 +90,7 @@ export default function ControllingPage() {
               onClick={() => setPeriod(p)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 period === p
-                  ? "bg-violet-500/20 text-violet-400 border border-violet-500/30"
+                  ? "bg-violet-500/20 text-violet-600 border border-violet-500/30"
                   : "bg-[#eceef3] text-[#585866] border border-[#e2e4ec] hover:border-[#b4b9c8]"
               }`}
             >
@@ -125,7 +125,7 @@ export default function ControllingPage() {
                 <Euro size={14} />
                 <span className="text-xs">Gesamtumsatz</span>
               </div>
-              <div className="text-2xl font-semibold text-emerald-400">{totalRevenue.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</div>
+              <div className="text-2xl font-semibold text-emerald-600">{totalRevenue.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}</div>
             </div>
             <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4">
               <div className="flex items-center gap-2 text-[#585866] mb-2">
@@ -173,7 +173,7 @@ export default function ControllingPage() {
                           <span className="text-xs text-[#585866]">{utilization}%</span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-right font-medium text-emerald-400">
+                      <td className="px-4 py-3 text-right font-medium text-emerald-600">
                         {s.totalRevenue.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
                       </td>
                     </tr>

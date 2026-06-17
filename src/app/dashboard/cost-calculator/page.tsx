@@ -111,7 +111,7 @@ export default function CostCalculatorPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
-          <Calculator size={20} className="text-emerald-400" />
+          <Calculator size={20} className="text-emerald-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Kostenrechner</h1>
@@ -126,7 +126,7 @@ export default function CostCalculatorPage() {
           className={cn(
             "flex-1 px-4 py-3 rounded-xl border text-sm font-medium transition-all",
             jurisdiction === "de"
-              ? "bg-violet-600/10 border-violet-500/30 text-violet-400"
+              ? "bg-violet-600/10 border-violet-500/30 text-violet-600"
               : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
           )}
         >
@@ -137,7 +137,7 @@ export default function CostCalculatorPage() {
           className={cn(
             "flex-1 px-4 py-3 rounded-xl border text-sm font-medium transition-all",
             jurisdiction === "at"
-              ? "bg-violet-600/10 border-violet-500/30 text-violet-400"
+              ? "bg-violet-600/10 border-violet-500/30 text-violet-600"
               : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#15151d]"
           )}
         >
@@ -177,7 +177,7 @@ export default function CostCalculatorPage() {
       {result && (
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-4">
           <div className="flex items-center gap-2">
-            <CheckCircle2 size={18} className="text-emerald-400" />
+            <CheckCircle2 size={18} className="text-emerald-600" />
             <h2 className="text-sm font-semibold text-[#15151d]">Berechnungsergebnis</h2>
           </div>
 
@@ -213,8 +213,8 @@ export default function CostCalculatorPage() {
               <span className="text-sm text-[#15151d] font-mono">{result.mwst.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
             </div>
             <div className="flex items-center justify-between py-3 rounded-lg bg-violet-600/5 border border-violet-500/10 px-3">
-              <span className="text-sm font-semibold text-violet-400">Geschätztes Honorar (brutto)</span>
-              <span className="text-lg font-bold text-violet-400 font-mono">{result.total.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
+              <span className="text-sm font-semibold text-violet-600">Geschätztes Honorar (brutto)</span>
+              <span className="text-lg font-bold text-violet-600 font-mono">{result.total.toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
             </div>
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function CostCalculatorPage() {
 
       {/* AT approximation warning */}
       {jurisdiction === "at" && (
-        <div className="flex items-start gap-2 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-400" role="note">
+        <div className="flex items-start gap-2 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-600" role="note">
           <AlertTriangle size={14} className="shrink-0 mt-0.5" aria-hidden="true" />
           <p>
             Die Österreich-Werte sind <strong>Näherungswerte</strong>. Das RATG rechnet mit

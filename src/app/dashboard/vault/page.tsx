@@ -44,14 +44,14 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  legal_case: "bg-violet-500/10 border-violet-500/20 text-violet-300",
-  legal_contract: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
-  legal_document: "bg-blue-500/10 border-blue-500/20 text-blue-400",
-  bea_message: "bg-amber-500/10 border-amber-500/20 text-amber-400",
-  court_decision: "bg-red-500/10 border-red-500/20 text-red-400",
-  invoice: "bg-cyan-500/10 border-cyan-500/20 text-cyan-400",
-  contact: "bg-pink-500/10 border-pink-500/20 text-pink-400",
-  evidence: "bg-orange-500/10 border-orange-500/20 text-orange-400",
+  legal_case: "bg-violet-500/10 border-violet-500/20 text-violet-700",
+  legal_contract: "bg-emerald-500/10 border-emerald-500/20 text-emerald-600",
+  legal_document: "bg-blue-500/10 border-blue-500/20 text-blue-600",
+  bea_message: "bg-amber-500/10 border-amber-500/20 text-amber-600",
+  court_decision: "bg-red-500/10 border-red-500/20 text-red-600",
+  invoice: "bg-cyan-500/10 border-cyan-500/20 text-cyan-600",
+  contact: "bg-pink-500/10 border-pink-500/20 text-pink-600",
+  evidence: "bg-orange-500/10 border-orange-500/20 text-orange-600",
 };
 
 function parseDoc(page: BrainPage): VaultDoc {
@@ -176,7 +176,7 @@ export default function VaultPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-            <FolderOpen size={20} className="text-violet-400" />
+            <FolderOpen size={20} className="text-violet-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Dokumenten-Vault</h1>
@@ -202,10 +202,10 @@ export default function VaultPage() {
             {reviewQuestions.map((q, i) => (
               <div key={i} className="flex items-center gap-2">
                 <input value={q} onChange={(e) => setReviewQuestions((qs) => qs.map((qq, idx) => (idx === i ? e.target.value : qq)))} placeholder={`Frage ${i + 1}`} className="flex-1 bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
-                <button onClick={() => setReviewQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="text-[#585866] hover:text-red-400"><X size={14} /></button>
+                <button onClick={() => setReviewQuestions((qs) => qs.filter((_, idx) => idx !== i))} className="text-[#585866] hover:text-red-600"><X size={14} /></button>
               </div>
             ))}
-            {reviewQuestions.length < 8 && <button onClick={() => setReviewQuestions((qs) => [...qs, ""])} className="text-xs text-violet-400 hover:underline">+ Frage hinzufügen</button>}
+            {reviewQuestions.length < 8 && <button onClick={() => setReviewQuestions((qs) => [...qs, ""])} className="text-xs text-violet-600 hover:underline">+ Frage hinzufügen</button>}
           </div>
           <div className="flex items-center gap-3">
             <Button onClick={runBulkReview} disabled={reviewLoading} className="bg-violet-600 hover:bg-violet-500 text-white gap-2">
@@ -219,7 +219,7 @@ export default function VaultPage() {
               }}><Download size={14} /> CSV Export</Button>
             )}
           </div>
-          {reviewError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{reviewError}</div>}
+          {reviewError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">{reviewError}</div>}
           {reviewResult && reviewResult.rows.length > 0 && (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -252,12 +252,12 @@ export default function VaultPage() {
       {selectedSlugs.size > 0 && (
         <div className="flex items-center gap-3 text-xs text-[#585866]">
           <span>{selectedSlugs.size} ausgewählt</span>
-          <button onClick={selectAll} className="text-violet-400 hover:underline">Alle auswählen</button>
-          <button onClick={deselectAll} className="text-violet-400 hover:underline">Alle abwählen</button>
+          <button onClick={selectAll} className="text-violet-600 hover:underline">Alle auswählen</button>
+          <button onClick={deselectAll} className="text-violet-600 hover:underline">Alle abwählen</button>
         </div>
       )}
 
-      {loadError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{loadError}</div>}
+      {loadError && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">{loadError}</div>}
 
       {loading ? (
         <div className="text-center py-20 text-[#585866]">Lade Dokumente…</div>
@@ -277,7 +277,7 @@ export default function VaultPage() {
                     {TYPE_LABELS[doc.type] || doc.type}
                   </Badge>
                 </div>
-                <button onClick={() => deleteDoc(doc.slug)} className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen">
+                <button onClick={() => deleteDoc(doc.slug)} className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all" title="Löschen">
                   <Trash2 size={14} />
                 </button>
               </div>

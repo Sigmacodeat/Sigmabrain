@@ -109,22 +109,22 @@ export default function TeamPage() {
 
       {error && (
         <div role="alert" className="flex items-start gap-2.5 p-3.5 rounded-xl border border-rose-500/20 bg-rose-500/5">
-          <AlertCircle size={15} className="text-rose-400 shrink-0 mt-0.5" aria-hidden />
-          <p className="text-sm text-rose-300">{error}</p>
+          <AlertCircle size={15} className="text-rose-600 shrink-0 mt-0.5" aria-hidden />
+          <p className="text-sm text-rose-700">{error}</p>
         </div>
       )}
       {notice && (
         <div role="status" className="flex items-start gap-2.5 p-3.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5">
-          <CheckCircle size={15} className="text-emerald-400 shrink-0 mt-0.5" aria-hidden />
+          <CheckCircle size={15} className="text-emerald-600 shrink-0 mt-0.5" aria-hidden />
           <p className="text-sm text-[#454552]">{notice}</p>
         </div>
       )}
       {devJoinUrl && (
         <div className="p-3.5 rounded-xl border border-amber-500/20 bg-amber-500/5">
-          <p className="text-xs text-amber-300 mb-1.5">
+          <p className="text-xs text-amber-700 mb-1.5">
             Mail-Provider nicht konfiguriert — gib der Person diesen Einladungs-Link direkt:
           </p>
-          <code className="text-xs text-violet-400 break-all">{devJoinUrl}</code>
+          <code className="text-xs text-violet-600 break-all">{devJoinUrl}</code>
         </div>
       )}
 
@@ -132,7 +132,7 @@ export default function TeamPage() {
         <Card>
           <div className="p-6 space-y-4">
             <div className="flex items-center gap-2.5">
-              <Users size={18} className="text-violet-400" aria-hidden />
+              <Users size={18} className="text-violet-600" aria-hidden />
               <h2 className="text-base font-semibold text-[#15151d]">Team erstellen</h2>
             </div>
             <p className="text-sm text-[#585866] leading-relaxed">
@@ -186,7 +186,7 @@ export default function TeamPage() {
                   <div className="min-w-0">
                     <p className="text-sm text-[#15151d] truncate flex items-center gap-1.5">
                       {m.name}
-                      {m.isOwner && <Crown size={12} className="text-amber-400 shrink-0" aria-label="Inhaber" />}
+                      {m.isOwner && <Crown size={12} className="text-amber-600 shrink-0" aria-label="Inhaber" />}
                     </p>
                     <p className="text-xs text-[#585866] truncate">{m.email}</p>
                   </div>
@@ -216,7 +216,7 @@ export default function TeamPage() {
             <Card>
               <div className="p-6 space-y-3">
                 <div className="flex items-center gap-2.5">
-                  <Mail size={16} className="text-violet-400" aria-hidden />
+                  <Mail size={16} className="text-violet-600" aria-hidden />
                   <h3 className="text-sm font-semibold text-[#15151d]">Mitglied einladen</h3>
                 </div>
                 <form

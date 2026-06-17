@@ -166,7 +166,7 @@ export default function ResearchPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-            <Globe size={20} className="text-violet-400" />
+            <Globe size={20} className="text-violet-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Legal Research</h1>
@@ -202,7 +202,7 @@ export default function ResearchPage() {
             <Landmark size={14} /> Urteile-Sync
           </Button>
         </div>
-        {error && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">{error}</div>}
+        {error && <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">{error}</div>}
       </div>
 
       {/* Current Result */}
@@ -210,9 +210,9 @@ export default function ResearchPage() {
         <div className="rounded-xl border border-violet-500/20 bg-[#ffffff] p-5 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Scale size={16} className="text-violet-400" />
+              <Scale size={16} className="text-violet-600" />
               <h3 className="text-sm font-semibold text-[#15151d]">Ergebnis</h3>
-              <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{jurisdiction.toUpperCase()}</Badge>
+              <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700">{jurisdiction.toUpperCase()}</Badge>
             </div>
             <Button onClick={saveResearch} className="bg-emerald-600 hover:bg-emerald-500 text-white gap-2 text-xs">
               <Save size={14} /> Als Brain-Page speichern
@@ -226,7 +226,7 @@ export default function ResearchPage() {
               <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Zitierte Quellen</h4>
               <div className="flex flex-wrap gap-2">
                 {currentCitations.map((c) => (
-                  <span key={c.slug} className="text-[10px] px-2 py-1 rounded-lg bg-[#eceef3] border border-[#e2e4ec] text-violet-400">
+                  <span key={c.slug} className="text-[10px] px-2 py-1 rounded-lg bg-[#eceef3] border border-[#e2e4ec] text-violet-600">
                     {c.title}
                   </span>
                 ))}
@@ -238,7 +238,7 @@ export default function ResearchPage() {
               <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Erkannte Lücken</h4>
               <ul className="space-y-1">
                 {currentGaps.map((gap, i) => (
-                  <li key={i} className="text-xs text-amber-400 flex items-start gap-2">
+                  <li key={i} className="text-xs text-amber-600 flex items-start gap-2">
                     <span className="mt-0.5">⚠️</span> {gap}
                   </li>
                 ))}
@@ -254,7 +254,7 @@ export default function ResearchPage() {
           onClick={() => setActiveTab("new")}
           className={`px-4 py-2 text-sm font-medium transition-all border-b-2 ${
             activeTab === "new"
-              ? "border-violet-500 text-violet-400"
+              ? "border-violet-500 text-violet-600"
               : "border-transparent text-[#585866] hover:text-[#15151d]"
           }`}
         >
@@ -264,7 +264,7 @@ export default function ResearchPage() {
           onClick={() => setActiveTab("saved")}
           className={`px-4 py-2 text-sm font-medium transition-all border-b-2 ${
             activeTab === "saved"
-              ? "border-violet-500 text-violet-400"
+              ? "border-violet-500 text-violet-600"
               : "border-transparent text-[#585866] hover:text-[#15151d]"
           }`}
         >
@@ -279,9 +279,9 @@ export default function ResearchPage() {
             <div className="rounded-xl border border-violet-500/20 bg-[#ffffff] p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Scale size={16} className="text-violet-400" />
+                  <Scale size={16} className="text-violet-600" />
                   <h3 className="text-sm font-semibold text-[#15151d]">Ergebnis</h3>
-                  <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{jurisdiction.toUpperCase()}</Badge>
+                  <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700">{jurisdiction.toUpperCase()}</Badge>
                 </div>
                 <Button onClick={saveResearch} className="bg-emerald-600 hover:bg-emerald-500 text-white gap-2 text-xs">
                   <Save size={14} /> Als Brain-Page speichern
@@ -298,7 +298,7 @@ export default function ResearchPage() {
                       <a
                         key={c.slug}
                         href={`/dashboard/brain/${c.slug.split("/").map(encodeURIComponent).join("/")}`}
-                        className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-lg bg-[#eceef3] border border-[#e2e4ec] text-violet-400 hover:text-violet-300 hover:border-violet-500/30 transition-all"
+                        className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-lg bg-[#eceef3] border border-[#e2e4ec] text-violet-600 hover:text-violet-700 hover:border-violet-500/30 transition-all"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -314,7 +314,7 @@ export default function ResearchPage() {
                   <h4 className="text-xs font-semibold text-[#585866] uppercase tracking-wider mb-2">Erkannte Lücken</h4>
                   <ul className="space-y-1">
                     {currentGaps.map((gap, i) => (
-                      <li key={i} className="text-xs text-amber-400 flex items-start gap-2">
+                      <li key={i} className="text-xs text-amber-600 flex items-start gap-2">
                         <span className="mt-0.5">⚠️</span> {gap}
                       </li>
                     ))}
@@ -328,7 +328,7 @@ export default function ResearchPage() {
           {sessions.length > 0 && (
             <div className="space-y-3">
               <h2 className="text-sm font-semibold text-[#15151d] flex items-center gap-2">
-                <Clock size={16} className="text-violet-400" />
+                <Clock size={16} className="text-violet-600" />
                 Sitzungs-Verlauf
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -336,7 +336,7 @@ export default function ResearchPage() {
                   <div key={s.id} className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-medium text-[#15151d] truncate">{s.query}</span>
-                      <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{s.jurisdiction.toUpperCase()}</Badge>
+                      <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700">{s.jurisdiction.toUpperCase()}</Badge>
                     </div>
                     <div className="text-xs text-[#585866] line-clamp-2">{s.answer.slice(0, 150)}…</div>
                     <div className="flex items-center justify-between text-[10px] text-[#585866]">
@@ -371,7 +371,7 @@ export default function ResearchPage() {
                   onClick={() => setSavedJurisdiction(j)}
                   className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all border ${
                     savedJurisdiction === j
-                      ? "bg-violet-600/15 border-violet-500/30 text-violet-400"
+                      ? "bg-violet-600/15 border-violet-500/30 text-violet-600"
                       : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:border-[#b4b9c8]"
                   }`}
                 >
@@ -422,10 +422,10 @@ export default function ResearchPage() {
                             <span className="text-sm font-medium text-[#15151d] truncate">{page.title}</span>
                             {j && (
                               <Badge variant="default" className={`text-[10px] border ${
-                                j === "at" ? "bg-red-500/10 border-red-500/20 text-red-400" :
-                                j === "ch" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
-                                j === "eu" ? "bg-amber-500/10 border-amber-500/20 text-amber-400" :
-                                "bg-blue-500/10 border-blue-500/20 text-blue-400"
+                                j === "at" ? "bg-red-500/10 border-red-500/20 text-red-600" :
+                                j === "ch" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600" :
+                                j === "eu" ? "bg-amber-500/10 border-amber-500/20 text-amber-600" :
+                                "bg-blue-500/10 border-blue-500/20 text-blue-600"
                               }`}>{j.toUpperCase()}</Badge>
                             )}
                           </div>
@@ -434,12 +434,12 @@ export default function ResearchPage() {
                         <div className="flex items-center gap-1 shrink-0">
                           <button
                             onClick={() => setExpandedSlug(isExpanded ? null : page.slug)}
-                            className="p-1.5 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all"
+                            className="p-1.5 rounded-lg text-[#585866] hover:text-violet-600 hover:bg-violet-500/10 transition-all"
                             title={isExpanded ? "Zuklappen" : "Aufklappen"}
                           >
                             {isExpanded ? <X size={13} /> : <ChevronRight size={13} />}
                           </button>
-                          <button onClick={() => deleteResearch(page.slug)} className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen">
+                          <button onClick={() => deleteResearch(page.slug)} className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all" title="Löschen">
                             <Trash2 size={13} />
                           </button>
                         </div>
@@ -455,7 +455,7 @@ export default function ResearchPage() {
                         <span className="flex items-center gap-1"><Clock size={9} />{new Date((page as unknown as Record<string, unknown>).createdAt as string || (page as unknown as Record<string, unknown>).created_at as string || page.created_at || new Date().toISOString()).toLocaleDateString("de-DE")}</span>
                         <div className="flex items-center gap-2">
                           {Array.isArray(fm.citations) && fm.citations.length > 0 && <span>{fm.citations.length} Quellen</span>}
-                          {Array.isArray(fm.gaps) && fm.gaps.length > 0 && <span className="text-amber-400">{fm.gaps.length} Lücken</span>}
+                          {Array.isArray(fm.gaps) && fm.gaps.length > 0 && <span className="text-amber-600">{fm.gaps.length} Lücken</span>}
                         </div>
                       </div>
                     </div>

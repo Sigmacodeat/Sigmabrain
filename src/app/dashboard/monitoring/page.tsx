@@ -75,7 +75,7 @@ export default function MonitoringPage() {
     <div className="p-6 max-w-3xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-          <Radar size={20} className="text-violet-400" />
+          <Radar size={20} className="text-violet-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Rechtsprechungs-Monitoring</h1>
@@ -113,8 +113,8 @@ export default function MonitoringPage() {
             <Plus size={15} /> Hinzufügen
           </Button>
         </div>
-        {saved && <p className="text-xs text-emerald-400 flex items-center gap-1"><Check size={12} /> Gespeichert</p>}
-        {error && <p className="text-xs text-red-400 flex items-center gap-1"><AlertTriangle size={12} /> {error}</p>}
+        {saved && <p className="text-xs text-emerald-600 flex items-center gap-1"><Check size={12} /> Gespeichert</p>}
+        {error && <p className="text-xs text-red-600 flex items-center gap-1"><AlertTriangle size={12} /> {error}</p>}
       </div>
 
       {loading ? (
@@ -132,7 +132,7 @@ export default function MonitoringPage() {
                 <p className="text-sm text-[#15151d]">{t.query}</p>
                 <p className="text-xs text-[#585866]">{JUR_LABEL[t.jurisdiction]}</p>
               </div>
-              <button onClick={() => removeTerm(i)} disabled={saving} className="text-[#585866] hover:text-red-400 p-2"><X size={16} /></button>
+              <button onClick={() => removeTerm(i)} disabled={saving} className="text-[#585866] hover:text-red-600 p-2"><X size={16} /></button>
             </div>
           ))}
         </div>

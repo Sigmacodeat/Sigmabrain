@@ -160,7 +160,7 @@ export default function RechtsprechungPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center">
-          <Landmark size={20} className="text-blue-400" />
+          <Landmark size={20} className="text-blue-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Rechtsprechung</h1>
@@ -178,7 +178,7 @@ export default function RechtsprechungPage() {
               className={cn(
                 "px-3 py-1.5 rounded-lg text-xs font-medium border transition-all",
                 jurisdiction === j
-                  ? "bg-violet-600/10 border-violet-500/30 text-violet-400"
+                  ? "bg-violet-600/10 border-violet-500/30 text-violet-600"
                   : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#585866]"
               )}
             >
@@ -239,8 +239,8 @@ export default function RechtsprechungPage() {
                     <span className="font-medium text-[#15151d]">{r.title}</span>
                     <Badge variant="default" className={cn(
                       "text-[10px] border",
-                      r.source === "brain" ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-400" :
-                      r.source === "ris-ogd" ? "bg-blue-500/5 border-blue-500/20 text-blue-400" :
+                      r.source === "brain" ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-600" :
+                      r.source === "ris-ogd" ? "bg-blue-500/5 border-blue-500/20 text-blue-600" :
                       "bg-[#eceef3] border-[#e2e4ec] text-[#585866]"
                     )}>
                       {r.source === "brain" ? "Brain" : r.source === "ris-ogd" ? "RIS-OGD" : "KI"}
@@ -256,7 +256,7 @@ export default function RechtsprechungPage() {
                   {r.keywords.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       {r.keywords.map((k) => (
-                        <Badge key={k} variant="default" className="text-[10px] bg-violet-600/5 border-violet-500/10 text-violet-400">
+                        <Badge key={k} variant="default" className="text-[10px] bg-violet-600/5 border-violet-500/10 text-violet-600">
                           {k}
                         </Badge>
                       ))}
@@ -268,7 +268,7 @@ export default function RechtsprechungPage() {
                     href={r.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 w-8 h-8 rounded-lg bg-[#eceef3] border border-[#e2e4ec] flex items-center justify-center text-[#585866] hover:text-violet-400 hover:border-violet-500/30 transition-all"
+                    className="shrink-0 w-8 h-8 rounded-lg bg-[#eceef3] border border-[#e2e4ec] flex items-center justify-center text-[#585866] hover:text-violet-600 hover:border-violet-500/30 transition-all"
                   >
                     <ExternalLink size={14} />
                   </a>

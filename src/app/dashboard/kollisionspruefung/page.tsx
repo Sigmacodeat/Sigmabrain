@@ -22,9 +22,9 @@ const SEVERITY_CONFIG: Record<ConflictCheckResponse["severity"], {
   iconClass: string;
   icon: React.ElementType;
 }> = {
-  none: { label: "Kein Konflikt", iconClass: "text-emerald-400", icon: CheckCircle2 },
-  low: { label: "Geringes Risiko", iconClass: "text-amber-400", icon: AlertTriangle },
-  critical: { label: "Kritischer Konflikt", iconClass: "text-red-400", icon: ShieldAlert },
+  none: { label: "Kein Konflikt", iconClass: "text-emerald-600", icon: CheckCircle2 },
+  low: { label: "Geringes Risiko", iconClass: "text-amber-600", icon: AlertTriangle },
+  critical: { label: "Kritischer Konflikt", iconClass: "text-red-600", icon: ShieldAlert },
 };
 
 export default function KollisionspruefungPage() {
@@ -59,7 +59,7 @@ export default function KollisionspruefungPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-red-600/15 border border-red-500/20 flex items-center justify-center" aria-hidden="true">
-          <ShieldAlert size={20} className="text-red-400" />
+          <ShieldAlert size={20} className="text-red-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Kollisionsprüfung</h1>
@@ -103,7 +103,7 @@ export default function KollisionspruefungPage() {
       {/* Results */}
       <div aria-live="polite">
         {error && (
-          <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-red-500/20 bg-red-500/5 text-sm text-red-400" role="alert">
+          <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-red-500/20 bg-red-500/5 text-sm text-red-600" role="alert">
             <AlertTriangle size={16} aria-hidden="true" />
             {error}
           </div>
@@ -130,10 +130,10 @@ export default function KollisionspruefungPage() {
                     className={cn(
                       "text-[10px] border",
                       result.severity === "critical"
-                        ? "bg-red-500/10 text-red-400 border-red-500/20"
+                        ? "bg-red-500/10 text-red-600 border-red-500/20"
                         : result.severity === "low"
-                        ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                        : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                        ? "bg-amber-500/10 text-amber-600 border-amber-500/20"
+                        : "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
                     )}
                   >
                     {cfg.label}
@@ -154,13 +154,13 @@ export default function KollisionspruefungPage() {
                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#ffffff] border border-[#e2e4ec]"
                   >
                     {m.role === "client" ? (
-                      <Users size={14} className="text-emerald-400 shrink-0" aria-hidden="true" />
+                      <Users size={14} className="text-emerald-600 shrink-0" aria-hidden="true" />
                     ) : (
-                      <Building2 size={14} className="text-red-400 shrink-0" aria-hidden="true" />
+                      <Building2 size={14} className="text-red-600 shrink-0" aria-hidden="true" />
                     )}
                     <span className="text-sm text-[#15151d] flex-1">{m.title}</span>
                     {!m.exact && (
-                      <Badge variant="default" className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                      <Badge variant="default" className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-600">
                         Ähnlicher Name: {m.matched_name}
                       </Badge>
                     )}

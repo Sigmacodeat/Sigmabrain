@@ -251,7 +251,7 @@ export default function ContactsPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-            <Users size={20} className="text-violet-400" />
+            <Users size={20} className="text-violet-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Kontakte</h1>
@@ -289,7 +289,7 @@ export default function ContactsPage() {
       </div>
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
@@ -328,7 +328,7 @@ export default function ContactsPage() {
                     <textarea value={editAddress} onChange={(e) => setEditAddress(e.target.value)} rows={2} placeholder="Adresse" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
                     <textarea value={editNotes} onChange={(e) => setEditNotes(e.target.value)} rows={2} placeholder="Notizen" className="w-full bg-[#ffffff] border border-[#e2e4ec] rounded-lg px-3 py-2 text-sm text-[#15151d] placeholder:text-[#585866] focus:outline-none focus:border-violet-500/50" />
                   </div>
-                  {editError && <p className="text-xs text-red-400">{editError}</p>}
+                  {editError && <p className="text-xs text-red-600">{editError}</p>}
                   <div className="flex justify-end">
                     <Button onClick={saveEdit} disabled={!editName.trim()} className="bg-violet-600 hover:bg-violet-500 text-white gap-2 text-xs">
                       <Save size={14} /> Speichern
@@ -345,9 +345,9 @@ export default function ContactsPage() {
                     {contact.company && <div className="text-xs text-[#585866]">{contact.company}</div>}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300">{ROLE_LABEL[contact.role]}</Badge>
-                    <button onClick={() => startEdit(contact)} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all" title="Bearbeiten"><Pencil size={13} /></button>
-                    <button onClick={() => deleteContact(contact.slug)} className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all" title="Löschen"><Trash2 size={13} /></button>
+                    <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700">{ROLE_LABEL[contact.role]}</Badge>
+                    <button onClick={() => startEdit(contact)} className="p-1.5 rounded-lg text-[#585866] hover:text-violet-600 hover:bg-violet-500/10 transition-all" title="Bearbeiten"><Pencil size={13} /></button>
+                    <button onClick={() => deleteContact(contact.slug)} className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all" title="Löschen"><Trash2 size={13} /></button>
                   </div>
                 </div>
                 <div className="space-y-1 text-xs text-[#585866]">
@@ -359,7 +359,7 @@ export default function ContactsPage() {
                   <div className="space-y-1">
                     <div className="text-[10px] uppercase tracking-wider text-[#585866] font-semibold">Verknüpfte Akten</div>
                     {linked.map((c) => (
-                      <Link key={c.slug} href={`/dashboard/cases/${encodeURIComponent(c.slug)}`} className="block text-xs text-violet-400 hover:underline truncate">
+                      <Link key={c.slug} href={`/dashboard/cases/${encodeURIComponent(c.slug)}`} className="block text-xs text-violet-600 hover:underline truncate">
                         {c.caseNumber} — {c.title}
                       </Link>
                     ))}

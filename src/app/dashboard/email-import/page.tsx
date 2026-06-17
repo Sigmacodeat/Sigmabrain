@@ -78,7 +78,7 @@ export default function EmailImportPage() {
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center">
-          <Mail size={20} className="text-blue-400" />
+          <Mail size={20} className="text-blue-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">E-Mail-Import</h1>
@@ -109,13 +109,13 @@ export default function EmailImportPage() {
       </div>
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
 
       {importError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {importError}
         </div>
       )}
@@ -136,7 +136,7 @@ export default function EmailImportPage() {
           </div>
 
           {imported > 0 && (
-            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-sm text-emerald-300">
+            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-sm text-emerald-700">
               <CheckCircle2 size={14} className="inline mr-1" />
               {imported} E-Mail(s) erfolgreich zugeordnet.
             </div>
@@ -148,16 +148,16 @@ export default function EmailImportPage() {
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-[#15151d] truncate">{email.subject}</span>
                   {email.confidence === "high" ? (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">Hoch</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-600">Hoch</span>
                   ) : (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-amber-500/20 bg-amber-500/10 text-amber-400">Unsicher</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full border border-amber-500/20 bg-amber-500/10 text-amber-600">Unsicher</span>
                   )}
                 </div>
                 <div className="text-xs text-[#585866]">
                   {email.fromName} &lt;{email.from}&gt; · {email.date}
                 </div>
                 {email.suggestedCaseSlug && (
-                  <div className="flex items-center gap-1 text-xs text-blue-400">
+                  <div className="flex items-center gap-1 text-xs text-blue-600">
                     <Link size={12} />
                     Vorgeschlagene Akte: {email.suggestedCaseSlug}
                   </div>

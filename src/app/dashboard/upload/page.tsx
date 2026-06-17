@@ -41,10 +41,10 @@ const ACCEPTED_TYPES = {
 function FileIcon({ name }: { name: string }) {
   const ext = name.split(".").pop()?.toLowerCase();
   const colors: Record<string, string> = {
-    md: "text-blue-400",
+    md: "text-blue-600",
     txt: "text-[#585866]",
-    pdf: "text-red-400",
-    json: "text-amber-400",
+    pdf: "text-red-600",
+    json: "text-amber-600",
   };
   return <File size={20} className={colors[ext || ""] || "text-[#585866]"} />;
 }
@@ -264,7 +264,7 @@ export default function UploadPage() {
           className="mt-0.5 accent-violet-600"
         />
         <span className="flex items-start gap-2.5 text-sm">
-          <Archive size={15} className="text-violet-400 shrink-0 mt-0.5" />
+          <Archive size={15} className="text-violet-600 shrink-0 mt-0.5" />
           <span className="text-[#585866] leading-relaxed">
             <strong className="text-[#15151d]">Steuerlich relevanter Beleg (GoBD-Bausteine)</strong> — Rechnungen,
             Kontoauszüge, Quittungen. Beim Hochladen werden eine 10-Jahre-Aufbewahrungsfrist
@@ -280,7 +280,7 @@ export default function UploadPage() {
 
       {/* Offline warning */}
       {!isOnline() && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-400 text-sm">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-600 text-sm">
           <CloudUpload size={16} />
           <span>Offline-Modus aktiv — Datei-Upload erfordert Internetverbindung.</span>
         </div>
@@ -303,14 +303,14 @@ export default function UploadPage() {
             "w-16 h-16 rounded-2xl flex items-center justify-center transition-all",
             isDragActive ? "bg-violet-500/20" : "bg-[#e2e4ec]"
           )}>
-            <CloudUpload size={28} className={isDragActive ? "text-violet-400" : "text-[#585866]"} />
+            <CloudUpload size={28} className={isDragActive ? "text-violet-600" : "text-[#585866]"} />
           </div>
           <div>
             <p className="text-base font-semibold text-[#15151d] mb-1">
               {isDragActive ? "Loslassen zum Hochladen" : "Dateien hierher ziehen"}
             </p>
             <p className="text-sm text-[#585866]">
-              oder <span className="text-violet-400 hover:underline">Dateien auswählen</span>
+              oder <span className="text-violet-600 hover:underline">Dateien auswählen</span>
             </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap justify-center">
@@ -343,13 +343,13 @@ export default function UploadPage() {
 
       {/* Info box */}
       <div className="flex items-start gap-3 p-4 rounded-xl border border-blue-500/20 bg-blue-500/5">
-        <Info size={15} className="text-blue-400 shrink-0 mt-0.5" />
+        <Info size={15} className="text-blue-600 shrink-0 mt-0.5" />
         <div className="text-sm text-[#585866] leading-relaxed">
           <strong className="text-[#15151d]">Wie funktioniert es?</strong> Sigmabrain chunked das Dokument automatisch,
           erstellt Embeddings und indiziert es im Wissensgraph. Entitäten (Personen, Firmen, Konzepte)
           werden extrahiert und verknüpft. Danach kannst du das Dokument über die Query-Seite abfragen.
           <br />
-          <strong className="text-blue-400 mt-1 block">Hinweis:</strong> Die Sigmabrain Engine muss laufen ({`gbrain serve`}).
+          <strong className="text-blue-600 mt-1 block">Hinweis:</strong> Die Sigmabrain Engine muss laufen ({`gbrain serve`}).
         </div>
       </div>
 
@@ -359,7 +359,7 @@ export default function UploadPage() {
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold text-[#15151d]">
               {files.length} Datei{files.length !== 1 ? "en" : ""}
-              {doneCount > 0 && <span className="text-emerald-400 ml-2">· {doneCount} fertig</span>}
+              {doneCount > 0 && <span className="text-emerald-600 ml-2">· {doneCount} fertig</span>}
             </h3>
             <div className="flex items-center gap-2">
               {pendingCount > 0 && (
@@ -396,16 +396,16 @@ export default function UploadPage() {
                   )}
                   {f.status === "done" && f.slug && (
                     <span className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-mono text-emerald-400">→ {f.slug}</span>
+                      <span className="text-xs font-mono text-emerald-600">→ {f.slug}</span>
                       {f.gobdStamped && (
-                        <Badge variant="default" className="text-[10px] bg-violet-500/10 text-violet-400 border border-violet-500/20 gap-1">
+                        <Badge variant="default" className="text-[10px] bg-violet-500/10 text-violet-600 border border-violet-500/20 gap-1">
                           <Archive size={10} /> GoBD gestempelt
                         </Badge>
                       )}
                     </span>
                   )}
                   {f.status === "error" && (
-                    <span className="text-xs text-red-400">{f.error}</span>
+                    <span className="text-xs text-red-600">{f.error}</span>
                   )}
                   {f.status === "pending" && (
                     <span className="text-xs text-[#585866]">Bereit zum Hochladen</span>
@@ -413,18 +413,18 @@ export default function UploadPage() {
                 </div>
                 <div className="shrink-0">
                   {f.status === "pending" && (
-                    <button onClick={() => removeFile(f.id)} className="text-[#585866] hover:text-red-400 transition-colors">
+                    <button onClick={() => removeFile(f.id)} className="text-[#585866] hover:text-red-600 transition-colors">
                       <X size={14} />
                     </button>
                   )}
                   {f.status === "uploading" && (
-                    <Loader size={14} className="text-violet-400 animate-spin" />
+                    <Loader size={14} className="text-violet-600 animate-spin" />
                   )}
                   {f.status === "done" && (
-                    <CheckCircle size={14} className="text-emerald-400" />
+                    <CheckCircle size={14} className="text-emerald-600" />
                   )}
                   {f.status === "error" && (
-                    <XCircle size={14} className="text-red-400" />
+                    <XCircle size={14} className="text-red-600" />
                   )}
                 </div>
               </div>
@@ -437,8 +437,8 @@ export default function UploadPage() {
       {doneCount > 0 && (
         <div className="p-5 rounded-xl border border-emerald-500/20 bg-emerald-500/5">
           <div className="flex items-center gap-2 mb-3">
-            <CheckCircle size={16} className="text-emerald-400" />
-            <span className="text-sm font-semibold text-emerald-400">{doneCount} Datei{doneCount !== 1 ? "en" : ""} hochgeladen</span>
+            <CheckCircle size={16} className="text-emerald-600" />
+            <span className="text-sm font-semibold text-emerald-600">{doneCount} Datei{doneCount !== 1 ? "en" : ""} hochgeladen</span>
           </div>
           <p className="text-sm text-[#585866] mb-4">
             Dein Brain wird indexiert. Sobald Sigmabrain die Embeddings erstellt hat, kannst du die Dokumente abfragen.

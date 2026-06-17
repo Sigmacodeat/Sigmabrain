@@ -44,7 +44,7 @@ export default function KanzleiSettingsPage() {
 
   if (!settings) {
     return (
-      <div className="p-6 max-w-3xl mx-auto text-red-300">{error ?? "Einstellungen konnten nicht geladen werden."}</div>
+      <div className="p-6 max-w-3xl mx-auto text-red-700">{error ?? "Einstellungen konnten nicht geladen werden."}</div>
     );
   }
 
@@ -61,7 +61,7 @@ export default function KanzleiSettingsPage() {
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
       )}
@@ -94,7 +94,7 @@ export default function KanzleiSettingsPage() {
             Speichern
           </Button>
           {saved && (
-            <span className="text-sm text-emerald-400 flex items-center gap-1">
+            <span className="text-sm text-emerald-600 flex items-center gap-1">
               <CheckCircle2 size={14} />
               Gespeichert
             </span>

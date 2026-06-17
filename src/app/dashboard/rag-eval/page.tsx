@@ -34,7 +34,7 @@ export default function RagEvalPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-            <BarChart3 size={20} className="text-violet-400" />
+            <BarChart3 size={20} className="text-violet-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">RAG-Eval</h1>
@@ -53,7 +53,7 @@ export default function RagEvalPage() {
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
       )}
@@ -67,15 +67,15 @@ export default function RagEvalPage() {
               <div className="text-xs text-[#585866] mt-1">Gesamtbewertung</div>
             </div>
             <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 text-center">
-              <div className="text-2xl font-bold text-blue-400">{(result.overallPrecision * 100).toFixed(1)}%</div>
+              <div className="text-2xl font-bold text-blue-600">{(result.overallPrecision * 100).toFixed(1)}%</div>
               <div className="text-xs text-[#585866] mt-1">Precision@10</div>
             </div>
             <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 text-center">
-              <div className="text-2xl font-bold text-emerald-400">{(result.overallRecall * 100).toFixed(1)}%</div>
+              <div className="text-2xl font-bold text-emerald-600">{(result.overallRecall * 100).toFixed(1)}%</div>
               <div className="text-xs text-[#585866] mt-1">Recall@10</div>
             </div>
             <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-4 text-center">
-              <div className="text-2xl font-bold text-amber-400">{result.overallMrr.toFixed(3)}</div>
+              <div className="text-2xl font-bold text-amber-600">{result.overallMrr.toFixed(3)}</div>
               <div className="text-xs text-[#585866] mt-1">MRR</div>
             </div>
           </div>
@@ -115,12 +115,12 @@ export default function RagEvalPage() {
                 return (
                   <div key={r.queryId} className="flex items-center gap-3 p-3 rounded-lg border border-[#e2e4ec] bg-[#ffffff]">
                     <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", pass ? "bg-emerald-500/10" : "bg-red-500/10")}>
-                      {pass ? <CheckCircle2 size={16} className="text-emerald-400" /> : <XCircle size={16} className="text-red-400" />}
+                      {pass ? <CheckCircle2 size={16} className="text-emerald-600" /> : <XCircle size={16} className="text-red-600" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-[#15151d] truncate">{r.query}</span>
-                        <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-300 shrink-0">{r.category}</Badge>
+                        <Badge variant="default" className="text-[10px] border border-violet-500/20 bg-violet-500/10 text-violet-700 shrink-0">{r.category}</Badge>
                       </div>
                       <div className="text-xs text-[#585866] mt-0.5">
                         P={(r.precision * 100).toFixed(0)}% · R={(r.recall * 100).toFixed(0)}% · MRR={r.mrr.toFixed(2)} · {r.retrievedSlugs.length} Treffer

@@ -635,7 +635,7 @@ export default function InvoicingPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-600/15 border border-emerald-500/20 flex items-center justify-center">
-            <FileText size={20} className="text-emerald-400" />
+            <FileText size={20} className="text-emerald-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#15151d]">Rechnungen</h1>
@@ -656,11 +656,11 @@ export default function InvoicingPage() {
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
           <div className="text-xs text-[#585866]">Offen</div>
-          <div className="text-xl font-bold text-amber-400">{totalOutstanding.toLocaleString("de-DE")} €</div>
+          <div className="text-xl font-bold text-amber-600">{totalOutstanding.toLocaleString("de-DE")} €</div>
         </div>
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
           <div className="text-xs text-[#585866]">Bezahlt</div>
-          <div className="text-xl font-bold text-emerald-400">{totalPaid.toLocaleString("de-DE")} €</div>
+          <div className="text-xl font-bold text-emerald-600">{totalPaid.toLocaleString("de-DE")} €</div>
         </div>
         <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3 text-center">
           <div className="text-xs text-[#585866]">Rechnungen</div>
@@ -672,8 +672,8 @@ export default function InvoicingPage() {
         <div className={cn(
           "rounded-xl border px-4 py-3 text-sm",
           statusMessage.includes("nicht") || statusMessage.includes("fehl")
-            ? "border-red-500/20 bg-red-500/5 text-red-300"
-            : "border-emerald-500/20 bg-emerald-500/5 text-emerald-300",
+            ? "border-red-500/20 bg-red-500/5 text-red-700"
+            : "border-emerald-500/20 bg-emerald-500/5 text-emerald-700",
         )}>
           {statusMessage}
         </div>
@@ -682,7 +682,7 @@ export default function InvoicingPage() {
       {/* Create Invoice */}
       {showCreate && (
         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-4">
-          <h2 className="text-sm font-semibold text-emerald-400">Rechnung aus Akte erstellen</h2>
+          <h2 className="text-sm font-semibold text-emerald-600">Rechnung aus Akte erstellen</h2>
           <div className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
@@ -719,7 +719,7 @@ export default function InvoicingPage() {
               const openTime = (c?.timeEntries ?? []).filter((entry) => entry.billable !== false && !entry.billed);
               const openExpenses = (c?.expenses ?? []).filter((entry) => entry.billable !== false && !entry.billed);
               if (openTime.length === 0 && openExpenses.length === 0) return (
-                <div className="text-sm text-amber-400">Keine offenen abrechenbaren Zeiten oder Auslagen in dieser Akte.</div>
+                <div className="text-sm text-amber-600">Keine offenen abrechenbaren Zeiten oder Auslagen in dieser Akte.</div>
               );
               const totalMinutes = openTime.reduce((s, e) => s + (e.minutes || 0), 0);
               const expenseTotal = openExpenses.reduce((s, e) => s + e.amount, 0);
@@ -801,7 +801,7 @@ export default function InvoicingPage() {
                       {status.label}
                     </Badge>
                     {inv.reminderCount ? (
-                      <Badge variant="default" className="text-[10px] border bg-amber-600/15 text-amber-400 border-amber-500/30">
+                      <Badge variant="default" className="text-[10px] border bg-amber-600/15 text-amber-600 border-amber-500/30">
                         {inv.reminderCount}. Mahnung
                       </Badge>
                     ) : null}
@@ -818,14 +818,14 @@ export default function InvoicingPage() {
                 <div className="flex items-center gap-1 shrink-0">
                   <button
                     onClick={() => void printInvoice(inv)}
-                    className="p-2 rounded-lg text-[#585866] hover:text-emerald-400 hover:bg-emerald-500/10 transition-all"
+                    className="p-2 rounded-lg text-[#585866] hover:text-emerald-600 hover:bg-emerald-500/10 transition-all"
                     title="Drucken"
                   >
                     <Printer size={14} />
                   </button>
                   <button
                     onClick={() => void downloadPdf(inv)}
-                    className="p-2 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all"
+                    className="p-2 rounded-lg text-[#585866] hover:text-violet-600 hover:bg-violet-500/10 transition-all"
                     title="PDF herunterladen"
                   >
                     <FileText size={14} />
@@ -833,7 +833,7 @@ export default function InvoicingPage() {
                   {(userRole === "admin" || userRole === "lawyer" || userRole === "assistant") && (
                     <button
                       onClick={() => void sendInvoiceEmail(inv)}
-                      className="p-2 rounded-lg text-[#585866] hover:text-blue-400 hover:bg-blue-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-blue-600 hover:bg-blue-500/10 transition-all"
                       title="Per E-Mail senden"
                     >
                       <Mail size={14} />
@@ -842,7 +842,7 @@ export default function InvoicingPage() {
                   {inv.status === "draft" && (
                     <button
                       onClick={() => updateStatus(inv, "sent")}
-                      className="p-2 rounded-lg text-[#585866] hover:text-blue-400 hover:bg-blue-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-blue-600 hover:bg-blue-500/10 transition-all"
                       title="Als gesendet markieren"
                     >
                       <Send size={14} />
@@ -851,7 +851,7 @@ export default function InvoicingPage() {
                   {inv.status === "sent" && (
                     <button
                       onClick={() => updateStatus(inv, "paid")}
-                      className="p-2 rounded-lg text-[#585866] hover:text-emerald-400 hover:bg-emerald-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-emerald-600 hover:bg-emerald-500/10 transition-all"
                       title="Als bezahlt markieren"
                     >
                       <CheckCircle2 size={14} />
@@ -860,7 +860,7 @@ export default function InvoicingPage() {
                   {inv.status !== "paid" && inv.status !== "cancelled" && (userRole === "admin" || userRole === "lawyer") && (
                     <button
                       onClick={() => updateStatus(inv, "cancelled")}
-                      className="p-2 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all"
                       title="Stornieren"
                     >
                       <XCircle size={14} />
@@ -869,7 +869,7 @@ export default function InvoicingPage() {
                   {(inv.status === "sent" || inv.status === "overdue") && (userRole === "admin" || userRole === "lawyer") && (
                     <button
                       onClick={() => void sendReminder(inv)}
-                      className="p-2 rounded-lg text-[#585866] hover:text-amber-400 hover:bg-amber-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-amber-600 hover:bg-amber-500/10 transition-all"
                       title={`${inv.reminderCount ? `${inv.reminderCount}. ` : ""}Mahnung senden`}
                     >
                       <AlertTriangle size={14} />
@@ -878,7 +878,7 @@ export default function InvoicingPage() {
                   {(userRole === "admin" || userRole === "lawyer") && (
                     <button
                       onClick={() => deleteInvoice(inv)}
-                      className="p-2 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                      className="p-2 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all"
                       title="Löschen"
                     >
                       <Trash2 size={14} />
@@ -938,7 +938,7 @@ function RvgDialog() {
                 <div className="flex justify-between"><span className="text-[#585866]">Auslagenpauschale</span><span className="text-[#15151d]">{result.auslagenpauschale.toFixed(2)} €</span></div>
                 <div className="flex justify-between border-t border-[#e2e4ec] pt-2"><span className="text-[#585866]">Netto</span><span className="text-[#15151d] font-medium">{result.summeNetto.toFixed(2)} €</span></div>
                 <div className="flex justify-between"><span className="text-[#585866]">MwSt (19 %)</span><span className="text-[#15151d]">{result.mwst.toFixed(2)} €</span></div>
-                <div className="flex justify-between text-emerald-400 font-semibold"><span>Brutto</span><span>{result.summeBrutto.toFixed(2)} €</span></div>
+                <div className="flex justify-between text-emerald-600 font-semibold"><span>Brutto</span><span>{result.summeBrutto.toFixed(2)} €</span></div>
               </div>
             )}
             <div className="flex justify-end gap-2">

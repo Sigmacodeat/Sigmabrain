@@ -46,12 +46,12 @@ const TYPE_ICON: Record<string, React.ElementType> = {
 };
 
 const TYPE_COLOR: Record<string, string> = {
-  person: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-  company: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-  idea: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-  document: "text-violet-400 bg-violet-500/10 border-violet-500/20",
-  event: "text-rose-400 bg-rose-500/10 border-rose-500/20",
-  place: "text-teal-400 bg-teal-500/10 border-teal-500/20",
+  person: "text-blue-600 bg-blue-500/10 border-blue-500/20",
+  company: "text-emerald-600 bg-emerald-500/10 border-emerald-500/20",
+  idea: "text-amber-600 bg-amber-500/10 border-amber-500/20",
+  document: "text-violet-600 bg-violet-500/10 border-violet-500/20",
+  event: "text-rose-600 bg-rose-500/10 border-rose-500/20",
+  place: "text-teal-600 bg-teal-500/10 border-teal-500/20",
 };
 
 export default function BrainDetailPage() {
@@ -113,7 +113,7 @@ export default function BrainDetailPage() {
       } else if (trimmed.startsWith("## ")) {
         flushList();
         elements.push(
-          <h2 key={i} className="text-lg font-semibold text-violet-400 mb-3 mt-6 pb-2 border-b border-[#e2e4ec]">
+          <h2 key={i} className="text-lg font-semibold text-violet-600 mb-3 mt-6 pb-2 border-b border-[#e2e4ec]">
             {trimmed.slice(3)}
           </h2>
         );
@@ -160,7 +160,7 @@ export default function BrainDetailPage() {
               onClick={copySlug}
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-[#585866] hover:text-[#585866] hover:bg-[#eceef3] transition-all"
             >
-              {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+              {copied ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
               {copied ? "Kopiert" : "Slug"}
             </button>
             <button
@@ -168,7 +168,7 @@ export default function BrainDetailPage() {
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
                 editMode
-                  ? "bg-violet-600/20 text-violet-400 border border-violet-500/30"
+                  ? "bg-violet-600/20 text-violet-600 border border-violet-500/30"
                   : "text-[#585866] hover:text-[#585866] hover:bg-[#eceef3]"
               )}
             >
@@ -185,7 +185,7 @@ export default function BrainDetailPage() {
           </div>
         )}
         {!loading && !page && (
-          <div className="flex-1 flex flex-col items-center justify-center gap-3 text-rose-400">
+          <div className="flex-1 flex flex-col items-center justify-center gap-3 text-rose-600">
             <p className="text-sm font-medium">Seite nicht gefunden</p>
             <p className="text-xs text-[#585866]">{slug}</p>
           </div>
@@ -215,7 +215,7 @@ export default function BrainDetailPage() {
                   {page.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs font-mono text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-md"
+                      className="text-xs font-mono text-violet-600 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-md"
                     >
                       {tag}
                     </span>
@@ -267,7 +267,7 @@ export default function BrainDetailPage() {
             {!editMode && ((page as PageGraphExtras).links?.length ?? 0) > 0 && (
               <div className="mt-10">
                 <h3 className="text-sm font-semibold text-[#15151d] mb-4 flex items-center gap-2">
-                  <Network size={14} className="text-violet-400" />
+                  <Network size={14} className="text-violet-600" />
                   Verknüpfungen im Graph
                 </h3>
                 <div className="space-y-2">
@@ -278,15 +278,15 @@ export default function BrainDetailPage() {
                       className="flex items-center gap-3 p-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:border-[#b4b9c8] hover:bg-[#eceef3] transition-all group"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">
+                        <span className="text-xs font-mono text-violet-600 bg-violet-500/10 px-2 py-0.5 rounded border border-violet-500/20">
                           {link.type}
                         </span>
                         <span className="text-xs text-[#585866]">→</span>
                       </div>
-                      <span className="text-sm text-[#15151d] group-hover:text-violet-300 transition-colors flex-1">
+                      <span className="text-sm text-[#15151d] group-hover:text-violet-700 transition-colors flex-1">
                         {link.target}
                       </span>
-                      <ExternalLink size={12} className="text-[#585866] group-hover:text-violet-400 transition-colors" />
+                      <ExternalLink size={12} className="text-[#585866] group-hover:text-violet-600 transition-colors" />
                     </Link>
                   ))}
                 </div>
@@ -312,12 +312,12 @@ export default function BrainDetailPage() {
                       href={`/dashboard/brain/${encodeURIComponent(rel.slug)}`}
                       className="flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-[#eceef3] transition-colors group"
                     >
-                      <RelIcon size={14} className="text-[#585866] group-hover:text-violet-400 transition-colors shrink-0" />
+                      <RelIcon size={14} className="text-[#585866] group-hover:text-violet-600 transition-colors shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-medium text-[#15151d] truncate">{rel.title}</p>
                         <p className="text-[10px] text-[#585866] font-mono">{rel.slug}</p>
                       </div>
-                      <span className="text-[10px] font-mono text-emerald-400">{(rel.relevance * 100).toFixed(0)}%</span>
+                      <span className="text-[10px] font-mono text-emerald-600">{(rel.relevance * 100).toFixed(0)}%</span>
                     </Link>
                   );
                 })}
@@ -346,7 +346,7 @@ export default function BrainDetailPage() {
                         <p className="text-[10px] text-[#585866] font-mono">{ent.type}</p>
                       </div>
                       {ent.salience !== undefined && (
-                        <span className="text-[10px] font-mono text-violet-400">{(ent.salience * 100).toFixed(0)}%</span>
+                        <span className="text-[10px] font-mono text-violet-600">{(ent.salience * 100).toFixed(0)}%</span>
                       )}
                     </div>
                   );

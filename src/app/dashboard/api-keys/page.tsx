@@ -87,7 +87,7 @@ export default function ApiKeysPage() {
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-          <Key size={20} className="text-violet-400" />
+          <Key size={20} className="text-violet-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">API-Keys</h1>
@@ -120,23 +120,23 @@ export default function ApiKeysPage() {
         {newKeyPlaintext && (
           <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-2">
             <div className="flex items-center gap-2">
-              <AlertTriangle size={16} className="text-amber-400" />
-              <span className="text-sm font-medium text-amber-400">Key wird nur EINMAL angezeigt</span>
+              <AlertTriangle size={16} className="text-amber-600" />
+              <span className="text-sm font-medium text-amber-600">Key wird nur EINMAL angezeigt</span>
             </div>
             <div className="flex items-center gap-2 bg-[#ffffff] rounded-lg px-3 py-2 border border-[#e2e4ec]">
               <code className="text-sm text-[#15151d] font-mono flex-1 break-all">{newKeyPlaintext}</code>
               <button
                 onClick={() => copyKey(newKeyPlaintext)}
-                className="p-1.5 rounded-lg text-[#585866] hover:text-violet-400 hover:bg-violet-500/10 transition-all"
+                className="p-1.5 rounded-lg text-[#585866] hover:text-violet-600 hover:bg-violet-500/10 transition-all"
               >
-                {copied ? <CheckCircle2 size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                {copied ? <CheckCircle2 size={14} className="text-emerald-600" /> : <Copy size={14} />}
               </button>
             </div>
           </div>
         )}
 
         {error && (
-          <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+          <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
             {error}
           </div>
         )}
@@ -168,22 +168,22 @@ export default function ApiKeysPage() {
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
                       {k.scopes.map((s) => (
-                        <Badge key={s} variant="default" className="text-[10px] bg-violet-500/10 border-violet-500/20 text-violet-400">{s}</Badge>
+                        <Badge key={s} variant="default" className="text-[10px] bg-violet-500/10 border-violet-500/20 text-violet-600">{s}</Badge>
                       ))}
                     </div>
                   </td>
                   <td className="px-4 py-3">
                     {k.active ? (
-                      <span className="text-xs text-emerald-400">Aktiv</span>
+                      <span className="text-xs text-emerald-600">Aktiv</span>
                     ) : (
-                      <span className="text-xs text-red-400">Inaktiv</span>
+                      <span className="text-xs text-red-600">Inaktiv</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-[#585866]">{new Date(k.createdAt).toLocaleDateString("de-DE")}</td>
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => deleteKey(k.id)}
-                      className="p-1.5 rounded-lg text-[#585866] hover:text-red-400 hover:bg-red-500/10 transition-all"
+                      className="p-1.5 rounded-lg text-[#585866] hover:text-red-600 hover:bg-red-500/10 transition-all"
                       title="Löschen"
                     >
                       <Trash2 size={14} />
@@ -203,8 +203,8 @@ export default function ApiKeysPage() {
           POST https://ihre-domain.de/api/webhook/incoming
         </code>
         <p className="text-xs text-[#585866]">
-          Header: <code className="text-violet-400">X-API-Key: sk_live_…</code><br />
-          Events: <code className="text-violet-400">case.created</code>, <code className="text-violet-400">deadline.due</code>, <code className="text-violet-400">invoice.paid</code>, <code className="text-violet-400">email.received</code>
+          Header: <code className="text-violet-600">X-API-Key: sk_live_…</code><br />
+          Events: <code className="text-violet-600">case.created</code>, <code className="text-violet-600">deadline.due</code>, <code className="text-violet-600">invoice.paid</code>, <code className="text-violet-600">email.received</code>
         </p>
       </div>
     </div>

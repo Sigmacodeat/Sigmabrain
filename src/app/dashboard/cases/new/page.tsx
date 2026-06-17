@@ -164,13 +164,13 @@ export default function NewCasePage() {
           <ArrowLeft size={16} aria-hidden="true" />
         </Link>
         <div className="w-8 h-8 rounded-lg bg-violet-600/15 border border-violet-500/20 flex items-center justify-center">
-          <Briefcase size={16} className="text-violet-400" />
+          <Briefcase size={16} className="text-violet-600" />
         </div>
         <h1 className="text-lg font-bold text-[#15151d]">Neue Akte</h1>
       </div>
 
       {error && (
-        <div role="alert" className="mb-4 flex items-center gap-2 px-4 py-3 rounded-lg border border-red-500/20 bg-red-500/5 text-red-400 text-sm">
+        <div role="alert" className="mb-4 flex items-center gap-2 px-4 py-3 rounded-lg border border-red-500/20 bg-red-500/5 text-red-600 text-sm">
           <AlertTriangle size={16} />
           {error}
         </div>
@@ -254,12 +254,12 @@ export default function NewCasePage() {
                     "flex-1 px-3 py-2 rounded-lg text-xs font-medium border transition-all",
                     priority === o.value
                       ? o.value === "critical"
-                        ? "bg-red-500/10 border-red-500/30 text-red-400"
+                        ? "bg-red-500/10 border-red-500/30 text-red-600"
                         : o.value === "high"
-                        ? "bg-amber-500/10 border-amber-500/30 text-amber-400"
+                        ? "bg-amber-500/10 border-amber-500/30 text-amber-600"
                         : o.value === "low"
                         ? "bg-gray-500/10 border-gray-500/30 text-gray-400"
-                        : "bg-blue-500/10 border-blue-500/30 text-blue-400"
+                        : "bg-blue-500/10 border-blue-500/30 text-blue-600"
                       : "bg-[#ffffff] border-[#e2e4ec] text-[#585866] hover:text-[#585866]"
                   )}
                 >

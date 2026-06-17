@@ -107,10 +107,10 @@ export default function DashboardPage() {
         {statCards.map((stat) => {
           const Icon = stat.icon;
           const colorMap: Record<string, string> = {
-            violet: "text-violet-400 bg-violet-500/10",
-            blue: "text-blue-400 bg-blue-500/10",
-            emerald: "text-emerald-400 bg-emerald-500/10",
-            amber: "text-amber-400 bg-amber-500/10",
+            violet: "text-violet-600 bg-violet-500/10",
+            blue: "text-blue-600 bg-blue-500/10",
+            emerald: "text-emerald-600 bg-emerald-500/10",
+            amber: "text-amber-600 bg-amber-500/10",
           };
           return (
             <Card key={stat.label} className="p-5">
@@ -135,7 +135,7 @@ export default function DashboardPage() {
           <Card>
             <div className="p-6 pb-4 border-b border-[#e2e4ec]">
               <div className="flex items-center gap-2">
-                <TrendingUp size={16} className="text-violet-400" />
+                <TrendingUp size={16} className="text-violet-600" />
                 <h2 className="text-sm font-semibold text-[#15151d]">Erste Schritte</h2>
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function DashboardPage() {
                 <div key={item.step} className="flex items-center gap-4 p-4 hover:bg-[#eceef3] transition-colors">
                   <div className={`w-7 h-7 rounded-full border flex items-center justify-center shrink-0 text-xs font-mono font-bold ${
                     item.done
-                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600"
                       : "bg-[#e2e4ec] border-[#b4b9c8] text-[#585866]"
                   }`}>
                     {item.step}
@@ -156,7 +156,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-[#585866] font-mono mt-0.5">{item.desc}</p>
                   </div>
                   <Link href={item.href}>
-                    <Button variant="ghost" size="sm" className="shrink-0 text-violet-400 hover:text-violet-300">
+                    <Button variant="ghost" size="sm" className="shrink-0 text-violet-600 hover:text-violet-700">
                       {item.action} <ArrowRight size={12} />
                     </Button>
                   </Link>
@@ -181,13 +181,13 @@ export default function DashboardPage() {
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#eceef3] transition-colors group"
                   >
                     <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0">
-                      <Icon size={14} className="text-violet-400" />
+                      <Icon size={14} className="text-violet-600" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-[#15151d] group-hover:text-violet-300 transition-colors">{action.label}</p>
+                      <p className="text-sm font-medium text-[#15151d] group-hover:text-violet-700 transition-colors">{action.label}</p>
                       <p className="text-xs text-[#585866]">{action.desc}</p>
                     </div>
-                    <ArrowRight size={12} className="text-[#585866] group-hover:text-violet-400 transition-colors" />
+                    <ArrowRight size={12} className="text-[#585866] group-hover:text-violet-600 transition-colors" />
                   </Link>
                 );
               })}
@@ -197,7 +197,7 @@ export default function DashboardPage() {
           <Card className="border-amber-500/20">
             <div className="p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Zap size={14} className="text-amber-400" />
+                <Zap size={14} className="text-amber-600" />
                 <span className="text-sm font-semibold text-[#15151d]">Dream Cycle</span>
                 <Badge variant="warning" className="ml-auto text-xs">Inaktiv</Badge>
               </div>
@@ -205,7 +205,7 @@ export default function DashboardPage() {
                 Der Dream Cycle läuft nachts und konsolidiert dein Wissen, fixiert Zitate und findet Widersprüche.
               </p>
               <Link href="/dashboard/settings">
-                <Button variant="outline" size="sm" className="w-full text-amber-400 border-amber-500/30 hover:bg-amber-500/10">
+                <Button variant="outline" size="sm" className="w-full text-amber-600 border-amber-500/30 hover:bg-amber-500/10">
                   Dream Cycle einrichten
                 </Button>
               </Link>

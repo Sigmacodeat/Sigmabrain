@@ -103,7 +103,7 @@ export default function OpponentsPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-red-600/15 border border-red-500/20 flex items-center justify-center">
-          <ShieldAlert size={20} className="text-red-400" />
+          <ShieldAlert size={20} className="text-red-600" />
         </div>
         <div>
           <h1 className="text-xl font-bold text-[#15151d]">Gegner-Analyse</h1>
@@ -128,13 +128,13 @@ export default function OpponentsPage() {
           </div>
           <div className="rounded-xl border border-[#e2e4ec] bg-[#ffffff] p-3">
             <div className="text-xs text-[#585866]">Gewonnen</div>
-            <div className="text-xl font-bold text-emerald-400">{opponents.reduce((s, o) => s + o.wins, 0)}</div>
+            <div className="text-xl font-bold text-emerald-600">{opponents.reduce((s, o) => s + o.wins, 0)}</div>
           </div>
         </div>
       )}
 
       {loadError && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-300">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-700">
           {loadError}
         </div>
       )}
@@ -142,7 +142,7 @@ export default function OpponentsPage() {
       {/* Opponent list */}
       {loading ? (
         <div className="flex items-center justify-center py-20" role="status" aria-label="Wird geladen">
-          <Loader2 size={24} className="text-violet-400 animate-spin" />
+          <Loader2 size={24} className="text-violet-600 animate-spin" />
         </div>
       ) : opponents.length === 0 ? (
         <div className="text-center py-20 space-y-4">
@@ -165,7 +165,7 @@ export default function OpponentsPage() {
                 <h2 className="text-lg font-bold text-[#15151d]">{selectedOpponent.name}</h2>
                 <div className="flex items-center gap-3 text-sm text-[#585866] mt-1">
                   <span>{selectedOpponent.caseCount} Akten</span>
-                  <span className={selectedOpponent.winRate >= 0.5 ? "text-emerald-400" : "text-red-400"}>
+                  <span className={selectedOpponent.winRate >= 0.5 ? "text-emerald-600" : "text-red-600"}>
                     {Math.round(selectedOpponent.winRate * 100)}% Siegquote
                   </span>
                 </div>
@@ -173,15 +173,15 @@ export default function OpponentsPage() {
 
               <div className="grid grid-cols-3 gap-3">
                 <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-center">
-                  <div className="text-xl font-bold text-emerald-400">{selectedOpponent.wins}</div>
+                  <div className="text-xl font-bold text-emerald-600">{selectedOpponent.wins}</div>
                   <div className="text-xs text-[#585866]">Gewonnen</div>
                 </div>
                 <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 text-center">
-                  <div className="text-xl font-bold text-red-400">{selectedOpponent.losses}</div>
+                  <div className="text-xl font-bold text-red-600">{selectedOpponent.losses}</div>
                   <div className="text-xs text-[#585866]">Verloren</div>
                 </div>
                 <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-3 text-center">
-                  <div className="text-xl font-bold text-blue-400">{selectedOpponent.settlements}</div>
+                  <div className="text-xl font-bold text-blue-600">{selectedOpponent.settlements}</div>
                   <div className="text-xs text-[#585866]">Erledigt</div>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function OpponentsPage() {
                   <h3 className="text-sm font-semibold text-[#15151d] mb-2">Rechtsgebiete</h3>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedOpponent.preferredAreas.map((area) => (
-                      <Badge key={area} variant="default" className="text-[10px] bg-violet-600/5 border-violet-500/10 text-violet-400">
+                      <Badge key={area} variant="default" className="text-[10px] bg-violet-600/5 border-violet-500/10 text-violet-600">
                         {area}
                       </Badge>
                     ))}
@@ -204,10 +204,10 @@ export default function OpponentsPage() {
                 <div className="space-y-2">
                   {selectedOpponent.recentCases.map((c) => {
                     const statusColor =
-                      c.status === "won" ? "text-emerald-400" :
-                      c.status === "lost" ? "text-red-400" :
-                      c.status === "settled" ? "text-blue-400" :
-                      "text-amber-400";
+                      c.status === "won" ? "text-emerald-600" :
+                      c.status === "lost" ? "text-red-600" :
+                      c.status === "settled" ? "text-blue-600" :
+                      "text-amber-600";
                     return (
                       <Link
                         key={c.slug}
@@ -219,7 +219,7 @@ export default function OpponentsPage() {
                           <span className={`text-xs ${statusColor}`}>
                             {c.status === "won" ? "Gewonnen" : c.status === "lost" ? "Verloren" : c.status === "settled" ? "Erledigt" : c.status}
                           </span>
-                          <ChevronRight size={12} className="text-[#585866] group-hover:text-violet-400" />
+                          <ChevronRight size={12} className="text-[#585866] group-hover:text-violet-600" />
                         </div>
                       </Link>
                     );
@@ -236,7 +236,7 @@ export default function OpponentsPage() {
                   className="w-full flex items-center gap-4 px-4 py-3 rounded-xl border border-[#e2e4ec] bg-[#ffffff] hover:border-violet-500/30 hover:bg-violet-600/5 transition-all text-left group"
                 >
                   <div className="w-10 h-10 rounded-lg bg-[#eceef3] border border-[#e2e4ec] flex items-center justify-center shrink-0">
-                    <ShieldAlert size={18} className="text-red-400" />
+                    <ShieldAlert size={18} className="text-red-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-[#15151d]">{o.name}</div>
@@ -245,12 +245,12 @@ export default function OpponentsPage() {
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className={cn("text-sm font-medium", o.winRate >= 0.5 ? "text-emerald-400" : "text-red-400")}>
+                    <div className={cn("text-sm font-medium", o.winRate >= 0.5 ? "text-emerald-600" : "text-red-600")}>
                       {Math.round(o.winRate * 100)}%
                     </div>
                     <div className="text-xs text-[#585866]">Siegquote</div>
                   </div>
-                  <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-400 shrink-0" />
+                  <ChevronRight size={16} className="text-[#585866] group-hover:text-violet-600 shrink-0" />
                 </button>
               ))}
             </div>
