@@ -256,6 +256,7 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Betroffene Events**: `import-started`, `import-completed`, `import-failed`
 - **Blocker**: keine
 - **Nächster Schritt**: Integrator Review + Merge
+- **PR Branch**: `feat/desktop-lifecycle-wp102-107`
 - **Tests**: 23 pass, 0 fail
 - **Sources**: Notion (marker stripping), Obsidian (wikilink preservation, frontmatter tags), Confluence (storage format → markdown), Markdown (pass-through), CSV
 - **Features**: Deterministic normalization, unsupported items reported not lost, source links preserved, maxItems limit, skipErrors mode, dry-run preview
