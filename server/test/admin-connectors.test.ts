@@ -86,7 +86,7 @@ describe('ConnectorManager admin API surface', () => {
     await expect(mgr.setEnabled('nonexistent', true)).rejects.toThrow('Connector not found');
   });
 
-  test('CONNECTOR_REGISTRY exports all 11 connectors', () => {
+  test('CONNECTOR_REGISTRY exports all 12 connectors', () => {
     expect(SUPPORTED_CONNECTORS).toContain('google-drive');
     expect(SUPPORTED_CONNECTORS).toContain('gmail');
     expect(SUPPORTED_CONNECTORS).toContain('notion');
@@ -99,6 +99,8 @@ describe('ConnectorManager admin API surface', () => {
     // v0.43 legal vertical:
     expect(SUPPORTED_CONNECTORS).toContain('legal-judgements');
     expect(SUPPORTED_CONNECTORS).toContain('bea-import');
-    expect(Object.keys(CONNECTOR_REGISTRY)).toHaveLength(11);
+    // v0.44 M365 connector:
+    expect(SUPPORTED_CONNECTORS).toContain('m365');
+    expect(Object.keys(CONNECTOR_REGISTRY)).toHaveLength(12);
   });
 });
