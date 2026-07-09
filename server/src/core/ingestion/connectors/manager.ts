@@ -32,6 +32,7 @@ import { AsanaConnector } from './asana.ts';
 import { JiraConnector } from './jira.ts';
 import { LegalJudgementsConnector } from './legal-judgements.ts';
 import { BeaImportConnector } from './bea-import.ts';
+import { M365Connector } from './m365.ts';
 
 /** Registry entry: one line per active connector. */
 interface ConnectorRegistryEntry {
@@ -53,6 +54,7 @@ export const CONNECTOR_REGISTRY: Record<string, new (cfg: ConnectorConfig) => Ba
   'jira': JiraConnector,
   'legal-judgements': LegalJudgementsConnector,
   'bea-import': BeaImportConnector,
+  'm365': M365Connector,
 };
 
 export const SUPPORTED_CONNECTORS = Object.keys(CONNECTOR_REGISTRY);

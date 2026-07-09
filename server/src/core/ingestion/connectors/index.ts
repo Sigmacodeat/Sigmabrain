@@ -40,5 +40,25 @@ export { AsanaConnector } from './asana.ts';
 export { JiraConnector } from './jira.ts';
 export { LegalJudgementsConnector } from './legal-judgements.ts';
 export { BeaImportConnector } from './bea-import.ts';
+export { M365Connector } from './m365.ts';
+export {
+  generateAuthUrl as m365GenerateAuthUrl,
+  exchangeCode as m365ExchangeCode,
+  refreshAccessToken as m365RefreshAccessToken,
+  M365_DEFAULT_SCOPES,
+} from './m365-oauth.ts';
+export {
+  generateAuthUrl as slackGenerateAuthUrl,
+  exchangeCode as slackExchangeCode,
+  extractInstallation as slackExtractInstallation,
+  SLACK_DEFAULT_SCOPES,
+} from './slack-oauth.ts';
+export type { SlackOAuthResponse, SlackWorkspaceInstallation } from './slack-oauth.ts';
+export {
+  verifySlackSignature,
+  processTrigger,
+  WorkspaceRegistry,
+} from './slack-triggers.ts';
+export type { SlackTriggerContext, SlackTriggerPolicy, SlackTriggerResult } from './slack-triggers.ts';
 
 export type { ConnectorState, ConnectorConfig, SyncCursor } from './base.ts';

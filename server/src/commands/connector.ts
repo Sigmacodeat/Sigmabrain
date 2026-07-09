@@ -25,6 +25,17 @@ import {
   generateAuthUrl,
   exchangeCode,
 } from '../core/ingestion/connectors/google-oauth.ts';
+import {
+  generateAuthUrl as m365GenerateAuthUrl,
+  exchangeCode as m365ExchangeCode,
+  M365_DEFAULT_SCOPES,
+} from '../core/ingestion/connectors/m365-oauth.ts';
+import {
+  generateAuthUrl as slackGenerateAuthUrl,
+  exchangeCode as slackExchangeCode,
+  extractInstallation as slackExtractInstallation,
+  SLACK_DEFAULT_SCOPES as SLACK_OAUTH_SCOPES,
+} from '../core/ingestion/connectors/slack-oauth.ts';
 import { createServer } from 'node:http';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -37,7 +48,7 @@ Usage: gbrain connector <subcommand> [args]
 Subcommands:
   list                              Show all connectors
   add <service> [options]          Add a connector
-  auth <service>                   OAuth2 web flow (Google Drive / Gmail)
+  auth <service>                   OAuth2 web flow (Google Drive / Gmail / M365 / Slack)
   remove <service>                 Remove a connector
   sync <service> [options]         Trigger one-shot sync
   status [service]                 Show connector health
@@ -50,6 +61,13 @@ Add options (per service):
   Google Drive / Gmail (OAuth2):
     --client-id <id>
     --client-secret <secret>
+    --redirect-uri <uri>            (default: http://localhost:3000/oauth/callback)
+
+  M365 (OAuth2):
+    --client-id <id>
+    --client-secret <secret>
+    --tenant <tenant-id>            (default: common; use specific tenant UUID for enterprise)
+    --sources files,mail,calendar  (default: all; comma-separated subset)
     --redirect-uri <uri>            (default: http://localhost:3000/oauth/callback)
 
   Notion / GitHub (API Key):
@@ -83,6 +101,8 @@ function flagsToConfig(flags: Record<string, string>): ConnectorConfig {
   if (flags.client_secret) config.client_secret = flags.client_secret;
   if (flags.api_key) config.api_key = flags.api_key;
   if (flags.redirect_uri) config.redirect_uri = flags.redirect_uri;
+  if (flags.tenant) (config as Record<string, unknown>).tenant = flags.tenant;
+  if (flags.sources) (config as Record<string, unknown>).sources = flags.sources.split(',').map((s) => s.trim()).filter(Boolean);
   if (flags.poll_interval) config.poll_interval_ms = parseInt(flags.poll_interval, 10);
   if (flags.mode) config.mode = flags.mode as 'trickle' | 'migration';
   if (flags.filters) {
@@ -142,8 +162,8 @@ export async function runConnector(args: string[]): Promise<number> {
         console.error('Error: missing service. Usage: gbrain connector auth <service>');
         return 1;
       }
-      if (!['google-drive', 'gmail'].includes(service)) {
-        console.error(`Error: OAuth2 web flow is only supported for google-drive and gmail.`);
+      if (!['google-drive', 'gmail', 'm365', 'slack'].includes(service)) {
+        console.error(`Error: OAuth2 web flow is only supported for google-drive, gmail, m365, and slack.`);
         console.error(`For Notion/GitHub, use: gbrain connector add ${service} --api-key KEY`);
         return 1;
       }
@@ -170,11 +190,23 @@ export async function runConnector(args: string[]): Promise<number> {
         return 1;
       }
 
-      const scopes = service === 'gmail'
-        ? 'https://www.googleapis.com/auth/gmail.readonly'
-        : 'https://www.googleapis.com/auth/drive.readonly';
+      let auth: { url: string; codeVerifier: string; state: string };
+      let scopes: string;
 
-      const auth = generateAuthUrl(clientId, redirectUri, scopes);
+      if (service === 'm365') {
+        const tenant = (cfg.tenant as string) ?? 'common';
+        scopes = M365_DEFAULT_SCOPES;
+        auth = m365GenerateAuthUrl(clientId, redirectUri, scopes, tenant);
+      } else if (service === 'slack') {
+        const slackAuth = slackGenerateAuthUrl(clientId, redirectUri, SLACK_OAUTH_SCOPES);
+        auth = { url: slackAuth.url, codeVerifier: '', state: slackAuth.state };
+      } else if (service === 'gmail') {
+        scopes = 'https://www.googleapis.com/auth/gmail.readonly';
+        auth = generateAuthUrl(clientId, redirectUri, scopes);
+      } else {
+        scopes = 'https://www.googleapis.com/auth/drive.readonly';
+        auth = generateAuthUrl(clientId, redirectUri, scopes);
+      }
 
       // Persist PKCE data for the callback server to pick up.
       const pkcePath = join(homedir(), '.gbrain', 'connectors', `.${service}-pkce.tmp.json`);
@@ -239,14 +271,32 @@ export async function runConnector(args: string[]): Promise<number> {
           }
 
           // Exchange code for tokens.
-          exchangeCode(code, pkce.verifier, pkce.clientId, pkce.clientSecret, pkce.redirectUri)
-            .then((tokens) => {
-              // Save tokens to state file.
-              const newState = { ...state, access_token: tokens.access_token };
-              if (tokens.refresh_token) {
-                (newState as Record<string, unknown>).refresh_token = tokens.refresh_token;
+          const exchangePromise = service === 'm365'
+            ? m365ExchangeCode(code, pkce.verifier, pkce.clientId, pkce.clientSecret, pkce.redirectUri, ((state as Record<string, unknown>).tenant as string) ?? 'common')
+            : service === 'slack'
+              ? slackExchangeCode(code, pkce.clientId, pkce.clientSecret, pkce.redirectUri)
+              : exchangeCode(code, pkce.verifier, pkce.clientId, pkce.clientSecret, pkce.redirectUri);
+
+          exchangePromise
+            .then(async (tokens) => {
+              const tokenAny = tokens as unknown as Record<string, unknown>;
+              const newState: Record<string, unknown> = { ...state, access_token: tokenAny.access_token };
+              if (tokenAny.refresh_token) newState.refresh_token = tokenAny.refresh_token;
+              newState.token_expires_at = Date.now() + (tokenAny.expires_in ? Number(tokenAny.expires_in) * 1000 : 0);
+
+              // For Slack, extract workspace installation info.
+              if (service === 'slack') {
+                const slackRes = tokens as unknown as import('../core/ingestion/connectors/slack-oauth.ts').SlackOAuthResponse;
+                try {
+                  const install = slackExtractInstallation(slackRes);
+                  newState.workspace_id = install.workspace_id;
+                  newState.workspace_name = install.workspace_name;
+                  newState.bot_user_id = install.bot_user_id;
+                  newState.app_id = install.app_id;
+                  console.log(`   Workspace: ${install.workspace_name} (${install.workspace_id})`);
+                } catch { /* ignore extraction errors */ }
               }
-              (newState as Record<string, unknown>).token_expires_at = Date.now() + tokens.expires_in * 1000;
+
               writeFileSync(statePath, JSON.stringify(newState, null, 2));
               try { require('node:fs').unlinkSync(pkcePath); } catch { /* ignore */ }
 
