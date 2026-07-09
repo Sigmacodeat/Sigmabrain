@@ -108,6 +108,7 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Betroffene APIs**: `get_shell_info`, `shell_ready` (Tauri commands)
 - **Betroffene Events**: `DesktopShellStarted`, `DesktopShellReady`, `DesktopShellClosing`
 - **Nächster Schritt**: Integrator Review + Merge
+- **PR Branch**: `feat/desktop-lifecycle-wp102-107`
 
 ### WP-104: Folder Authorization
 
@@ -120,6 +121,7 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Betroffene Events**: `folder-authorized`, `folder-revoked`, `folder-authorization-denied`
 - **Blocker**: keine
 - **Nächster Schritt**: Integrator Review + Merge
+- **PR Branch**: `feat/desktop-lifecycle-wp102-107`
 
 ### WP-105: File Watcher
 
@@ -132,6 +134,7 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Betroffene Events**: `file-observed`, `file-changed`, `file-removed`, `file-ignored`
 - **Blocker**: keine
 - **Nächster Schritt**: Integrator Review + Merge
+- **PR Branch**: `feat/desktop-lifecycle-wp102-107`
 
 ### WP-103: OS Keychain Integration
 
@@ -144,6 +147,7 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Betroffene Events**: `secret-stored`, `secret-loaded`, `secret-deleted`
 - **Blocker**: keine
 - **Nächster Schritt**: Integrator Review + Merge, dann WP-102 (Desktop Auth/Session) freigeben
+- **PR Branch**: `feat/desktop-lifecycle-wp102-107`
 
 ### WP-102: Desktop Auth Session
 
@@ -156,6 +160,7 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Betroffene Events**: `DesktopSessionStarted`, `DesktopSessionRestored`, `DesktopSessionEnded` (event listener infrastructure)
 - **Blocker**: keine
 - **Nächster Schritt**: Integrator Review + Merge
+- **PR Branch**: `feat/desktop-lifecycle-wp102-107`
 
 ### WP-106: Local Ingest Queue
 
@@ -168,6 +173,7 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Betroffene Events**: `ingest-queued`, `ingest-started`, `ingest-completed`, `ingest-failed`
 - **Blocker**: keine
 - **Nächster Schritt**: Integrator Review + Merge
+- **PR Branch**: `feat/desktop-lifecycle-wp102-107`
 - **Tests**: 16 pass, 0 fail
 
 ### WP-107: Local Search Cache
@@ -181,6 +187,7 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Betroffene Events**: `document-indexed`, `index-rebuilt`, `search-cache-invalidated`
 - **Blocker**: keine
 - **Nächster Schritt**: Integrator Review + Merge
+- **PR Branch**: `feat/desktop-lifecycle-wp102-107`
 - **Tests**: 19 pass, 0 fail
 - **Performance**: p95 < 150ms on 100 docs confirmed
 
