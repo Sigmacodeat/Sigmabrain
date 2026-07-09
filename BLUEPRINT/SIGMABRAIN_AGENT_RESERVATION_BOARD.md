@@ -196,3 +196,59 @@ Der Agent liest dieses Dokument vor dem Arbeiten, trägt sich ein, arbeitet nur 
 - **Blocker**: keine
 - **Nächster Schritt**: Integrator Review + Merge
 - **Tests**: 32 pass, 0 fail
+
+### WP-307: Marketplace Skeleton
+
+- **Owner Agent**: Cascade (Agent 07)
+- **Status**: `ready_for_review`
+- **Startzeit**: 2026-07-09 02:58 UTC+02
+- **Letzte Aktualisierung**: 2026-07-09 03:20 UTC+02
+- **Betroffene Dateien**: `marketplace/**` (types, service, index), `tests/unit/marketplace.test.ts`
+- **Betroffene APIs**: `listPackages(filter)`, `getPackage(id)`, `submitPackage(input)`, `submitPackageReview(id, review)`, `publishPackage(id)`, `unpublishPackage(id, reason)`, `incrementDownload(id)`, `stats()`
+- **Betroffene Events**: `package-submitted`, `package-approved`, `package-published`, `package-rejected`, `package-unpublished`
+- **Blocker**: keine
+- **Nächster Schritt**: Integrator Review + Merge
+- **Tests**: 24 pass, 0 fail
+
+### WP-408: Mobile Companion MVP
+
+- **Owner Agent**: Cascade (Agent 07)
+- **Status**: `ready_for_review`
+- **Startzeit**: 2026-07-09 03:00 UTC+02
+- **Letzte Aktualisierung**: 2026-07-09 03:30 UTC+02
+- **Betroffene Dateien**: `mobile/**` (types, api-client, sync-service, index), `tests/unit/mobile-companion.test.ts`
+- **Betroffene APIs**: `MobileApiClient.get/post/put/delete`, `MobileSyncService.sync/submitApproval/search/markNotificationRead/getCachedApprovals/getCachedNotifications/getSyncState/setOnline/clearCache`
+- **Betroffene Events**: `mobile-sync-started`, `mobile-sync-completed`, `mobile-sync-failed`, `mobile-notification-received`, `mobile-approval-submitted`
+- **Blocker**: keine
+- **Nächster Schritt**: Integrator Review + Merge
+- **Tests**: 13 pass, 0 fail
+- **Offline**: Cached approvals/notifications readable offline, pending decisions queued and flushed on reconnect
+
+### WP-409: Agent Evaluation Framework
+
+- **Owner Agent**: Cascade (Agent 07)
+- **Status**: `ready_for_review`
+- **Startzeit**: 2026-07-09 03:08 UTC+02
+- **Letzte Aktualisierung**: 2026-07-09 03:40 UTC+02
+- **Betroffene Dateien**: `evals/framework/**` (types, service, index), `tests/unit/agent-eval.test.ts`
+- **Betroffene APIs**: `evaluateRun(runId, agentId, taskType, metrics, evaluatedBy)`, `recordFeedback(runId, reviewer, type, rating, comment, corrections)`, `getEvaluation(runId)`, `listEvaluations(filter)`, `listMetrics(agentId)`, `markFailed(runId, error)`, `passed(runId)`
+- **Betroffene Events**: `run-evaluated`, `feedback-recorded`, `capability-metrics-updated`
+- **Blocker**: keine
+- **Nächster Schritt**: Integrator Review + Merge
+- **Tests**: 24 pass, 0 fail
+- **Features**: Weighted scoring (accuracy/completeness/safety/latency/cost), trend detection (improving/declining/stable), feedback loop with corrections, reproducible scores
+
+### WP-410: Migration Framework v1
+
+- **Owner Agent**: Cascade (Agent 07)
+- **Status**: `ready_for_review`
+- **Startzeit**: 2026-07-09 03:10 UTC+02
+- **Letzte Aktualisierung**: 2026-07-09 03:50 UTC+02
+- **Betroffene Dateien**: `src/lib/migration/**` (types, normalization, import-service, index), `tests/unit/migration.test.ts`
+- **Betroffene APIs**: `previewImport(config, items)`, `runImport(config, items)`, `getImportReport(id)`, `listImportReports()`, `cancelImport(id)`, `normalizeItem(item, source)`, `normalizeBatch(items, source)`, `slugify(text)`, `extractTags(content)`
+- **Betroffene Events**: `import-started`, `import-completed`, `import-failed`
+- **Blocker**: keine
+- **Nächster Schritt**: Integrator Review + Merge
+- **Tests**: 23 pass, 0 fail
+- **Sources**: Notion (marker stripping), Obsidian (wikilink preservation, frontmatter tags), Confluence (storage format → markdown), Markdown (pass-through), CSV
+- **Features**: Deterministic normalization, unsupported items reported not lost, source links preserved, maxItems limit, skipErrors mode, dry-run preview
